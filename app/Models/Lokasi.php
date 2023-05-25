@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Lokasi extends Model
+{
+	use HasFactory, SoftDeletes;
+
+	protected $table = 'lokasis';
+
+	protected $dates = [
+		'created_at',
+		'updated_at',
+		'deleted_at',
+	];
+
+	protected $fillable = [
+		'npwp',
+		'no_ijin',
+		'poktan_id',
+		'anggota_id',
+		'nama_lokasi',
+		'latitude',
+		'longitude',
+		'altitude',
+		'polygon',
+		'luas_kira',
+		'tgl_tanam',
+		'luas_tanam',
+		'tanam_doc',
+		'tanam_pict',
+		'tgl_panen',
+		'volume',
+		'panen_doc',
+		'panen_pict',
+		'status',
+		'varietas',
+	];
+
+	public function masteranggota()
+	{
+		return $this->belongsTo(MasterAnggota::class, 'anggota_id', 'anggota_id');
+	}
+}

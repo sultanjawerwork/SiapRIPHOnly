@@ -1,0 +1,303 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\CommitmentCheck;
+use App\Models\Pengajuan;
+use App\Models\PullRiph;
+use App\Models\AnggotaRiph;
+use App\Models\PenangkarRiph;
+use App\Models\PoktanRiph;
+
+use Gate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+use App\Http\Requests\MassDestroyPullriphRequest;
+use App\Http\Controllers\Api\HelperController;
+use App\Http\Controllers\Traits\SimeviTrait;
+use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
+
+class PengajuanController extends Controller
+{
+	public function index(Request $request)
+	{
+		abort_if(Gate::denies('pengajuan_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		if ($request->ajax()) {
+			//harus di query berdasarkan no riph sesuai user
+			$no_doc = (Auth::user()::find(Auth::user()->id)->data_user->pullRiph[0]->no_doc ?? null);
+			if (!$no_doc) {
+				$query = Pengajuan::select(sprintf('%s.*', (new Pengajuan())->table));
+			} else
+				$query = Pengajuan::where('no_doc', $no_doc)->orderBy('created_at', 'desc')->select(sprintf('%s.*', (new Pengajuan())->table));
+
+			$table = Datatables::of($query);
+
+			$table->addColumn('placeholder', '&nbsp;');
+			$table->addColumn('actions', '&nbsp;');
+
+			$table->editColumn('actions', function ($row) {
+				$viewGate = 'pengajuan_show';
+				$crudRoutePart = 'task.pengajuan';
+
+				return view('partials.viewOnlyActions', compact(
+					'viewGate',
+					'crudRoutePart',
+					'row'
+				));
+			});
+
+			$table->editColumn('id', function ($row) {
+				return $row->id ? $row->id : '';
+			});
+			$table->editColumn('no_doc', function ($row) {
+				return $row->no_doc ? $row->no_doc : '';
+			});
+			$table->editColumn('detail', function ($row) {
+				return $row->detail ? $row->detail : '';
+			});
+			$table->editColumn('jenis', function ($row) {
+				return $row->jenis ? $row->jenis : 0;
+			});
+			$table->editColumn('status', function ($row) {
+				return $row->status ? $row->status : 0;
+			});
+			$table->editColumn('created_at', function ($row) {
+				return $row->created_at ? date('d/m/Y', strtotime($row->created_at)) : '';
+			});
+			$table->editColumn('updated_at', function ($row) {
+				return $row->updated_at ? date('d/m/Y', strtotime($row->updated_at)) : '';
+			});
+
+			$table->rawColumns(['actions', 'placeholder']);
+
+			return $table->make(true);
+		}
+
+		$module_name = 'Proses RIPH';
+		$page_title = 'Daftar Pengajuan';
+		$page_heading = 'Daftar Pengajuan';
+		$heading_class = 'fal fa-ballot-check';
+		return view('admin.pengajuan.index', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
+	}
+
+	public function create($id)
+	{
+		$module_name = 'Komitmen';
+		$page_title = 'Pengajuan Verifikasi';
+		$page_heading = 'Data Pengajuan';
+		$heading_class = 'fal fa-file-invoice';
+
+		$npwp_company = Auth::user()->data_user->npwp_company;
+		$commitment = PullRiph::where('npwp', $npwp_company)
+			->findOrFail($id);
+
+		$total_luastanam = $commitment->anggotariph->sum('luas_tanam');
+		$total_volume = $commitment->anggotariph->sum('volume');
+
+		$pks = PoktanRiph::where('no_ijin', $commitment->no_ijin);
+		// $lokasi = AnggotaRiph::where('no_ijin', $commitment->no_ijin);
+
+		if (request()->ajax()) {
+			$lokasis = AnggotaRiph::join('poktans', 'anggota_riphs.poktan_id', '=', 'poktans.poktan_id')
+				->join('anggotas', 'anggota_riphs.anggota_id', '=', 'anggotas.anggota_id')
+				->join('poktan_riphs', 'anggota_riphs.poktan_id', '=', 'poktan_riphs.poktan_id')
+				->where('anggota_riphs.npwp', $npwp_company)
+				->where('anggota_riphs.no_ijin', $commitment->no_ijin)
+				// ->where(function ($query) {
+				// 	$query->whereNotNull('poktan_riphs.no_perjanjian')
+				// 		->whereNotNull('poktan_riphs.berkas_pks');
+				// })
+				->orderBy('anggota_riphs.poktan_id', 'asc')
+				->select(
+					sprintf('%s.*', (new AnggotaRiph())->getTable()),
+					'poktans.nama_kelompok as nama_kelompok',
+					'anggotas.nama_petani as nama_petani'
+				);
+
+			$table = Datatables::of($lokasis);
+
+			$table->addColumn('data_geolokasi', function ($row) {
+				$nullCount = 0;
+				$nulledColumns = [];
+
+				if (empty($row->latitude)) {
+					$nullCount++;
+					$nulledColumns[] = 'lat?';
+				}
+				if (empty($row->longitude)) {
+					$nullCount++;
+					$nulledColumns[] = 'long?';
+				}
+				if (empty($row->polygon)) {
+					$nullCount++;
+					$nulledColumns[] = 'poly?';
+				}
+				if (empty($row->altitude)) {
+					$nullCount++;
+					$nulledColumns[] = 'alt?';
+				}
+
+				if ($nullCount === 4) {
+					return '<span class="badge badge-xs badge-danger">Tidak Ada</span>';
+				} elseif ($nullCount > 0) {
+					$nulledColumnsHtml = '';
+					foreach ($nulledColumns as $column) {
+						$nulledColumnsHtml .= '<span class="badge badge-xs badge-warning">' . $column . '</span> ';
+					}
+					return $nulledColumnsHtml;
+				} else {
+					return '<span class="badge badge-xs badge-success">Lengkap</span>';
+				}
+			});
+
+			$table->editColumn('id', function ($row) {
+				return $row->id ? $row->id : '';
+			});
+			$table->editColumn('nama_kelompok', function ($row) {
+				return $row->nama_kelompok ? $row->nama_kelompok : '';
+			});
+			$table->editColumn('nama_lokasi', function ($row) {
+				return $row->nama_lokasi ? $row->nama_lokasi : '';
+			});
+			$table->editColumn('anggota_id', function ($row) {
+				return $row->anggota_id ? $row->anggota_id : '';
+			});
+			$table->editColumn('nama_petani', function ($row) {
+				return $row->nama_petani ? $row->nama_petani : '';
+			});
+			$table->editColumn('luas_tanam', function ($row) {
+				return $row->luas_tanam ? $row->luas_tanam : '';
+			});
+			$table->editColumn('volume', function ($row) {
+				return $row->volume ? $row->volume : '';
+			});
+
+			$table->rawColumns(['data_geolokasi']);
+
+			return $table->make(true);
+		}
+
+		// dd($row->data_geolokasi);
+		return view('admin.pengajuan.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'total_luastanam', 'total_volume', 'pks'));
+	}
+
+	public function store($id, Request $request)
+	{
+		//validasi sebelum pengajuan di-submit
+		$npwp_company = Auth::user()->data_user->npwp_company;
+		$commitment = PullRiph::findOrFail($id);
+		// $totalVolume = $commitment->anggotariph->sum('volume');
+		// $targetVolume = $commitment->volume_riph * 0.05;
+
+		// if ($totalVolume < $targetVolume) {
+		// 	return redirect()->back()->withErrors([
+		// 		'volume' => 'Total volume produksi/panen yang dilaporkan TIDAK MEMENUHI SYARAT untuk pengajuan verifikasi. Silahkan lengkapi dan penuhi persyaratan terlebih dahulu.',
+		// 	]);
+		// }
+
+		$pengajuan = new Pengajuan();
+		// get current month and year as 2-digit and 4-digit strings
+		$month = date('m');
+		$year = date('Y');
+		// retrieve the latest record for the current month and year
+		$latestRecord = Pengajuan::where('no_pengajuan', 'like', "%/{$month}/{$year}")
+			->orderBy('created_at', 'desc')
+			->first();
+
+		// get the current increment value for n
+		$n = 1;
+		if ($latestRecord) {
+			$parts = explode('/', $latestRecord->no_pengajuan);
+			$n = intval($parts[0]) + 1;
+		}
+
+		// mask the n part to always have 3 digits
+		$nMasked = str_pad($n, 3, '0', STR_PAD_LEFT);
+
+		// generate the new no_pengajuan value with timestamp and masked n
+		$no_pengajuan = "{$nMasked}/PV." . time() . "/simethris/{$month}/{$year}";
+		$pengajuan->no_pengajuan = $no_pengajuan;
+		$pengajuan->no_ijin = $commitment->no_ijin;
+		$pengajuan->npwp = $npwp_company;
+		$pengajuan->commitment_id = $commitment->id;
+		$pengajuan->status = '1';
+		$pengajuan->save();
+
+		$commitment->status = '1';
+		$commitment->save();
+
+		$no_pengajuan = $pengajuan->no_pengajuan;
+		$pengajuanId = Pengajuan::where('no_pengajuan', $no_pengajuan)->first();
+		$commitmentcheck = new CommitmentCheck();
+		$commitmentcheck->pengajuan_id = $pengajuanId->id;
+		$commitmentcheck->no_pengajuan = $no_pengajuan;
+		$commitmentcheck->commitment_id = $commitment->id;
+		$commitmentcheck->npwp = $npwp_company;
+		$commitmentcheck->no_ijin = $pengajuan->no_ijin;
+		$commitmentcheck->status = $pengajuan->status;
+		// dd($commitmentcheck);
+		$commitmentcheck->save();
+		return redirect()->route('admin.task.commitment.realisasi', $pengajuan->commitment_id)
+			->with('success', 'Pengajuan Verifikasi Anda telah kami terima, dan akan segera Kami tindaklanjut. Terima Kasih.');
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Models\Pengajuan  $pengajuan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(Pengajuan $pengajuan)
+	{
+		abort_if(Gate::denies('pengajuan_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$module_name = 'Proses RIPH';
+		$page_title = 'Detail Pengajuan';
+		$page_heading = 'Detail Pengajuan';
+		$heading_class = 'fal fa-ballot-check';
+
+		return view('admin.pengajuan.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pengajuan'));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\Models\Pengajuan  $pengajuan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(Pengajuan $pengajuan)
+	{
+		//
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \App\Models\Pengajuan  $pengajuan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, Pengajuan $pengajuan)
+	{
+		//
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Models\Pengajuan  $pengajuan
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(Pengajuan $pengajuan)
+	{
+		//
+	}
+}
