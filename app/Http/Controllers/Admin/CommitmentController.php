@@ -65,7 +65,7 @@ class CommitmentController extends Controller
 					if ($request->formRiph != null) {
 						$file = $request->file('formRiph');
 						$file_name = 'formRiph.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formRiph' => $file_path);
 					};
 				}
