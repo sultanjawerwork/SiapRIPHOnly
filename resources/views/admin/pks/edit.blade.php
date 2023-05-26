@@ -194,8 +194,6 @@
 										<div class="input-group">
 											<select class="form-control custom-select" name="varietas_tanam" id="select2-varietas" required>
 												<option value="" hidden></option>
-													{{ $varietass->firstWhere('id', $pks->varietas_tanam)->nama_varietas }}
-												</option>
 												@foreach($varietass as $varietas)
 													<option value="{{ $varietas->id }}"{{ old('varietas_tanam', $pks->varietas_tanam) == $varietas->id ? ' selected' : '' }}>
 														{{ $varietas->nama_varietas }}

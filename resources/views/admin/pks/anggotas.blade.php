@@ -85,7 +85,6 @@
 													$secondGroup = [
 														$lokasi->tgl_tanam,
 														$lokasi->luas_tanam,
-														$lokasi->varietas,
 														$lokasi->tanam_doc,
 														$lokasi->tanam_pict,
 													];

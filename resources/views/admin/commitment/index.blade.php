@@ -35,7 +35,7 @@
 								{{-- check if commitment data are complete --}}
 								<td>
 									@if (empty($commitment->formRiph)
-										|| empty($commitment->formSptjm) || empty($commitment->logBook)
+										|| empty($commitment->formSptjm) || empty($commitment->logbook)
 										|| empty($commitment->formRt) || empty($commitment->formRta)
 										|| empty($commitment->formRpo) || empty($commitment->formLa)
 										|| empty($commitment->poktan_share))
@@ -99,10 +99,16 @@
 								</td>
 								<td class="justify-content-center">
 									@if (empty($commitment->status))
-										<span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
+									
+										<a href="{{ route('admin.task.commitment.submit', $commitment->id) }}"
+											class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
+											title data-original-title="Ajukan Verifikasi Data">
+											<i class="fal fa-file-search"></i>
+										</a>
+										{{-- <span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Belum Mengajukan Verifikasi">
 											<i class="fal fa-exclamation-circle"></i>
-										</span>
+										</span> --}}
 									@elseif ($commitment->status === '1')
 										<span class="badge btn-primary btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Verifikasi sudah diajukan">

@@ -81,14 +81,14 @@
 												<i class="fal fa-globe"></i>
 											</span>
 										</div>
-										<input id="mapId" name="mapId" placeholder="contoh: 1cwFsptUJ7EdW1IoHxFB_VRHsD10TEJ0" class="form-control">
+										<input id="mapId" name="mapId" placeholder="contoh: 1cwFsptUJ7EdW1IoHxFB_VRHsD10TEJ0" class="form-control" disabled>
 										<div class="input-group-append">
 											
-											<button class="btn btn-default waves-effect waves-themed"
+											<button class="btn btn-default waves-effect waves-themed" disabled
 												onclick="link_parser()">Open</button>
 										</div>
 									</div>
-									<span class="help-block">Pastikan tautan yang Anda berikan telah diatur agar dapat dilihat oleh publik pada aplikasi google map.</span>
+									<span class="help-block">Fitur masih dalam pengembangan.</span>
 								</div>
 							</div>
 						</div>
@@ -218,7 +218,7 @@
 							<div class="row mb-3">
 								<div class="col-md-12">
 									<div class="row">
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-12">
 											<label class="form-label" for="tgl_tanam">Tanggal Tanam</label>
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -230,7 +230,7 @@
 											</div>
 											<span class="help-block">Tanggal mulai penanaman.</span>
 										</div>
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-12">
 											<label for="luas_tanam">Luas Bidang (ha)<sup class="text-danger"> *</sup></label>
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -241,18 +241,6 @@
 													class="font-weight-bold form-control form-control-sm bg-white" />
 											</div>
 											<span class="help-block">Luas area lahan diukur mandiri.</span>
-										</div>
-										<div class="form-group col-md-12">
-											<label>Varietas yang ditanam <sup class="text-danger"> *</sup></label>
-											<div class="input-group">
-												<div class="input-group-prepend">
-													<span class="input-group-text"><i class="fal fa-seedling"></i></span>
-												</div>
-												<input type="text" value="{{ old('varietas', $anggota->varietas) }}"
-													name="varietas" id="varietas"
-													class="font-weight-bold form-control form-control-sm bg-white" />
-											</div>
-											<span class="help-block">Realisasi Varietas yang ditanam.</span>
 										</div>
 									</div>
 								</div>
