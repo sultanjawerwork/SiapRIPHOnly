@@ -136,9 +136,14 @@
 										</span>
 									@elseif ($commitment->status === '6')
 										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Hore!. SKL Telah Terbit">
-											<i class="fal fa-award"></i>
+											title data-original-title="Rekomendasi Penerbitan SKL">
+											<i class="fal fa-file-certificate"></i>
 										</span>
+									@elseif ($commitment->status === '7')
+										<a href="" class="btn btn-success btn-icon btn-xs" data-toggle="tooltip"
+											title data-original-title="HORAY! SKL Sudah Terbit">
+											<i class="fal fa-file-certificate"></i>
+										</a>
 									@endif
 								</td>
 							</tr>

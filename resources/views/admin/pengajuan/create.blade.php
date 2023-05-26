@@ -154,15 +154,18 @@
 							</tr>
 						</thead>
 						<tbody>
+							@php
+								$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+							@endphp
 							<tr>
 								<td>Penerbitan RIPH</td>
 								<td>
 									<span class="text-primary">{{ $commitment->formRiph }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formRiph/' . $commitment->formRiph)))
+									@if(file_exists(storage_path('app/public/storage/uploads/' .$npwp.'/'.$commitment->periodetahun . '/' . $commitment->formRiph)))
 										<a href="#" data-toggle="modal" data-target="#viewDocs"
-											data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRiph/' . $commitment->formRiph) }}">
+											data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun . $commitment->formRiph) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
