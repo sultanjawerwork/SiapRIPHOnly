@@ -54,14 +54,14 @@ class CommitmentCheck extends Model
         return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
     }
 
-    public function poktanRiph()
+    public function pks()
     {
-        return $this->hasMany(PoktanRiph::class, 'no_ijin', 'no_ijin');
+        return $this->hasMany(Pks::class, 'no_ijin', 'no_ijin');
     }
 
     public function pengajuan()
     {
-        return $this->belongsTo(Pengajuan::class);
+        return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
     }
 
     public function pkscheck()

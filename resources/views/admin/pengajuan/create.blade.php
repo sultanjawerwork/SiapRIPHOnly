@@ -74,7 +74,7 @@
 									<i class="fal fa-calendar-day"></i>
 								</span>
 							</div>
-							<input type="text" class="form-control form-control-sm bg-white" id="tgl_end" value="{{ date('d-m-Y', strtotime($commitment->tgl_akhir)) }}" disabled="">
+							<input type="text" class="form-control form-control-sm bg-white" id="tgl_akhir" value="{{ date('d-m-Y', strtotime($commitment->tgl_akhir)) }}" disabled="">
 						</div>
 						<span class="help-block">Tanggal berakhir RIPH.</span>
 					</div>
@@ -300,10 +300,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach ($commitment->poktanRiph as $pksmitra)
+							@foreach ($commitment->pks as $pksmitra)
 							<tr>
 								<td>{{$pksmitra->no_perjanjian}}</td>
-								<td>{{$pksmitra->poktan->nama_kelompok}}</td>
+								<td>{{$pksmitra->masterpoktan->nama_kelompok}}</td>
 								<td>{{$pksmitra->tgl_perjanjian_start}}</td>
 								<td>{{$pksmitra->tgl_perjanjian_end}}</td>
 								<td>

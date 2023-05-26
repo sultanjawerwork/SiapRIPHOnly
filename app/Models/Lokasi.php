@@ -45,4 +45,9 @@ class Lokasi extends Model
 	{
 		return $this->belongsTo(MasterAnggota::class, 'anggota_id', 'anggota_id');
 	}
+
+	public function pullriph()
+	{
+		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+	}
 }

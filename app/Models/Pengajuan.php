@@ -32,6 +32,7 @@ class Pengajuan extends Model
 	 */
 	protected $fillable = [
 		//main
+		'npwp',
 		'no_pengajuan',
 		'no_ijin',
 		'commitment_id',
@@ -61,4 +62,14 @@ class Pengajuan extends Model
 		'updated_at',
 		'deleted_at',
 	];
+
+	public function commitment()
+	{
+		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function commitmentcheck()
+	{
+		return $this->belongsTo(CommitmentCheck::class, 'pengajuan_id', 'id');
+	}
 }

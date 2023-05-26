@@ -81,9 +81,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 	Route::resource('riphAdmin', 'RiphAdminController');
 
-	//skl-admin
-	Route::resource('skl', 'AdminSKLController');
-
 	//daftar pejabat penandatangan SKL
 	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');
 	Route::get('pejabat/create', 'PejabatController@create')->name('pejabat.create');
@@ -143,6 +140,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 		// Route::resource('pks', 'PksController')->except(['create']);
 
+
 		//realisasi lokasi tanam
 		Route::get('realisasi/lokasi/{anggota_id}', 'AnggotaRiphController@lokasi')->name('lokasi.tanam');
 		Route::post('realisasi/lokasi/{id}/update', 'AnggotaRiphController@update')->name('lokasi.tanam.update');
@@ -154,12 +152,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::resource('pengajuan', 'PengajuanController');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
-		//verifikasi
-		// Route::resource('verifikasi', 'VerifOnlineController');
-		Route::get('verifikasi/data', 'VerifOnlineController@index')->name('verifikasi.data');
-		Route::get('verifikasi/data/{id}', 'VerifOnlineController@show')->name('verifikasi.data.show');
-
 		Route::resource('skl', 'SklController');
+		Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
+		Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
+		Route::get('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
+		Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
+		Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
 
 		//berkas
 		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');
@@ -180,16 +178,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 });
 
 Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
-	Route::resource('onfarm', 'OnfarmController');
 	Route::resource('online', 'OnlineController');
+	Route::resource('onfarm', 'OnfarmController');
 	Route::resource('completed', 'CompletedController');
-	//Route::resource('skl', 'SklController' );   
+
+	//verifikasi
+	// Route::resource('verifikasi', 'VerifOnlineController');
+	Route::get('data', 'VerifOnlineController@index')->name('data');
+	Route::get('data/{id}', 'VerifOnlineController@show')->name('data.show');
+	Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
-
-
-
 	// Change password
 	if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php'))) {
 		Route::get('password', 'ChangePasswordController@edit')->name('password.edit');

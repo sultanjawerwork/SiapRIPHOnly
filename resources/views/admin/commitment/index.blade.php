@@ -84,7 +84,7 @@
 												<i class="fal fa-edit"></i>
 											</a>
 										@else
-											<a href="{{ route('admin.task.commitments.read', $commitment->id) }}"
+											<a href="{{ route('admin.task.commitment.edit', $commitment->id) }}"
 												class="btn btn-icon btn-xs btn-primary"
 												title="Lihat Data Komitmen">
 												<i class="fal fa-eye"></i>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Verifikator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,16 +11,16 @@ use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Gate;
 
-use App\Models\AnggotaCheck;
+use App\Models\LokasiCheck;
 use App\Models\Pengajuan;
 use App\Models\CommitmentCheck;
 use App\Models\PksCheck;
-use App\Models\AnggotaRiph;
+use App\Models\Lokasi;
 use App\Models\PenangkarRiph;
 use App\Models\PullRiph;
-use App\Models\Anggotas;
+use App\Models\MasterAnggota;
 use App\Models\DataUser;
-use App\Models\PoktanRiph;
+use App\Models\Pks;
 use App\Models\Poktans;
 
 class VerifOnlineController extends Controller
@@ -97,37 +97,58 @@ class VerifOnlineController extends Controller
 		$verifikasi = Pengajuan::findOrFail($id);
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)
 			->firstorFail();
-		$data_user = DataUser::where('npwp_company', $verifikasi->npwp)
-			->firstOrFail();
+		// $data_user = DataUser::where('npwp_company', $verifikasi->npwp)
+		// 	->firstOrFail();
 		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
 			->firstOrFail();
+		// dd($commitmentcheck);
 		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
-		$lokasichecks = AnggotaCheck::where('pengajuan_id', $verifikasi->id)
+		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)
 			->orderBy('created_at', 'desc')
 			->get();
 
-		$pksriphs = PoktanRiph::where('no_ijin', $commitment->no_ijin)->get();
-		$anggotariphs = collect();
+		$pkss = Pks::withCount('lokasi')
+			->where('no_ijin', $commitment->no_ijin)->get();
+		$lokasis = collect();
 		foreach ($pkschecks as $pkscheck) {
-			$anggotariph = AnggotaRiph::where('poktan_id', $pksriphs->poktan_id)
+			$anggotariph = Lokasi::where('poktan_id', $pkss->poktan_id)
 				->where('no_ijin', $commitmentcheck->no_ijin)
 				->get();
-			$anggotariphs->push($anggotariph);
+			$lokasis->push($anggotariph);
 		};
 
-		$total_luastanam = $commitment->anggotariph->sum('luas_tanam');
-		$total_volume = $commitment->anggotariph->sum('volume');
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
 
-		// dd($anggotariphs);
-		return view('admin.verifikasi.online.check', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'commitmentcheck', 'pkschecks', 'lokasichecks', 'pksriphs', 'anggotariphs', 'total_luastanam', 'total_volume'));
+		return view('admin.verifikasi.online.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'commitmentcheck', 'pkschecks', 'lokasichecks', 'pkss', 'lokasis', 'total_luastanam', 'total_volume'));
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
+	 * berikut ini adalah detail-detail verifikasi.
+	 * 1. Verifikasi Kommitmen (Unggahan Berkas Kelengkapan RIPH)
+	 * 2. Verifikasi PKS/Perjanjian Kerjasama dengan Poktan
+	 * 3. Sekilas data Lokasi
 	 */
+
+	public function commitmentcheck($id)
+	{
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$module_name = 'Verifikasi';
+		$page_title = 'Verifikasi Data';
+		$page_heading = 'Berkas Komitmen';
+		$heading_class = 'fal fa-file-search';
+
+		$user = Auth::user();
+		$commitmentcheck = CommitmentCheck::findOrFail($id);
+		$commitment = PullRiph::findOrFail($commitmentcheck->pengajuan->commitment_id);
+
+		// dd($commitmentcheck);
+
+		return view('admin.verifikasi.online.commitmentcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'user', 'commitmentcheck', 'commitment'));
+	}
+
+
 	public function edit($id)
 	{
 		//

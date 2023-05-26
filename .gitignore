@@ -5,4 +5,5 @@
 !/vendor/laravel/ui/auth-backend
 /vendor
 .env
+/storage
 .DS_Store

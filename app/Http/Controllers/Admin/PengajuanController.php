@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CommitmentCheck;
 use App\Models\Pengajuan;
 use App\Models\PullRiph;
-use App\Models\AnggotaRiph;
+use App\Models\Lokasi;
 use App\Models\PenangkarRiph;
-use App\Models\PoktanRiph;
+use App\Models\Pks;
 
 use Gate;
 use Illuminate\Http\Request;
@@ -99,27 +99,27 @@ class PengajuanController extends Controller
 		$commitment = PullRiph::where('npwp', $npwp_company)
 			->findOrFail($id);
 
-		$total_luastanam = $commitment->anggotariph->sum('luas_tanam');
-		$total_volume = $commitment->anggotariph->sum('volume');
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
 
-		$pks = PoktanRiph::where('no_ijin', $commitment->no_ijin);
+		$pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
 		// $lokasi = AnggotaRiph::where('no_ijin', $commitment->no_ijin);
 
 		if (request()->ajax()) {
-			$lokasis = AnggotaRiph::join('poktans', 'anggota_riphs.poktan_id', '=', 'poktans.poktan_id')
-				->join('anggotas', 'anggota_riphs.anggota_id', '=', 'anggotas.anggota_id')
-				->join('poktan_riphs', 'anggota_riphs.poktan_id', '=', 'poktan_riphs.poktan_id')
-				->where('anggota_riphs.npwp', $npwp_company)
-				->where('anggota_riphs.no_ijin', $commitment->no_ijin)
+			$lokasis = Lokasi::join('master_poktans', 'lokasis.poktan_id', '=', 'master_poktans.poktan_id')
+				->join('master_anggotas', 'lokasis.anggota_id', '=', 'master_anggotas.anggota_id')
+				->join('pks', 'lokasis.poktan_id', '=', 'pks.poktan_id')
+				->where('lokasis.npwp', $npwp_company)
+				->where('lokasis.no_ijin', $commitment->no_ijin)
 				// ->where(function ($query) {
 				// 	$query->whereNotNull('poktan_riphs.no_perjanjian')
 				// 		->whereNotNull('poktan_riphs.berkas_pks');
 				// })
-				->orderBy('anggota_riphs.poktan_id', 'asc')
+				->orderBy('lokasis.poktan_id', 'asc')
 				->select(
-					sprintf('%s.*', (new AnggotaRiph())->getTable()),
-					'poktans.nama_kelompok as nama_kelompok',
-					'anggotas.nama_petani as nama_petani'
+					sprintf('%s.*', (new Lokasi())->getTable()),
+					'master_poktans.nama_kelompok as nama_kelompok',
+					'master_anggotas.nama_petani as nama_petani'
 				);
 
 			$table = Datatables::of($lokasis);
@@ -239,7 +239,7 @@ class PengajuanController extends Controller
 		$commitmentcheck = new CommitmentCheck();
 		$commitmentcheck->pengajuan_id = $pengajuanId->id;
 		$commitmentcheck->no_pengajuan = $no_pengajuan;
-		$commitmentcheck->commitment_id = $commitment->id;
+		$commitmentcheck->pull_id = $commitment->id;
 		$commitmentcheck->npwp = $npwp_company;
 		$commitmentcheck->no_ijin = $pengajuan->no_ijin;
 		$commitmentcheck->status = $pengajuan->status;

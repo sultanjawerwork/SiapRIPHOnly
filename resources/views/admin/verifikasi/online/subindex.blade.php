@@ -36,14 +36,14 @@
 									<span class="help-block">Nomor Ijin RIPH.</span>
 								</div>
 								<div class="form-group col-md-4">
-									<label class="form-label" for="statusVerif">Tanggal Pengajuan</label>
+									<label class="form-label" for="created_at">Tanggal Pengajuan</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text">
 												<i class="fal fa-calendar-day"></i>
 											</span>
 										</div>
-										<input type="text" class="form-control form-control-sm" id="created_at"
+										<input type="text" class="form-control form-control-sm" id="created_at" name="created_at"
 											value="{{$verifikasi->created_at}}" disabled>
 									</div>
 									<span class="help-block">Tanggal Pengajuan</span>
@@ -120,7 +120,7 @@
 					<div class="panel-hdr">
 						<h2>Kelengkapan Berkas</h2>
 						<div class="panel-toolbar">
-							<a href="" class="btn btn-xs btn-primary"><i class="fal fa-search mr-1"></i>Periksa Dokumen</a>
+							<a href="{{route('verification.data.commitmentcheck', $commitmentcheck->id)}}" class="btn btn-xs btn-primary"><i class="fal fa-search mr-1"></i>Periksa Dokumen</a>
 						</div>
 					</div>
 					<div class="panel-container show">
@@ -519,8 +519,10 @@
 									<th class="text-uppercase text-muted">Tindakan</th>
 								</thead>
 								<tbody>
-									@foreach ($lokasichecks as $veriflokasi)
-									<tr></tr>
+									@foreach ($lokasis as $lokasi)
+									<tr>
+										<td>{{$lokasi->masteranggota->masterpoktan->nama_kelompok}}</td>
+									</tr>
 									@endforeach
 								</tbody>
 							</table>
@@ -543,7 +545,7 @@
 							@method('PUT')
 							<div class="panel-content">
 								<div class="form-group">
-									<label for="">Catatan Pemeriksaan</label>
+									<label for="onlinenote">Catatan Pemeriksaan</label>
 									<textarea name="onlinenote" id="onlinenote" rows="5" class="form-control form-control-sm" required>{{ old('onlinenote', $verifikasi ? $verifikasi->onlinenote : '') }}</textarea>
 								</div>
 								<div class="form-group">
@@ -568,7 +570,7 @@
 								</div>
 								<div class="row">
 									<div class="form-group col-md-6">
-										<label for="">Status Pemeriksaan</label>
+										<label for="onlinestatus">Status Pemeriksaan</label>
 										<select class="custom-select" name="onlinestatus" id="onlinestatus">
 											<option value="" hidden>-- pilih</option>
 											<option value="1" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '1' ? 'selected' : '' }}>Selesai</option>
@@ -630,8 +632,15 @@
 						<div class="form-group">
 							<label class="form-label" for="pksMitra">PKS/Poktan</label>
 							<div class="input-group">
-								<select class="select2-des form-control" id="pksMitra" name="pksMitra" required>
+								<select class="form-control" id="pksMitra" name="pksMitra" required>
 									<option value="" hidden></option>
+									@foreach ($pkss as $pks)
+										@if (!$pkschecks->contains('poktan_id', $pks->id))
+											<option value="{{$pks->id}}" data-verifikasi="{{$verifikasi->id}}" data-commitment="{{ $pks->commitment }}">
+												{{$pks->no_perjanjian}} - {{$pks->masterpoktan->nama_kelompok}} <em>{{$pks->lokasi_count}} anggota</em>
+											</option>
+										@endif
+									@endforeach
 								</select>
 							</div>
 							<div class="help-block">

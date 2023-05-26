@@ -32,9 +32,9 @@ class PksCheck extends Model
 		'verif_by',
 	];
 
-	public function poktanriph()
+	public function pks()
 	{
-		return $this->belongsTo(PoktanRiph::class);
+		return $this->belongsTo(Pks::class);
 	}
 
 	public function pengajuan()

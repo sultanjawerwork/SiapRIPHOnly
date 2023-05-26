@@ -36,7 +36,7 @@
 				serverSide: true,
 				responsive: true,
 				ajax: {
-				url: "{{ route('admin.task.verifikasi.data') }}",
+				url: "{{ route('verification.data') }}",
 				type: "GET",
 					},
 				columns: [
@@ -46,8 +46,8 @@
 						data: null,
 						render: function(data, type, row) {
 							// You can customize this as per your requirements
-							var route = "{{ route('admin.task.verifikasi.data.show', ':id') }}";
-							return '<a href="' + route.replace(':id', data.id) + '" class="btn btn-primary">View</a>';
+							var route = "{{ route('verification.data.show', ':id') }}";
+							return '<a href="' + route.replace(':id', data.id) + '" class="btn btn-primary btn-xs">View</a>';
 						}
 					},
 				],

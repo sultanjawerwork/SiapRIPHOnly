@@ -45,6 +45,7 @@ return new class extends Migration
 			$table->string('formRpo')->nullable();
 			$table->string('formLa')->nullable();
 			$table->text('datariph')->nullable();
+			$table->string('status')->nullable();
 			$table->string('skl')->nullable();
 			$table->timestamps();
 			$table->softDeletes()->nullable();

@@ -151,12 +151,25 @@
 			{{-- verificator task --}}
 			@can('verificator_task_access')
 				<li class="nav-title" data-i18n="nav.administation">VERIFICATOR TASK</li>
-				@can('onfarm_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm') ? 'active' : '' }}">
-						<a href="{{ route('verification.onfarm.index') }}"
-							data-filter-tags="verifikasi onfarm lapangan">
-							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.onfarm.title_lang') }}</span>
+				@can('online_access')
+					<li class="c-sidebar-nav-item {{ request()->is('verification/data') ? 'active' : '' }}">
+						<a href="{{ route('verification.data') }}"
+							data-filter-tags="verifikasi data online">
+							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">{{ trans('cruds.online.title_lang') }}</span>
+							@php($unread = \App\Models\QaTopic::unreadCount())
+							@if ($unread > 0)
+								<span
+									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
+									request</span>
+							@endif
+						</a>
+					</li>
+					<li class="c-sidebar-nav-item {{ request()->is('verification/online') ? 'active' : '' }}">
+						<a href="{{ route('verification.online.index') }}"
+							data-filter-tags="verifikasi data online">
+							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">{{ trans('cruds.online.title_lang') }}</span>
 							@php($unread = \App\Models\QaTopic::unreadCount())
 							@if ($unread > 0)
 								<span
@@ -166,12 +179,12 @@
 						</a>
 					</li>
 				@endcan
-				@can('online_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/online') ? 'active' : '' }}">
-						<a href="{{ route('verification.online.index') }}"
-							data-filter-tags="verifikasi data online">
-							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.online.title_lang') }}</span>
+				@can('onfarm_access')
+					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm') ? 'active' : '' }}">
+						<a href="{{ route('verification.onfarm.index') }}"
+							data-filter-tags="verifikasi onfarm lapangan">
+							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">{{ trans('cruds.onfarm.title_lang') }}</span>
 							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
 							@if ($unread > 0)
 								<span
@@ -236,7 +249,27 @@
 					</li>
 				@endcan
 			@endcan
-
+			{{-- direktur task --}}
+			@if (Auth::user()->roles[0]->title == 'Pejabat')
+				<li class="nav-title" data-i18n="nav.administation">Direktur Menu</li>
+				<li class="c-sidebar-nav-item {{ request()->is('admin/task/skl/recomendations')
+					|| request()->is('admin/task/skl/recomendations/*') ? 'active' : '' }}">
+					<a href="{{ route('admin.task.skl.recomendations') }}"
+						data-filter-tags="daftar rekomendasi penerbitan skl"
+						title="Daftar Rekomendasi Penerbitan SKL">
+						<i class="fa-fw fal fa-file-signature c-sidebar-nav-icon"></i>
+						Permohonan SKL
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('admin/task/skl/publish*') ? 'active' : '' }}">
+					<a href="{{ route('admin.task.skl.publishes') }}"
+						data-filter-tags="daftar skl diterbitkan"
+						title="Daftar SKL yang telah diterbitkan">
+						<i class="fa-fw fal fa-file-certificate c-sidebar-nav-icon"></i>
+						SKL Diterbitkan
+					</a>
+				</li>
+			@endif
 			{{-- user task --}}
 			@can('user_task_access')
 				<li class="nav-title">{{ __('PROSES RIPH')}}</li>
@@ -587,7 +620,7 @@
 				@can('admin_SKL_access')
 					<li 
 						class="{{ request()->is('admin/skl') || request()->is('admin/skl/*') ? 'active open' : '' }}">
-						<a href="{{ route('admin.skl.index') }}" title="SKL"
+						<a href="" title="SKL"
 							data-filter-tags="Surat Keterangan Lunas SKL">
 							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">{{ trans('cruds.adminskl.title_lang') }}</span>

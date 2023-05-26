@@ -45,10 +45,10 @@
 									<small id="helpId" class="text-muted">Tanggal ijin RIPH diterbitkan</small>
 								</div>
 								<div class="form-group col-md-3">
-									<label for="tgl_end">Tanggal Akhir</label>
-									<input type="date" name="tgl_end" id="tgl_end" readonly
+									<label for="tgl_akhir">Tanggal Akhir</label>
+									<input type="date" name="tgl_akhir" id="tgl_akhir" readonly
 									class="form-control form-control-sm" placeholder="Tanggal akhir berlakunya RIPH"
-									aria-describedby="helpId" value="{{ old('tgl_end', $commitment->tgl_akhir) }}">
+									aria-describedby="helpId" value="{{ old('tgl_akhir', $commitment->tgl_akhir) }}">
 									<small id="helpId" class="text-muted">Tanggal akhir berlaku ijin RIPH</small>
 								</div>
 							</div>
@@ -261,7 +261,7 @@
 									</div>
 									<span class="help-block">
 										@if($commitment->formRiph)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRiph) }}" target="_blank">
+											<a href="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRiph) }}" target="_blank">
 												Lihat Berkas RIPH
 											</a>
 										@else

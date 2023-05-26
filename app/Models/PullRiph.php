@@ -71,9 +71,9 @@ class PullRiph extends Model
 		return $this->hasMany(PKS::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function anggotaRiph()
+	public function lokasi()
 	{
-		return $this->hasMany(AnggotaRiph::class, 'no_ijin', 'no_ijin');
+		return $this->hasMany(Lokasi::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function commitmentcheck()
