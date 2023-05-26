@@ -23,8 +23,8 @@ return new class extends Migration
 			$table->date('published_date')->nullable();
 			$table->string('qrcode')->nullable();
 			$table->text('nota_attch')->nullable();
-			$table->unsignedBigInteger('publisher')->nullable();
-			$table->unsignedBigInteger('pejabat_id')->nullable();
+			$table->string('approved_by')->nullable();
+			$table->string('approved_at')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

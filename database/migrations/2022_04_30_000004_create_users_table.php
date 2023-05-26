@@ -17,6 +17,10 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('remember_token')->nullable();
             $table->integer('roleaccess');
+            $table->string('jabatan')->nullable();
+            $table->string('nip')->nullable();
+            $table->string('ttd')->nullable();
+            $table->string('digisign')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
