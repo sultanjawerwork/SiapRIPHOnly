@@ -43,6 +43,7 @@ class VerifOnlineController extends Controller
 		// $pengajuans = Pengajuan::orderBy('created_at', 'desc');
 		if (request()->ajax()) {
 			$pengajuans = Pengajuan::select(sprintf('%s.*', (new Pengajuan())->table))
+				->where('status', '<=', '3')
 				->orderBy('created_at', 'desc')
 				->get();
 			$table = Datatables::of($pengajuans);
@@ -51,6 +52,21 @@ class VerifOnlineController extends Controller
 			});
 			$table->editColumn('no_pengajuan', function ($row) {
 				return $row->no_pengajuan ? $row->no_pengajuan : '';
+			});
+			$table->editColumn('no_ijin', function ($row) {
+				return $row->no_ijin ? $row->no_ijin : '';
+			});
+			$table->editColumn('npwp', function ($row) {
+				return $row->npwp ? $row->npwp : '';
+			});
+			$table->editColumn('company_name', function ($row) {
+				return $row->datauser->company_name ? $row->datauser->company_name : '';
+			});
+			$table->editColumn('created_at', function ($row) {
+				return $row->created_at ? $row->created_at : '';
+			});
+			$table->editColumn('status', function ($row) {
+				return $row->status ? $row->status : '';
 			});
 			return $table->make(true);
 		}
@@ -136,7 +152,7 @@ class VerifOnlineController extends Controller
 
 		$module_name = 'Verifikasi';
 		$page_title = 'Verifikasi Data';
-		$page_heading = 'Berkas Komitmen';
+		$page_heading = 'Pemeriksaan Berkas Komitmen';
 		$heading_class = 'fal fa-file-search';
 
 		$user = Auth::user();
@@ -146,6 +162,30 @@ class VerifOnlineController extends Controller
 		// dd($commitmentcheck);
 
 		return view('admin.verifikasi.online.commitmentcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'user', 'commitmentcheck', 'commitment'));
+	}
+
+	public function commitmentstore(Request $request, $id)
+	{
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$user = Auth::user();
+		$commitmentcheck = CommitmentCheck::findOrFail($id);
+
+		$pengajuan = Pengajuan::find($commitmentcheck->pengajuan_id);
+		$commitmentcheck->verif_by = $user->id;
+		$commitmentcheck->verif_at = Carbon::now();
+		$commitmentcheck->formRiph = $request->input('formRiph');
+		$commitmentcheck->formSptjm = $request->input('formSptjm');
+		$commitmentcheck->logbook = $request->input('logbook');
+		$commitmentcheck->formRt = $request->input('formRt');
+		$commitmentcheck->formRta = $request->input('formRta');
+		$commitmentcheck->formRpo = $request->input('formRpo');
+		$commitmentcheck->formLa = $request->input('formLa');
+		$commitmentcheck->note = $request->input('note');
+
+		$commitmentcheck->save();
+		return redirect()->route('verification.data.show', $pengajuan->id)
+			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
 

@@ -142,14 +142,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 
 		//realisasi lokasi tanam
-		Route::get('realisasi/lokasi/{anggota_id}', 'AnggotaRiphController@lokasi')->name('lokasi.tanam');
-		Route::post('realisasi/lokasi/{id}/update', 'AnggotaRiphController@update')->name('lokasi.tanam.update');
+		Route::get('realisasi/lokasi/{anggota_id}', 'LokasiController@show')->name('lokasi.tanam');
+		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
 
 		// pengajuan
 		Route::get('commitment/{id}/submit', 'PengajuanController@create')->name('commitment.submit');
 		Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
 
-		Route::resource('pengajuan', 'PengajuanController');
+		// Route::resource('pengajuan', 'PengajuanController');
+		Route::get('submissions', 'PengajuanController@index')->name('submissions');
+		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
 		Route::resource('skl', 'SklController');
@@ -182,11 +184,12 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::resource('onfarm', 'OnfarmController');
 	Route::resource('completed', 'CompletedController');
 
-	//verifikasi
+	//verifikasi online/data
 	// Route::resource('verifikasi', 'VerifOnlineController');
 	Route::get('data', 'VerifOnlineController@index')->name('data');
 	Route::get('data/{id}', 'VerifOnlineController@show')->name('data.show');
 	Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
+	Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

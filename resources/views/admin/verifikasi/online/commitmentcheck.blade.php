@@ -154,7 +154,7 @@
 									</div>
 								</div>
 							</div>
-							<form action="" method="POST" id="form1">
+							<form action="{{route('verification.data.commitmentcheck.store', $commitmentcheck->id)}}" method="POST">
 								@csrf
 								@method('PUT')
 								<div class="panel-content">
@@ -174,7 +174,7 @@
 												@endphp
 												<tr class="align-items-center">
 													<td>Penerbitan RIPH</td>
-													<td >
+													<td hidden>
 														@if ($commitment->formRiph)
 															<span class="text-primary">{{ $commitment->formRiph }}</span>
 														@else
@@ -212,7 +212,7 @@
 													</td>
 													<td>
 														@if ($commitment->formSptjm)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formSptjm/' . $commitment->formSptjm) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formSptjm) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>
@@ -239,7 +239,7 @@
 													</td>
 													<td>
 														@if ($commitment->logbook)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/logbook/' . $commitment->logbook) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->logbook) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>
@@ -266,7 +266,7 @@
 													</td>
 													<td>
 														@if ($commitment->formRt)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRt/' . $commitment->formRt) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRt) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>
@@ -293,7 +293,7 @@
 													</td>
 													<td>
 														@if ($commitment->formRta)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRta/' . $commitment->formRta) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRta) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>
@@ -320,7 +320,7 @@
 													</td>
 													<td>
 														@if ($commitment->formRpo)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRpo/' . $commitment->formRpo) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRpo) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>
@@ -347,7 +347,7 @@
 													</td>
 													<td>
 														@if ($commitment->formLa)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formLa/' . $commitment->formLa) }}">
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formLa) }}">
 																<i class="fas fa-search mr-1"></i>
 																Periksa Dokumen
 															</a>

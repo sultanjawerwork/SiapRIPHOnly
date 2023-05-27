@@ -17,14 +17,7 @@
 			<i class="fal fa-badge-check fa-3x subheader-icon"></i>
 			<h2>Ringkasan Data</h2>
 			<div class="row justify-content-center">
-				<!--
-				Yang ingin dicapi pada fitur ini adalah:
-				menampilkan animasi sistem sedang memeriksa data (check & load query).
-			-->
 				<p class="lead">Berikut adalah data-data yang telah Anda laporkan dan lampirkan.</p>
-				{{-- <div class="col-md-8 order-md-2">
-					<h3>HASIL PEMERIKSAAN AWAL</h3>
-				</div> --}}
 			</div>
 		</div>
 		<div class="panel" id="panel-1">
@@ -163,9 +156,9 @@
 									<span class="text-primary">{{ $commitment->formRiph }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/storage/uploads/' .$npwp.'/'.$commitment->periodetahun . '/' . $commitment->formRiph)))
+									@if($commitment->formRiph)
 										<a href="#" data-toggle="modal" data-target="#viewDocs"
-											data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun . $commitment->formRiph) }}">
+											data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRiph) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -180,8 +173,8 @@
 									<span class="text-primary">{{ $commitment->formSptjm }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formSptjm/' . $commitment->formSptjm)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formSptjm/' . $commitment->formSptjm) }}">
+									@if($commitment->formSptjm)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'.$commitment->formSptjm) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -196,8 +189,8 @@
 									<span class="text-primary">{{ $commitment->logbook }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/logbook/' . $commitment->logbook)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/logbook/' . $commitment->logbook) }}">
+									@if($commitment->logbook)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->logbook) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -212,8 +205,8 @@
 									<span class="text-primary">{{ $commitment->formRt }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formRt/' . $commitment->formRt)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRt/' . $commitment->formRt) }}">
+									@if($commitment->formRt)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRt) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -228,8 +221,8 @@
 									<span class="text-primary">{{ $commitment->formRta }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formRta/' . $commitment->formRta)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRta/' . $commitment->formRta) }}">
+									@if($commitment->formRta)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRta) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -244,8 +237,8 @@
 									<span class="text-primary">{{ $commitment->formRpo }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formRpo/' . $commitment->formRpo)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRpo/' . $commitment->formRpo) }}">
+									@if($commitment->formRpo)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRpo) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -260,8 +253,8 @@
 									<span class="text-primary">{{ $commitment->formLa }}</span>
 								</td>
 								<td>
-									@if(file_exists(storage_path('app/public/docs/commitmentsv2/' . $commitment->periodetahun . '/formLa/' . $commitment->formLa)))
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formLa/' . $commitment->formLa) }}">
+									@if($commitment->formLa)
+										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formLa) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -312,7 +305,7 @@
 								<td>
 									@if($pksmitra->berkas_pks)
 										<a href="#" data-toggle="modal" data-target="#viewDocs"
-											data-doc="{{ url('storage/docs/' . $commitment->periodetahun . '/commitment_'.$commitment->id.'/pks/'.$pksmitra->berkas_pks) }}">
+											data-doc="{{ url('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $pksmitra->berkas_pks) }}">
 											<i class="fas fa-check text-success mr-1"></i>
 											Lihat Dokumen
 										</a>
@@ -350,38 +343,6 @@
 							</tr>
 						</thead>
 					</table>
-					{{-- <table id="dt-ajulokasi" class="table table-sm table-bordered table-striped w-100">
-						<thead>
-							<tr>
-								<th hidden>Kelompoktani</th>
-								<th>Nama Lokasi</th>
-								<th>Nama Anggota</th>
-								<th>Luas Tanam</th>
-								<th>Produksi</th>
-								<th>Data geolokasi</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach ($commitment->poktanriph as $pksmitra)
-								@foreach ($pksmitra->anggotariph as $anggotamitra)
-								<tr>
-									<td hidden>{{$anggotamitra->poktanriph->nama_kelompok}}</td>
-									<td>{{$anggotamitra->nama_lokasi}}</td>
-									<td>{{$anggotamitra->anggota->nama_petani}}</td>
-									<td class="text-right">{{$anggotamitra->luas_tanam}} ha</td>
-									<td class="text-right">{{$anggotamitra->volume}} ton</td>
-									<td text-center>
-										@if ($anggotamitra->latitude || $anggotamitra->longitude || $anggotamitra->polygon)
-											<span class="badge badge-xs badge-success">Ada</span>
-										@else
-											<span class="badge badge-xs badge-danger">Tidak Ada</span>
-										@endif
-									</td>
-								</tr>
-								@endforeach
-							@endforeach
-						</tbody>
-					</table> --}}
 				</div>
 			</div>
 		</div>
@@ -391,14 +352,14 @@
 					<div class="row d-flex align-items-center">
 						<div class="col-md-6">
 							<div class="alert alert-danger" role="alert">
-							  <p>Dengan ini menyatakan bahwa kami telah menyelesaikan komitmen wajib tanam-produksi dan siap untuk dilakukan verifikasi data dan lapangan.</p>
+							<p>Dengan ini menyatakan bahwa kami telah menyelesaikan komitmen wajib tanam-produksi dan siap untuk dilakukan verifikasi data dan lapangan.</p>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="form-label h6">Konfirmasi</label>
 								<div class="input-group">
-									<input type="text" class="form-control form-control-sm" placeholder="ketik username Anda di sini" id="validasi" name="validasi" {{--@if ($disabled) disabled @endif required--}}>
+									<input type="text" class="form-control form-control-sm" placeholder="ketik username Anda di sini" id="validasi" name="validasi">
 									<div class="input-group-append">
 										<a class="btn btn-sm btn-danger" href="" role="button"><i class="fal fa-times text-align-center mr-1"></i> Batalkan</a>
 									</div>
@@ -406,8 +367,7 @@
 										@csrf
 										<div class="input-group-append">
 											<button class="btn btn-sm btn-primary" type="submit" onclick="return validateInput()"
-												{{-- @if ($disabled) disabled @endif--}}>
-												 
+												@if ($disabled) disabled @endif>
 												<i class="fas fa-upload text-align-center mr-1"></i> Ajukan
 											</button>
 										</div>

@@ -147,8 +147,8 @@ return [
         'level'          => '0',
     ],
     'pengajuan' => [
-        'title'          => 'Pengajuan',
-        'title_lang'     => 'Pengajuan',
+        'title'          => 'Pengajuan Verifikasi',
+        'title_lang'     => 'Pengajuan Verifikasi',
         'is_parent'      => '0',
         'is_hidden'      => '0',
         'can_view'       => '1',

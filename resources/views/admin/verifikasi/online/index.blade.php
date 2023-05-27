@@ -13,9 +13,12 @@
 							<table id="tablePengajuan" class="table table-sm table-bordered table-striped w-100">
 								<thead>
 									<tr>
-										<th>ID</th>
+										<th>Pelaku Usaha</th>
 										<th>No. Pengajuan</th>
-										<th>action</th>
+										<th>No. RIPH</th>
+										<th>Diajukan pada</th>
+										<th>Status</th>
+										<th>Tindakan</th>
 									</tr>
 								</thead>
 							</table>
@@ -40,14 +43,37 @@
 				type: "GET",
 					},
 				columns: [
-					{ data: 'id', name: 'id' },
+					{ data: 'company_name', name: 'company_name' },
 					{ data: 'no_pengajuan', name: 'no_pengajuan' },
+					{ data: 'no_ijin', name: 'no_ijin' },
+					{ data: 'created_at', name: 'created_at' },
+					{ 
+						data: 'status',
+						name: 'status',
+						createdCell: function (td, cellData, rowData, row, col) {
+							$(td).addClass('text-center'); // Add the 'text-center' class to the td element
+						},
+						render: function (data, type, row) {
+							if (data === '1') {
+								return '<span class="badge btn-xs btn-icon btn-warning rounded-circle" title="Verifikasi diajukan"><i class="fa fa-download"></i></span>';
+							} else if (data === '2') {
+								return '<span class="badge btn-xs btn-icon btn-success rounded-circle" title="Verifikasi Selesai"><i class="fal fa-check"></i></span>';
+							} else if (data === '3') {
+								return '<span class="badge btn-xs btn-icon btn-danger rounded-circle" title="Dikembalikan kepada Pelaku Usaha untuk diperbaiki"><i class="fal fa-exclamation-circle"></i></span>';
+							} else {
+								return 'Tidak dapat mendapatkan data';
+							}
+						}
+					},
 					{
 						data: null,
+						createdCell: function (td, cellData, rowData, row, col) {
+							$(td).addClass('text-center'); // Add the 'text-center' class to the td element
+						},
 						render: function(data, type, row) {
 							// You can customize this as per your requirements
 							var route = "{{ route('verification.data.show', ':id') }}";
-							return '<a href="' + route.replace(':id', data.id) + '" class="btn btn-primary btn-xs">View</a>';
+							return '<a href="' + route.replace(':id', data.id) + '" class="btn btn-primary btn-xs btn-icon" data-toggle="tooltip" data-original-title="Periksa Data"><i class="fal fa-file-search"></i> </a>';
 						}
 					},
 				],

@@ -5,6 +5,9 @@
 	@can('commitment_access')
 		@include('partials.sysalert')
 		<div class="row">
+			@php
+				$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+			@endphp
 			<div class="col-12">
 				<div id="panel-1" class="panel">
 					<div class="panel-container show">
@@ -55,7 +58,7 @@
 				<div id="panel-2" class="panel">
 					<div class="panel-hdr">
 						<h2>
-							Data Ringkasan Realisasi
+							Ringkasan Data Realisasi
 						</h2>
 						<div class="panel-toolbar">
 							
@@ -66,7 +69,7 @@
 							<div class="d-flex align-item-center">
 								<i class="fal fa-info-circle mr-1"></i>
 								<div class="flex-1">
-									<span>Berikut ini adalah data ringkasan realisasi komitmen wajib tanam-produksi.</span>
+									<span>Berikut ini adalah data ringkasan realisasi komitmen wajib tanam-produksi yang telah dilaporkan oleh Pelaku Usaha.</span>
 								</div>
 							</div>
 						</div>
@@ -143,273 +146,88 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr class="align-items-center">
-										<td>Penerbitan RIPH</td>
-										<td>
-											@if ($commitment->formRiph)
-												<span class="text-primary">{{ $commitment->formRiph }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if($commitment->formRiph)
-												<a href="#" data-toggle="modal" data-target="#viewDocs"
-													data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRiph/' . $commitment->formRiph) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formRiph;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning">
-													<i class="fas fa-times-circle mr-1" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Form SPTJM</td>
-										<td>
-											@if ($commitment->formSptjm)
-												<span class="text-primary">{{ $commitment->formSptjm }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->formSptjm)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formSptjm/' . $commitment->formSptjm) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formSptjm;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}">
-													<i class="fas fa-times-circle mr-1"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Logbook</td>
-										<td>
-											@if ($commitment->logbook)
-												<span class="text-primary">{{ $commitment->logbook }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->logbook)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/logbook/' . $commitment->logbook) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->logbook;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning">
-													<i class="fas fa-times-circle mr-1" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Form RT</td>
-										<td>
-											@if ($commitment->formRt)
-												<span class="text-primary">{{ $commitment->formRt }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->formRt)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRt/' . $commitment->formRt) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formRt;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}">
-													<i class="fas fa-times-circle mr-1"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Form RTA</td>
-										<td>
-											@if ($commitment->formRta)
-												<span class="text-primary">{{ $commitment->formRta }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->formRta)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRta/' . $commitment->formRta) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formRta;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}">
-													<i class="fas fa-times-circle mr-1"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Form RPO</td>
-										<td>
-											@if ($commitment->formRpo)
-												<span class="text-primary">{{ $commitment->formRpo }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->formRpo)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formRpo/' . $commitment->formRpo) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formRpo;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}">
-													<i class="fas fa-times-circle mr-1"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Form LA</td>
-										<td>
-											@if ($commitment->formLa)
-												<span class="text-primary">{{ $commitment->formLa }}</span>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@if ($commitment->formLa)
-												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/docs/commitmentsv2/' . $commitment->periodetahun . '/formLa/' . $commitment->formLa) }}">
-													<i class="fas fa-search mr-1"></i>
-													Lihat Dokumen
-												</a>
-											@else
-												<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-											@endif
-										</td>
-										<td>
-											@php
-												$myform = $commitmentcheck->formLa;
-											@endphp
-											@if ($myform === 'Sesuai')
-												<span class="text-success">
-													<i class="fas fa-check-circle mr-1"></i>Sesuai
-												</span>
-											@elseif ($myform === 'Tidak Sesuai')
-												<span class="text-warning" data-toggle="tooltip" data-original-title="{{$verifcommit->note}}">
-													<i class="fas fa-times-circle mr-1"></i>Tidak Sesuai
-												</span>
-											@else
-												<span class="text-danger">
-													<i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa
-												</span>
-											@endif
-										</td>
-									</tr>
+									@php
+										$forms = [
+											[
+												'label' => 'Surat Rekomendasi Import (RIPH)',
+												'file' => $commitment->formRiph,
+												'check' => $commitmentcheck->formRiph,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Surat Pertanggungjawaban Mutlak',
+												'file' => $commitment->formSptjm,
+												'check' => $commitmentcheck->formSptjm,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Logbook',
+												'file' => $commitment->logbook,
+												'check' => $commitmentcheck->logbook,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Form Rencana Tanam',
+												'file' => $commitment->formRt,
+												'check' => $commitmentcheck->formRt,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Form Realiasi Tanam',
+												'file' => $commitment->formRta,
+												'check' => $commitmentcheck->formRta,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Form Realisasi Produksi',
+												'file' => $commitment->formRpo,
+												'check' => $commitmentcheck->formRpo,
+												'verifNote' => $commitmentcheck->note
+											],
+											[
+												'label' => 'Laporan Akhir',
+												'file' => $commitment->formLa,
+												'check' => $commitmentcheck->formLa,
+												'verifNote' => $commitmentcheck->note
+											],
+											// Add more forms here
+										];
+
+										function getStatusLabel($status, $verifNote) {
+											if ($status === 'Sesuai') {
+												return '<span class="text-success"><i class="fas fa-check-circle mr-1"></i>Sesuai</span>';
+											} elseif ($status === 'Tidak Sesuai') {
+												return '<span class="text-warning" data-toggle="tooltip" data-original-title="' . $verifNote . '"><i class="fas fa-times-circle mr-1"></i>Tidak Sesuai</span>';
+											} else {
+												return '<span class="text-danger"><i class="fas fa-exclamation-circle mr-1"></i>Belum Diperiksa</span>';
+											}
+										}
+									@endphp
+									@foreach ($forms as $form)
+										<tr>
+											<td>{{ $form['label'] }}</td>
+											<td>
+												@if ($form['file'])
+													<span class="text-primary">{{ $form['file'] }}</span>
+												@else
+													<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
+												@endif
+											</td>
+											<td>
+												@if ($form['file'])
+													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$form['file']) }}">
+														<i class="fas fa-search mr-1"></i>
+														Lihat Dokumen
+													</a>
+												@else
+													<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
+												@endif
+											</td>
+											<td>
+												{!! getStatusLabel($form['check'], $form['verifNote']) !!}
+											</td>
+										</tr>
+									@endforeach
 								</tbody>
 							</table>
 						</div>

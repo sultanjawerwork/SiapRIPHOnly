@@ -72,4 +72,9 @@ class Pengajuan extends Model
 	{
 		return $this->belongsTo(CommitmentCheck::class, 'pengajuan_id', 'id');
 	}
+
+	public function datauser()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
 }
