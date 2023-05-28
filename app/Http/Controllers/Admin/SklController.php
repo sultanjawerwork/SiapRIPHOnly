@@ -24,13 +24,17 @@ class SklController extends Controller
 	 */
 	public function index()
 	{
-		abort_if(Gate::denies('skl_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-		$module_name = 'Proses RIPH';
-		$page_title = 'SKL Terbit';
-		$page_heading = 'SKL Terbit';
-		$heading_class = 'fa fa-file';
-		return view('admin.skl.index', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
+		$module_name = 'SKL';
+		$page_title = 'Daftar Rekomendasi';
+		$page_heading = 'Daftar Rekomendasi Penerbitan SKL';
+		$heading_class = 'fa fa-file-signature';
+
+		$recomends = Pengajuan::where('status', '4')
+			->get();
+
+		return view('verifikator.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
 	/**

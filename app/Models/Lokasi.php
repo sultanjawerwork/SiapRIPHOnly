@@ -50,4 +50,9 @@ class Lokasi extends Model
 	{
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
+
+	public function pks()
+	{
+		return $this->belongsTo(Pks::class, 'poktan_id', 'poktan_id');
+	}
 }

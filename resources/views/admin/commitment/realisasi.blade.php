@@ -104,16 +104,31 @@
 									<div class="col-12 text-center mb-1">
 										<span class="icon-stack icon-stack-sm">
 											<i class="base-7 icon-stack-3x color-success-700"></i>
+											<i class="fal fa-hourglass icon-stack-1x text-white"></i>
+										</span>
+									</div>
+									<div class="col-12 text-center">
+										<span class="fw-700">Rekomendasi SKL</span>
+									</div>
+								</div><hr>
+								<p class="small help-block">Horray! Sebentar lagi SKL diterbitkan.
+								</p>
+							@break
+							@case(7)
+								<div class="row">
+									<div class="col-12 text-center mb-1">
+										<span class="icon-stack icon-stack-sm">
+											<i class="base-7 icon-stack-3x color-success-700"></i>
 											<i class="fal fa-award icon-stack-1x text-white"></i>
 										</span>
 									</div>
 									<div class="col-12 text-center">
-										<span class="fw-700">SKL TERBIT</span>
+										<span class="fw-700">SKL Terbit</span>
 									</div>
 								</div><hr>
-								<p class="small help-block">Selamat! Surat Keterangan Lunas untuk RIPH terkait telah diterbitkan.
+								<p class="small help-block">Horray! Sebentar lagi SKL diterbitkan.
 								</p>
-								@break
+							@break
 							@default
 								<div class="row">
 									<div class="col-12 text-center">

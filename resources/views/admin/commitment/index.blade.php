@@ -117,7 +117,7 @@
 									@elseif ($commitment->status === '2')
 										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Verifikasi Data Selesai">
-											<i class="fal fa-check-circle"></i>
+											<i class="fal fa-file-check"></i>
 										</span>
 									@elseif ($commitment->status === '3')
 										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"

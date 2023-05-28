@@ -22,7 +22,7 @@ class PksCheck extends Model
 	protected $fillable = [
 		'pengajuan_id',
 		'commitcheck_id',
-		'poktanriph_id',
+		'pks_id',
 		'poktan_id',
 		'npwp',
 		'no_ijin',
@@ -34,7 +34,7 @@ class PksCheck extends Model
 
 	public function pks()
 	{
-		return $this->belongsTo(Pks::class);
+		return $this->belongsTo(Pks::class, 'pks_id', 'id');
 	}
 
 	public function pengajuan()

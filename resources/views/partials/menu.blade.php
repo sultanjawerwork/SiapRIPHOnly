@@ -166,26 +166,14 @@
 							@endif
 						</a>
 					</li>
-					<li class="c-sidebar-nav-item {{ request()->is('verification/online') ? 'active' : '' }}">
-						<a href="{{ route('verification.online.index') }}"
-							data-filter-tags="verifikasi data online">
-							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.online.title_lang') }}</span>
-							@php($unread = \App\Models\QaTopic::unreadCount())
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
-							@endif
-						</a>
-					</li>
 				@endcan
 				@can('onfarm_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm') ? 'active' : '' }}">
-						<a href="{{ route('verification.onfarm.index') }}"
+					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm')
+						|| request()->is('verification/onfarm*') ? 'active' : '' }}">
+						<a href="{{ route('verification.onfarm') }}"
 							data-filter-tags="verifikasi onfarm lapangan">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.onfarm.title_lang') }}</span>
+							<span class="nav-link-text">Verifikasi {{ trans('cruds.onfarm.title_lang') }}</span>
 							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
 							@if ($unread > 0)
 								<span

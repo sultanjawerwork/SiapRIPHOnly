@@ -53,4 +53,19 @@ class LokasiCheck extends Model
 		'onfarmverif_at',
 		'onfarmverif_by',
 	];
+
+	public function masteranggota()
+	{
+		return $this->belongsTo(MasterAnggota::class, 'anggota_id', 'anggota_id');
+	}
+
+	public function masterpoktan()
+	{
+		return $this->belongsTo(MasterPoktan::class, 'poktan_id', 'poktan_id');
+	}
+
+	public function lokasi()
+	{
+		return $this->belongsTo(Lokasi::class, 'anggota_id', 'anggota_id');
+	}
 }

@@ -180,16 +180,32 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 });
 
 Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
-	Route::resource('online', 'OnlineController');
-	Route::resource('onfarm', 'OnfarmController');
+	// Route::resource('online', 'OnlineController');
+	// Route::resource('onfarm', 'OnfarmController');
 	Route::resource('completed', 'CompletedController');
 
 	//verifikasi online/data
 	// Route::resource('verifikasi', 'VerifOnlineController');
 	Route::get('data', 'VerifOnlineController@index')->name('data');
-	Route::get('data/{id}', 'VerifOnlineController@show')->name('data.show');
+	Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
+	Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
 	Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
 	Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
+	Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
+	Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
+	Route::get('data/pks/{poktan_id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
+	Route::put('data/pks/{poktan_id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
+	Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
+	Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
+	Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');
+
+	//verifikasi onfarm/lapangan
+	Route::get('onfarm', 'VerifOnfarmController@index')->name('onfarm');
+	Route::get('onfarm/{id}/show', 'VerifOnfarmController@show')->name('onfarm.show');
+	Route::get('onfarm/{id}/farmlist', 'VerifOnfarmController@farmlist')->name('onfarm.farmlist');
+	Route::get('onfarm/{noIjin}/lokasi/{anggota_id}', 'VerifOnfarmController@farmcheck')->name('onfarm.farmcheck');
+	Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
+	Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

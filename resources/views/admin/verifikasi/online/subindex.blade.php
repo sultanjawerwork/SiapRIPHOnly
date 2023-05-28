@@ -21,7 +21,7 @@
 												<i class="fal fa-file-invoice"></i>
 											</span>
 										</div>
-										<input type="text" class="form-control form-control-sm" id="no_pengajuan"
+										<input type="text" class="form-control form-control-sm" id="no_pengajuan" name="no_pengajuan"
 											value="{{$verifikasi->no_pengajuan}}" disabled>
 									</div>
 									<span class="help-block">Nomor Pengajuan Verifikasi.</span>
@@ -34,7 +34,7 @@
 												<i class="fal fa-file-invoice"></i>
 											</span>
 										</div>
-										<input type="text" class="form-control form-control-sm" id="no_ijin" value="{{$verifikasi->no_ijin}}" disabled>
+										<input type="text" class="form-control form-control-sm" id="no_ijin" value="{{$verifikasi->no_ijin}}" name="no_ijin" disabled>
 									</div>
 									<span class="help-block">Nomor Ijin RIPH.</span>
 								</div>
@@ -272,25 +272,25 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($pkschecks as $verifpksmitra)
+									@foreach ($pkschecks as $pkscheck)
 										<tr class="align-items-center">
-											<td>{{$verifpksmitra->poktanriph->no_perjanjian}}</td>
-											<td>{{$verifpksmitra->poktanriph->poktans->nama_kelompok}}</td>
+											<td>{{$pkscheck->pks->no_perjanjian}}</td>
+											<td>{{$pkscheck->pks->masterpoktan->nama_kelompok}}</td>
 											<td>
-												{{$verifpksmitra->poktanriph->tgl_perjanjian_start}} s.d <br>
-												{{$verifpksmitra->poktanriph->tgl_perjanjian_end}}
+												{{$pkscheck->pks->tgl_perjanjian_start}} s.d <br>
+												{{$pkscheck->pks->tgl_perjanjian_end}}
 											</td>
-											<td>{{$verifpksmitra->verif_at}}</td>
+											<td>{{$pkscheck->verif_at}}</td>
 											<td class="text-center">
-												@if ($verifpksmitra->status === '1')
+												@if ($pkscheck->status === '1')
 													<span class="badge btn-xs btn-icon btn-success"
 														data-toggle="tooltip" title
-														data-original-title="Pemeriksaan Selesai. Catatan: {{$verifpksmitra->note}}">
+														data-original-title="Pemeriksaan Selesai. Catatan: {{$pkscheck->note}}">
 														<i class="fa fa-check-circle"></i>
 													</span>
-												@elseif ($verifpksmitra->status === '2')
+												@elseif ($pkscheck->status === '2')
 													<span class="badge btn-xs btn-icon btn-danger" data-toggle="tooltip" title
-													data-original-title="Pemeriksaan Selesai, Pelaku usaha harus memperbaiki kekurangan. Catatan: {{$verifpksmitra->note}}">
+													data-original-title="Pemeriksaan Selesai, Pelaku usaha harus memperbaiki kekurangan. Catatan: {{$pkscheck->note}}">
 														<i class="fa fa-exclamation-circle"></i>
 													</span>
 												@else
@@ -301,8 +301,8 @@
 												@endif
 											</td>
 											<td>
-												@if($verifpksmitra->id)
-													<a href="" data-toggle="tooltip"
+												@if($pkscheck->id)
+													<a href="{{route('verification.data.pkscheck.edit', $pkscheck->poktan_id)}}" data-toggle="tooltip"
 														data-original-title="Ubah Pemeriksaan"
 														class="btn btn-xs btn-icon btn-primary mr-1">
 														<i class="fal fa-edit"></i>
@@ -337,9 +337,25 @@
 									<th class="text-uppercase text-muted">Tindakan</th>
 								</thead>
 								<tbody>
-									@foreach ($lokasis as $lokasi)
+									@foreach ($lokasichecks as $lokasicheck)
 									<tr>
-										<td>{{$lokasi->masteranggota->masterpoktan->nama_kelompok}}</td>
+										<td>{{$lokasicheck->masterpoktan->nama_kelompok}}</td>
+										<td>{{$lokasicheck->lokasi->nama_lokasi}}</td>
+										<td>{{$lokasicheck->masteranggota->nama_petani}}</td>
+										<td>{{$lokasicheck->lokasi->luas_tanam}}</td>
+										<td>{{$lokasicheck->lokasi->volume}}</td>
+										<td>
+											@if ($lokasicheck->onlinestatus === 'Selesai')
+												<span class="badge btn-xs btn-success btn-icon" data-toggle="tooltip" data-original-title="Selesai. {{$lokasicheck->onlinenote}}">
+													<i class="fa fa-check-circle"></i>
+												</span>
+											@elseif ($lokasicheck->onlinestatus === 'Perbaikan')
+												<span class="badge btn-xs btn-danger btn-icon" data-toggle="tooltip" data-original-title="Perbaikan. {{$lokasicheck->onlinenote}}">
+													<i class="fa fa-exclamation-circle"></i>
+												</span>
+											@endif
+										</td>
+										<td>{{$lokasicheck->id}}</td>
 									</tr>
 									@endforeach
 								</tbody>
@@ -350,23 +366,25 @@
 			</div>
 			<div class="col-12">
 				<div class="panel" id="panel-6">
-					
 					<div class="panel-hdr">
-						<h2>BA. Verifikasi Administratif</h2>
+						<h2>BA. Verifikasi Data dan Administratif</h2>
 						<div class="panel-toolbar">
 							<span class="help-block">Rekam Berita Acara ini <span class="text-danger fw-500">HANYA JIKA</span> pemeriksaan seluruh data secara administratif telah selesai.</span>
 						</div>
 					</div>
 					<div class="panel-container show">
-						<form action="" method="POST" enctype="multipart/form-data">
+						<form action="{{route('verification.data.baonline.store', $verifikasi->id)}}" method="POST" enctype="multipart/form-data">
 							@csrf
 							@method('PUT')
 							<div class="panel-content">
+								<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}">
+								<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}">
+								<input type="text" name="npwp" value="{{$verifikasi->npwp}}">
 								<div class="form-group">
 									<label for="onlinenote">Catatan Pemeriksaan</label>
 									<textarea name="onlinenote" id="onlinenote" rows="5" class="form-control form-control-sm" required>{{ old('onlinenote', $verifikasi ? $verifikasi->onlinenote : '') }}</textarea>
 								</div>
-								<div class="form-group">
+								{{-- <div class="form-group">
 									<label class="form-label">
 										Berkas Berita Acara.
 										@if (!empty($verifikasi->onlineattch))
@@ -385,14 +403,14 @@
 										</label>
 									</div>
 									<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
-								</div>
+								</div> --}}
 								<div class="row">
 									<div class="form-group col-md-6">
 										<label for="onlinestatus">Status Pemeriksaan</label>
 										<select class="custom-select" name="onlinestatus" id="onlinestatus">
 											<option value="" hidden>-- pilih</option>
-											<option value="1" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '1' ? 'selected' : '' }}>Selesai</option>
-											<option value="2" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '2' ? 'selected' : '' }}>Perbaikan Data</option>
+											<option value="2" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '2' ? 'selected' : '' }}>Selesai</option>
+											<option value="3" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '3' ? 'selected' : '' }}>Perbaikan Data</option>
 										</select>
 									</div>
 									<div class="form-group col-md-6">
@@ -453,8 +471,8 @@
 								<select class="form-control" id="pksMitra" name="pksMitra" required>
 									<option value="" hidden></option>
 									@foreach ($pkss as $pks)
-										@if (!$pkschecks->contains('poktan_id', $pks->id))
-											<option value="{{$pks->id}}" data-verifikasi="{{$verifikasi->id}}" data-commitment="{{ $pks->commitment }}">
+										@if (!$pkschecks->contains('poktan_id', $pks->poktan_id))
+											<option value="{{$pks->poktan_id}}" data-verifikasi="{{$verifikasi->id}}" data-commitment="{{ $pks->commitment }}">
 												{{$pks->no_perjanjian}} - {{$pks->masterpoktan->nama_kelompok}} <em>{{$pks->lokasi_count}} anggota</em>
 											</option>
 										@endif
@@ -487,11 +505,40 @@
 						</button>
 					</div>
 					<div class="modal-body">
+						<div class="alert alert-warning">
+							<div class="d-flex flex-start w-100">
+								<div class="d-flex flex-fill">
+									<div class="flex-fill">
+										<span class="h5">Perhatian</span>
+										<p>
+											Lakukan pemeriksaan terlebih dahulu untuk mendapatkan data lokasi sesuai PKS yang diperiksa.
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="form-label" for="lokasiLahan">Lokasi Lahan/Anggota</label>
 							<div class="input-group">
 								<select class="select2-des form-control" id="lokasiLahan" name="lokasiLahan" required>
 									<option value="" hidden></option>
+									@php
+										$lokasisGrouped = $lokasis->flatten()->where('poktan_id', '!=', null)->groupBy(function ($lokasi) {
+											return $lokasi->pks->masterpoktan->nama_kelompok;
+										});
+										$noIjin = str_replace(['.','/'], '', $commitment->no_ijin);
+									@endphp
+									@foreach ($lokasisGrouped as $kelompok => $anggotamitras)
+										<optgroup label="{{ $kelompok }}">
+											@foreach ($anggotamitras as $anggotamitra)
+												@if (!$lokasichecks->contains('anggotamitra_id', $anggotamitra->id))
+													<option value="{{$anggotamitra->anggota_id}}" data-commitment="{{$noIjin}}">
+														{{$noIjin}}-{{$anggotamitra->nama_lokasi}} - {{$anggotamitra->masteranggota->nama_petani}}
+													</option>
+												@endif
+											@endforeach
+										</optgroup>
+									@endforeach
 								</select>
 							</div>
 							<div class="help-block">
@@ -543,27 +590,24 @@
 				var commitmentId = $('option:selected', this).data('commitment');
 
 				// Construct the new href value with the selected value and data attributes
-				var newHref = "";
+				var newHref = "{{route('verification.data.pkscheck', ':poktan_id')}}";
 				newHref = newHref.replace(':verifikasi', verifikasiId);
 				newHref = newHref.replace(':commitment', commitmentId);
-				newHref = newHref.replace(':id', selectedValue);
+				newHref = newHref.replace(':poktan_id', selectedValue);
 
 				// Update the href attribute of the link with the new href value
 				$('#verifikasi-link').attr('href', newHref);
 			});
 
-			$('#lokasiLahan').change(function () {
+			$('#lokasiLahan').change(function() {
 				// Get the selected value of the select element
 				var selectedValue = $(this).val();
-
-				// Get the data attributes of the selected option
-				// var verifikasi = $('#lokasiLahan option:selected').data('verifikasi');
-				// var commitment = $('#lokasiLahan option:selected').data('commitment');
-				// var pksmitra = $('#lokasiLahan option:selected').data('pksmitra');
+				var noIjin = $('option:selected', this).data('commitment');
 
 				// Construct the new href value with the selected value and data attributes
-				var newHref = "";
-				newHref = newHref.replace(':id', selectedValue);
+				var newHref = "{{ route('verification.data.lokasicheck', [':noIjin', ':anggota_id']) }}";
+				newHref = newHref.replace(':noIjin', noIjin);
+				newHref = newHref.replace(':anggota_id', selectedValue);
 
 				// Update the href attribute of the link with the new href value
 				$('#lokasi-link').attr('href', newHref);
