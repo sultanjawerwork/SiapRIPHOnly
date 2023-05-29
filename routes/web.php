@@ -155,11 +155,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
 		Route::resource('skl', 'SklController');
-		Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
-		Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
-		Route::get('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
-		Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
-		Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
+
 
 		//berkas
 		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');
@@ -206,6 +202,14 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('onfarm/{noIjin}/lokasi/{anggota_id}', 'VerifOnfarmController@farmcheck')->name('onfarm.farmcheck');
 	Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
 	Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
+
+	Route::get('skl', 'SklController@index')->name('skladmin');
+	Route::post('skl', 'SklController@submit')->name('skladmin.submit');
+	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
+	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
+	Route::get('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
+	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
+	Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

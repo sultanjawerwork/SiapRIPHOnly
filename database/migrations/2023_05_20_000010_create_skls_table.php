@@ -20,6 +20,7 @@ return new class extends Migration
 			$table->string('no_skl')->nullable();
 			$table->string('npwp')->nullable();
 			$table->string('no_ijin')->nullable();
+			$table->unsignedBigInteger('submit_by')->nullable();
 			$table->date('published_date')->nullable();
 			$table->string('qrcode')->nullable();
 			$table->text('nota_attch')->nullable();

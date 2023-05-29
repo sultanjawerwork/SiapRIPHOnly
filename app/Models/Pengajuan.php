@@ -77,4 +77,9 @@ class Pengajuan extends Model
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
+
+	public function skl()
+	{
+		return $this->hasOne(Skl::class, 'pengajuan_id', 'id');
+	}
 }
