@@ -8,24 +8,15 @@ use App\Models\CommitmentCheck;
 use App\Models\Pengajuan;
 use App\Models\PullRiph;
 use App\Models\Lokasi;
-use App\Models\PenangkarRiph;
 use App\Models\Pks;
 
-use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use App\Http\Requests\MassDestroyPullriphRequest;
-use App\Http\Controllers\Api\HelperController;
-use App\Http\Controllers\Traits\SimeviTrait;
-use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class PengajuanController extends Controller
 {
+	//halaman daftar pengajuan untuk importir
 	public function index(Request $request)
 	{
 		$module_name = 'Proses RIPH';
@@ -33,7 +24,7 @@ class PengajuanController extends Controller
 		$page_heading = 'Daftar Pengajuan';
 		$heading_class = 'fal fa-ballot-check';
 		$pengajuans = Pengajuan::where('npwp', Auth::user()->data_user->npwp_company)
-			->where('status', '!=', '7')
+			// ->where('status', '!=', '7')
 			->get();
 
 		return view('admin.pengajuan.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pengajuans'));

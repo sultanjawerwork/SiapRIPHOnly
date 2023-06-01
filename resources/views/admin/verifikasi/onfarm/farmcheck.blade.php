@@ -4,12 +4,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1ea90fk4RXPswzkOJzd17W3EZx_KNB1M&libraries=drawing,geometry"></script>
 
-
 @endsection
 @section('content')
 	@include('partials.breadcrumb')
 	@include('partials.subheader')
-	@can('commitment_access')
+	@can('onfarm_access')
 		@include('partials.sysalert')
 		@php
 			$npwp = str_replace(['.', '-'], '', $commitment->npwp);

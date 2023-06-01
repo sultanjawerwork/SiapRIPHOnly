@@ -20,49 +20,35 @@
 						<table id="recomTable" class="table table-sm table-bordered table-hover table-striped w-100">
 							<thead>
 								<tr>
-									<th>No. Pengajuan</th>
+									<th>No. SKL</th>
 									<th>No. RIPH</th>
-									<th>Pemohon</th>
+									<th>Pelaku Usaha</th>
 									<th>Rekomendasi</th>
-									<th>Status</th>
-									<th>Tanggal Terbit</th>
+									<th>Tanggal</th>
 									<th>Tindakan</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach ($recomends as $recomend)
 									<tr>
-										<td>{{$recomend->no_pengajuan}}</td>
+										<td>{{$recomend->skl->no_skl}}</td>
 										<td>{{$recomend->no_ijin}}</td>
 										<td>{{$recomend->datauser->company_name}}</td>
-										<td>
+										<td class="text-center">
 											@php
 												$user = \App\Models\User::find($recomend->skl->submit_by);
 											@endphp
 											{{ $user ? $user->name : 'User Not Found' }}
-										</td>										
-										<td>
-											@if($recomend->skl->published_date)
-												<span class="badge btn-xs btn-success">Sudah Terbit</span>
-											@else
-												<span class="badge btn-xs btn-danger">Belum Terbit</span>
-											@endif
 										</td>
-										<td>
-											@if($recomend->skl->published_date)
-												{{$recomend->skl->published_date}}
-											@else
-												<span class="badge btn-xs btn-danger">Belum Terbit</span>
-											@endif
-										</td>
-										<td>
+										<td class="text-center">{{$recomend->created_at}}</td>
+										<td class="text-center">
 											@if($recomend->skl->published_date)
 												<a href="" class="btn btn-xs btn-success btn-icon">
 													<i class="fal fa-award"></i>
 												</a>
 											@else
-												<a href="" class="btn btn-xs btn-primary btn-icon">
-													<i class="fal fa-file-check">
+												<a href="{{route('verification.skl.recomendations.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
+													<i class="fal fa-file-search">
 													</i>
 												</a>
 											@endif
@@ -91,9 +77,9 @@
 			responsive: true,
 			lengthChange: false,
 			order: [[1, 'desc']],
-			rowGroup: {
-                dataSrc: 0
-            },
+			// rowGroup: {
+				// dataSrc: 0
+			// },
 			dom:
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
 				"<'row'<'col-sm-12'tr>>" +
@@ -135,4 +121,3 @@
 	});
 </script>
 @endsection
-

@@ -3,7 +3,7 @@
 	@include('partials.breadcrumb')
 	@include('partials.subheader')
 
-	@can('commitment_access')
+	@can('online_access')
 		@include('partials.sysalert')
 		<div class="row d-flex justify-content-between">
 			<div class="col-md-4">

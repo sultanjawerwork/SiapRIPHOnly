@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\DB;
 class KelompoktaniController extends Controller
 {
     private $access_token;
-    
+
     use SimeviTrait;
 
 
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +34,7 @@ class KelompoktaniController extends Controller
     {
         abort_if(Gate::denies('poktan_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        
+
         if ($request->ajax()) {
             $npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
 
@@ -43,34 +43,34 @@ class KelompoktaniController extends Controller
             where p.npwp = "' . $npwp . '"' . ' and p.id_poktan=g.id_poktan
             GROUP BY g.nama_kelompok';
 
-            
+
             $table = Datatables::of(DB::select(DB::raw($query)));
             $table->addColumn('actions', '&nbsp;');
 
-            
+
             $table->editColumn('actions', function ($row) {
                 $nomor = Str::replace('.', '', $row->no_riph);
                 $nomor = Str::replace('/', '', $nomor);
-                $urlView = route('admin.task.kelompoktani.show', $nomor );
+                $urlView = route('admin.task.kelompoktani.show', $nomor);
                 return '';
                 // '<a class="btn btn-xs btn-primary " data-toggle="tooltip" title data-original-title="view" href='.$urlView.'>'.
                 // '    <i class="fal fa-eye"></i></a>';
             });
 
-            
+
             $table->editColumn('no_riph', function ($row) {
                 return $row->no_riph ? $row->no_riph : '';
             });
-            
+
             $table->editColumn('id_kecamatan', function ($row) {
                 $access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
                 $datakecamatan = $this->getAPIKecamatan($access_token, $row->id_kecamatan);
-                if($datakecamatan['data'][0]){
-                    return $datakecamatan['data'][0]['nm_kec'] ? $datakecamatan['data'][0]['nm_kec']  : '';   
-                } 
+                if ($datakecamatan['data'][0]) {
+                    return $datakecamatan['data'][0]['nm_kec'] ? $datakecamatan['data'][0]['nm_kec']  : '';
+                }
                 return $row->id_kecamatan ? $row->id_kecamatan : '';
             });
-            
+
             $table->editColumn('nama_kelompok', function ($row) {
                 return $row->nama_kelompok ? $row->nama_kelompok : '';
             });
@@ -82,25 +82,25 @@ class KelompoktaniController extends Controller
             $table->editColumn('hp_pimpinan', function ($row) {
                 return $row->hp_pimpinan ? $row->hp_pimpinan : '';
             });
-            
-            
+
+
             $table->editColumn('jum_petani', function ($row) {
                 return $row->jum_petani ? $row->jum_petani  : '';
             });
-            
+
             $table->editColumn('luas', function ($row) {
                 return $row->luas ? number_format($row->luas, 2, '.', ',') : 0;
             });
-            
-            
+
+
             $table->rawColumns(['actions']);
 
             return $table->make(true);
         }
 
-        $module_name = 'Proses RIPH' ;
+        $module_name = 'Proses RIPH';
         $page_title = 'Kelompok Tani';
-        $page_heading = 'Kelompok Tani' ;
+        $page_heading = 'Kelompok Tani';
         $heading_class = 'fa fa-user-alt';
         return view('admin.kelompoktani.index', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
     }
@@ -116,21 +116,25 @@ class KelompoktaniController extends Controller
         $kabupaten = $this->getAPIKabupatenProp($this->access_token, '11');
         $kecamatan = $this->getAPIKecamatanKab($this->access_token, '1101');
         $desa = $this->getAPIDesaKec($this->access_token, '1101010');
-        $module_name = 'Proses RIPH' ;
+        $module_name = 'Proses RIPH';
         $page_title = 'Tambah Kelompok Tani';
-        $page_heading = 'Tambah Kelompok Tani' ;
+        $page_heading = 'Tambah Kelompok Tani';
         $heading_class = 'fa fa-user-alt';
-        return view('admin.kelompoktani.create', 
-        ['access_token' => $this->access_token,
-        'module_name' => $module_name, 
-        'page_title' => $page_title, 
-        'page_heading' => $page_heading, 
-        'heading_class' => $heading_class, 
-        'user_id' => $user_id, 
-        'provinsis' => $this->provinsis, 
-        'kabupatens' => $kabupaten, 
-        'kecamatans' => $kecamatan, 
-        'desas' => $desa]);    
+        return view(
+            'admin.kelompoktani.create',
+            [
+                'access_token' => $this->access_token,
+                'module_name' => $module_name,
+                'page_title' => $page_title,
+                'page_heading' => $page_heading,
+                'heading_class' => $heading_class,
+                'user_id' => $user_id,
+                'provinsis' => $this->provinsis,
+                'kabupatens' => $kabupaten,
+                'kecamatans' => $kecamatan,
+                'desas' => $desa
+            ]
+        );
     }
 
     /**
@@ -142,8 +146,8 @@ class KelompoktaniController extends Controller
     public function store(Request $request)
     {
         $user_id = Auth::user()->id;
-        $no_poktan = $request->string('id_simluhtan','');
-        $nama_poktan = $request->string('nama_poktan','');
+        $no_poktan = $request->string('id_simluhtan', '');
+        $nama_poktan = $request->string('nama_poktan', '');
         $provinsi = $request->string('provinsi', '');
         $kabupaten = $request->string('kabupaten', '');
         $kecamatan = $request->string('kecamatan', '');
@@ -172,12 +176,10 @@ class KelompoktaniController extends Controller
             'no_hp'         => $no_hp,
             'pimpinan'      => $pimpinan
         ]);
-        if ($kelompoktani)
-        {            
+        if ($kelompoktani) {
             session()->flash('message', trans('global.create_success'));
             return redirect()->route('admin.task.kelompoktani.index');
-        }
-        else 
+        } else
             return back()->withErrors('Gagal menambah data');
     }
 
@@ -197,45 +199,45 @@ class KelompoktaniController extends Controller
 
             $query = 'select g.no_riph, g.id_kecamatan, g.nama_kelompok, g.nama_pimpinan, g.hp_pimpinan, g.id_poktan, count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas 
             from poktans p, group_tanis g
-            where p.npwp = "' . $npwp . '"' . ' and p.id_poktan=g.id_poktan and g.no_riph = p.no_riph and p.no_riph = "'.
-            $realno .'"'. 'GROUP BY g.nama_kelompok';
+            where p.npwp = "' . $npwp . '"' . ' and p.id_poktan=g.id_poktan and g.no_riph = p.no_riph and p.no_riph = "' .
+                $realno . '"' . 'GROUP BY g.nama_kelompok';
 
-            
+
             $table = Datatables::of(DB::select(DB::raw($query)));
             $table->addColumn('actions', '&nbsp;');
 
-            
+
             $table->editColumn('actions', function ($row) {
                 $riph = Str::replace('.', '', $row->no_riph);
                 $riph = Str::replace('/', '', $riph);
                 $nomor = $row->id_poktan;
-                $urlView = route('admin.task.kelompoktani.showtani', [$riph, $nomor] );
-                $urlCreate = route('admin.task.pks.create', [$riph , $nomor] );
-                $urlEdit = route('admin.task.pks.edit', [$riph, $nomor] );
-                
-                return '<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Tambah PKS"  href='.$urlCreate.'>'.
-                '    <i class="fal fa-plus-circle"></i></a>'.
-                '<a class="btn btn-xs btn-warning btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Edit PKS" href='.$urlEdit.'>'.
-                '    <i class="fal fa-pencil"></i></a>';
-                
+                $urlView = route('admin.task.kelompoktani.showtani', [$riph, $nomor]);
+                $urlCreate = route('admin.task.pks.create', [$riph, $nomor]);
+                $urlEdit = route('admin.task.pks.edit', [$riph, $nomor]);
+
+                return '<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Tambah PKS"  href=' . $urlCreate . '>' .
+                    '    <i class="fal fa-plus-circle"></i></a>' .
+                    '<a class="btn btn-xs btn-warning btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Edit PKS" href=' . $urlEdit . '>' .
+                    '    <i class="fal fa-pencil"></i></a>';
+
                 // '<a class="btn btn-xs btn-success btn-icon" data-toggle="tooltip" title data-original-title="View poktan" href='.$urlView.'>'.
                 // '    <i class="fal fa-pencil"></i></a>';
             });
 
-            
+
             $table->editColumn('no_riph', function ($row) {
                 return $row->no_riph ? $row->no_riph : '';
             });
-            
+
             $table->editColumn('id_kecamatan', function ($row) {
                 $access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
                 $datakecamatan = $this->getAPIKecamatan($access_token, $row->id_kecamatan);
-                if($datakecamatan['data'][0]){
-                    return $datakecamatan['data'][0]['nm_kec'] ? $datakecamatan['data'][0]['nm_kec']  : '';   
-                } 
+                if ($datakecamatan['data'][0]) {
+                    return $datakecamatan['data'][0]['nm_kec'] ? $datakecamatan['data'][0]['nm_kec']  : '';
+                }
                 return $row->id_kecamatan ? $row->id_kecamatan : '';
             });
-            
+
             $table->editColumn('nama_kelompok', function ($row) {
                 return $row->nama_kelompok ? $row->nama_kelompok : '';
             });
@@ -247,17 +249,17 @@ class KelompoktaniController extends Controller
             $table->editColumn('hp_pimpinan', function ($row) {
                 return $row->hp_pimpinan ? $row->hp_pimpinan : '';
             });
-            
-            
+
+
             $table->editColumn('jum_petani', function ($row) {
                 return $row->jum_petani ? $row->jum_petani  : '';
             });
-            
+
             $table->editColumn('luas', function ($row) {
                 return $row->luas ? number_format($row->luas, 2, '.', ',') : 0;
             });
-            
-            
+
+
             $table->rawColumns(['actions']);
 
             return $table->make(true);
@@ -265,21 +267,21 @@ class KelompoktaniController extends Controller
 
         $realno = Str::substr($nomor, 0, 4) . '/' . Str::substr($nomor, 4, 2) . '.' . Str::substr($nomor, 6, 3) . '/' . Str::substr($nomor, 9, 1) . '/' . Str::substr($nomor, 10, 2) . '/' . Str::substr($nomor, 12, 4);
 
-        $module_name = 'Proses RIPH' ;
+        $module_name = 'Proses RIPH';
         $page_title = 'Summary Kelompok Tani';
-        $page_heading = 'Summary Kelompok Tani' ;
+        $page_heading = 'Summary Kelompok Tani';
         $heading_class = 'fal fa-user-alt';
-        
-        
-        return view('admin.kelompoktani.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'nomor', 'realno' ));
+
+
+        return view('admin.kelompoktani.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'nomor', 'realno'));
     }
 
     public function showtani(Request $request, $nomor)
     {
         if ($request->ajax()) {
-            
+
             $query = Poktan::select(sprintf('%s.*', (new Poktan())->table))->where('id_poktan', $nomor);
-            
+
             $table = Datatables::of($query);
 
             // $table->addColumn('placeholder', '&nbsp;');
@@ -315,17 +317,17 @@ class KelompoktaniController extends Controller
             $table->editColumn('periode_tanam', function ($row) {
                 return $row->periode_tanam ? $row->periode_tanam : '';
             });
-            
+
             // $table->rawColumns(['actions', 'placeholder']);
 
             return $table->make(true);
         }
 
-        $module_name = 'Proses RIPH' ;
+        $module_name = 'Proses RIPH';
         $page_title = 'Detail petani';
-        $page_heading = 'Detail petani' ;
+        $page_heading = 'Detail petani';
         $heading_class = 'fal fa-user-alt';
-        
+
         return view('admin.kelompoktani.showtani', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'nomor'));
     }
 
@@ -370,9 +372,9 @@ class KelompoktaniController extends Controller
 
     public function massDestroy(MassDestroyKelompoktaniRequest $request)
     {
-        
+
         Kelompoktani::whereIn('id', request('ids'))->delete();
-        
+
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

@@ -9,7 +9,7 @@
 @section('content')
 	@include('partials.breadcrumb')
 	@include('partials.subheader')
-	@can('commitment_access')
+	@can('online_access')
 		@include('partials.sysalert')
 		@php
 			$npwp = str_replace(['.', '-'], '', $commitment->npwp);

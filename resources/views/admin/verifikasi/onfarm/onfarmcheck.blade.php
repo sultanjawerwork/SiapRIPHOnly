@@ -9,7 +9,7 @@
 @section('content')
 	@include('partials.breadcrumb')
 	@include('partials.subheader')
-	@can('commitment_access')
+	@can('onfarm_access')
 		@include('partials.sysalert')
 		<div class="row d-flex">
 			<div class="col-12">

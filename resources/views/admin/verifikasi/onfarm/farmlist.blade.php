@@ -3,7 +3,7 @@
 	{{-- @include('partials.breadcrumb') --}}
 	@include('partials.subheader')
 
-	@can('commitment_access')
+	@can('onfarm_access')
 		@include('partials.sysalert')
 		@php
 			$npwp = str_replace(['.', '-'], '', $verifikasi->npwp);

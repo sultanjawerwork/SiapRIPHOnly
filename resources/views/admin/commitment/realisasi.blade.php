@@ -160,7 +160,7 @@
 				<div class="panel-container show">
 					<div class="panel-content">
 						<ul class="list-group mb-3" style="word-break:break-word;">
-							<li class="list-group-item d-flex justify-content-between">
+							<li class="list-group-item list-group-item-action d-flex justify-content-between">
 								<div>
 									<span class="text-muted">Perusahaan/Lembaga</span>
 									<h6 class="fw-500 my-0">{{ $commitment->user->data_user->company_name }}</h6>

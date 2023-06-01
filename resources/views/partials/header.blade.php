@@ -178,9 +178,15 @@
                     <span data-i18n="drpdwn.fullscreen">Layar Penuh</span>
                     <i class="float-right text-muted fw-n">F11</i>
                 </a>
+                @if (\Auth::user()->roleaccess == '1')
+                <a href="{{ route('admin.profile.pejabat') }}" class="dropdown-item">
+                    <span data-i18n="drpdwn.profile">Profile</span>
+                </a>
+                @else
                 <a href="{{ route('admin.profile.show') }}" class="dropdown-item">
                     <span data-i18n="drpdwn.profile">Profile</span>
                 </a>
+                @endif
                 {{-- <div class="dropdown-multilevel dropdown-multilevel-left">
 					<div class="dropdown-item" data-i18n="drpdwn.lang">
 						Bahasa

@@ -3,9 +3,6 @@
 {{-- @include('partials.breadcrumb') --}}
 {{-- @include('partials.subheader') --}}
 @can('skl_access')
-@if (!empty($pagedata['alerttitle']))
-<div class="" data-title="System Alert" data-intro="Ini adalah Panel yang berisi informasi atau pemberitahuan penting untuk Anda." data-step="1">@include('partials.sysalert')</div>
-@endif
 <div class="row">
     <div class="col-lg-12">
         <div id="panel-1" class="panel">

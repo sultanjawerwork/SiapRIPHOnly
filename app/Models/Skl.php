@@ -35,4 +35,9 @@ class Skl extends Model
     {
         return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
     }
+
+    public function datauser()
+    {
+        return $this->belongsTo(Skl::class, 'npwp_company', 'npwp');
+    }
 }

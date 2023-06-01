@@ -23,7 +23,6 @@ Route::get('/home', function () {
 Auth::routes(['register' => true]); // menghidupkan registration
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
-
 	// landing
 	Route::get('/', 'HomeController@index')->name('home');
 	// Dashboard
@@ -51,6 +50,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('profile', 'ProfileController@index')->name('profile.show');
 	Route::post('profile', 'ProfileController@store')->name('profile.store');
 	Route::post('profile/{id}', 'ProfileController@update')->name('profile.update');
+	Route::get('profile/pejabat', 'AdminProfileController@index')->name('profile.pejabat');
+	Route::post('profile/pejabat/store', 'AdminProfileController@store')->name('profile.pejabat.store');
 
 	//posts
 	Route::put('posts/{post}/restore', 'PostsController@restore')->name('posts.restore');
@@ -154,8 +155,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
-		Route::resource('skl', 'SklController');
-
+		//Daftar SKL untuk user
+		Route::get('user/skl', 'UserSklController@index')->name('user.skl');
+		Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
 
 		//berkas
 		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');
@@ -176,12 +178,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 });
 
 Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
-	// Route::resource('online', 'OnlineController');
-	// Route::resource('onfarm', 'OnfarmController');
-	Route::resource('completed', 'CompletedController');
 
 	//verifikasi online/data
-	// Route::resource('verifikasi', 'VerifOnlineController');
 	Route::get('data', 'VerifOnlineController@index')->name('data');
 	Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
 	Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
@@ -203,13 +201,15 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
 	Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
 
-	Route::get('skl', 'SklController@index')->name('skladmin');
+	Route::resource('skl', 'SklController');
+	Route::get('skl', 'SklController@index')->name('skl');
 	Route::post('skl', 'SklController@submit')->name('skladmin.submit');
 	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
 	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
-	Route::get('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
+	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
 	Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
+	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

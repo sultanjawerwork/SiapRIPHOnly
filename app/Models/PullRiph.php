@@ -61,6 +61,11 @@ class PullRiph extends Model
 		return $this->belongsTo(User::class);
 	}
 
+	public function datauser()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
+
 	public function penangkar_riph()
 	{
 		return $this->hasMany(PenangkarRiph::class, 'no_ijin', 'no_ijin');
