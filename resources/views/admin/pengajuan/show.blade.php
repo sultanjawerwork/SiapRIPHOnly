@@ -10,7 +10,7 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 
-@can('poktan_access')
+@can('pengajuan_show')
 <div class="row">
 	<div class="col-12">
 		<div class="text-center">

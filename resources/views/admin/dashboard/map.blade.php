@@ -2,12 +2,11 @@
 @section('content')
 <link rel="stylesheet" media="screen, print" href="{{ asset('css/miscellaneous/jqvmap/jqvmap.bundle.css') }}">
 
-{{-- @include('partials.breadcrumb') --}}
 <style>
 	.bg-ocean {
 		background-color: #eafeff;
 	}
-	</style>
+</style>
 <!-- Page Title Heading -->
 <div class="subheader d-print-none">
 	<h1 class="subheader-title">
@@ -32,6 +31,7 @@
 		</div>
 	</div>
 </div>
+@can('dashboard_access')
 {{-- page content --}}
 <div class="row">
 	<div class="col-md-12">
@@ -232,7 +232,7 @@
 	<!-- End Modal upload -->
 </div>
 {{-- End Page Content --}}
-
+@endcan
 @endsection
 @section('scripts')
 @parent

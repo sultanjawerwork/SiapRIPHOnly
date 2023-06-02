@@ -1,68 +1,70 @@
 @extends('layouts.admin')
 @section('content')
-{{-- @include('partials.breadcrumb') --}}
-@include('partials.subheader')
-@include('partials.sysalert')
-<div class="row">
-	<div class="col-lg-12">
-		<div id="panel-1" class="panel">
-			<div class="panel-hdr">
-				<h2>
-					Daftar Permohonan<span class="fw-300">|<i>SKL</i></span>
-				</h2>
-				<div class="panel-toolbar">
-					@include('partials.globaltoolbar')
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<div class="table">
-						<table id="recomTable" class="table table-sm table-bordered table-hover table-striped w-100">
-							<thead>
-								<tr>
-									<th>No. SKL</th>
-									<th>No. RIPH</th>
-									<th>Pelaku Usaha</th>
-									<th>Rekomendasi</th>
-									<th>Tanggal</th>
-									<th>Tindakan</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach ($recomends as $recomend)
-									<tr>
-										<td>{{$recomend->skl->no_skl}}</td>
-										<td>{{$recomend->no_ijin}}</td>
-										<td>{{$recomend->datauser->company_name}}</td>
-										<td class="text-center">
-											@php
-												$user = \App\Models\User::find($recomend->skl->submit_by);
-											@endphp
-											{{ $user ? $user->name : 'User Not Found' }}
-										</td>
-										<td class="text-center">{{$recomend->created_at}}</td>
-										<td class="text-center">
-											@if($recomend->skl->published_date)
-												<a href="" class="btn btn-xs btn-success btn-icon">
-													<i class="fal fa-award"></i>
-												</a>
-											@else
-												<a href="{{route('verification.skl.recomendations.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
-													<i class="fal fa-file-search">
-													</i>
-												</a>
-											@endif
-										</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
+	{{-- @include('partials.breadcrumb') --}}
+	@include('partials.subheader')
+	@include('partials.sysalert')
+	@can('skl_access')
+		<div class="row">
+			<div class="col-lg-12">
+				<div id="panel-1" class="panel">
+					<div class="panel-hdr">
+						<h2>
+							Daftar Permohonan<span class="fw-300">|<i>SKL</i></span>
+						</h2>
+						<div class="panel-toolbar">
+							@include('partials.globaltoolbar')
+						</div>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="table">
+								<table id="recomTable" class="table table-sm table-bordered table-hover table-striped w-100">
+									<thead>
+										<tr>
+											<th>No. SKL</th>
+											<th>No. RIPH</th>
+											<th>Pelaku Usaha</th>
+											<th>Rekomendasi</th>
+											<th>Tanggal</th>
+											<th>Tindakan</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach ($recomends as $recomend)
+											<tr>
+												<td>{{$recomend->skl->no_skl}}</td>
+												<td>{{$recomend->no_ijin}}</td>
+												<td>{{$recomend->datauser->company_name}}</td>
+												<td class="text-center">
+													@php
+														$user = \App\Models\User::find($recomend->skl->submit_by);
+													@endphp
+													{{ $user ? $user->name : 'User Not Found' }}
+												</td>
+												<td class="text-center">{{$recomend->created_at}}</td>
+												<td class="text-center">
+													@if($recomend->skl->published_date)
+														<a href="" class="btn btn-xs btn-success btn-icon">
+															<i class="fal fa-award"></i>
+														</a>
+													@else
+														<a href="{{route('verification.skl.recomendations.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
+															<i class="fal fa-file-search">
+															</i>
+														</a>
+													@endif
+												</td>
+											</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+	@endcan
 @endsection
 
 @section('scripts')

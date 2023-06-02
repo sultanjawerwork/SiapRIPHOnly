@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section ('styles')
 <link rel="stylesheet" media="screen, print" href="{{asset('/css/smartadmin/page-invoice.css')}}">
-
 @endsection
 @section('content')
 {{-- @include('partials.breadcrumb') --}}

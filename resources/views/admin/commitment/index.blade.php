@@ -2,9 +2,8 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-@can('commitment_access')
+@can('commitment_list_access')
 @include('partials.sysalert')
-
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">

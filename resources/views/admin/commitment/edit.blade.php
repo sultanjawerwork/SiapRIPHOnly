@@ -2,7 +2,7 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-@can('commitment_show')
+@can('commitment_edit')
 @include('partials.sysalert')
 	{{-- {{ dd($data_poktan) }} --}}
 	<div class="row">

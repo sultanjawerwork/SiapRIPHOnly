@@ -2,9 +2,8 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-
-@can('commitment_show')
 @include('partials.sysalert')
+@can('pks_create')
 	<div class="row">
 		<div class="col">
 			<div class="panel" id="panel-1">
@@ -155,8 +154,6 @@
 			</div>
 		</div>
 	</div>
-	
-
 @endcan
 
 @endsection

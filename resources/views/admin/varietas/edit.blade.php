@@ -3,7 +3,7 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 @include('partials.sysalert')
-@can('poktan_access')
+@can('varietas_edit')
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">

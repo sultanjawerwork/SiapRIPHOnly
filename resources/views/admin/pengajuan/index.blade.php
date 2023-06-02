@@ -3,7 +3,7 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 
-@can('poktan_access')
+@can('pengajuan_access')
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">

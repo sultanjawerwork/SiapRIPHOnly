@@ -354,7 +354,6 @@ return [
         'level'          => '2',
     ],
 
-
     'administrator' => [
         'title'          => 'Administrator',
         'title_lang'     => 'ADMINISTRATOR',
@@ -619,6 +618,18 @@ return [
         'can_delete'     => '0',
         'can_access'     => '0',
         'can_create'     => '0',
+        'level'          => '0',
+    ],
+    'varietas' => [
+        'title'          => 'Varietas',
+        'title_lang'     => 'Varietas',
+        'is_parent'      => '1',
+        'is_hidden'      => '0',
+        'can_view'       => '1',
+        'can_edit'       => '1',
+        'can_delete'     => '1',
+        'can_access'     => '1',
+        'can_create'     => '1',
         'level'          => '0',
     ],
 ];

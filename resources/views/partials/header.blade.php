@@ -178,7 +178,7 @@
                     <span data-i18n="drpdwn.fullscreen">Layar Penuh</span>
                     <i class="float-right text-muted fw-n">F11</i>
                 </a>
-                @if (\Auth::user()->roleaccess == '1')
+                @if (Auth::user()->roles[0]->title == 'Pejabat')
                 <a href="{{ route('admin.profile.pejabat') }}" class="dropdown-item">
                     <span data-i18n="drpdwn.profile">Profile</span>
                 </a>
