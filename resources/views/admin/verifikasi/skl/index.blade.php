@@ -7,14 +7,6 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div id="panel-1" class="panel">
-					<div class="panel-hdr">
-						<h2>
-							Daftar Rekomendasi<span class="fw-300">|<i>Terbit</i></span>
-						</h2>
-						<div class="panel-toolbar">
-							@include('partials.globaltoolbar')
-						</div>
-					</div>
 					<div class="panel-container show">
 						<div class="panel-content">
 							<div class="table">
@@ -61,7 +53,7 @@
 															<i class="fal fa-file-certificate"></i>
 														</a>
 													@elseif($recomend->skl && $recomend->skl->created_at && !$recomend->skl->published_date)
-														<span class="badge badge-xs badge-icon badge-info" title="Sudah direkomendasikan penerbitan SKL.">
+														<span class="btn btn-xs btn-icon btn-info" title="Sudah direkomendasikan kepada pimpinan.">
 															<i class="fal fa-check"></i>
 														</span>
 													@else
@@ -83,7 +75,7 @@
 																	<span aria-hidden="true">&times;</span>
 																</button>
 															</div>
-															<form action="{{route('verification.skladmin.submit')}}" method="post">
+															<form action="{{route('verification.skl.recomend')}}" method="post">
 																@csrf
 																<div class="modal-body">
 																<input type="text" name="pengajuan_id" value="{{$recomend->id}}" hidden>

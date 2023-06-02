@@ -3,18 +3,10 @@
 {{-- @include('partials.breadcrumb') --}}
 	@include('partials.subheader')
 	@include('partials.sysalert')
-	@can('skl_access')
+	{{-- @can('create_skl_access') --}}
 		<div class="row">
 			<div class="col-lg-12">
 				<div id="panel-1" class="panel">
-					<div class="panel-hdr">
-						<h2>
-							Daftar Permohonan<span class="fw-300">|<i>SKL</i></span>
-						</h2>
-						<div class="panel-toolbar">
-							@include('partials.globaltoolbar')
-						</div>
-					</div>
 					<div class="panel-container show">
 						<div class="panel-content">
 							<div class="table">
@@ -64,7 +56,7 @@
 				</div>
 			</div>
 		</div>
-	@endcan
+	{{-- @endcan --}}
 @endsection
 
 @section('scripts')
@@ -72,7 +64,6 @@
 <script>
 	$(document).ready(function()
 	{
-
 		// initialize datatable
 		$('#recomTable').dataTable(
 		{

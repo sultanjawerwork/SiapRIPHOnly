@@ -201,9 +201,9 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
 	Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
 
-	Route::resource('skl', 'SklController');
+	// Route::resource('skl', 'SklController');
 	Route::get('skl', 'SklController@index')->name('skl');
-	Route::post('skl', 'SklController@submit')->name('skladmin.submit');
+	Route::post('skl/recomend', 'SklController@recomend')->name('skl.recomend');
 	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
 	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
 	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');

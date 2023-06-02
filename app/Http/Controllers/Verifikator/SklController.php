@@ -17,7 +17,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SklController extends Controller
 {
-
+	//digunakan oleh Administrator/Verifikator untuk melihat daftar verifikasi yang siap direkomendasikan terbit skl.
 	public function index()
 	{
 		abort_if(Gate::denies('verification_skl_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -33,7 +33,8 @@ class SklController extends Controller
 		return view('admin.verifikasi.skl.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
-	public function submit(Request $request)
+	//dilakukan oleh verifikator/administrator
+	public function recomend(Request $request)
 	{
 		abort_if(Gate::denies('verification_skl_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 		$user = Auth::user();
@@ -55,11 +56,12 @@ class SklController extends Controller
 		$recomend->save();
 		$pengajuan->save();
 		$commitment->save();
-		return redirect()->route('verification.skladmin')
+		return redirect()->route('verification.skl')
 			->with('success', 'Komitmen No. RIPH: ' . $commitment->no_ijin . ', berhasil diajukan untuk penerbitan SKL.');
 	}
 
-	public function recomendations(Request $request)
+	//untuk pejabat melihat rekomendasi penerbitan skl.
+	public function recomendations()
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
 			abort(403, 'Unauthorized');
@@ -72,10 +74,11 @@ class SklController extends Controller
 
 		$recomends = Pengajuan::where('status', '6')
 			->get();
-
-		return view('admin.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
+		// dd($recomends);
+		return view('admin.verifikasi.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
+	//oleh pejabat
 	public function showrecom($id)
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
@@ -96,9 +99,10 @@ class SklController extends Controller
 		$wajib_produksi = $commitment->volume_riph * 0.05;
 		$volume_verif = $pengajuan->volume_verif;
 
-		return view('admin.skl.recomshow', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'importir', 'wajib_tanam', 'luas_verif', 'wajib_produksi', 'volume_verif'));
+		return view('admin.verifikasi.skl.recomshow', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'importir', 'wajib_tanam', 'luas_verif', 'wajib_produksi', 'volume_verif'));
 	}
 
+	//oleh pejabat
 	public function storerecom($id)
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
@@ -125,6 +129,7 @@ class SklController extends Controller
 		return redirect()->route('verification.skl.published', ['id' => $skl->id]);
 	}
 
+	//daftar skl terbit
 	public function publishes()
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
@@ -139,7 +144,7 @@ class SklController extends Controller
 		$recomends = Pengajuan::where('status', '7')
 			->get();
 
-		return view('admin.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
+		return view('admin.verifikasi.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
 	public function published($id)
@@ -170,7 +175,7 @@ class SklController extends Controller
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
 		// dd($commitment);
-		return view('admin.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
 	}
 
 	public function arsipskl($id)
@@ -195,7 +200,7 @@ class SklController extends Controller
 
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
-		return view('sklPdf', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.sklPdf', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
 	}
 
 	/**

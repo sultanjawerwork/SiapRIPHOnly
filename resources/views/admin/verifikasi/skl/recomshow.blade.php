@@ -3,7 +3,7 @@
 {{-- @include('partials.breadcrumb') --}}
 	@include('partials.subheader')
 	@include('partials.sysalert')
-	@can('skl_access')
+	{{-- @can('skl_access') --}}
 		<div class="row">
 			<div class="col-12">
 				<div class="text-center">
@@ -141,7 +141,7 @@
 				</div>
 			</div>
 		</div>
-	@endcan
+	{{-- @endcan --}}
 @endsection
 
 @section('scripts')
