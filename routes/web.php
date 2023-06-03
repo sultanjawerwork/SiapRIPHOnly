@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Verifikator\SklOldController;
 
 Route::get('/', function () {
 	return redirect()->route('login');
@@ -159,6 +160,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('user/skl', 'UserSklController@index')->name('user.skl');
 		Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
 
+		Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
+		Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
+
 		//berkas
 		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');
 
@@ -210,6 +214,15 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
 	Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
 	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
+
+	//SKL Old/Manual
+	Route::get('oldskl/index', 'SklOlderController@index')->name('oldskl.index');
+	Route::get('oldskl/create', 'SklOlderController@create')->name('oldskl.create');
+	Route::post('oldskl/store', 'SklOlderController@store')->name('oldskl.store');
+	Route::get('oldskl/{id}/show', 'SklOlderController@show')->name('oldskl.show');
+	Route::get('oldskl/{id}/edit', 'SklOlderController@edit')->name('oldskl.edit');
+	Route::put('oldskl/{id}/update', 'SklOlderController@update')->name('oldskl.update');
+	Route::delete('oldskl/{id}/delete', 'SklOlderController@destroy')->name('oldskl.delete');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

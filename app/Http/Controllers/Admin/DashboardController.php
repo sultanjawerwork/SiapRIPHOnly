@@ -24,9 +24,10 @@ class DashboardController extends Controller
 				$page_heading = 'Monitoring';
 				$heading_class = 'fal fa-analytics';
 
-				$riph_admin = RiphAdmin::orderBy('updated_at', 'DESC')->get();
+				$periodeTahuns = RiphAdmin::all()->groupBy('periode');
+				$riph_admin = RiphAdmin::orderBy('periode', 'DESC')->get();
 
-				return view('admin.dashboard.indexadmin', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'riph_admin'));
+				return view('admin.dashboard.indexadmin', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'riph_admin', 'periodeTahuns'));
 			}
 			if (Auth::user()->roles[0]->title == 'Verifikator') {
 				$module_name = 'Dashboard';

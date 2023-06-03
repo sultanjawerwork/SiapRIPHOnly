@@ -8,7 +8,7 @@ use App\Models\PullRiph;
 use App\Models\Pengajuan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class UserSklController extends Controller
@@ -63,5 +63,34 @@ class UserSklController extends Controller
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status']);
 
 		return view('admin.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+	}
+
+	public function oldindex()
+	{
+		abort_if(Gate::denies('old_skl_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$module_name = 'SKL';
+		$page_title = 'Old SKL';
+		$page_heading = 'Daftar SKL Lama';
+		$heading_class = 'fa fa-file-certificate';
+
+		$oldskls = SklOlder::all();
+
+		return view('admin.oldskl.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'oldskls'));
+	}
+
+	public function showold($id)
+	{
+		abort_if(Gate::denies('old_skl_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$module_name = 'SKL';
+		$page_title = 'Old SKL';
+		$page_heading = 'Rekam Data SKL Lama';
+		$heading_class = 'fa fa-file-certificate';
+
+		$oldskl = SklOlder::find($id);
+		dd($oldskl);
+
+		return view('admin.oldskl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'oldskl'));
 	}
 }

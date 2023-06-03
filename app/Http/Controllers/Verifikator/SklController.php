@@ -144,7 +144,7 @@ class SklController extends Controller
 		$recomends = Pengajuan::where('status', '7')
 			->get();
 
-		return view('admin.verifikasi.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
+		return view('admin.verifikasi.skl.publishes', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
 	public function published($id)

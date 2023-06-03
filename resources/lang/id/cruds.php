@@ -632,4 +632,16 @@ return [
         'can_create'     => '1',
         'level'          => '0',
     ],
+    'oldskl' => [
+        'title'          => 'Old Skl',
+        'title_lang'     => 'Old SKL',
+        'is_parent'      => '1',
+        'is_hidden'      => '0',
+        'can_view'       => '1',
+        'can_edit'       => '1',
+        'can_delete'     => '1',
+        'can_access'     => '1',
+        'can_create'     => '1',
+        'level'          => '0',
+    ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreRiphAdminRequest;
+use Illuminate\Http\Request;
 use App\Http\Requests\UpdateRiphAdminRequest;
 use App\Models\RiphAdmin;
 use App\Http\Controllers\Controller;
@@ -11,94 +12,112 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RiphAdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function index()
+	{
+		abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $module_name = 'Master RIPH' ;
-        $page_title = '';
-        $page_heading = 'Master RIPH' ;
-        $heading_class = 'fal fa-ballot';
-        $riph_admin = RiphAdmin::all();
-        return view('admin.riphAdmin.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'riph_admin'));
-    }
+		$module_name = 'Master RIPH';
+		$page_title = '';
+		$page_heading = 'Master RIPH';
+		$heading_class = 'fal fa-ballot';
+		$riph_admin = RiphAdmin::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+		return view('admin.riphAdmin.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'riph_admin'));
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreRiphAdminRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreRiphAdminRequest $request)
-    {
-        
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\RiphAdmin  $riphAdmin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RiphAdmin $riphAdmin)
-    {
-        //
-    }
+		$module_name = 'Master RIPH';
+		$page_title = '';
+		$page_heading = 'Master RIPH';
+		$heading_class = 'fal fa-ballot';
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\RiphAdmin  $riphAdmin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RiphAdmin $riphAdmin)
-    {
-        abort_if(Gate::denies('master_riph_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $module_name = 'Master RIPH' ;
-        $page_title = '';
-        $page_heading = 'Edit Master RIPH' ;
-        $heading_class = 'fal fa-ballot';
-        return view('admin.riphAdmin.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class','riphAdmin'));
-    }
+		return view('admin.riphAdmin.create', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateRiphAdminRequest  $request
-     * @param  \App\Models\RiphAdmin  $riphAdmin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateRiphAdminRequest $request, RiphAdmin $riphAdmin)
-    {
-        $riphAdmin->update($request->all());
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \App\Http\Requests\StoreRiphAdminRequest  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$datariph = new RiphAdmin();
+		$datariph->periode = $request->input('periode');
+		$datariph->jumlah_importir = $request->input('jumlah_importir');
+		$datariph->v_pengajuan_import = $request->input('v_pengajuan_import');
+		$datariph->v_beban_tanam = $request->input('v_beban_tanam');
+		$datariph->v_beban_produksi = $request->input('v_beban_produksi');
 
-        return redirect()->route('admin.riphAdmin.index')->with('message','Berhasil update data riph-admin');
-        
-    }
+		// dd($datariph);
+		$datariph->save();
+		return redirect()->route('admin.riphAdmin.index')
+			->with('success', 'Data berhasil disimpan.');
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\RiphAdmin  $riphAdmin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RiphAdmin $riphAdmin)
-    {
-        //
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Models\RiphAdmin  $riphAdmin
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show(RiphAdmin $riphAdmin)
+	{
+		//
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  \App\Models\RiphAdmin  $riphAdmin
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit(RiphAdmin $riphAdmin)
+	{
+		abort_if(Gate::denies('master_riph_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		$module_name = 'Master RIPH';
+		$page_title = 'Ubah Data';
+		$page_heading = 'Ubah Data Master RIPH';
+		$heading_class = 'fal fa-ballot';
+
+		return view('admin.riphAdmin.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'riphAdmin'));
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \App\Http\Requests\UpdateRiphAdminRequest  $request
+	 * @param  \App\Models\RiphAdmin  $riphAdmin
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $riphAdmin)
+	{
+		$riphAdmin->update($request->all());
+
+		return redirect()->route('admin.riphAdmin.index')->with('message', 'Berhasil update data riph-admin');
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  \App\Models\RiphAdmin  $riphAdmin
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(RiphAdmin $riphAdmin)
+	{
+		//
+	}
 }

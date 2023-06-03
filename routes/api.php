@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\AnggotaMitraController;
 use App\Http\Controllers\Api\GetWilayahController;
 
 Route::group(['namespace' => 'Api'], function () {
+    //dashboard
+    Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');
 
     // Route::post('getAPIAccessToken', 'HelperController@getAPIAccessToken');
     // Provinsi
