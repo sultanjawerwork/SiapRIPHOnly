@@ -8,6 +8,7 @@ function initMap() {
 	// Make an Ajax request to retrieve the marker data and polygons
 	$("#periodetahun").on("change", function () {
 		initMap();
+
 		var periodetahun = $(this).val();
 		var url =
 			periodetahun == "all"
@@ -18,7 +19,6 @@ function initMap() {
 			type: "GET",
 			dataType: "json",
 			success: function (data) {
-				console.log(data);
 				$.each(data, function (index, anggotaMitra) {
 					if (anggotaMitra.latitude && anggotaMitra.longitude) {
 						var marker = new google.maps.Marker({
@@ -27,7 +27,9 @@ function initMap() {
 								lng: parseFloat(anggotaMitra.longitude),
 							},
 							map: map,
-							id: anggotaMitra.id, // Add id property to the marker object
+							id: anggotaMitra.id,
+							npwp: anggotaMitra.npwp,
+							periodetahun: anggotaMitra.periodetahun,
 							latitude: anggotaMitra.latitude,
 							longitude: anggotaMitra.longitude,
 							no_ijin: anggotaMitra.no_ijin,
@@ -47,6 +49,8 @@ function initMap() {
 							varietas: anggotaMitra.varietas,
 							tgl_panen: anggotaMitra.tgl_panen,
 							volume: anggotaMitra.volume,
+
+							company: anggotaMitra.company,
 						});
 
 						marker.addListener("click", function () {
@@ -54,6 +58,7 @@ function initMap() {
 							map.panTo(marker.getPosition());
 
 							// Send an AJAX request to get the marker data
+
 							$.ajax({
 								url:
 									"http://127.0.0.1:8000/api/getAPIAnggotaMitra/" +
@@ -63,7 +68,9 @@ function initMap() {
 								success: function (data) {
 									// Create a string containing the marker data
 									var markerId = marker.id;
+									var npwp = marker.npwp;
 									var no_ijin = marker.no_ijin;
+									var periodetahun = marker.periodetahun;
 									var no_perjanjian = marker.no_perjanjian;
 									var nama_lokasi = marker.nama_lokasi;
 									var panenPictName = marker.panen_pict;
@@ -82,41 +89,66 @@ function initMap() {
 									var tgl_panen = marker.tgl_panen;
 									var volume = marker.volume;
 
+									var company = marker.company;
+
 									// Set the modal content to the marker details
 									$("#markerModal #markerId").text(markerId);
 									$("#markerModal #no_ijin").text(no_ijin);
 									$("#markerModal #no_perjanjian").text(no_perjanjian);
 									$("#markerModal #nama_lokasi").text(nama_lokasi);
+									$("#markerModal #npwp").text(npwp);
+									$("#markerModal #company").text(company);
 
 									//set the <a> element for panen
+
 									$("#markerModal #panenPictName").html(
-										`<a href="/storage/docs/pks/anggota/panen/img/${panenPict}" target="_blank">${panenPictName}</a>`
+										`<a href="/storage/uploads/${npwp}/${periodetahun}/${panenPict}" target="_blank">${panenPictName}</a>`
 									);
 									$("#markerModal #panenPict").attr(
 										"src",
-										"/storage/docs/pks/anggota/panen/img/" + panenPict
+										"/storage/uploads/" +
+											npwp +
+											"/" +
+											periodetahun +
+											"/" +
+											panenPict
 									);
 									$("#markerModal #panenPict")
 										.parent("a")
 										.attr(
 											"href",
-											"/storage/docs/pks/anggota/panen/img/" + panenPict
+											"/storage/uploads/" +
+												npwp +
+												"/" +
+												periodetahun +
+												"/" +
+												panenPict
 										);
 
 									//set the <a> element for tanam
 									$("markerModal #tanamPictName").html(
-										`<a href="/storage/docs/pks/anggota/tanam/img/${tanamPict}" target="_blank">${tanamPictName}</a>`
+										`<a href="/storage/uploads/${npwp}/${periodetahun}/${tanamPict}" target="_blank">${tanamPictName}</a>`
 									);
 									$("#markerModal #tanamPict").attr(
 										"src",
-										"/storage/docs/pks/anggota/tanam/img/" + tanamPict
+										"/storage/uploads/" +
+											npwp +
+											"/" +
+											periodetahun +
+											"/" +
+											tanamPict
 									);
 
 									$("#markerModal #tanamPict")
 										.parent("a")
 										.attr(
 											"href",
-											"/storage/docs/pks/anggota/tanam/img/" + tanamPict
+											"/storage/uploads/" +
+												npwp +
+												"/" +
+												periodetahun +
+												"/" +
+												tanamPict
 										);
 									// $("#markerModal #tanamPictName").text(tanamPictName);
 									// $("#markerModal #tanamPict").attr(
@@ -135,7 +167,7 @@ function initMap() {
 									$("#markerModal #varietas").text(varietas);
 									$("#markerModal #tgl_panen").text(tgl_panen);
 									$("#markerModal #volume").text(volume);
-
+									console.log(npwp);
 									// Show the modal
 									$("#markerModal").modal("show");
 								},

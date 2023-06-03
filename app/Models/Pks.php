@@ -46,4 +46,9 @@ class Pks extends Model
     {
         return $this->belongsTo(MasterPoktan::class, 'poktan_id', 'poktan_id');
     }
+
+    public function commitment()
+    {
+        return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+    }
 }

@@ -67,7 +67,7 @@
 						</h3>
 					</div>
 				</div>
-				<i class="fal fa-balance-scale position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+				<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
 			</div>
 		</div>
 		<div class="col-md-3">

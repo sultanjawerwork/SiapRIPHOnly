@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\CommitmentBackdate;
 use App\Models\AnggotaMitra;
+use App\Models\PullRiph;
+use App\Models\Lokasi;
 use App\Models\RiphAdmin;
 
 class DashboardController extends Controller
@@ -67,18 +69,18 @@ class DashboardController extends Controller
 		$page_desc = 'Peta Lahan Realisasi Wajib Tanam-Produksi';
 		$heading_class = 'fal fa-map-marked-alt';
 
-		$anggotaMitras = AnggotaMitra::with([
-			'pksmitra' => function ($query) {
-				$query->with('commitmentbackdate');
+		$anggotaMitras = Lokasi::with([
+			'pks' => function ($query) {
+				$query->with('commitment');
 			},
-			'pksmitra',
+			'pks',
 			'masteranggota'
 		])->get();
 
-		$periodeTahuns = CommitmentBackdate::all()->groupBy('periodetahun');
+		$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
 
 
-		return view('v2.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'anggotaMitras', 'page_desc', 'periodeTahuns'));
+		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'anggotaMitras', 'page_desc', 'periodeTahuns'));
 	}
 
 	public function monitoring(Request $request)
