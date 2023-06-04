@@ -3,7 +3,6 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 @include('partials.sysalert')
-@can('poktan_access')
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">
@@ -63,7 +62,6 @@
 		</div>
 	</div>
 </div>
-@endcan
 @endsection
 
 @section('scripts')

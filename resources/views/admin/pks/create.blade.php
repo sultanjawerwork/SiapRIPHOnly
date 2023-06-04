@@ -3,7 +3,7 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-@can('commitment_show')
+@can('pks_create')
 	<div class="row">
 		<div class="col">
 			<div class="panel" id="panel-2">

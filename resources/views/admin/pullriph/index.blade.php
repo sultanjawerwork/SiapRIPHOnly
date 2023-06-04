@@ -4,8 +4,6 @@
 {{-- @include('partials.subheader') --}}
 
 @can('pull_access')
-
-
 <div class="row">
 	<div class="col-12">
 		<form  id="dataForm" action="{{ route('admin.task.pull.store') }}" method="POST" enctype="multipart/form-data">

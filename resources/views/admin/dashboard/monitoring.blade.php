@@ -439,7 +439,7 @@
 
 		$('#periodetahun').on('change', function () {
 			var periodetahun = $(this).val();
-			var url = '/api/getAPIMonitoringDataByYear/' + periodetahun;
+			var url = '/api/getApiDashboardDatabyYear/' + periodetahun;
 
 			if (periodetahun == '') return;
 			if (periodetahun == 'all') {

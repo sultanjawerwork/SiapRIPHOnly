@@ -59,4 +59,14 @@ class DataUser extends Model
     {
         return $this->hasMany(PullRiph::class, 'npwp', 'npwp_company');
     }
+
+    public function pengajuan()
+    {
+        return $this->hasMany(Pengajuan::class, 'npwp', 'npwp_company');
+    }
+
+    public function oldskl()
+    {
+        return $this->hasMany(SklOlder::class, 'npwp', 'npwp_company');
+    }
 }

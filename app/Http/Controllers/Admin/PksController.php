@@ -11,6 +11,7 @@ use App\Models\PullRiph;
 use App\Models\MasterKecamatan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\SimeviTrait;
+use App\Models\Varietas;
 use Gate;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -183,6 +184,8 @@ class PksController extends Controller
 		$commitmentStatus = $commitment->status;
 		$commitmentId = $commitment->id;
 
+		$varietass = Varietas::all();
+
 		// dd($commitmentId);
 
 		if (empty($commitmentStatus) || $commitmentStatus == 3 || $commitmentStatus == 5) {
@@ -190,7 +193,7 @@ class PksController extends Controller
 		} else {
 			$disabled = true; // input di-disable
 		}
-		return view('admin.pks.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'disabled', 'commitmentId', 'npwpCompany', 'commitment'));
+		return view('admin.pks.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'disabled', 'commitmentId', 'npwpCompany', 'commitment', 'varietass'));
 	}
 
 	public function update(Request $request, $id)

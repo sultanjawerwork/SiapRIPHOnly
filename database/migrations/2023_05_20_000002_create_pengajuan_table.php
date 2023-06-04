@@ -15,6 +15,7 @@ return new class extends Migration
 	{
 		Schema::create('pengajuans', function (Blueprint $table) {
 			$table->bigIncrements('id');
+			$table->string('npwp');
 			$table->string('no_pengajuan');
 			$table->string('no_ijin');
 			$table->unsignedBigInteger('commitment_id');

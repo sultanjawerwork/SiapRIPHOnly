@@ -32,8 +32,8 @@ class CommitmentController extends Controller
 	public function index(Request $request)
 	{
 		$module_name = 'Proses RIPH';
-		$page_title = 'Daftar RIPH';
-		$page_heading = 'Daftar RIPH';
+		$page_title = 'Daftar Komitmen';
+		$page_heading = 'Daftar Komitmen';
 		$heading_class = 'fal fa-ballot-check';
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
@@ -65,7 +65,7 @@ class CommitmentController extends Controller
 					if ($request->formRiph != null) {
 						$file = $request->file('formRiph');
 						$file_name = 'formRiph.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formRiph' => $file_path);
 					};
 				}
@@ -73,7 +73,7 @@ class CommitmentController extends Controller
 					if ($request->formSptjm != null) {
 						$file = $request->file('formSptjm');
 						$file_name = 'formSptjm.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formSptjm' => $file_path);
 					};
 				}
@@ -81,7 +81,7 @@ class CommitmentController extends Controller
 					if ($request->logBook != null) {
 						$file = $request->file('logBook');
 						$file_name = 'logBook.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('logBook' => $file_path);
 					};
 				}
@@ -89,7 +89,7 @@ class CommitmentController extends Controller
 					if ($request->formRt != null) {
 						$file = $request->file('formRt');
 						$file_name = 'formRt.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formRt' => $file_path);
 					};
 				}
@@ -97,7 +97,7 @@ class CommitmentController extends Controller
 					if ($request->formRta != null) {
 						$file = $request->file('formRta');
 						$file_name = 'formRta.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formRta' => $file_path);
 					};
 				}
@@ -105,7 +105,7 @@ class CommitmentController extends Controller
 					if ($request->formRpo != null) {
 						$file = $request->file('formRpo');
 						$file_name = 'formRpo.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formRpo' => $file_path);
 					};
 				}
@@ -113,7 +113,7 @@ class CommitmentController extends Controller
 					if ($request->formLa != null) {
 						$file = $request->file('formLa');
 						$file_name = 'formLa.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp, $file_name, 'public');
+						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
 						$userFiles += array('formLa' => $file_path);
 					};
 				}
@@ -319,8 +319,8 @@ class CommitmentController extends Controller
 		$commitment = PullRiph::where('npwp', $npwp_company)
 			->findOrFail($id);
 
-		$total_luastanam = $commitment->anggotariph->sum('luas_tanam');
-		$total_volume = $commitment->anggotariph->sum('volume');
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
 
 
 		dd($total_volume);

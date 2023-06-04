@@ -28,6 +28,15 @@ class UsersTableSeeder extends Seeder
                 'username'       => 'user1',
                 'roleaccess'     => 2,
             ],
+            [
+                'id'             => 3,
+                'name'           => 'Pejabat',
+                'email'          => 'pejabat@admin.com',
+                'password'       => bcrypt('password'),
+                'remember_token' => null,
+                'username'       => 'DirSto2023',
+                'roleaccess'     => 1,
+            ],
         ];
 
         User::insert($users);

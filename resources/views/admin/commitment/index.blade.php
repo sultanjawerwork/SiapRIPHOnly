@@ -4,18 +4,9 @@
 @include('partials.subheader')
 @can('commitment_access')
 @include('partials.sysalert')
-
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">
-			<div class="panel-hdr">
-				<h2>
-					Daftar Komitment (RIPH Bawang Putih Konsumsi)
-				</h2>
-				<div class="panel-toolbar">
-					@include('partials.globaltoolbar')
-				</div>
-			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
 					<table id="datatable" class="table table-bordered table-hover table-striped table-sm w-100">
@@ -35,7 +26,7 @@
 								{{-- check if commitment data are complete --}}
 								<td>
 									@if (empty($commitment->formRiph)
-										|| empty($commitment->formSptjm) || empty($commitment->logBook)
+										|| empty($commitment->formSptjm) || empty($commitment->logbook)
 										|| empty($commitment->formRt) || empty($commitment->formRta)
 										|| empty($commitment->formRpo) || empty($commitment->formLa)
 										|| empty($commitment->poktan_share))
@@ -84,7 +75,7 @@
 												<i class="fal fa-edit"></i>
 											</a>
 										@else
-											<a href="{{ route('admin.task.commitments.read', $commitment->id) }}"
+											<a href="{{ route('admin.task.commitment.edit', $commitment->id) }}"
 												class="btn btn-icon btn-xs btn-primary"
 												title="Lihat Data Komitmen">
 												<i class="fal fa-eye"></i>
@@ -99,10 +90,16 @@
 								</td>
 								<td class="justify-content-center">
 									@if (empty($commitment->status))
-										<span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
+									
+										<a href="{{ route('admin.task.commitment.submit', $commitment->id) }}"
+											class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
+											title data-original-title="Ajukan Verifikasi Data">
+											<i class="fal fa-file-search"></i>
+										</a>
+										{{-- <span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Belum Mengajukan Verifikasi">
 											<i class="fal fa-exclamation-circle"></i>
-										</span>
+										</span> --}}
 									@elseif ($commitment->status === '1')
 										<span class="badge btn-primary btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Verifikasi sudah diajukan">
@@ -111,7 +108,7 @@
 									@elseif ($commitment->status === '2')
 										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Verifikasi Data Selesai">
-											<i class="fal fa-check-circle"></i>
+											<i class="fal fa-file-check"></i>
 										</span>
 									@elseif ($commitment->status === '3')
 										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"
@@ -130,9 +127,14 @@
 										</span>
 									@elseif ($commitment->status === '6')
 										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Hore!. SKL Telah Terbit">
-											<i class="fal fa-award"></i>
+											title data-original-title="Rekomendasi Penerbitan SKL">
+											<i class="fal fa-file-certificate"></i>
 										</span>
+									@elseif ($commitment->status === '7')
+										<a href="" class="btn btn-success btn-icon btn-xs" data-toggle="tooltip"
+											title data-original-title="HORAY! SKL Sudah Terbit">
+											<i class="fal fa-file-certificate"></i>
+										</a>
 									@endif
 								</td>
 							</tr>

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('no_pengajuan', 50);
             $table->string('npwp', 50);
             $table->string('no_ijin');
+            $table->unsignedBigInteger('commitment_id');
             $table->enum('formRiph', ['Sesuai', 'Tidak Sesuai'])->nullable();
             $table->enum('formSptjm', ['Sesuai', 'Tidak Sesuai'])->nullable();
             $table->enum('logbook', ['Sesuai', 'Tidak Sesuai'])->nullable();

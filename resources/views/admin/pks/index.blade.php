@@ -1,11 +1,9 @@
 @extends('layouts.admin')
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
-{{-- @include('partials.subheader') --}}
-@can('commitment_access')
-@if (!empty($pagedata['alerttitle']))
-<div class="" data-title="System Alert" data-intro="Ini adalah Panel yang berisi informasi atau pemberitahuan penting untuk Anda." data-step="1">@include('partials.sysalert')</div>
-@endif
+@include('partials.subheader')
+@include('partials.sysalert')
+@can('pks_access')
 <div class="row">
     <div class="col-md-12">
         <div id="panel-1" class="panel" data-title="Panel Data" data-intro="Panel ini berisi data-data" data-step="2">

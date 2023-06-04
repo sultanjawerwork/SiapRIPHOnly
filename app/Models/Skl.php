@@ -31,8 +31,23 @@ class Skl extends Model
         'pejabat_id',
     ];
 
+    public function NewRecomendation(): int
+    {
+        return self::whereNull('published_date')->count();
+    }
+
     public function pengajuan()
     {
         return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
+    }
+
+    public function datauser()
+    {
+        return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+    }
+
+    public function commitment()
+    {
+        return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
     }
 }

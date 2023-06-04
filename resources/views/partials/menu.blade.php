@@ -148,95 +148,6 @@
 				@endif
 			@endcan
 
-			{{-- verificator task --}}
-			@can('verificator_task_access')
-				<li class="nav-title" data-i18n="nav.administation">VERIFICATOR TASK</li>
-				@can('onfarm_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm') ? 'active' : '' }}">
-						<a href="{{ route('verification.onfarm.index') }}"
-							data-filter-tags="verifikasi onfarm lapangan">
-							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.onfarm.title_lang') }}</span>
-							@php($unread = \App\Models\QaTopic::unreadCount())
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
-							@endif
-						</a>
-					</li>
-				@endcan
-				@can('online_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/online') ? 'active' : '' }}">
-						<a href="{{ route('verification.online.index') }}"
-							data-filter-tags="verifikasi data online">
-							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.online.title_lang') }}</span>
-							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
-							@endif
-						</a>
-					</li>
-				@endcan
-				@can('completed_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/completed') ? 'active' : '' }}">
-						<a href="{{ route('verification.completed.index') }}"
-							data-filter-tags="verifikasi selesai">
-							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.completed.title_lang') }}</span>
-							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
-							@endif
-
-						</a>
-					</li>
-				@endcan
-				@can('verification_skl_access')
-					<li class="{{ request()->is('admin/verification/skl/*') ? 'active open' : '' }} ">
-						<a href="#" title="Surat Keterangan Lunas"
-							data-filter-tags="verifikasi skl terbit">
-							<i class="fal fal fa-file"></i>
-							<span class="nav-link-text">{{ trans('cruds.sklverifikator.title_lang') }}</span>
-						</a>
-						<ul>
-							@can('list_skl_access')
-								<li class="c-sidebar-nav-item {{ request()->is('verification/skl/listskl') ? 'active' : '' }}">
-									<a href="{{ route('admin.permissions.index') }}" title="listskl"
-										data-filter-tags="verifikasi daftar skl">
-										<i class="fa-fw fal fa-list c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.listskl.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('create_skl_access')
-								<li class="c-sidebar-nav-item {{ request()->is('verification/skl/createskl') ? 'active' : '' }}">
-									<a href="{{ route('admin.roles.index') }}" title="createskl"
-										data-filter-tags="verifikasi create buat skl terbit">
-										<i class="fa-fw fal fa-plus c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.createskl.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-							@can('issued_skl_access')
-								<li class="c-sidebar-nav-item {{ request()->is('verification/skl/issuedskl') ? 'active' : '' }}">
-									<a href="{{ route('admin.users.index') }}" title="issuedskl"
-										data-filter-tags="verifikasi daftar skl terbit">
-										<i class="fa-fw fal fa-briefcase c-sidebar-nav-icon"></i>
-										<span class="nav-link-text">{{ trans('cruds.issuedskl.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan
-						</ul>
-					</li>
-				@endcan
-			@endcan
-
 			{{-- user task --}}
 			@can('user_task_access')
 				<li class="nav-title">{{ __('PROSES RIPH')}}</li>
@@ -253,7 +164,7 @@
 				@can('commitment_access')
 					@if (Auth::user()->roles[0]->title == 'user_v2')
 						{{-- for later use only --}}
-					@else
+					@elseif (Auth::user()->roles[0]->title == 'User')
 						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ? 'active' : '' }}">
 							<a href="{{ route('admin.task.commitment') }}"
 								data-filter-tags="daftar komitmen riph index">
@@ -262,6 +173,47 @@
 							</a>
 						</li>
 					@endif
+				@endcan
+				{{-- pengajuan verifikasi --}}
+				@can('pengajuan_access')
+					<li class="c-sidebar-nav-item {{request()->is('admin/task/submissions') ? 'active' : '' }}">
+						@if (Auth::user()->roles[0]->title == 'User')
+						<a href="{{ route('admin.task.submissions') }}" title="Pengajuan"
+							data-filter-tags="daftar pengajuan verifikasi data online onfarm">
+							<i class="fa-fw fal fa-upload c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">
+								Daftar Pengajuan Verifikasi
+							</span>
+						</a>
+						@else
+							{{-- for later use --}}
+						@endif
+					</li>
+				@endcan
+				{{-- Skl terbit --}}
+				@can('permohonan_access')
+					<li class="c-sidebar-nav-item {{request()->is('admin/task/user/skl')
+						|| request()->is('admin/task/user/skl*')? 'active' : '' }}">
+						@if (Auth::user()->roles[0]->title == 'User')
+						<a href="{{route('admin.task.user.skl')}}" title="Daftar SKL Terbit/RIPH Lunas"
+							data-filter-tags="daftar skl riph lunas">
+							<i class="fa-fw fal fa-award c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">Daftar SKL Terbit</span>
+						</a>
+						@else
+							{{-- for later use --}}
+						@endif
+					</li>
+				@endcan
+				@can('old_skl_access')
+					<li 
+						class="{{ request()->is('admin/task/user/oldskl/index') || request()->is('admin/task/user/oldskl/*') ? 'active' : '' }}">
+						<a href="{{route('admin.task.user.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
+							data-filter-tags="surat keterangan lunas lama dulu old">
+							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">SKL Terdahulu</span>
+						</a>
+					</li>
 				@endcan
 				@can('kelompoktani_access')
 					<li class="{{ request()->is('admin/task/masterpenangkar') 
@@ -304,57 +256,112 @@
 						</ul>
 					</li>
 				@endcan
-				{{-- permohonan --}}
-				@can('permohonan_access')
-					<li class="{{ request()->is('admin/task/pengajuan*') 
-						|| request()->is('admin/task/skl*') ? 'active open' : '' }} ">
-						<a href="#" title="Verifikasi & SKL"
-							data-filter-tags="daftar pengajuan permohonan verifikasi skl">
-							<i class="fa-fw fal fa-ballot"></i>
-							<span class="nav-link-text">{{ trans('cruds.verifikasi.title_lang') }}</span>
-						</a>
-						<ul>
-							@can('pengajuan_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/task/pengajuan') 
-									|| request()->is('admin/task/submission*') ? 'active' : '' }}">
-									@if (Auth::user()->roles[0]->title == 'user_v2')
-										{{-- for later use only --}}
-									@else
-										<a href="{{ route('admin.task.pengajuan.index') }}" title="Pengajuan"
-											data-filter-tags="daftar pengajuan verifikasi data online onfarm">
-											<i class="fa-fw fal fa-file c-sidebar-nav-icon"></i>
-											<span class="nav-link-text">
-												{{ trans('cruds.pengajuan.title_lang') }}
-											</span>
-										</a>
-									@endif
-								</li>
-							@endcan
-							@can('skl_access')  
-								<li class="c-sidebar-nav-item {{ request()->is('admin/task/skl')
-									|| request()->is('admin/task/sklv2*')
-									|| request()->is('admin/task/skl/*') ? 'active' : '' }}">
-									@if (Auth::user()->roles[0]->title == 'user_v2')
-										{{-- for later use only --}}
-									@else
-										<a href="{{ route('admin.task.skl.index') }}" title="Skl"
-											data-filter-tags="daftar pengajuan skl">
-											<i class="fa-fw fal fa-file c-sidebar-nav-icon"></i>
-											<span class="nav-link-text">{{ trans('cruds.skl.title_lang') }}</span>
-										</a>
-									@endif
-								</li>
-							@endcan
+			@endcan
 
-						</ul>
+			{{-- verificator task --}}
+			@can('verificator_task_access')
+				<li class="nav-title" data-i18n="nav.administation">VERIFICATOR TASK</li>
+				@can('online_access')
+					<li class="c-sidebar-nav-item {{ request()->is('verification/data')
+						|| request()->is('verification/data*') ? 'active' : '' }}">
+						<a href="{{ route('verification.data') }}"
+							data-filter-tags="verifikasi data online">
+							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">Verifikasi Data</span>
+							@php
+								$pengajuan = new \App\Models\Pengajuan();
+								$unverified = $pengajuan->NewOnlineRequest();
+							@endphp
+
+							@if ($unverified > 0)
+								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+						</a>
+					</li>
+				@endcan
+				@can('onfarm_access')
+					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm')
+						|| request()->is('verification/onfarm*') ? 'active' : '' }}">
+						<a href="{{ route('verification.onfarm') }}"
+							data-filter-tags="verifikasi onfarm lapangan">
+							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">Verifikasi {{ trans('cruds.onfarm.title_lang') }}</span>
+							@php
+								$pengajuan = new \App\Models\Pengajuan();
+								$unverified = $pengajuan->NewOnFarmRequest();
+							@endphp
+
+							@if ($unverified > 0)
+								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+						</a>
+					</li>
+				@endcan
+				@can('completed_access')
+					<li class="c-sidebar-nav-item {{ request()->is('verification/skl') ||
+						request()->is('verification/skl*') ? 'active' : '' }}">
+						<a href="{{ route('verification.skl') }}"
+							data-filter-tags="verifikasi selesai">
+							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+							<span class="nav-link-text text-wrap">Rekomendasi & SKL</span>
+						@php
+							$pengajuan = new \App\Models\Pengajuan();
+							$newRecomendation = $pengajuan->NewRecomendation();
+						@endphp
+
+						@if ($newRecomendation > 0)
+							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+						@endif
+						</a>
+					</li>
+				@endcan
+				
+				@can('old_skl_access')
+					<li 
+						class="{{ request()->is('verification/oldskl/index') || request()->is('verification/oldskl/*') ? 'active' : '' }}">
+						<a href="{{route('verification.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
+							data-filter-tags="surat keterangan lunas lama dulu old">
+							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">SKL Terdahulu</span>
+						</a>
 					</li>
 				@endcan
 			@endcan
+			{{-- direktur task --}}
+			@if (Auth::user()->roles[0]->title == 'Pejabat')
+				<li class="nav-title" data-i18n="nav.administation">Direktur Menu</li>
+				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendations')
+					|| request()->is('verification/skl/recomendations/*') ? 'active' : '' }}">
+					<a href="{{ route('verification.skl.recomendations') }}"
+						data-filter-tags="daftar rekomendasi penerbitan skl"
+						title="Daftar Rekomendasi Penerbitan SKL">
+						<i class="fa-fw fal fa-file-signature c-sidebar-nav-icon"></i>
+						<span class="nav-link-text">
+							Permohonan SKL
+						</span>
+						@php
+							$skl = new \App\Models\Skl();
+							$newRecomendation = $skl->NewRecomendation();
+						@endphp
 
-			
+						@if ($newRecomendation > 0)
+							<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+						@endif
+					</a>
+				</li>
+				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/publish*') ? 'active' : '' }}">
+					<a href="{{ route('verification.skl.publishes') }}"
+						data-filter-tags="daftar skl diterbitkan"
+						title="Daftar SKL yang telah diterbitkan">
+						<i class="fa-fw fal fa-file-certificate c-sidebar-nav-icon"></i>
+						SKL Diterbitkan
+					</a>
+				</li>
+			@endif
 
 			{{-- pengelolaan berkas --}}
 			@can('folder_access')
+				<li class="nav-title">Pengelolaan Berkas</li>
 				<li class="{{ request()->is('admin/task/berkas*') 
 					|| request()->is('admin/task/galeri*') 
 					|| request()->is('admin/task/template*') ? 'active open' : '' }} ">
@@ -364,20 +371,22 @@
 						<span class="nav-link-text">{{ trans('cruds.folder.title_lang') }}</span>
 					</a>
 					<ul>
+						
 						@can('berkas_access')
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/berkas') 
 								|| request()->is('admin/task/berkas/*') ? 'active' : '' }}">
-								<a href="{{ route('admin.task.berkas') }}" title="Berkas"
-									data-filter-tags="berkas file unggahan unduhan">
+								<a href="{{-- {{ route('admin.task.berkas') }} --}} javascript:void()" title="Berkas"
+									data-filter-tags="berkas file unggahan unduhan" class="disabled"> 
 									<i class="fa-fw fal fa-file c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.berkas.title_lang') }}</span>
 								</a>
 							</li>
 						@endcan
 						@can('galeri_access')
+						
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/galeri') 
 								|| request()->is('admin/task/skl/*') ? 'active' : '' }}">
-								<a href="{{ route('admin.task.galeri') }}" title="Galeri"
+								<a href="{{-- {{ route('admin.task.galeri') }} --}} javascript:void()" title="Galeri"
 									data-filter-tags="galeri gallery daftar foto">
 									<i class="fa-fw fal fa-images c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.galeri.title_lang') }}</span>
@@ -387,6 +396,11 @@
 						@can('template_access')
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') 
 								|| request()->is('admin/task/template/*') ? 'active' : '' }}">
+								{{-- <a href="{{ route('admin.task.template') }}" title="Skl"
+									data-filter-tags="daftar berkas file template">
+									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
+									<span class="nav-link-text">{{ trans('cruds.template.title_lang') }}</span>
+								</a> --}}
 								<a href="{{ route('admin.task.template') }}" title="Skl"
 									data-filter-tags="daftar berkas file template">
 									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
@@ -583,54 +597,22 @@
 					</li>
 				@endcan
 
-				{{-- SKL --}}
-				@can('admin_SKL_access')
-					<li 
-						class="{{ request()->is('admin/skl') || request()->is('admin/skl/*') ? 'active open' : '' }}">
-						<a href="{{ route('admin.skl.index') }}" title="SKL"
-							data-filter-tags="Surat Keterangan Lunas SKL">
-							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.adminskl.title_lang') }}</span>
+				
+				@can('varietas_access')
+					{{-- <li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
+						<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
+							data-filter-tags="setting permission user">
+							<i class="fal fa-user-tie"></i>
+							<span class="nav-link-text">Daftar Pejabat</span>
 						</a>
-						{{-- <ul>
-							@can('admin_SKLlist_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/skl/skllist') ? 'active' : '' }}">
-									<a href="{{ route('admin.audit-logs.index') }}" title="SKL List"
-										data-filter-tags="{{ strtolower(trans('cruds.adminskllist.title_lang')) }}">
-										<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text"
-											data-i18n="nav.administation_sub1_menu4">{{ trans('cruds.adminskllist.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan  
-							@can('admin_SKLcreate_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/skl/sklcreate') ? 'active' : '' }}">
-									<a href="{{ route('admin.audit-logs.index') }}" title="SKL Create"
-										data-filter-tags="{{ strtolower(trans('cruds.admincreateskl.title_lang')) }}">
-										<i class="fa-fw fal fa-file-alt c-sidebar-nav-icon"></i>
-										<span class="nav-link-text"
-											data-i18n="nav.administation_sub1_menu4">{{ trans('cruds.admincreateskl.title_lang') }}</span>
-									</a>
-								</li>
-							@endcan    
-						</ul> --}}
+					</li> --}}
+					<li class="{{ request()->is('admin/varietas*') ? 'active open' : '' }} ">
+						<a href="{{route('admin.varietas')}}" title="Daftar Varietas Hortikultura"
+							data-filter-tags="setting permission user">
+							<i class="fal fa-seedling"></i>
+							<span class="nav-link-text">Daftar Varietas</span>
+						</a>
 					</li>
-				@endcan
-				@can('template_access')
-				<li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
-					<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
-						data-filter-tags="setting permission user">
-						<i class="fal fa-user-tie"></i>
-						<span class="nav-link-text">Daftar Pejabat</span>
-					</a>
-				</li>
-				<li class="{{ request()->is('admin/varietas*') ? 'active open' : '' }} ">
-					<a href="{{route('admin.varietas')}}" title="Daftar Varietas Hortikultura"
-						data-filter-tags="setting permission user">
-						<i class="fal fa-seedling"></i>
-						<span class="nav-link-text">Daftar Varietas</span>
-					</a>
-				</li>
 				@endcan
 			@endcan
 

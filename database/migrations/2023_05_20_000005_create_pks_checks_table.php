@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('pengajuan_id');
             $table->unsignedBigInteger('commitcheck_id');
-            $table->unsignedBigInteger('poktanriph_id');
+            $table->unsignedBigInteger('pks_id');
             $table->unsignedBigInteger('poktan_id');
             $table->string('npwp', 50);
             $table->string('no_ijin');

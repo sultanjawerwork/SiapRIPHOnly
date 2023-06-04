@@ -135,4 +135,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Post', 'starred_posts', 'user_id', 'post_id');
     }
+
+    public function dataadmin()
+    {
+        return $this->belongsTo(DataAdministrator::class, 'id', 'user_id');
+    }
 }

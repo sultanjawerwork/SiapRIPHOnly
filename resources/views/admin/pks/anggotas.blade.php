@@ -2,9 +2,8 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-
-@can('commitment_show')
 @include('partials.sysalert')
+@can('pks_create')
 	<div class="row">
 		<div class="col">
 			<div class="panel" id="panel-1">
@@ -85,7 +84,6 @@
 													$secondGroup = [
 														$lokasi->tgl_tanam,
 														$lokasi->luas_tanam,
-														$lokasi->varietas,
 														$lokasi->tanam_doc,
 														$lokasi->tanam_pict,
 													];
@@ -156,8 +154,6 @@
 			</div>
 		</div>
 	</div>
-	
-
 @endcan
 
 @endsection

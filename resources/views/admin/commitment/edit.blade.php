@@ -2,7 +2,7 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-@can('commitment_show')
+@can('commitment_edit')
 @include('partials.sysalert')
 	{{-- {{ dd($data_poktan) }} --}}
 	<div class="row">
@@ -45,10 +45,10 @@
 									<small id="helpId" class="text-muted">Tanggal ijin RIPH diterbitkan</small>
 								</div>
 								<div class="form-group col-md-3">
-									<label for="tgl_end">Tanggal Akhir</label>
-									<input type="date" name="tgl_end" id="tgl_end" readonly
+									<label for="tgl_akhir">Tanggal Akhir</label>
+									<input type="date" name="tgl_akhir" id="tgl_akhir" readonly
 									class="form-control form-control-sm" placeholder="Tanggal akhir berlakunya RIPH"
-									aria-describedby="helpId" value="{{ old('tgl_end', $commitment->tgl_akhir) }}">
+									aria-describedby="helpId" value="{{ old('tgl_akhir', $commitment->tgl_akhir) }}">
 									<small id="helpId" class="text-muted">Tanggal akhir berlaku ijin RIPH</small>
 								</div>
 							</div>
@@ -293,7 +293,7 @@
 									</div>
 									<span class="help-block">
 										@if($commitment->logbook)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->logBook) }}" target="_blank">
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->logbook) }}" target="_blank">
 												Lihat Berkas Logbook
 											</a>
 										@else
@@ -308,8 +308,8 @@
 										<label class="custom-file-label" for="formRt">{{ $commitment->formRt ? $commitment->formRt : 'Pilih file...' }}</label>
 									</div>
 									<span class="help-block">
-										@if($commitment->Rt)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->Rt) }}" target="_blank">
+										@if($commitment->formRt)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRt) }}" target="_blank">
 												Lihat Berkas Rencana tanam
 											</a>
 										@else
@@ -324,8 +324,8 @@
 										<label class="custom-file-label" for="formRta">{{ $commitment->formRta ? $commitment->formRta : 'Pilih file...' }}</label>
 									</div>
 									<span class="help-block">
-										@if($commitment->Rta)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->Rta) }}" target="_blank">
+										@if($commitment->formRta)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRta) }}" target="_blank">
 												Lihat Berkas Relisasi tanam
 											</a>
 										@else
@@ -340,8 +340,8 @@
 										<label class="custom-file-label" for="formRpo">{{ $commitment->formRpo ? $commitment->formRpo : 'Pilih file...' }}</label>
 									</div>
 									<span class="help-block">
-										@if($commitment->Rpo)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->Rpo) }}" target="_blank">
+										@if($commitment->formRpo)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formRpo) }}" target="_blank">
 												Lihat Berkas Realisasi produksi
 											</a>
 										@else
@@ -356,8 +356,8 @@
 										<label class="custom-file-label" for="formLa">{{ $commitment->formLa ? $commitment->formLa : 'Pilih file...' }}</label>
 									</div>
 									<span class="help-block">
-										@if($commitment->La)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->La) }}" target="_blank">
+										@if($commitment->formLa)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$commitment->formLa) }}" target="_blank">
 												Lihat Berkas Laporan Akhir
 											</a>
 										@else

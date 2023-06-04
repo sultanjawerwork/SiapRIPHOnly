@@ -18,7 +18,7 @@
     "dependencies": {
         "jquery": "^3.6.3",
         "jquery-mask-plugin": "^1.14.16",
-        "jqvmap": "^1.0.1",
+        "pdfmake": "^0.2.7",
         "toastr": "^2.1.4"
     }
 }

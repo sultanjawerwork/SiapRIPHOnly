@@ -2,9 +2,8 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-
 @include('partials.sysalert')
-
+@can('pks_edit')
 	<div class="row">
 		<div class="col-md-4">
 			<div class="panel" id="panel-1">
@@ -192,12 +191,15 @@
 									<div class="form-group">
 										<label class="form-label" for="varietas_tanam">Varietas Tanam</label>
 										<div class="input-group">
-											<div class="input-group-prepend">
-												<span class="input-group-text" id="varietas_tanam"><i class="fal fa-seedling"></i></span>
-											</div>
-											<input type="text" class="form-control " name="varietas_tanam" id="varietas_tanam"
-												value="{{old('varietas_tanam', $pks->varietas_tanam)}}" required
-												placeholder="varietas yang akan ditanam" >
+											<select class="form-control custom-select" name="varietas_tanam" id="select2-varietas" required>
+												<option value="" hidden></option>
+												@foreach($varietass as $varietas)
+													<option value="{{ $varietas->id }}"{{ old('varietas_tanam', $pks->varietas_tanam) == $varietas->id ? ' selected' : '' }}>
+														{{ $varietas->nama_varietas }}
+													</option>
+												@endforeach
+											</select>
+											
 										</div>
 										<div class="help-block">
 											Varietas ditanam sesuai dokumen perjanjian.
@@ -209,11 +211,11 @@
 										<label class="form-label" for="periode">Periode Tanam</label>
 										<div class="input-group">
 											<div class="input-group-prepend">
-												<span class="input-group-text" id="varietas"><i class="fal fa-calendar-week"></i></span>
+												<span class="input-group-text" id=""><i class="fal fa-calendar-week"></i></span>
 											</div>
 											<input type="text" name="periode_tanam" id="periode_tanam"
 												class="form-control " placeholder="misal: Jan-Feb" aria-describedby="helpId"
-												value="{{old('periode_tanam', $pks->periode_tanam)}}" required>>
+												value="{{old('periode_tanam', $pks->periode_tanam)}}" required>
 										</div>
 										<div class="help-block">
 											Periode tanam sesuai dokumen perjanjian.
@@ -238,5 +240,16 @@
 			</div>
 		</div>
 	</div>
+@endcan
+@endsection
 
+@section('scripts')
+@parent
+<script>
+    $(document).ready(function() {
+        $("#select2-varietas").select2({
+            placeholder: "--Pilih Varietas",
+        });
+	});
+</script>
 @endsection

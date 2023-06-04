@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\AnggotaMitra;
+use App\Models\Lokasi;
 use Illuminate\Http\Request;
 
 class AnggotaMitraController extends Controller
@@ -16,34 +16,35 @@ class AnggotaMitraController extends Controller
 
 	public function index()
 	{
-		$anggotaMitras = AnggotaMitra::with([
-			'pksmitra' => function ($query) {
-				$query->with('commitmentbackdate');
+		$anggotaMitras = Lokasi::with([
+			'pks' => function ($query) {
+				$query->with('commitment');
 			},
-			'pksmitra',
+			'pks',
 			'masteranggota'
-		])->get();
+		])
+			->whereNotNull('latitude')
+			->get();
 
 		$result = [];
 
 		foreach ($anggotaMitras as $anggotaMitra) {
-			// $tglTanam = $anggotaMitra->tgl_tanam ? $anggotaMitra->tgl_tanam->format('Y-m-d') : 'belum tanam';
-			// $tglPanen = $anggotaMitra->tgl_panen ? $anggotaMitra->tgl_panen->format('Y-m-d') : 'belum panen';
 			$luasTanam = $anggotaMitra->luas_tanam ? $anggotaMitra->luas_tanam : 'belum tanam';
 			$volume = $anggotaMitra->volume ? $anggotaMitra->volume : 'belum panen';
 
 			$result[] = [
 				'id' => $anggotaMitra->id,
+				'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
 				'latitude' => $anggotaMitra->latitude,
 				'longitude' => $anggotaMitra->longitude,
 				'polygon' => $anggotaMitra->polygon,
 
-				'pks_mitra_id' => $anggotaMitra->pks_mitra_id,
-				'no_ijin' => $anggotaMitra->pksmitra->commitmentbackdate->no_ijin,
-				'periodetahun' => $anggotaMitra->pksmitra->commitmentbackdate->periodetahun,
-				'no_perjanjian' => $anggotaMitra->pksmitra->no_perjanjian,
+				'pks_mitra_id' => $anggotaMitra->poktan_id,
+				'no_ijin' => $anggotaMitra->pullriph->no_ijin,
+				'periodetahun' => $anggotaMitra->pullriph->periodetahun,
+				'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
 				'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
-				'nama_kelompok' => $anggotaMitra->pksmitra->masterkelompok->nama_kelompok,
+				'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
 				'nama_lokasi' => $anggotaMitra->nama_lokasi,
 
 				'altitude' => $anggotaMitra->altitude,
@@ -55,6 +56,8 @@ class AnggotaMitraController extends Controller
 				'volume' => $volume,
 				'tanam_pict' => $anggotaMitra->tanam_pict,
 				'panen_pict' => $anggotaMitra->panen_pict,
+
+				'company' => $anggotaMitra->pullriph->datauser->company_name,
 			];
 		}
 
@@ -63,17 +66,19 @@ class AnggotaMitraController extends Controller
 
 	public function ByYears($periodeTahun)
 	{
-		$anggotaMitras = AnggotaMitra::with([
-			'pksmitra' => function ($query) {
-				$query->with('commitmentbackdate');
+		$anggotaMitras = Lokasi::with([
+			'pks' => function ($query) {
+				$query->with('commitment');
 			},
 			'masteranggota'
-		])->get();
+		])
+			->whereNotNull('latitude')
+			->get();
 
 		$result = [];
 
 		foreach ($anggotaMitras as $anggotaMitra) {
-			$periodetahun = $anggotaMitra->pksmitra->commitmentbackdate->periodetahun;
+			$periodetahun = $anggotaMitra->pullriph->periodetahun;
 			if ($periodetahun == $periodeTahun) {
 				$luasTanam = $anggotaMitra->luas_tanam ? $anggotaMitra->luas_tanam : 'belum tanam';
 				$volume = $anggotaMitra->volume ? $anggotaMitra->volume : 'belum panen';
@@ -81,16 +86,17 @@ class AnggotaMitraController extends Controller
 				$result[] = [
 					'periodetahun' => $periodetahun,
 					'id' => $anggotaMitra->id,
+					'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
 					'latitude' => $anggotaMitra->latitude,
 					'longitude' => $anggotaMitra->longitude,
 					'polygon' => $anggotaMitra->polygon,
 
-					'pks_mitra_id' => $anggotaMitra->pks_mitra_id,
-					'no_ijin' => $anggotaMitra->pksmitra->commitmentbackdate->no_ijin,
-					'periodetahun' => $anggotaMitra->pksmitra->commitmentbackdate->periodetahun,
-					'no_perjanjian' => $anggotaMitra->pksmitra->no_perjanjian,
+					'pks_mitra_id' => $anggotaMitra->poktan_id,
+					'no_ijin' => $anggotaMitra->pullriph->no_ijin,
+					'periodetahun' => $anggotaMitra->pullriph->periodetahun,
+					'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
 					'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
-					'nama_kelompok' => $anggotaMitra->pksmitra->masterkelompok->nama_kelompok,
+					'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
 					'nama_lokasi' => $anggotaMitra->nama_lokasi,
 
 					'altitude' => $anggotaMitra->altitude,
@@ -102,6 +108,8 @@ class AnggotaMitraController extends Controller
 					'volume' => $volume,
 					'tanam_pict' => $anggotaMitra->tanam_pict,
 					'panen_pict' => $anggotaMitra->panen_pict,
+
+					'company' => $anggotaMitra->pullriph->datauser->company_name,
 				];
 			}
 		}
@@ -118,11 +126,11 @@ class AnggotaMitraController extends Controller
 	public function show($id)
 	{
 		// the url for the REST Api of anggotaMitra : http://127.0.0.1:8000/api/getAPIAnggotaMitra/{id}
-		$anggotaMitra = AnggotaMitra::with([
-			'pksmitra' => function ($query) {
-				$query->with('commitmentbackdate');
+		$anggotaMitra = Lokasi::with([
+			'pks' => function ($query) {
+				$query->with('commitment');
 			},
-			'pksmitra',
+			'pks',
 			'masteranggota'
 		])->find($id);
 
@@ -132,11 +140,13 @@ class AnggotaMitraController extends Controller
 			// 'longitude' => $anggotaMitra->longitude,
 			// 'polygon' => $anggotaMitra->polygon,
 
-			'pks_mitra_id' => $anggotaMitra->pks_mitra_id,
-			'no_ijin' => $anggotaMitra->pksmitra->commitmentbackdate->no_ijin,
-			'no_perjanjian' => $anggotaMitra->pksmitra->no_perjanjian,
+			'pks_mitra_id' => $anggotaMitra->poktan_id,
+			'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
+			'no_ijin' => $anggotaMitra->pullriph->no_ijin,
+			'periodetahun' => $anggotaMitra->pullriph->periodetahun,
+			'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
 			'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
-			'nama_kelompok' => $anggotaMitra->pksmitra->masterkelompok->nama_kelompok,
+			'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
 			'nama_lokasi' => $anggotaMitra->nama_lokasi,
 
 			'altitude' => $anggotaMitra->altitude,
@@ -148,6 +158,8 @@ class AnggotaMitraController extends Controller
 			'volume' => $anggotaMitra->volume,
 			'tanam_pict' => $anggotaMitra->tanam_pict,
 			'panen_pict' => $anggotaMitra->panen_pict,
+
+			'company' => $anggotaMitra->pullriph->datauser->company_name,
 		];
 		return response()->json($result);
 	}
