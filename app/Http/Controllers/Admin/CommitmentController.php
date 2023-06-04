@@ -32,8 +32,8 @@ class CommitmentController extends Controller
 	public function index(Request $request)
 	{
 		$module_name = 'Proses RIPH';
-		$page_title = 'Daftar RIPH';
-		$page_heading = 'Daftar RIPH';
+		$page_title = 'Daftar Komitmen';
+		$page_heading = 'Daftar Komitmen';
 		$heading_class = 'fal fa-ballot-check';
 
 		$npwp_company = Auth::user()->data_user->npwp_company;

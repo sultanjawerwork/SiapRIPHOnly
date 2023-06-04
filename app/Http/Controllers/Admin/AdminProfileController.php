@@ -24,9 +24,8 @@ class AdminProfileController extends Controller
 		$heading_class = 'fa fa-user-tie';
 
 		$user = Auth::user();
-		$data_admin = DataAdministrator::where('user_id', $user->id)->first();
-		$data = QrCode::size(50)->generate('Welcome to Makitweb');
-		return view('admin.adminprofile.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'data_admin', 'user', 'data'));
+		$data_admin = DataAdministrator::where('user_id', $user->id)->firstorFail();
+		return view('admin.adminprofile.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'data_admin', 'user'));
 	}
 
 	/**

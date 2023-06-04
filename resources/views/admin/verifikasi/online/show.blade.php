@@ -93,6 +93,12 @@
 				<div class="panel" id="lampiran">
 					<div class="panel-hdr">
 						<h2>Pemeriksaan Berkas</h2>
+						<div>
+							<a href="{{route('verification.data.check', $verifikasi->id)}}"
+								class="btn btn-xs btn-info">
+								Kembali
+							</a>
+						</div>
 					</div>
 					<div class="panel-container show">
 						<div class="panel-content">

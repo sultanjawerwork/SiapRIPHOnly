@@ -247,7 +247,7 @@
 										<input type="text" name="poktan_id" value="{{$verifpks->poktan_id}}" hidden>
 										<input type="text" name="anggota_id" value="{{$anggotamitra->anggota_id}}" hidden>
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
-										<input type="text" name="mod_noijin" value="{{$mod_noijin}}">
+										<input type="text" name="mod_noijin" value="{{$mod_noijin}}" hidden>
 										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
 										<table class="table table-striped table-bordered w-100" id="dataVerif">
 											<thead>

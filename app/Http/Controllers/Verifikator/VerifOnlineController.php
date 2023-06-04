@@ -76,38 +76,32 @@ class VerifOnlineController extends Controller
 	public function check($id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-		//page level
+
+		// Page level
 		$module_name = 'Permohonan';
 		$page_title = 'Data Pengajuan';
 		$page_heading = 'Data Pengajuan Verifikasi';
 		$heading_class = 'fa fa-file-search';
 
-		//populate related data
+		// Populate related data
 		$verifikasi = Pengajuan::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)
-			->firstorFail();
-
-		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
-			->firstOrFail();
-
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->firstOrFail();
+		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
 		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
-		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)
-			->orderBy('created_at', 'desc')
-			->get();
+		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
 
-		$pkss = Pks::withCount('lokasi')
-			->where('no_ijin', $commitment->no_ijin)->get();
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $commitment->no_ijin)->get();
 		$lokasis = collect();
 		foreach ($pkschecks as $pkscheck) {
 			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
 				->where('no_ijin', $commitmentcheck->no_ijin)
 				->get();
 			$lokasis->push($lokasi);
-		};
+		}
 
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
-		// dd($lokasis);
+
 		return view('admin.verifikasi.online.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'commitmentcheck', 'pkschecks', 'lokasichecks', 'pkss', 'lokasis', 'total_luastanam', 'total_volume'));
 	}
 
@@ -226,8 +220,6 @@ class VerifOnlineController extends Controller
 		$page_heading = 'Pemeriksaan Data Tanam dan Produksi';
 		$heading_class = 'fal fa-ballot-check';
 
-		//convert $noIjin to its original form.
-		// $no_ijin = substr_replace(substr_replace(substr_replace(substr_replace(substr_replace($noIjin, '/', 4, 0), '.', 7, 0), '/', 11, 0), '/', 13, 0), '/', 16, 0);
 		$no_ijin = substr_replace($noIjin, '/', 4, 0);
 		$no_ijin = substr_replace($no_ijin, '.', 7, 0);
 		$no_ijin = substr_replace($no_ijin, '/', 11, 0);

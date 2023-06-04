@@ -33,6 +33,24 @@ class SklController extends Controller
 		return view('admin.verifikasi.skl.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
+	//untuk pejabat melihat rekomendasi penerbitan skl.
+	public function recomendations()
+	{
+		if (Auth::user()->roles[0]->title !== 'Pejabat') {
+			abort(403, 'Unauthorized');
+		}
+
+		$module_name = 'SKL';
+		$page_title = 'Daftar Permohonan';
+		$page_heading = 'Daftar Permohonan Penerbitan SKL';
+		$heading_class = 'fa fa-file-signature';
+
+		$recomends = Pengajuan::where('status', '6')
+			->get();
+		// dd($recomends);
+		return view('admin.verifikasi.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
+	}
+
 	//dilakukan oleh verifikator/administrator
 	public function recomend(Request $request)
 	{
@@ -58,24 +76,6 @@ class SklController extends Controller
 		$commitment->save();
 		return redirect()->route('verification.skl')
 			->with('success', 'Komitmen No. RIPH: ' . $commitment->no_ijin . ', berhasil diajukan untuk penerbitan SKL.');
-	}
-
-	//untuk pejabat melihat rekomendasi penerbitan skl.
-	public function recomendations()
-	{
-		if (Auth::user()->roles[0]->title !== 'Pejabat') {
-			abort(403, 'Unauthorized');
-		}
-
-		$module_name = 'SKL';
-		$page_title = 'Daftar Permohonan';
-		$page_heading = 'Daftar Permohonan Penerbitan SKL';
-		$heading_class = 'fa fa-file-signature';
-
-		$recomends = Pengajuan::where('status', '6')
-			->get();
-		// dd($recomends);
-		return view('admin.verifikasi.skl.recomendations', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
 	//oleh pejabat
@@ -129,7 +129,7 @@ class SklController extends Controller
 		return redirect()->route('verification.skl.published', ['id' => $skl->id]);
 	}
 
-	//daftar skl terbit
+	//daftar ini digunakan oleh semua user role.
 	public function publishes()
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
@@ -147,6 +147,30 @@ class SklController extends Controller
 		return view('admin.verifikasi.skl.publishes', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'recomends'));
 	}
 
+	/**
+	 * Menampilkan halaman data SKL
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		$module_name = 'SKL';
+		$page_title = 'Data SKL';
+		$page_heading = 'Data SKL Terbit';
+		$heading_class = 'fal fa-file-certificate';
+
+		$skl = Skl::find($id);
+
+		return view('admin.verifikasi.skl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl'));
+	}
+
+	/**
+	 * Menampilkan halaman SKL (print)
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
 	public function published($id)
 	{
 		$module_name = 'SKL';
@@ -220,17 +244,6 @@ class SklController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request)
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
 	{
 		//
 	}

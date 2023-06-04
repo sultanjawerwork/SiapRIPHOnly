@@ -49,7 +49,7 @@
 												</td>
 												<td class="text-center">
 													@if($recomend->skl?->published_date)
-														<a href="{{route('verification.skl.published', $recomend->skl->id)}}" class="btn btn-xs btn-icon btn-success" title="SKL sudah terbit.">
+														<a href="{{route('verification.skl.show', $recomend->skl->id)}}" class="btn btn-xs btn-icon btn-success" title="SKL sudah terbit.">
 															<i class="fal fa-file-certificate"></i>
 														</a>
 													@elseif($recomend->skl && $recomend->skl->created_at && !$recomend->skl->published_date)

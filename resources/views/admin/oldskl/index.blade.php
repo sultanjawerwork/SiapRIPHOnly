@@ -13,6 +13,10 @@
 								<table id="OldSkl" class="table table-sm table-bordered table-hover table-striped w-100">
 									<thead>
 										<tr>
+											@if (Auth::user()->roleaccess === 1)
+												<th>Perusahaan</th>
+											@endif
+											<th>Periode</th>
 											<th>Nomor RIPH</th>
 											<th>No SKL</th>
 											<th>Tanggal Terbit</th>
@@ -23,13 +27,17 @@
 									<tbody>
 										@foreach ($oldskls as $oldskl)
 											<tr>
+												@if (Auth::user()->roleaccess === 1)
+													<td>{{$oldskl->datauser->company_name}}</td>
+												@endif
+												<td>{{$oldskl->periodetahun}}</td>
 												<td>{{$oldskl->no_ijin}}</td>
 												<td>{{$oldskl->no_skl}}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($oldskl->published_date)) }}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($oldskl->created_at)) }}</td>
 												<td class="text-center d-flex justify-content-center">
 													@can('old_skl_show')
-													@if (Auth::user()->roles[0]->title == 'User')
+														@if (Auth::user()->roles[0]->title === 'User')
 															<a href="{{route('admin.task.user.oldskl.show', $oldskl->id)}}" class="btn btn-icon btn-primary btn-xs mr-1" title="Lihat">
 																<i class="fal fa-file-search"></i>
 															</a>

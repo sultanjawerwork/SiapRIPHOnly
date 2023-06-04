@@ -377,9 +377,9 @@
 							@csrf
 							@method('PUT')
 							<div class="panel-content">
-								<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}">
-								<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}">
-								<input type="text" name="npwp" value="{{$verifikasi->npwp}}">
+								<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
+								<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}" hidden>
+								<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
 								<div class="form-group">
 									<label for="onlinenote">Catatan Pemeriksaan</label>
 									<textarea name="onlinenote" id="onlinenote" rows="5" class="form-control form-control-sm" required>{{ old('onlinenote', $verifikasi ? $verifikasi->onlinenote : '') }}</textarea>

@@ -31,6 +31,6 @@ class SklOlder extends Model
 
     public function datauser()
     {
-        return $this->belongsTo(Skl::class, 'npwp_company', 'npwp');
+        return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
     }
 }

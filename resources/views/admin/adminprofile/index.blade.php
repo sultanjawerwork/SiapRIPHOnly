@@ -88,7 +88,7 @@
 					</div>
 				</div>
 				<div class="card-footer d-flex justify-content-between align-items-center">
-					<div>{{$data}}</div>
+					<div></div>
 					<div class="form-group">
 						<a class="btn btn-danger  waves-effect waves-themed btn-sm mr-2" href="{{ route('admin.users.index') }}">
 							{{ trans('global.cancel') }}

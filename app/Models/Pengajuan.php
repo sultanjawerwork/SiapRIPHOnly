@@ -63,6 +63,32 @@ class Pengajuan extends Model
 		'deleted_at',
 	];
 
+
+
+
+	public static function newPengajuanCount(): int
+	{
+		return self::whereNull('onlinedate')->count();
+	}
+
+	public function NewOnlineRequest(): int
+	{
+		return self::whereNull('onlinedate')->count();
+	}
+
+	public function NewOnFarmRequest(): int
+	{
+		return self::where('onlinestatus', '2')
+			->whereNull('onfarmdate')
+			->count();
+	}
+
+	public function NewRecomendation(): int
+	{
+		return self::where('status', '4')
+			->count();
+	}
+
 	public function commitment()
 	{
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');

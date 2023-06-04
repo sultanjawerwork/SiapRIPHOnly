@@ -159,6 +159,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		//Daftar SKL untuk user
 		Route::get('user/skl', 'UserSklController@index')->name('user.skl');
 		Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
+		Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
 
 		Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
 		Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
@@ -212,7 +213,8 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
 	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
-	Route::get('skl/published/{id}/show', 'SklController@published')->name('skl.published');
+	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
+	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
 	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
 
 	//SKL Old/Manual
@@ -223,6 +225,9 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('oldskl/{id}/edit', 'SklOlderController@edit')->name('oldskl.edit');
 	Route::put('oldskl/{id}/update', 'SklOlderController@update')->name('oldskl.update');
 	Route::delete('oldskl/{id}/delete', 'SklOlderController@destroy')->name('oldskl.delete');
+});
+
+Route::group(['prefix' => 'backdate', 'as' => 'backdate.', 'namespace' => 'Backdate', 'middleware' => ['auth']], function () {
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

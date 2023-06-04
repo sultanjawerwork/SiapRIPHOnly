@@ -9,6 +9,7 @@ use App\Models\Pengajuan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class UserSklController extends Controller
@@ -33,10 +34,23 @@ class UserSklController extends Controller
 	}
 
 	/**
-	 * Display SKL untuk user.
+	 * Display SKL print untuk user.
 	 *
 	 */
+
 	public function show($id)
+	{
+		$module_name = 'SKL';
+		$page_title = 'Data SKL';
+		$page_heading = 'Data SKL Terbit';
+		$heading_class = 'fal fa-file-certificate';
+
+		$skl = Skl::find($id);
+
+		return view('admin.verifikasi.skl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl'));
+	}
+
+	public function print($id)
 	{
 		$module_name = 'SKL';
 		$page_title = 'Surat Keterangan Lunas';
@@ -62,8 +76,10 @@ class UserSklController extends Controller
 		// $QrCode = QrCode::size(70)->generate(json_encode($data));
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status']);
 
-		return view('admin.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
 	}
+
+
 
 	public function oldindex()
 	{

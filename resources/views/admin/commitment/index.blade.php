@@ -2,19 +2,11 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-@can('commitment_list_access')
+@can('commitment_access')
 @include('partials.sysalert')
 <div class="row">
 	<div class="col-12">
 		<div class="panel" id="panel-1">
-			<div class="panel-hdr">
-				<h2>
-					Daftar Komitment (RIPH Bawang Putih Konsumsi)
-				</h2>
-				<div class="panel-toolbar">
-					@include('partials.globaltoolbar')
-				</div>
-			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
 					<table id="datatable" class="table table-bordered table-hover table-striped table-sm w-100">

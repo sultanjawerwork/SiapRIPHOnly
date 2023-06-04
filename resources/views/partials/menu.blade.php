@@ -268,11 +268,13 @@
 							data-filter-tags="verifikasi data online">
 							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Verifikasi Data</span>
-							@php($unread = \App\Models\QaTopic::unreadCount())
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
+							@php
+								$pengajuan = new \App\Models\Pengajuan();
+								$unverified = $pengajuan->NewOnlineRequest();
+							@endphp
+
+							@if ($unverified > 0)
+								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
 							@endif
 						</a>
 					</li>
@@ -284,11 +286,13 @@
 							data-filter-tags="verifikasi onfarm lapangan">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Verifikasi {{ trans('cruds.onfarm.title_lang') }}</span>
-							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
+							@php
+								$pengajuan = new \App\Models\Pengajuan();
+								$unverified = $pengajuan->NewOnFarmRequest();
+							@endphp
+
+							@if ($unverified > 0)
+								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
 							@endif
 						</a>
 					</li>
@@ -299,13 +303,15 @@
 						<a href="{{ route('verification.skl') }}"
 							data-filter-tags="verifikasi selesai">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Rekomendasi & SKL</span>
-							{{-- @php($unread = \App\Models\QaTopic::unreadCount()) --}}
-							@if ($unread > 0)
-								<span
-									class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unread }}
-									request</span>
-							@endif
+							<span class="nav-link-text text-wrap">Rekomendasi & SKL</span>
+						@php
+							$pengajuan = new \App\Models\Pengajuan();
+							$newRecomendation = $pengajuan->NewRecomendation();
+						@endphp
+
+						@if ($newRecomendation > 0)
+							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+						@endif
 						</a>
 					</li>
 				@endcan
@@ -330,7 +336,17 @@
 						data-filter-tags="daftar rekomendasi penerbitan skl"
 						title="Daftar Rekomendasi Penerbitan SKL">
 						<i class="fa-fw fal fa-file-signature c-sidebar-nav-icon"></i>
-						Permohonan SKL
+						<span class="nav-link-text">
+							Permohonan SKL
+						</span>
+						@php
+							$skl = new \App\Models\Skl();
+							$newRecomendation = $skl->NewRecomendation();
+						@endphp
+
+						@if ($newRecomendation > 0)
+							<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+						@endif
 					</a>
 				</li>
 				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/publish*') ? 'active' : '' }}">

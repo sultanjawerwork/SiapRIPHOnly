@@ -17,7 +17,16 @@
 										<ul class="list-group">
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Perusahaan</label>
-												<input type="text" class="form-control form-control-sm" name="npwp" id="npwp" value="{{ old('company_name', $datauser->company_name) }}">
+												<select class="form-control custom-select select2-poktan"
+												name="npwp" id="select2-importir" required>
+												<option value=""></option>
+												@foreach($datausers as $company)
+													<option value="{{ $company->npwp_company }}"{{ old('npwp', $oldskl->npwp) == $company->npwp_company ? ' selected' : '' }}>
+														{{ $company->company_name }}
+													</option>
+												@endforeach
+												
+												</select>
 											</li>
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Nomor RIPH</label>
