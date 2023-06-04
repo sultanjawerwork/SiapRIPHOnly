@@ -172,13 +172,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 		//template
 		Route::delete('template/destroy', 'BerkasController@massDestroy')->name('template.massDestroy');
-		Route::get('template/create', 'BerkasController@createtemplate')->name('template.create');
 		Route::delete('template/{id}', 'BerkasController@destroytemplate')->name('template.destroy');
-		Route::post('template', 'BerkasController@storetemplate')->name('template.store');
-		//Route::get('template/{berkas}', 'BerkasController@showtemplate')->name('template.show');
 		Route::get('template/{berkas}/edit', 'BerkasController@edittemplate')->name('template.edit');
 		Route::put('template/{berkas}', 'BerkasController@updatetemplate')->name('template.update');
-		Route::get('template', 'BerkasController@indextemplate')->name('template');
+		// Route::get('template', 'BerkasController@indextemplate')->name('template');
+		//Route::get('template/{berkas}', 'BerkasController@showtemplate')->name('template.show');
+		// Route::get('template/create', 'BerkasController@createtemplate')->name('template.create');
+		// Route::post('template', 'BerkasController@storetemplate')->name('template.store');
+
+		Route::get('template', 'FileManagementController@templateindex')->name('template');
+		Route::get('template/create', 'FileManagementController@templatecreate')->name('template.create');
+		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 	});
 });
 
