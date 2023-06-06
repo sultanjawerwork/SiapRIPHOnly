@@ -241,17 +241,12 @@
 										Master Penangkar
 									</a>
 								</li>
-							@endcan
-							@can('pks_access')
-							<li
-								class="c-sidebar-nav-item {{ request()->is('admin/task/pks') 
-									|| request()->is('admin/task/pks/*') ? 'active' : '' }}">
-								<a href="" title="Daftar PKS"
-									data-filter-tags="daftar pks perjanjian kerjasama">
-									<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
-									{{ trans('cruds.daftarpks.title_lang') }}
-								</a>
-							</li>
+								<li class="c-sidebar-nav-item {{ request()->is('admin/task/saprodi') ? 'active' : '' }}">
+									<a href="{{route('admin.task.saprodi.index')}}" title="Daftar Bantuan Saprodi">
+										<i class="fa-fw fal fa-gifts c-sidebar-nav-icon"></i>
+										Daftar Saprodi
+									</a>
+								</li>
 							@endcan
 						</ul>
 					</li>

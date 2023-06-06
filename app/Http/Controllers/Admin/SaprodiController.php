@@ -20,12 +20,12 @@ class SaprodiController extends Controller
 	public function index()
 	{
 		$module_name = 'Realisasi';
-		$page_title = 'Bantuan Saprodi';
-		$page_heading = 'Bantuan Sarana Produksi';
-		$heading_class = 'fal fa-map-marked';
+		$page_title = 'Daftar Saprodi';
+		$page_heading = 'Daftar Bantuan Saprodi';
+		$heading_class = 'fal fa-gifts';
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
-		$saprodis = Saprodi::where('npwp', $npwpCompany);
+		$saprodis = Saprodi::where('npwp', $npwpCompany)->get();
 
 		return view('admin.saprodi.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'saprodis'));
 	}
@@ -94,9 +94,9 @@ class SaprodiController extends Controller
 	public function edit($pksId, $id)
 	{
 		$module_name = 'Realisasi';
-		$page_title = 'Bantuan Saprodi';
-		$page_heading = 'Bantuan Sarana Produksi';
-		$heading_class = 'fal fa-map-marked';
+		$page_title = 'Data Saprodi';
+		$page_heading = 'Ubah Data Saprodi';
+		$heading_class = 'fal fa-gifts';
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$pks = Pks::find($pksId);
@@ -138,6 +138,7 @@ class SaprodiController extends Controller
 		}
 		// dd($saprodi);
 		$saprodi->save();
+		return redirect()->route('admin.task.pks.saprodi', $pks->id)->with('message', "Data berhasil disimpan.");
 	}
 
 	/**
@@ -148,6 +149,9 @@ class SaprodiController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		$saprodi = Saprodi::find($id);
+		$pks = Pks::find($saprodi->pks_id);
+		$saprodi->delete();
+		return redirect()->route('admin.task.pks.saprodi', $pks->id)->with('message', "Data berhasil dihapus.");
 	}
 }

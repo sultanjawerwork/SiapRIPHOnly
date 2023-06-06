@@ -152,13 +152,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		//saprodi
 		Route::get('pks/{id}/saprodi', 'PksController@saprodi')->name('pks.saprodi');
 		Route::post('pks/{id}/saprodi', 'SaprodiController@store')->name('saprodi.store');
-		route::put('pks/{pksId}/saprodi/{id}', 'SaprodiController@update')->name('saprodi.update');
 		route::get('pks/{pksId}/saprodi/{id}/edit', 'SaprodiController@edit')->name('saprodi.edit');
+		route::put('pks/{pksId}/saprodi/{id}', 'SaprodiController@update')->name('saprodi.update');
+		route::delete('saprodi/{id}', 'SaprodiController@destroy')->name('saprodi.delete');
+		Route::get('saprodi', 'SaprodiController@index')->name('saprodi.index');
 
 		Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
 		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
-
-		// Route::resource('pks', 'PksController')->except(['create']);
 
 
 		//realisasi lokasi tanam

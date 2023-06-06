@@ -255,9 +255,9 @@ class PksController extends Controller
 	public function saprodi($id)
 	{
 		$module_name = 'Realisasi';
-		$page_title = 'Bantuan Saprodi';
-		$page_heading = 'Bantuan Sarana Produksi';
-		$heading_class = 'fal fa-map-marked';
+		$page_title = 'Daftar Saprodi';
+		$page_heading = 'Daftar Bantuan Saprodi';
+		$heading_class = 'fal fa-gifts';
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$pks = Pks::where('npwp', $npwpCompany)
