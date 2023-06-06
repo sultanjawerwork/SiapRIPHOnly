@@ -369,7 +369,11 @@
 													</a>
 													<a href="'.route('admin.task.pks.anggotas', $pks->id).'" class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip" data-original-title="Lengkapi data realisasi wajib tanam-produksi">
 														<i class="fal fa-seedling"></i>
-													</a>';
+													</a>
+													<a href="'.route('admin.task.pks.saprodi', $pks->id).'" class="btn btn-icon btn-xs btn-info" data-toggle="tooltip" data-original-title="Data Bantuan Sarana Produksi Tani">
+														<i class="fal fa-gifts"></i>
+													</a>
+													';
 												}
 											@endphp
 										</td>
@@ -560,7 +564,7 @@
 				{
 					text: '<i class="fa fa-plus mr-1"></i>Penangkar',
 					titleAttr: 'Tambah Penangkar Mitra',
-					className: 'btn btn-info btn-xs ml-2',
+					className: 'btn btn-info btn-sm ml-2',
 					action: function(e, dt, node, config) {
 						window.location.href = '{{ route('admin.task.commitment.penangkar', $commitment->id) }}';
 					}

@@ -11,6 +11,7 @@ use App\Models\PullRiph;
 use App\Models\MasterKecamatan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\SimeviTrait;
+use App\Models\Saprodi;
 use App\Models\Varietas;
 use Gate;
 use Illuminate\Http\Response;
@@ -249,6 +250,28 @@ class PksController extends Controller
 		}
 
 		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled'));
+	}
+
+	public function saprodi($id)
+	{
+		$module_name = 'Realisasi';
+		$page_title = 'Bantuan Saprodi';
+		$page_heading = 'Bantuan Sarana Produksi';
+		$heading_class = 'fal fa-map-marked';
+
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$pks = Pks::where('npwp', $npwpCompany)
+			->findOrFail($id);
+		$saprodis = Saprodi::where('pks_id', $pks->id)->get();
+		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)->first();
+
+		if (empty($commitment->status) || $commitment->status == 3 || $commitment->status == 5) {
+			$disabled = false; // input di-enable
+		} else {
+			$disabled = true; // input di-disable
+		}
+
+		return view('admin.pks.saprodi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'saprodis', 'disabled'));
 	}
 
 	public function destroy(Pks $pks)

@@ -78,8 +78,11 @@
 @section('scripts')
 <script src="{{ asset('js/miscellaneous/lightgallery/lightgallery.bundle.js') }}"></script>
 @parent
-
-<script src="{{ asset('js/gmap/allMaps.js') }}"></script>
+@if (Auth::user()->roles[0]->title == 'User')
+	<script src="{{ asset('js/gmap/userDashboardMaps.js') }}"></script>
+@else
+	<script src="{{ asset('js/gmap/allMaps.js') }}"></script>
+@endif
 {{-- <script src="{{ asset('js/gmap/clickMap.js') }}"></script> --}}
 
 <script>

@@ -90,7 +90,7 @@ class DashboardController extends Controller
 		$page_heading = 'Monitoring';
 		$heading_class = 'fal fa-analytics mr-1';
 
-		$periodeTahuns = CommitmentBackdate::all()->groupBy('periodetahun');
+		$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
 
 		return view('admin.dashboard.monitoring', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns'));
 	}

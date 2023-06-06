@@ -11,19 +11,13 @@
 	
 	<div class="subheader-block d-lg-flex align-items-center">
 		<div class="d-inline-flex flex-column justify-content-center ">
-			<select type="text" id="periodetahun" class="form-control form-control-sm" data-toggle="tooltip" title data-original-title="pilih tahun laporan">
+			<select type="text" id="periodetahun" class="form-control form-control-sm custom-select" data-toggle="tooltip" title data-original-title="pilih tahun laporan">
 				<option hidden>- pilih tahun laporan</option>
 				<option value="" hidden>--pilih tahun</option>
 				@foreach($periodeTahuns as $periodetahun => $records)
 					<option value="{{ $periodetahun }}">Tahun {{ $periodetahun }}</option>
 				@endforeach
 			</select>
-		</div>
-	</div>
-	<div class="subheader-block d-lg-flex align-items-center border-faded border-right-0 border-top-0 border-bottom-0 ml-3 pl-3">
-		<div class="d-inline-flex flex-column justify-content-center mr-3">
-			<button class="btn btn-primary " id="lihatButton">Lihat
-			</button>
 		</div>
 	</div>
 </div>
@@ -338,140 +332,7 @@
 @endsection
 @section('scripts')
 @parent
-	<script>
-		$(function () {
-		let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-		// @can('user_delete')
-		// 	let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
-		// 	let deleteButton = {
-		// 		text: deleteButtonTrans,
-		// 		url: "{{ route('admin.users.massDestroy') }}",
-		// 		className: 'btn-danger  waves-effect waves-themed  btn-sm mr-1',
-		// 		action: function (e, dt, node, config) {
-		// 			var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
-		// 				return entry.id
-		// 			});
-
-		// 			if (ids.length === 0) {
-		// 				alert('{{ trans('global.datatables.zero_selected') }}')
-
-		// 				return
-		// 			}
-
-		// 			if (confirm('{{ trans('global.areYouSure') }}')) {
-		// 				$.ajax({
-		// 				headers: {'x-csrf-token': _token},
-		// 				method: 'POST',
-		// 				url: config.url,
-		// 				data: { ids: ids, _method: 'DELETE' }})
-		// 				.done(function () { location.reload() })
-		// 			}
-		// 		}
-		// 	}
-		// 	dtButtons.push(deleteButton)
-		// @endcan
-
-		let dtOverrideGlobals = {
-			
-			buttons: dtButtons,
-			processing: true,
-			serverside: true,
-			retrieve: true,
-			aaSorting: [],
-			responsive: true,
-			lengthChange: false,
-			pageLength: 10,
-			order: [
-				[0, 'asc']
-			],
-			orderCellsTop: true,
-			dom:
-				/*	--- Layout Structure 
-					--- Options
-					l	-	length changing input control
-					f	-	filtering input
-					t	-	The table!
-					i	-	Table information summary
-					p	-	pagination control
-					r	-	processing display element
-					B	-	buttons
-					R	-	ColReorder
-					S	-	Select
-
-					--- Markup
-					< and >				- div element
-					<"class" and >		- div with a class
-					<"#id" and >		- div with an ID
-					<"#id.class" and >	- div with an ID and a class
-
-					--- Further reading
-					https://datatables.net/reference/option/dom
-					--------------------------------------
-				*/
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-			buttons: [
-				{
-					extend:    'colvis',
-					text:      'Visibility',
-					titleAttr: 'Col visibility',
-					className: 'btn-outline-info btn-xs mr-sm-3 ml-5'
-				},
-				{
-					extend: 'pdfHtml5',
-					text: 'PDF',
-					titleAttr: 'Generate PDF',
-					className: 'btn-outline-danger btn-xs mr-1'
-				},
-				{
-					extend: 'excelHtml5',
-					text: 'Excel',
-					titleAttr: 'Generate Excel',
-					className: 'btn-outline-success btn-xs mr-1'
-				},
-				/*{
-					extend: 'csvHtml5',
-					text: 'CSV',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-xs mr-1'
-				},*/
-				/*{
-					extend: 'copyHtml5',
-					text: 'Copy',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-xs mr-1'
-				},*/
-				{
-					extend: 'print',
-					text: 'Print',
-					titleAttr: 'Print Table',
-					className: 'btn-outline-primary btn-xs'
-				}
-			]
-			
-			//
-			
-			//ajax: "#",
-			// columns: [
-			// 	{ data: 'placeholder', name: 'placeholder' },
-			// 	{ data: 'name', name: 'name' },
-			// 	{ data: 'username', name: 'username' },
-			// 	{ data: 'roleaccess', name: 'roleaccess' },
-			// 	{ data: 'email', name: 'email' },
-			// 	//{ data: 'email_verified_at', name: 'email_verified_at' },
-			// 	{ data: 'roles', name: 'roles.title' },
-			// 	{ data: 'actions', name: '{{ trans('global.actions') }}' }
-			// ],
-			
-		};
-		let table = $('#sum_verif').DataTable(dtOverrideGlobals);
-		$('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-			$($.fn.dataTable.tables(true)).DataTable()
-				.columns.adjust();
-		});
-	});
-	</script>
+	
 	<script>
 		$(document).ready(function() {
 			$('#periodetahun').on('change', function() {

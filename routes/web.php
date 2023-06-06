@@ -31,6 +31,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('/dashboard/monitoring', 'DashboardController@monitoring')->name('dashboard.monitoring');
 	Route::get('/dashboard/map', 'DashboardController@map')->name('dashboard.map');
 
+	Route::get('mapDataAll', 'UserMapDashboard@index')->name('mapDataAll');
+	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
+	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
+
+	//dashboard data for admin
+	Route::get('monitoringDataByYear', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
+
+	//dashboard data for user
+	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
+
 	// Permissions
 	Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
 	Route::resource('permissions', 'PermissionsController');
@@ -135,7 +145,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		// daftar pks
 		Route::get('pks/{id}/edit', 'PksController@edit')->name('pks.edit');
 		Route::put('pks/{id}/update', 'PksController@update')->name('pks.update');
-		Route::get('lokasitanam/{id}', 'PksController@anggotas')->name('pks.anggotas');
+
+		//daftar lokasi tanam
+		Route::get('pks/{id}/lokasitanam', 'PksController@anggotas')->name('pks.anggotas');
+
+		//saprodi
+		Route::get('pks/{id}/saprodi', 'PksController@saprodi')->name('pks.saprodi');
+		Route::post('pks/{id}/saprodi', 'SaprodiController@store')->name('saprodi.store');
+		route::put('pks/{pksId}/saprodi/{id}', 'SaprodiController@update')->name('saprodi.update');
+		route::get('pks/{pksId}/saprodi/{id}/edit', 'SaprodiController@edit')->name('saprodi.edit');
 
 		Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
 		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');

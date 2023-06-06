@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Lokasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AnggotaMitraController extends Controller
 {
@@ -70,8 +71,64 @@ class AnggotaMitraController extends Controller
 			'pks' => function ($query) {
 				$query->with('commitment');
 			},
+			'pks',
 			'masteranggota'
 		])
+			->whereNotNull('latitude')
+			->get();
+		$result = [];
+
+		foreach ($anggotaMitras as $anggotaMitra) {
+			$periodetahun = $anggotaMitra->pullriph->periodetahun;
+			if ($periodetahun == $periodeTahun) {
+				$luasTanam = $anggotaMitra->luas_tanam ? $anggotaMitra->luas_tanam : 'belum tanam';
+				$volume = $anggotaMitra->volume ? $anggotaMitra->volume : 'belum panen';
+
+				$result[] = [
+					'periodetahun' => $periodetahun,
+					'id' => $anggotaMitra->id,
+					'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
+					'latitude' => $anggotaMitra->latitude,
+					'longitude' => $anggotaMitra->longitude,
+					'polygon' => $anggotaMitra->polygon,
+
+					'pks_mitra_id' => $anggotaMitra->poktan_id,
+					'no_ijin' => $anggotaMitra->pullriph->no_ijin,
+					'periodetahun' => $anggotaMitra->pullriph->periodetahun,
+					'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
+					'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
+					'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
+					'nama_lokasi' => $anggotaMitra->nama_lokasi,
+
+					'altitude' => $anggotaMitra->altitude,
+					'luas_kira' => $anggotaMitra->luas_kira,
+					'tgl_tanam' => $anggotaMitra->tgl_tanam,
+					'luas_tanam' => $luasTanam,
+					'varietas' => $anggotaMitra->varietas,
+					'tgl_panen' => $anggotaMitra->tgl_panen,
+					'volume' => $volume,
+					'tanam_pict' => $anggotaMitra->tanam_pict,
+					'panen_pict' => $anggotaMitra->panen_pict,
+
+					'company' => $anggotaMitra->pullriph->datauser->company_name,
+				];
+			}
+		}
+
+		return response()->json($result);
+	}
+
+	public function ByIdYears($id, $periodeTahun)
+	{
+		$user = Auth::user();
+		$anggotaMitras = Lokasi::with([
+			'pks' => function ($query) {
+				$query->with('commitment');
+			},
+			'pks',
+			'masteranggota'
+		])
+			->where('npwp', $npwp)
 			->whereNotNull('latitude')
 			->get();
 
