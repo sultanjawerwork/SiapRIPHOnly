@@ -187,7 +187,7 @@
 									</div>
 								</div>
 								<div class="col-md-6 mb-3">
-									<label class="form-label">Unggah Berkas PKS (Perjanjian Kerjasama</label>
+									<label class="form-label">Unggah Berkas PKS (Perjanjian Kerjasama)</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text" id="inputGroupPrepend3">PKS</span>

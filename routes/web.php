@@ -36,7 +36,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
 
 	//dashboard data for admin
-	Route::get('monitoringDataByYear', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
+	Route::get('monitoringDataByYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
 
 	//dashboard data for user
 	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');

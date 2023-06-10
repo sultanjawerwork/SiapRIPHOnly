@@ -111,7 +111,7 @@
 				},
 				{
 					text: '<i class="fa fa-plus"></i>',
-					titleAttr: 'Tambah Pejabat Penandatangan',
+					titleAttr: 'Tambah Varietas',
 					className: 'btn btn-info btn-sm btn-icon ml-2',
 					action: function(e, dt, node, config) {
 						window.location.href = '{{ route('admin.varietas.create') }}';
