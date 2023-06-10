@@ -90,4 +90,9 @@ class PullRiph extends Model
 	{
 		return $this->hasMany(Pengajuan::class, 'no_ijin', 'no_ijin');
 	}
+
+	public function skl()
+	{
+		return $this->hasOne(PullRiph::class, 'no_ijin', 'no_ijin');
+	}
 }

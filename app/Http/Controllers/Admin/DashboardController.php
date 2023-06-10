@@ -20,7 +20,7 @@ class DashboardController extends Controller
 		$roleaccess = Auth::user()->roleaccess;
 		if ($roleaccess == 1) {
 
-			if (Auth::user()->roles[0]->title == 'Admin') {
+			if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') {
 				$module_name = 'Dashboard';
 				$page_title = 'Monitoring Realisasi';
 				$page_heading = 'Monitoring';

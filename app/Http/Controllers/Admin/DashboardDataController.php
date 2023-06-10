@@ -21,6 +21,9 @@ class DashboardDataController extends Controller
 		// Retrieve all data from RiphAdmin based on the selected 'periode'
 		$riphData = RiphAdmin::where('periode', $periodetahun)->get();
 		$commitments = PullRiph::where('periodetahun', $periodetahun)->get();
+		$ajucount = $commitments->filter(function ($commitment) {
+			return $commitment->status == '1';
+		})->count();
 
 		$jumlahImportir = $riphData->sum('jumlah_importir');
 		$v_pengajuan_import = $riphData->sum('v_pengajuan_import');
@@ -31,6 +34,25 @@ class DashboardDataController extends Controller
 
 		$total_luastanam = 0;
 		$total_volume = 0;
+		$luas_verif = 0;
+		$volume_verif = 0;
+		$sumLunasTanam = 0;
+		$sumLunasProduksi = 0;
+		$verifikasis = [];
+		// $skls = [];
+
+		// Check if the denominator is 0 and set the percentages to 0
+		if ($v_beban_tanam == 0) {
+			$ltTowt = 0;
+		} else {
+			$ltTowt = $total_luastanam / $v_beban_tanam;
+		}
+
+		if ($v_beban_produksi == 0) {
+			$vpTowp = 0;
+		} else {
+			$vpTowp = $total_volume / $v_beban_produksi;
+		}
 
 		foreach ($commitments as $commitment) {
 			foreach ($commitment->lokasi as $lokasi) {
@@ -39,10 +61,53 @@ class DashboardDataController extends Controller
 					$total_volume += $lokasi->volume;
 				}
 			}
+
+			foreach ($commitment->pengajuan->whereIn('status', [4, 6, 7]) as $pengajuan) {
+				$luas_verif += $pengajuan->luas_verif;
+				$volume_verif += $pengajuan->volume_verif;
+			}
+
+			foreach ($commitment->lokasi as $lokasi) {
+				if ($commitment->status == 7) {
+					$sumLunasTanam += $lokasi->luas_tanam;
+					$sumLunasProduksi += $lokasi->volume;
+				}
+			}
+			$verifikasis = array_merge($verifikasis, $commitment->pengajuan->map(function ($verifikasi) {
+				return [
+					'no_pengajuan' => $verifikasi->no_pengajuan,
+					'commitment' => [
+						'datauser' => [
+							'company_name' => $verifikasi->commitment->datauser->company_name,
+						],
+					],
+					'no_ijin' => $verifikasi->commitment->no_ijin,
+
+					'status' => $verifikasi->status,
+					'onlinestatus' => $verifikasi->onlinestatus,
+					'onfarmstatus' => $verifikasi->onfarmstatus,
+				];
+			})->toArray());
+
+			// $skls[] = $commitment->skl ? $commitment->skl->toArray() : null;
 		}
+
+		$proccesscount = $commitments->filter(function ($commitment) {
+			return $commitment->pengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count() > 0;
+		})->count();
+
+		$verifiedcount = $commitments->filter(function ($commitment) {
+			return $commitment->pengajuan->where('onfarmstatus', '!=', '')->count() > 0;
+		})->count();
+
+		$lunascount = $commitments->where('status', 7)->count();
+
+		$lvtowt = $luas_verif / $v_beban_tanam;
+		$vvTowp = $volume_verif / $v_beban_produksi;
 
 		$data = [
 			'jumlah_importir'		=> $jumlahImportir,
+			'ajucount'				=> $ajucount,
 			'v_pengajuan_import'	=> $v_pengajuan_import,
 			'v_beban_tanam'			=> $v_beban_tanam,
 			'v_beban_produksi'		=> $v_beban_produksi,
@@ -50,6 +115,18 @@ class DashboardDataController extends Controller
 			'volume_import'			=> $volume_import,
 			'total_luastanam'		=> $total_luastanam,
 			'total_volume'			=> $total_volume,
+			'luas_verif'			=> $luas_verif,
+			'volume_verif'			=> $volume_verif,
+			'ltTowt'				=> $ltTowt,
+			'vpTowp'				=> $vpTowp,
+			'lvTowt'				=> $lvtowt,
+			'vvTowp'				=> $vvTowp,
+			'proccesscount'			=> $proccesscount,
+			'verifiedcount'			=> $verifiedcount,
+			'lunascount'			=> $lunascount,
+			'sumLunasTanam'			=> $sumLunasTanam,
+			'sumLunasProduksi'		=> $sumLunasProduksi,
+			'verifikasis'			=> $verifikasis,
 		];
 		return response()->json($data);
 	}
