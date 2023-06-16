@@ -6,6 +6,45 @@
 @can('master_riph_access')
 <div class="row">
 	<div class="col-md-12">
+		<form action="{{route('admin.riphadmin.storefetched')}}" method="post">
+			@csrf
+			<div class="row align-items-center">
+				<div class="form-group col-md-2">
+					<label for="" class="col-form-label mr-2">Status:</label>
+					<span id="keterangan"></span>
+					<input type="text" id="status" name="status">
+				</div>
+				<div class="col-md-10">
+					<div class="row">
+						<div class="form-group col-md-4">
+							<label for="">Jumlah RIPH/Perusahaan</label>
+							<input type="text" name="importir" id="jumlahPT" class="form-control" placeholder="" aria-describedby="helpId">
+							<small id="helpId" class="text-muted">Help text</small>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="">Total Import</label>
+							<input type="text" name="volumeRIPH" id="volumeRIPH" class="form-control" placeholder="" aria-describedby="helpId">
+							<small id="helpId" class="text-muted">Help text</small>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="">Pilih Tahun</label>
+							<div class="input-group">
+								<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="Pilih Tahun" aria-label="Pilih tahun" aria-describedby="basic-addon2">
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-sm" type="button" id="fetchDataButton" data-toggle="collapse" data-target="#responseData">
+										<i class="fal fa-search"></i></button>
+									</button>
+									<button class="btn btn-warning btn-sm" type="submit">
+										<i class="fal fa-save"></i></button>
+									</button>
+								</div>
+							</div>
+							<small id="helpId" class="text-muted">Help text</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 		<div id="panel-1" class="panel">
 			<div class="panel-container show">
 				<div class="panel-content">
@@ -27,8 +66,8 @@
 									<td>{{ $riph->periode }}</td>
 									<td>{{ $riph->updated_at->format('d/m/Y') }}</td>
 									<td>{{ number_format($riph->v_pengajuan_import, 0, ',', '.') }}</td>
-									<td>{{ number_format($riph->v_beban_tanam, 0, ',', '.') }}</td>
-									<td>{{ number_format($riph->v_beban_produksi, 0, ',', '.') }}</td>
+									<td>{{ number_format($riph->v_pengajuan_import*0.05/6, 0, ',', '.') }}</td>
+									<td>{{ number_format($riph->v_pengajuan_import*0.05, 0, ',', '.') }}</td>
 									<td>{{ number_format($riph->jumlah_importir, 0, ',', '.') }}</td>
 									<td>
 										<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" href="/admin/riphAdmin/{{ $riph->id }}/edit" data-toggle="tooltip" data-offset="0,10" data-original-title="Ubah Data"><i class="fal fa-edit"></i></a>
@@ -93,19 +132,74 @@
 					text: '<i class="fa fa-print"></i>',
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-
-					text: '<i class="fal fa-plus mr-1"></i>Tambah Data',
-					titleAttr: 'Tambah Data',
-					className: 'btn btn-info btn-xs ml-2',
-					action: function(e, dt, node, config) {
-						window.location.href = '{{ route('admin.riphAdmin.create') }}';
-					}
 				}
 			]
 		});
 
 	});
 </script>
+
+
+
+
+<!-- Include jQuery library -->
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
+<!-- Include the yearpicker script -->
+<script>
+	$(document).ready(function() {
+		// Initialize the year picker
+			$('.yearpicker').datepicker({
+			format: 'yyyy',
+			viewMode: 'years',
+			minViewMode: 'years',
+			autoclose: true
+		});
+	
+	  // Handle the button click event
+		$('#fetchDataButton').click(function() {
+			var tahun = $('#periodetahun').val();
+			if (tahun === '') {
+				$('#jumlahPT').val('');
+				$('#volumeRIPH').val('');
+				$('#status').val('');
+				$('#keterangan').text('FAIL');
+				$('#keterangan').removeClass('text-success').addClass('text-danger fw-500');
+				return; // Exit the function
+			}
+			fetchData(tahun);
+		});
+
+	
+	  // Fetch data from Laravel controller using AJAX
+	  function fetchData(tahun) {
+		$.ajax({
+		  url: '{{ route("admin.get.rekap.riph") }}',
+		  method: 'GET',
+		  data: {
+			periodetahun: tahun
+		  },
+		  success: function(response) {
+			// Update the fetched data in the HTML
+			$('#jumlahPT').val(response.riph.rekap.jumlah_pt);
+			$('#volumeRIPH').val(response.riph.rekap.jumlah_vol);
+			$('#status').val(response.keterangan);
+			$('#keterangan').text(response.keterangan);
+			$('#keterangan').removeClass('text-danger').addClass('text-success fw-500'); // Add success styling
+			},
+			error: function(xhr) {
+			$('#errorMessage').text('Error fetching data. Please try again.');
+			console.error(xhr.responseText);
+			// Clear the fetched data in the HTML
+			$('#jumlahPT').val('');
+			$('#volumeRIPH').val('');
+			$('#status').val('');
+			$('#keterangan').text('Fail to fetch request');
+			$('#keterangan').removeClass('text-success').addClass('text-danger fw-500'); // Add error styling
+			}
+		});
+	  }
+	});
+</script>
+
 @endsection

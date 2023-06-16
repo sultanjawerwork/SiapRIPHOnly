@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 	//dashboard data for user
 	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
+	Route::get('rekapRiphData', 'DashboardDataController@rekapRiphData')->name('get.rekap.riph');
 
 	// Permissions
 	Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
@@ -92,6 +93,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 
 	Route::resource('riphAdmin', 'RiphAdminController');
+	Route::post('riphadmin/storefetched', 'RiphAdminController@storefetched')->name('riphadmin.storefetched');
+
 
 	//daftar pejabat penandatangan SKL
 	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');

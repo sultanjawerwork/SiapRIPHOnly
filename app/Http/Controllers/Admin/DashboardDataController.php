@@ -9,6 +9,10 @@ use App\Models\Pks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Http;
+use Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
 use App\Models\RiphAdmin;
@@ -169,5 +173,35 @@ class DashboardDataController extends Controller
 			'total_volume'			=> $realisasi_produksi,
 		];
 		return response()->json($data);
+	}
+
+	public function rekapRiphData(Request $request)
+	{
+		try {
+			$options = array(
+				'soap_version' => SOAP_1_1,
+				'exceptions' => true,
+				'trace' => 1,
+				'cache_wsdl' => WSDL_CACHE_MEMORY,
+				'connection_timeout' => 25,
+				'style' => SOAP_RPC,
+				'use' => SOAP_ENCODED,
+			);
+
+			$client = new \SoapClient('http://riph.pertanian.go.id/api.php/simethris?wsdl', $options);
+			$parameter = array(
+				'user' => 'simethris',
+				'pass' => 'wsriphsimethris',
+				'tahun' => $request->string('periodetahun')
+			);
+			$response = $client->__soapCall('get_rekap', $parameter);
+		} catch (\Exception $e) {
+
+			Log::error('Soap Exception: ' . $e->getMessage());
+			throw new \Exception('Problem with SOAP call');
+		}
+		$res = json_decode(json_encode((array)simplexml_load_string($response)), true);
+
+		return $res;
 	}
 }

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lokasi;
 use App\Models\MasterAnggota;
 use App\Models\Pks;
-use  App\Models\MasterPoktan;
+use App\Models\MasterPoktan;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;

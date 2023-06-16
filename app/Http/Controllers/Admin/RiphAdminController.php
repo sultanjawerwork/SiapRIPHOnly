@@ -53,6 +53,36 @@ class RiphAdminController extends Controller
 	 * @param  \App\Http\Requests\StoreRiphAdminRequest  $request
 	 * @return \Illuminate\Http\Response
 	 */
+
+	public function storefetched(Request $request)
+	{
+		$periode = $request->input('periode');
+		$status = $request->input('status');
+		$importir = $request->input('importir');
+		$volumeRiph = $request->input('volumeRIPH');
+
+		if ($status == 'SUCCESS') {
+			$v_beban_tanam = $volumeRiph * 0.05 / 6;
+			$v_beban_produksi = $volumeRiph * 0.05;
+
+			$datariph = RiphAdmin::updateOrCreate(
+				[
+					'periode' => $periode,
+				],
+				[
+					'status' => $status,
+					'jumlah_importir' => $importir,
+					'v_pengajuan_import' => $volumeRiph,
+					'v_beban_tanam' => $v_beban_tanam,
+					'v_beban_produksi' => $v_beban_produksi,
+				]
+			);
+
+			return redirect()->route('admin.riphAdmin.index')
+				->with('success', 'Data berhasil disimpan.');
+		}
+	}
+
 	public function store(Request $request)
 	{
 		$datariph = new RiphAdmin();
