@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('v_beban_produksi');
             $table->integer('jumlah_importir');
             $table->integer('periode');
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });
