@@ -10,24 +10,23 @@
 	</h1>
 	<div class="subheader-block d-lg-flex align-items-center  d-print-none">
 		<div class="d-inline-flex flex-column justify-content-center ">
-			<select type="text" id="periodetahun" class="form-control form-control-sm custom-select" data-toggle="tooltip" title data-original-title="pilih tahun laporan">
-				<option hidden>- pilih tahun laporan</option>
-				<option value="" hidden>--pilih tahun</option>
-				@foreach($periodeTahuns as $periodetahun => $records)
-					<option value="{{ $periodetahun }}">Tahun {{ $periodetahun }}</option>
-				@endforeach
-			</select>
+			<div class="form-group row">
+				<label for="periodetahun" class="col-sm-4 col-form-label text-right">Tahun</label>
+				<div class="col-sm-8">
+					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$currentYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-3">
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
-			<div class="card-body bg-danger-300">
+			<div class="card-body bg-primary-400">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="jumlah_importir">{{ number_format($riph_admin[0]->jumlah_importir, 0, ',', '.') }}</span>
+						<span id="jumlah_importir"></span>
 						<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1"></span>Terdaftar</small> 
 					</h3>
 				</div>
@@ -37,11 +36,11 @@
 	</div>
 	<div class="col-md-3">
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
-			<div class="card-body bg-warning-400">
+			<div class="card-body bg-danger-300">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah volume import pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_pengajuan_import">{{ number_format($riph_admin[0]->v_pengajuan_import, 0, ',', '.') }}</span>
+						<span id="v_pengajuan_import"></span>
 						<small class="m-0 l-h-n">Volume Import (ton)</small>
 					</h3>
 				</div>
@@ -51,11 +50,11 @@
 	</div>
 	<div class="col-md-3">
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
-			<div class="card-body bg-info-300">
+			<div class="card-body bg-success-500">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_beban_tanam">{{ number_format($riph_admin[0]->v_beban_tanam, 0, ',', '.') }}</span>
+						<span id="v_beban_tanam"></span>
 						<small class="m-0 l-h-n">Kewajiban Tanam (ha)</small>
 					</h3>
 				</div>
@@ -65,11 +64,11 @@
 	</div>
 	<div class="col-md-3">
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
-			<div class="card-body bg-success-500">
+			<div class="card-body bg-warning-500">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_beban_produksi">{{ number_format($riph_admin[0]->v_beban_produksi, 0, ',', '.') }}</span>
+						<span id="v_beban_produksi"></span>
 						<small class="m-0 l-h-n">Kewajiban Produksi (ton)</small>
 					</h3>
 				</div>
@@ -91,72 +90,38 @@
 					<!-- Row -->
 					<div class="row mb-3 align-items-center">
 						<div class="col-lg-5 col-sm-6 align-self-center text-center">
-							<div class="tab-content" id="v-pills-tabContent">
-								<div class="tab-pane fade show active" id="real_Tanam" role="tabpanel" aria-labelledby="real_Tanam">
-									<div class="c-chart-wrapper">
-										<div 
-											id = "naschartTanam"
-											class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center "
-											data-percent="50.00"
-											data-piesize="145"
-											data-linewidth="10"
-											data-linecap="butt"
-											data-scalelength="7"
-											data-toggle="tooltip"
-											title data-original-title="% dari Kewajiban"
-											data-placement="bottom">
-											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
-												<span class="fs-xxl fw-500 text-dark"><span id="ltTowt">0</span><sup>%</sup></span>
-												<!--<span class="display-5 fw-500 js-percent d-block text-dark">97.68</span>-->
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane fade" id="verif_Tanam" role="tabpanel" aria-labelledby="verif_Tanam">
-									<div class="c-chart-wrapper">
-										<div
-											id="naschartTanamVerif"
-											class="js-easy-pie-chart color-primary-500 position-relative d-inline-flex align-items-center justify-content-center"
-											data-percent=""
-											data-piesize="145"
-											data-linewidth="10"
-											data-linecap="butt"
-											data-scalelength="7"
-											data-toggle="tooltip"
-											title data-original-title="% dari Kewajiban"
-											data-placement="bottom">
-											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
-												<span class="fs-xxl fw-500 text-dark" id="lvTowt">0<sup>%</sup></span>
-												<!--<span class="display-3 fw-500 js-percent d-block text-dark">97.68</span>-->
-											</div>
-										</div>
+							<div class="c-chart-wrapper">
+								<div 
+									id = "naschartTanam"
+									class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center"
+									data-percent=""
+									data-piesize="145"
+									data-linewidth="10"
+									data-linecap="butt"
+									data-scalelength="7"
+									data-toggle="tooltip"
+									title data-original-title="% dari total kewajiban."
+									data-placement="bottom">
+									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
+										<span class="fs-xxl fw-500 text-dark">
+											<span name="prosenTanam" id="prosenTanam"></span>
+											<sup>%</sup>
+										</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-lg-7 col-sm-6">
-							<nav class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-								<a class="nav-link shadow-1 p-1 btn-block btn-success bg-success-500 rounded overflow-hidden position-relative text-white mb-2 waves-effect waves-themed" id="v-pills-home-tab" data-toggle="pill" href="#real_Tanam" role="tab" aria-controls="v-pills-home" aria-selected="true">
-									<div class="">
-										<span class="small">Realisasi</span>
-										<div class="d-flex">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="total_luastanam">...</h5>
-											<span>ha</span>
-										</div>
-									</div>
-									<i class="fal fa-hand-holding-seedling position-absolute pos-right pos-bottom opacity-25 mb-n1 mr-n1" style="font-size:3rem"></i>
-								</a>
-								<a class="nav-link  shadow-1 p-1 btn-block btn-primary bg-primary-300 rounded overflow-hidden position-relative text-white mb-2 waves-effect waves-themed" id="v-pills-profile-tab" data-toggle="pill" href="#verif_Tanam" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-									<div class="">
-										<span class="small">Verifikasi</span>
-										<div class="d-flex">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="luas_verif">...</h5>
-											<span>ha</span>
-										</div>
-									</div>
-									<i class="fal fa-hand-holding-seedling position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:3rem"></i>
-								</a>
-							</nav>
+							<div class="shadow-1 p-2 bg-success-600 rounded overflow-hidden position-relative text-white mb-2">
+								<div class="card-body">
+									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
+										<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
+										<span id="total_luastanam"></span> ha
+										<small class="m-0 l-h-n">Total realisasi luas tanam.</small> 
+									</h4>
+								</div>
+								<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -175,70 +140,37 @@
 					<!-- Row -->
 					<div class="row mb-3 align-items-center">
 						<div class="col-lg-5 col-sm-6 align-self-center text-center">
-							<div class="tab-content" id="v-pills-tabContent">
-								<div class="tab-pane fade show active" id="real_Produksi" role="tabpanel" aria-labelledby="real_Produksi">
-									<div class="c-chart-wrapper">
-										<div
-											id = "naschartProduksi"
-											class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center"
-											data-percent="50.00"
-											data-piesize="145"
-											data-linewidth="10"
-											data-linecap="butt"
-											data-scalelength="7"
-											data-toggle="tooltip"
-											title data-original-title=""
-											data-placement="bottom">
-											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
-												<span class="fs-xxl fw-500 text-dark"><span id="vpTowp">0</span><sup>%</sup></span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="tab-pane fade" id="verif_Produksi" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-									<div class="c-chart-wrapper">
-										<div 
-											id = "naschartProduksiVerif"
-											class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center"
-											data-percent="50.00"
-											data-piesize="145"
-											data-linewidth="10"
-											data-linecap="butt"
-											data-scalelength="7"
-											data-toggle="tooltip"
-											title data-original-title=""
-											data-placement="bottom">
-											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
-												<span class="fs-xxl fw-500 text-dark"><span id="vvTowp">0</span><sup>%</sup></span>
-											</div>
-										</div>
+							<div class="c-chart-wrapper">
+								<div
+									id = "naschartProduksi"
+									data-percent=""
+									data-piesize="145"
+									data-linewidth="10"
+									data-linecap="butt"
+									data-scalelength="7"
+									data-toggle="tooltip"
+									title data-original-title="% dari total kewajiban."
+									data-placement="bottom"
+									class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center">
+									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
+										<span class="fs-xxl fw-500 text-dark">
+											<span name="prosenProduksi" id="prosenProduksi"></span>
+											<sup>%</sup>
+										</span>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="col-lg-7 col-sm-6">
-							<nav class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-								<a class="nav-link shadow-1 p-1 btn-block btn-warning bg-warning-300 rounded overflow-hidden position-relative text-white mb-2 waves-effect waves-themed" id="v-pills-home-tab" data-toggle="pill" href="#real_Produksi" role="tab" aria-controls="realisasiProduksi" aria-selected="true">
-									<div class="">
-										<span class="small">Realisasi</span>
-										<div class="d-flex">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="total_volume">...</h5>
-											<span>ton</span>
-										</div>
-									</div>
-									<i class="fal fa-hand-holding-seedling position-absolute pos-right pos-bottom opacity-35 mb-n1 mr-n1" style="font-size:3rem"></i>
-								</a>
-								<a class="nav-link  shadow-1 p-1 btn-block btn-primary bg-primary-300 rounded overflow-hidden position-relative text-white mb-2 waves-effect waves-themed" id="v-pills-profile-tab" data-toggle="pill" href="#verif_Produksi" role="tab" aria-controls="v-pills-profile" aria-selected="false">
-									<div class="">
-										<span class="small">Verifikasi</span>
-										<div class="d-flex">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="volume_verif">...</h5>
-											<span>ton</span>
-										</div>
-									</div>
-									<i class="fal fa-hand-holding-seedling position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:3rem"></i>
-								</a>
-							</nav>
+							<div class="shadow-1 p-2 bg-warning-600 rounded overflow-hidden position-relative text-white mb-2">
+								<div class="card-body">
+									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
+										<span id="total_volume"></span> ha
+										<small class="m-0 l-h-n">Total realisasi produksi.</small> 
+									</h4>
+								</div>
+								<i class="fal fa-dolly position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -246,12 +178,8 @@
 		</div>
 	</div>
 </div>
-					
+
 <div class="row">
-	<!-- Tabel Verifikasi
-		Nilai Tabel chart ini diperoleh dari kueri data verifikasi dengan status mulai dari 0 s. d 5. Temporary tabel sesuai dengan tampilan pada layar html.
-		Setiap status merupakan pintasan cepat ke halaman terkait.
-	-->
 	<div class="col-md-12">
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
@@ -273,10 +201,6 @@
 										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="ajucount">0</h5>
 										<span>RIPH</span>
 									</div>
-									<h5 class="d-block l-h-n m-0 fw-500">
-										{{-- sum wajib tanam --}}
-										0.00 ha
-									</h5>
 									<span class="small">Pengajuan</span>
 								</div>
 								<i class="fal fa-download position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:3rem"></i>
@@ -290,10 +214,6 @@
 										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="proccesscount">0</h5>
 										<span>RIPH</span>
 									</div>
-									<h5 class="d-block l-h-n m-0 fw-500">
-										{{-- sum wajib tanam --}}
-										0.00 ha
-									</h5>
 									<span class="small">Dalam Proses</span>
 								</div>
 								<i class="fal fa-hourglass position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:3rem"></i>
@@ -307,10 +227,6 @@
 										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="verifiedcount">0</h5>
 										<span>RIPH</span>
 									</div>
-									<h5 class="d-block l-h-n m-0 fw-500">
-										{{-- sum wajib tanam --}}
-										0.00 ha
-									</h5>
 									<span class="small">Terverifikasi</span>
 								</div>
 								<i class="fal fa-check-circle position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:3rem"></i>
@@ -326,11 +242,11 @@
 									</div>
 									<div class="d-flex">
 										<div class="d-flex">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="sumLunasTanam">0</h5>
+											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunasLuas">0</h5>
 											<span>ha  |  </span>
 										</div>
 										<div class="d-flex ml-1">
-											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="sumLunasProduksi">0</h5>
+											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunasVolume">0</h5>
 											<span>ton</span>
 										</div>
 									</div>
@@ -342,17 +258,55 @@
 					</div><hr>
 					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
-							<th>Nomor Pengajuan</th>
 							<th>Nama Perusahaan</th>
+							<th>Nomor Pengajuan</th>
 							<th>Nomor RIPH</th>
-							<th>Data</th>
-							<th>Lapangan</th>
-							<th>Lunas</th>
+							<th>Pengajuan</th>
+							<th>Tahap 1</th>
+							<th>Tahap 2</th>
+							<th>Tahap 3</th>
 						</thead>
 						<tbody>
-
+							
 						</tbody>
 					</table>
+					<hr>
+					<span class="help-block mt-2">
+						<label for="" class="form-label">Keterangan:</label>
+						<div class="row d-flex align-items-top">
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li>Tahap 1: Pemeriksaan Data</li>
+									<li>Tahap 2: Pemeriksaan Lapangan</li>
+									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
+								</ul>
+							</div>
+							<div class="col-md-5 col-sm-6">
+								<ul>
+									<li>
+										<span class="btn btn-icon btn-xs btn-success">
+											<i class="fal fa-check-circle mr-1"></i>
+										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-danger">
+											<i class="fal fa-ban mr-1"></i>
+										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-info">
+											<i class="fal fa-file-signature mr-1"></i>
+										</span> : Rekomendasi penerbitan SKL.</span>.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-success">
+											<i class="fal fa-award mr-1"></i>
+										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
+									</li>
+								</ul>
+							</div>
+						</div>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -428,6 +382,12 @@
 	</script>
 	<script>
 		$(document).ready(function() {
+			$('.yearpicker').datepicker({
+				format: 'yyyy',
+				viewMode: 'years',
+				minViewMode: 'years',
+				autoclose: true
+			});
 			$('#periodetahun').on('change', function() {
 				var periodetahun = $(this).val();
 				var url = '{{ route("admin.monitoringDataByYear", ":periodetahun") }}';
@@ -442,60 +402,47 @@
 					$('#volume_import').text(formatdecimals(data.volume_import));
 					$('#total_luastanam').text(formatdecimals(data.total_luastanam));
 					$('#total_volume').text(formatdecimals(data.total_volume));
-					$('#luas_verif').text(formatdecimals(data.luas_verif));
-					$('#volume_verif').text(formatdecimals(data.volume_verif));
-					$('#ltTowt').text(formatdecimals(data.ltTowt));
-					$('#vpTowp').text(formatdecimals(data.vpTowp));
-					$('#lvTowt').text(formatdecimals(data.lvTowt));
-					$('#vvTowp').text(formatdecimals(data.vvTowp));
+					$('#prosenTanam').text(formatdecimals(data.prosenTanam));
+					$('#prosenProduksi').text(formatdecimals(data.prosenProduksi));
 					$('#ajucount').text(data.ajucount);
 					$('#proccesscount').text(data.proccesscount);
 					$('#verifiedcount').text(data.verifiedcount);
+					$('#recomendationcount').text(data.recomendationcount);
 					$('#lunascount').text(data.lunascount);
-					$('#sumLunasTanam').text(formatdecimals(data.sumLunasTanam));
-					$('#sumLunasProduksi').text(formatdecimals(data.sumLunasProduksi));
+					$('#lunasLuas').text(formatdecimals(data.lunasLuas));
+					$('#lunasVolume').text(formatdecimals(data.lunasVolume));
 					
-					var ltToWt = (data.ltTowt);
-					$('#naschartTanam').attr('data-percent', ltToWt);
-					$('#naschartTanam').attr('data-original-title', ltToWt  + '% dari kewajiban');
+					var prosentanam = (data.prosenTanam);
+					$('#naschartTanam').attr('data-percent', prosentanam);
+					$('#naschartTanam').attr('data-original-title', prosentanam  + '% dari kewajiban');
 					var $chartTanam = $('#naschartTanam');
-					$chartTanam.data('easyPieChart').update(ltToWt);
+					$chartTanam.data('easyPieChart').update(prosentanam);
 
-					var vpToWp = (data.vpTowp);
-					$('#naschartProduksi').attr('data-percent', vpToWp);
-					$('#naschartProduksi').attr('data-original-title', vpToWp  + '% dari kewajiban');
+					var prosenproduksi = (data.prosenProduksi);
+					$('#naschartProduksi').attr('data-percent', prosenproduksi);
+					$('#naschartProduksi').attr('data-original-title', prosenproduksi  + '% dari total kewajiban');
 					var $chartProduksi = $('#naschartProduksi');
-					$chartProduksi.data('easyPieChart').update(vpToWp);
+					$chartProduksi.data('easyPieChart').update(prosenproduksi);
 
-					var lvToWt = (data.lvTowt);
-					$('#naschartTanamVerif').attr('data-percent', lvToWt);
-					$('#naschartTanamVerif').attr('data-original-title', lvToWt  + '% dari kewajiban');
-					var $chartTanam = $('#naschartTanamVerif');
-					$chartTanam.data('easyPieChart').update(lvToWt);
-
-					var vvToWp = (data.vvTowp);
-					$('#naschartProduksiVerif').attr('data-percent', vvToWp);
-					$('#naschartProduksiVerif').attr('data-original-title', vvToWp  + '% dari kewajiban');
-					var $chartTanam = $('#naschartProduksiVerif');
-					$chartTanam.data('easyPieChart').update(vvToWp);
-
-					// // Build table for pengajuanv2s
+					// // Build table for pengajuan
 					var tableBody = $("#verifprogress tbody");
 					tableBody.empty(); // Clear previous table data
 
 					$.each(data.verifikasis, function (index, verifikasi) {
 						console.log('Verifikasi:', verifikasi);
 						var row = $("<tr></tr>");
-						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
 						var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
+						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
 						var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
 						
+						var ajuCell = $('<td class="text-center"></td>').html(function() {
+							if (verifikasi.status) {
+								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
+							}
+						});
+
 						var dataCell = $('<td class="text-center"></td>').html(function() {
-							if (!verifikasi.status) {
-								return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diajukan</span>';
-							} else if (verifikasi.status === '1' && !verifikasi.onlinestatus) {
-								return '<span class="badge badge-xs badge-primary"><i class="fal fa-check-upload mr-1"></i>Diajukan</span>';
-							} else if (verifikasi.status === '2') {
+							if (verifikasi.status === '2') {
 								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
 							} else if (verifikasi.status === '3') {
 								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
@@ -516,18 +463,15 @@
 							if (verifikasi.status === '6') {
 								return '<span class="badge badge-xs badge-primary"><i class="fal fa-file-signature mr-1"></i>Rekomendasi</span>';
 							} else if (verifikasi.status === '7') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span>';
+								return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span> <span hidden>7</span>';
 							}
 						});
 
-						row.append(nomorPengajuan, namaPerusahaan, nomorRIPH, dataCell, lapanganCell, lunasCell);
+						row.append(namaPerusahaan, nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
 						tableBody.append(row);
 					});
-					
 				});
 
-				
-				
 				function formatNumber(number) {
 					return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 				}
@@ -546,3 +490,39 @@
 		});
 	</script>
 @endsection
+
+{{-- @foreach ($allPengajuan as $pengajuan)
+								<tr>
+									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
+									<td>{{$pengajuan->no_pengajuan}}</td>
+									<td>{{$pengajuan->no_ijin}}</td>
+									<td class="text-center">
+										@if ($pengajuan->status)
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '2')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '3')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->status === '6')
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
+										@elseif ($pengajuan->status === '7')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
+										@elseif ($pengajuan->status === '8')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+								</tr>
+							@endforeach --}}

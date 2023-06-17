@@ -38,6 +38,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	//dashboard data for admin
 	Route::get('monitoringDataByYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
 
+	//dashboard data for verifikator
+	Route::get('verifikatorMonitoringDataByYear/{periodetahun}', 'DashboardDataController@verifikatorMonitoringDataByYear')->name('verifikatormonitoringDataByYear');
+
 	//dashboard data for user
 	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
 	Route::get('rekapRiphData', 'DashboardDataController@rekapRiphData')->name('get.rekap.riph');
@@ -94,7 +97,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 	Route::resource('riphAdmin', 'RiphAdminController');
 	Route::post('riphadmin/storefetched', 'RiphAdminController@storefetched')->name('riphadmin.storefetched');
-
 
 	//daftar pejabat penandatangan SKL
 	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PullRiph;
-use App\Models\Lokasi;
-use App\Models\Pks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,18 +13,24 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
 use App\Models\RiphAdmin;
+use App\Models\Saprodi;
+use App\Models\PullRiph;
+use App\Models\Lokasi;
+use App\Models\Pks;
+use App\Models\Pengajuan;
 
 class DashboardDataController extends Controller
 {
 	public function monitoringDataByYear($periodetahun)
 	{
 		abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
-		// Retrieve all data from RiphAdmin based on the selected 'periode'
+
 		$riphData = RiphAdmin::where('periode', $periodetahun)->get();
 		$commitments = PullRiph::where('periodetahun', $periodetahun)->get();
-		$ajucount = $commitments->filter(function ($commitment) {
-			return $commitment->status == '1';
-		})->count();
+
+		$allPengajuan = Pengajuan::whereNotNull('status')
+			->whereYear('created_at', $periodetahun)
+			->get();
 
 		$jumlahImportir = $riphData->sum('jumlah_importir');
 		$v_pengajuan_import = $riphData->sum('v_pengajuan_import');
@@ -36,47 +39,136 @@ class DashboardDataController extends Controller
 		$volume_import = $commitments->sum('volume_riph');
 		$company = $commitments->count('no_ijin');
 
-		$total_luastanam = 0;
-		$total_volume = 0;
-		$luas_verif = 0;
-		$volume_verif = 0;
-		$sumLunasTanam = 0;
-		$sumLunasProduksi = 0;
+		$total_luastanam = $commitments->flatMap(function ($commitment) {
+			return $commitment->lokasi->pluck('luas_tanam');
+		})->sum();
+		$total_volume = $commitments->flatMap(function ($commitment) {
+			return $commitment->lokasi->pluck('volume');
+		})->sum();
+
+		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+			return [
+				'no_pengajuan' => $singlePengajuan->no_pengajuan,
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $singlePengajuan->commitment->datauser->company_name,
+					],
+				],
+				'no_ijin' => $singlePengajuan->commitment->no_ijin,
+				'status' => $singlePengajuan->status,
+				'onlinestatus' => $singlePengajuan->onlinestatus,
+				'onfarmstatus' => $singlePengajuan->onfarmstatus,
+			];
+		});
+
+		$ajucount = $allPengajuan->where('status', '1')->count();
+		$proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count();
+		$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count();
+		$recomendationcount = $allPengajuan->where('status', '6')->count();
+		$lunascount = $allPengajuan->where('status', '7')->count();
+		$lunasLuas = $allPengajuan->where('status', '7')->sum('luas_verif');
+		$lunasVolume = $allPengajuan->sum('volume_verif');
+
+		$data = [
+			'jumlah_importir'       => $jumlahImportir,
+			'v_pengajuan_import'    => $v_pengajuan_import,
+			'v_beban_tanam'         => $v_beban_tanam,
+			'v_beban_produksi'      => $v_beban_produksi,
+			'company'               => $company,
+			'volume_import'         => $volume_import,
+			'total_luastanam'       => $total_luastanam,
+			'total_volume'          => $total_volume,
+			'prosenTanam'           => ($v_beban_tanam == 0) ? 0 : ($total_luastanam / $v_beban_tanam * 100),
+			'prosenProduksi'        => ($v_beban_produksi == 0) ? 0 : ($total_volume / $v_beban_produksi * 100),
+			'ajucount'              => $ajucount,
+			'proccesscount'         => $proccesscount,
+			'verifiedcount'         => $verifiedcount,
+			'lunascount'            => $lunascount,
+			'lunasLuas'             => $lunasLuas,
+			'lunasVolume'           => $lunasVolume,
+			'verifikasis'           => $verifikasis,
+		];
+
+		return response()->json($data);
+	}
+
+
+	public function verifikatorMonitoringDataByYear($periodetahun)
+	{
+		abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		$allPengajuan = Pengajuan::whereNotNull('status')
+			->whereYear('created_at', $periodetahun)
+			->get();
+
+		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+			return [
+				'no_pengajuan' => $singlePengajuan->no_pengajuan,
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $singlePengajuan->commitment->datauser->company_name,
+					],
+				],
+				'no_ijin' => $singlePengajuan->commitment->no_ijin,
+				'status' => $singlePengajuan->status,
+				'onlinestatus' => $singlePengajuan->onlinestatus,
+				'onfarmstatus' => $singlePengajuan->onfarmstatus,
+			];
+		});
+
+		$ajucount = $allPengajuan->where('status', '1')->count();
+		$proccesscount = $allPengajuan->where('onlinestatus', '2')
+			->where('onfarmstatus', '')
+			->count();
+		$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')
+			->count();
+		$recomendationcount = $allPengajuan->where('status', '')
+			->count();
+		$lunascount = $allPengajuan->where('status', '7')
+			->count();
+
+		$data = [
+			'ajucount' => $ajucount,
+			'proccesscount' => $proccesscount,
+			'verifiedcount' => $verifiedcount,
+			'recomendationcount' => $recomendationcount,
+			'lunascount' => $lunascount,
+			'verifikasis' => $verifikasis,
+		];
+
+		return response()->json($data);
+	}
+
+	public function userMonitoringDataByYear($periodetahun)
+	{
+		$npwpuser = Auth::user()->data_user->npwp_company;
+		// Retrieve all data from RiphAdmin based on the selected 'periode'
+		$commitments = PullRiph::where('periodetahun', $periodetahun)
+			->where('npwp', $npwpuser)
+			->get();
+
+		$volumeImport = $commitments->sum('volume_riph');
+
+		$wajib_tanam = $commitments->sum('luas_wajib_tanam');
+		$wajib_produksi = $commitments->sum('volume_produksi');
+		$no_ijins = $commitments->pluck('no_ijin');
+		$pks = Pks::whereIn('no_ijin', $no_ijins)->get();
+		$lokasis = Lokasi::where('no_ijin', $no_ijins)->get();
+		$saprodis = Saprodi::where('no_ijin', $no_ijins)->get();
+
+		$jumlah_poktan = $pks->count('id');
+		$jumlah_anggota = $lokasis->count('id');
+		$realisasi_tanam = $lokasis->sum('luas_tanam');
+		$realisasi_produksi = $lokasis->sum('volume');
+		$total_saprodi = $saprodis->sum(function ($saprodi) {
+			return $saprodi->volume * $saprodi->harga;
+		});
+
+		$prosentanam = $realisasi_tanam / $wajib_tanam;
+		$prosenproduksi = $realisasi_produksi / $wajib_produksi;
+
 		$verifikasis = [];
-		// $skls = [];
-
-		// Check if the denominator is 0 and set the percentages to 0
-		if ($v_beban_tanam == 0) {
-			$ltTowt = 0;
-		} else {
-			$ltTowt = $total_luastanam / $v_beban_tanam;
-		}
-
-		if ($v_beban_produksi == 0) {
-			$vpTowp = 0;
-		} else {
-			$vpTowp = $total_volume / $v_beban_produksi;
-		}
-
 		foreach ($commitments as $commitment) {
-			foreach ($commitment->lokasi as $lokasi) {
-				if (!empty($commitment->status)) {
-					$total_luastanam += $lokasi->luas_tanam;
-					$total_volume += $lokasi->volume;
-				}
-			}
-
-			foreach ($commitment->pengajuan->whereIn('status', [4, 6, 7]) as $pengajuan) {
-				$luas_verif += $pengajuan->luas_verif;
-				$volume_verif += $pengajuan->volume_verif;
-			}
-
-			foreach ($commitment->lokasi as $lokasi) {
-				if ($commitment->status == 7) {
-					$sumLunasTanam += $lokasi->luas_tanam;
-					$sumLunasProduksi += $lokasi->volume;
-				}
-			}
 			$verifikasis = array_merge($verifikasis, $commitment->pengajuan->map(function ($verifikasi) {
 				return [
 					'no_pengajuan' => $verifikasi->no_pengajuan,
@@ -96,81 +188,18 @@ class DashboardDataController extends Controller
 			// $skls[] = $commitment->skl ? $commitment->skl->toArray() : null;
 		}
 
-		$proccesscount = $commitments->filter(function ($commitment) {
-			return $commitment->pengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count() > 0;
-		})->count();
-
-		$verifiedcount = $commitments->filter(function ($commitment) {
-			return $commitment->pengajuan->where('onfarmstatus', '!=', '')->count() > 0;
-		})->count();
-
-		$lunascount = $commitments->where('status', 7)->count();
-
-		$lvtowt = $luas_verif / $v_beban_tanam;
-		$vvTowp = $volume_verif / $v_beban_produksi;
-
 		$data = [
-			'jumlah_importir'		=> $jumlahImportir,
-			'ajucount'				=> $ajucount,
-			'v_pengajuan_import'	=> $v_pengajuan_import,
-			'v_beban_tanam'			=> $v_beban_tanam,
-			'v_beban_produksi'		=> $v_beban_produksi,
-			'company'				=> $company,
-			'volume_import'			=> $volume_import,
-			'total_luastanam'		=> $total_luastanam,
-			'total_volume'			=> $total_volume,
-			'luas_verif'			=> $luas_verif,
-			'volume_verif'			=> $volume_verif,
-			'ltTowt'				=> $ltTowt,
-			'vpTowp'				=> $vpTowp,
-			'lvTowt'				=> $lvtowt,
-			'vvTowp'				=> $vvTowp,
-			'proccesscount'			=> $proccesscount,
-			'verifiedcount'			=> $verifiedcount,
-			'lunascount'			=> $lunascount,
-			'sumLunasTanam'			=> $sumLunasTanam,
-			'sumLunasProduksi'		=> $sumLunasProduksi,
-			'verifikasis'			=> $verifikasis,
-		];
-		return response()->json($data);
-	}
-
-	public function userMonitoringDataByYear($periodetahun)
-	{
-		$npwpuser = Auth::user()->data_user->npwp_company;
-		// Retrieve all data from RiphAdmin based on the selected 'periode'
-		$commitment = PullRiph::where('periodetahun', $periodetahun)
-			->where('npwp', $npwpuser)
-			->first();
-
-		$volumeImport = $commitment->sum('volume_riph');
-		$wajib_tanam = 'jumlah wajib tanam';
-		$wajib_produksi = 'jumlah wajib produksi';
-		$pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
-		$lokasi = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
-
-		// dd($lokasi);
-		$jumlah_poktan = $pks->count('id');
-		$realisasi_tanam = $lokasi->sum('luas_tanam');
-		$realisasi_produksi = $lokasi->sum('volume');
-
-		dd($jumlah_poktan);
-
-		// foreach ($thiscommitment as $commitment) {
-		// 	foreach ($commitment->lokasi as $lokasi) {
-		// 		if (!empty($commitment->status)) {
-		// 			$realisasi_tanam += $lokasi->luas_tanam;
-		// 			$realisasi_produksi += $lokasi->volume;
-		// 		}
-		// 	}
-		// }
-
-		$data = [
-			'volumeImport'		=> $volumeImport,
+			'volumeImport'			=> $volumeImport,
 			'wajib_tanam'			=> $wajib_tanam,
 			'wajib_produksi'		=> $wajib_produksi,
 			'total_luastanam'		=> $realisasi_tanam,
 			'total_volume'			=> $realisasi_produksi,
+			'count_poktan'			=> $jumlah_poktan,
+			'count_anggota'			=> $jumlah_anggota,
+			'total_saprodi'			=> $total_saprodi,
+			'prosenTanam'			=> $prosentanam,
+			'prosenProduksi'		=> $prosenproduksi,
+			'verifikasis'			=> $verifikasis,
 		];
 		return response()->json($data);
 	}
