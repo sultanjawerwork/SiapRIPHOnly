@@ -16,6 +16,7 @@ use App\Models\DataUser;
 use App\Models\PullRiph;
 use App\Models\Post;
 use App\Models\MasterKelompok;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,8 @@ class User extends Authenticatable
     use Notifiable;
     use Auditable;
     use HasFactory;
-
+    use HasApiTokens;
+    
     public const ROLE_TYPE_SELECT = [
         '1' => 'Kementerian/Direktorat',
         '2' => 'Pelaku Usaha',

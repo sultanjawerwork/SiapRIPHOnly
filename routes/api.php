@@ -3,8 +3,15 @@
 use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\AnggotaMitraController;
 use App\Http\Controllers\Api\GetWilayahController;
+use App\Http\Controllers\Api\AuthController;
+
+
+//getToken
+Route::post('getToken', 'Api\\AuthController@getToken');
 
 Route::group(['namespace' => 'Api'], function () {
+
+    
     //dashboard
     Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');
 

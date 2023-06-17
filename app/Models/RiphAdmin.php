@@ -26,6 +26,7 @@ class RiphAdmin extends Model
         'v_beban_produksi',
         'jumlah_importir',
         'periode',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -35,6 +36,4 @@ class RiphAdmin extends Model
     {
         return $date->format('Y-m-d H:i:s');
     }
-
-    
 }
