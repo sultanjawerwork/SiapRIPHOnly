@@ -3,404 +3,333 @@
 {{-- @include('partials.breadcrumb') --}}
 {{-- @include('partials.subheader') --}}
 @can('dashboard_access')
-<!-- Page Title Heading -->
-<div class="subheader d-print-none">
+<!-- Page Content -->
+<div class="subheader">
 	<h1 class="subheader-title">
-		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Verifikasi</span>
+		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Realisasi & Verifikasi</span>
 	</h1>
-	
-	<div class="subheader-block d-lg-flex align-items-center">
+	<div class="subheader-block d-lg-flex align-items-center  d-print-none d-block">
 		<div class="d-inline-flex flex-column justify-content-center ">
-			<select type="text" id="statusTanam" class="form-control form-control-sm" data-toggle="tooltip" title data-original-title="pilih tahun awal laporan" placeholder="Task..." aria-label="statusTanam" aria-describedby="statusTanam">
-				<option hidden>- pilih tahun laporan</option>
-					<option disabled></option>
-					<option>2022</option>
-					<option>2023</option>
-					<option disabled></option>
-			</select>
-		</div>
-	</div>
-	<div class="subheader-block d-lg-flex align-items-center border-faded border-right-0 border-top-0 border-bottom-0 ml-3 pl-3">
-		<div class="d-inline-flex flex-column justify-content-center mr-3">
-			<button class="btn btn-primary ">Lihat
-			</button>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-3">
-		<div id="new_request" class="p-3 bg-danger-300 rounded overflow-hidden position-relative text-white mb-g">
-			<div class="">
-				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang BELUM ditindaklanjuti">
-					<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-					20
-					<small class="m-0 l-h-n">Pengajuan</small>
-				</h3>
-			</div>
-			<i class="fal fa-download position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:4rem"></i>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div id="onprogress" class="p-3 bg-warning-300 rounded overflow-hidden position-relative text-white mb-g">
-			<div class="">
-				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang SEDANG diverifikasi.">
-					<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang SEDANG diverifikasi. where status = 2 (mulai/on progress) -->
-					5
-					<small class="m-0 l-h-n">Diverifikasi</small>
-				</h3>
-			</div>
-			<i class="fal fa-hourglass position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:4rem"></i>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div id="verified" class="p-3 bg-info-300 rounded overflow-hidden position-relative text-white mb-g">
-			<div class="">
-				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang TELAH diverifikasi.">
-					<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang TELAH diverifikasi. where status = 3 & 4 (Verified OK & Verified Perbaikan) -->
-					7
-					<small class="m-0 l-h-n">Terverifikasi</small>
-				</h3>
-			</div>
-			<i class="fal fa-check-circle position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div id="accomplished" class="p-3 bg-success-300 rounded overflow-hidden position-relative text-white mb-g">
-			<div class="">
-				<h4 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah SKL diterbitkan.">
-					<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang TELAH LUNAS. where status = 5 (LUNAS) -->
-					7
-					<small class="m-0 l-h-n">Lunas</small>
-				</h4>
-			</div>
-			<i class="fal fa-award position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
-		</div>
-	</div>
-</div>
-<div class="row">
-	<!-- Bar Chart
-		Nilai Bar chart ini diperoleh dari tabel verifikasi (temporary) yang mem-populate data dengan status verifikasi = 3 & 4 (verified ok & perbaikan), contoh:
-		____________________________________________________________________________________________________
-		| No. RIPH | Wajib Tanam | Realisasi Tanam | Verifikasi | Wajib Prod | Realisasi Prod | Verifikasi |
-		----------------------------------------------------------------------------------------------------
-		| xxxxxxxx |     nnnn    |      nnnnnn     |   nnnnnnn  |     nnnn   |    nnnnnn      |   nnnnnnn  |
-		
-		Nilai KEWAJIBAN: adalah jumlah luas/produksi seluruh wajib tanam yang telah diverifikasi
-		Nilai REALISASI: adalah jumlah luas/produksi seluruh realisasi yang telah diverifikasi
-		Nilai VERIFIKASI: adalah jumlah luas/produksi seluruh hasil verifikasi.
-		Proses dan metode hanyalah contoh untuk menggambarkan apa yang ingin dicapai. Dapat menggunakan teknologi lain yang lebih relevan dan lebih baik.
-	-->
-	<div class="col-md-6">
-		<div class="panel" id="panel-1">
-			<div class="panel-hdr">
-				<h2>
-					<i class="subheader-icon fal fa-seedling mr-1"></i>Verifikasi <span class="fw-300"><i>Wajib Tanam</i></span>
-				</h2>
-				<div class="panel-toolbar">
-					<i class="fal fa-lightbulb-on text-info" data-toggle="tooltip" title data-original-title="Nilai Realisasi pada diagram ini bukan nilai total realisasi, melainkan nilai realisasi yang dilaporkan oleh pelaku usaha dan telah diverifikasi."></i>
+			<div class="form-group row">
+				<label for="periodetahun" class="col-sm-4 col-form-label text-right">Tahun</label>
+				<div class="col-sm-8">
+					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$currentYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
 				</div>
 			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<div id="barTanam" style="width:100%; height:250px;"></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+			<div class="card-body bg-danger-300">
+				<div class="">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian pengajuan verifikasi">
+						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
+						<span id="ajucount">{{$ajucount ? $ajucount:0}}</span>
+						<small class="m-0 l-h-n">Pengajuan</small> 
+					</h3>
+				</div>
+			</div>
+			<i class="fal fa-landmark position-absolute pos-right pos-bottom opacity-25 mb-n1 mr-n1" style="font-size:4rem"></i>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+			<div class="card-body bg-warning-400">
+				<div class="">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses.">
+						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
+						<span id="proccesscount">{{$proccesscount ? $proccesscount : 0}}</span>
+						<small class="m-0 l-h-n">Diproses</small>
+					</h3>
+				</div>
+			</div>
+			<i class="fal fa-balance-scale position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+			<div class="card-body bg-info-300">
+				<div class="">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah selesai RIPH periode ini.">
+						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
+						<span id="verifiedcount">{{$verifiedcount ? $verifiedcount : 0}}</span>
+						<small class="m-0 l-h-n">Selesai</small>
+					</h3>
+				</div>
+			</div>
+			<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+			<div class="card-body bg-success-500">
+				<div class="">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah SKL diterbitkan untuk RIPH periode ini.">
+						<span id="lunascount">{{$lunascount ? $lunascount : 0}}</span>
+						<small class="m-0 l-h-n">Lunas</small>
+					</h3>
+				</div>
+			</div>
+			<i class="fal fa-dolly position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
+		</div>
+	</div>
+</div>
 					
-				</div>
-			</div>
-			<div class="card-footer">
-				<div class="text-medium-emphasis small d-flex justify-content-between">
-					<div class="d-none d-md-block">
-						<span class="text-muted">Nilai Verifikasi diperoleh dari hasil verifikasi lapangan. Dalam satuan ha.</span>
-					</div>
-					<div class="text-muted"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="panel" id="panel-2">
-			<div class="panel-hdr">
-				<h2>
-					<i class="subheader-icon fal fa-balance-scale-left mr-1"></i>Verifikasi <span class="fw-300"><i>Wajib Produksi</i></span>
-				</h2>
-				<div class="panel-toolbar">
-					<i class="fal fa-lightbulb-on text-info" data-toggle="tooltip" title data-original-title="Nilai Realisasi pada diagram ini bukan nilai total realisasi, melainkan nilai realisasi yang dilaporkan oleh pelaku usaha dan telah diverifikasi."></i>
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<div id="barProduksi" style="width:100%; height:250px;"></div>
-					<!-- Row -->
-				</div>
-			</div>
-			<div class="card-footer">
-				<div class="text-medium-emphasis small d-flex justify-content-between">
-					<div class="d-none d-md-block">
-						<span class="text-muted">Nilai Verifikasi diperoleh dari hasil verifikasi lapangan. Dalam satuan ton.</span>
-					</div>
-					<div class="text-muted"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 <div class="row">
-	<!-- Tabel Verifikasi
-		Nilai Tabel chart ini diperoleh dari kueri data verifikasi dengan status mulai dari 0 s. d 5. Temporary tabel sesuai dengan tampilan pada layar html.
-		Setiap status merupakan pintasan cepat ke halaman terkait.
-	-->
 	<div class="col-md-12">
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-ballot-check mr-1"></i>Verification <span class="fw-300"><i>Tasks</i></span>
+					<i class="subheader-icon fal fa-ballot-check mr-1"></i>Daftar Verifikasi<span class="fw-300"><i> Dalam Proses</i></span>
 				</h2>
 				<div class="panel-toolbar">
-					@include('layouts.globaltoolbar')
+					{{-- @include('layouts.globaltoolbar') --}}
 				</div>
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-					
-                    <table id="sum_verif"  class="table table-bordered ajaxTable table-hover datatable table-sm w-100">
-                        <thead  class="bg-primary-100 text-white text-center">
+					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
+						<thead>
+							<th>Nama Perusahaan</th>
+							<th>Nomor Pengajuan</th>
+							<th>Nomor RIPH</th>
+							<th>Pengajuan</th>
+							<th>Tahap 1</th>
+							<th>Tahap 2</th>
+							<th>Tahap 3</th>
+						</thead>
+						<tbody>
+							@foreach ($allPengajuan as $pengajuan)
 								<tr>
-									<th rowspan="2">Perusahaan</th>
-									<th rowspan="2">Nomor RIPH</th>
-									<th colspan="2">Tahap 1 <sup>(Lapangan)</sup></th>
-									<th rowspan="2">Tahap 2 <sup>(Online)</sup></th>
-									<th rowspan="2">Tahap 3 <sup>SKL</sup></th>
-									<th rowspan="2">Status</th>
+									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
+									<td>{{$pengajuan->no_pengajuan}}</td>
+									<td>{{$pengajuan->no_ijin}}</td>
+									<td class="text-center">
+										@if ($pengajuan->status)
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '2')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '3')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->status === '6')
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
+										@elseif ($pengajuan->status === '7')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
+										@elseif ($pengajuan->status === '8')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
 								</tr>
-								<tr>
-									<th>Tanam</th>
-									<th>Produksi</th>
-								</tr>
-							</thead>
-							<tbody class="text-center">
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/onfarm">Submitted</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/onfarm">Submitted</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/online">Submitted</a></td>
-									<td><a class="badge btn-sm btn-default">No Status</a></td>
-									<td>-</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-warning" href="/verifikasi/onfarm">On progress</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/onfarm">Submitted</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/online">Submitted</a></td>
-									<td><a class="badge btn-sm btn-default">No Status</a></td>
-									<td>Verifying</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-warning" href="/verifikasi/onfarm">On progress</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/online">Submitted</a></td>
-									<td><a class="badge btn-sm btn-default">No Status</a></td>
-									<td>Verifying</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-danger" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-warning" href="/verifikasi/online">On progress</a></td>
-									<td><a class="badge btn-sm btn-default">No Status</a></td>
-									<td>Verifying</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/online">Verified</a></td>
-									<td><a class="badge btn-sm btn-info" href="/verifikasi/lunas_check">Submitted</a></td>
-									<td>Verifying</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-danger" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/online">Verified</a></td>
-									<td><a class="badge btn-sm btn-danger" href="/verifikasi/lunas_check">Rejected</a></td>
-									<td>Verifying</td>
-								</tr>
-								<tr>
-									<td class="text-left">PT. Bawang Nusantara</td>
-									<td>xxxx/PP.240/D/MM/YYY</td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/onfarm">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/verifikasi/online">Verified</a></td>
-									<td><a class="badge btn-sm btn-success" href="/skl/skl">Accomplished</a></td>
-									<td>-</td>
-								</tr>
-							</tbody>
-						</table>
-					
+							@endforeach
+						</tbody>
+					</table><hr>
+					<span class="help-block mt-2">
+						<label for="" class="form-label">Keterangan:</label>
+						<div class="row d-flex align-items-top">
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li>Tahap 1: Pemeriksaan Data</li>
+									<li>Tahap 2: Pemeriksaan Lapangan</li>
+									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
+								</ul>
+							</div>
+							<div class="col-md-5 col-sm-6">
+								<ul>
+									<li>
+										<span class="btn btn-icon btn-xs btn-success">
+											<i class="fal fa-check-circle mr-1"></i>
+										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-danger">
+											<i class="fal fa-ban mr-1"></i>
+										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-info">
+											<i class="fal fa-file-signature mr-1"></i>
+										</span> : Rekomendasi penerbitan SKL.</span>.
+									</li>
+									<li>
+										<span class="btn btn-icon btn-xs btn-success">
+											<i class="fal fa-award mr-1"></i>
+										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
+									</li>
+								</ul>
+							</div>
+						</div>
+					</span>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- End Page Content -->
+	<!-- End Page Content -->
 
 @endcan
 @endsection
 @section('scripts')
 @parent
-<script>
-	$(document).ready(function()
-	{
-		let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        // @can('user_delete')
-        // 	let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
-        // 	let deleteButton = {
-        // 		text: deleteButtonTrans,
-        // 		url: "{{ route('admin.users.massDestroy') }}",
-        // 		className: 'btn-danger  waves-effect waves-themed  btn-sm mr-1',
-        // 		action: function (e, dt, node, config) {
-        // 			var ids = $.map(dt.rows({ selected: true }).data(), function (entry) {
-        // 				return entry.id
-        // 			});
+	<script>
+		$(document).ready(function() {
+			//initialize datatable verifprogress
+			$('#verifprogress').dataTable({
+				responsive: true,
+				lengthChange: false,
+				dom:
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>" +
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'pdfHtml5',
+						text: '<i class="fa fa-file-pdf"></i>',
+						titleAttr: 'Generate PDF',
+						className: 'btn-outline-danger btn-sm btn-icon mr-1'
+					},
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-sm btn-icon mr-1'
+					},
+					{
+						extend: 'csvHtml5',
+						text: '<i class="fal fa-file-csv"></i>',
+						titleAttr: 'Generate CSV',
+						className: 'btn-outline-primary btn-sm btn-icon mr-1'
+					},
+					{
+						extend: 'copyHtml5',
+						text: '<i class="fa fa-copy"></i>',
+						titleAttr: 'Copy to clipboard',
+						className: 'btn-outline-primary btn-sm btn-icon mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-sm btn-icon mr-1'
+					}
+				]
+			});
 
-        // 			if (ids.length === 0) {
-        // 				alert('{{ trans('global.datatables.zero_selected') }}')
+			// Create the "Status" select element and add the options
+			// var selectStatus = $('<select>')
+			// 	.attr('id', 'selectverifprogressStatus')
+			// 	.addClass('custom-select custom-select-sm col-3 mr-2')
+			// 	.on('change', function() {
+			// 	var status = $(this).val();
+			// 	table.column(6).search(status).draw();
+			// 	});
 
-        // 				return
-        // 			}
+			// $('<option>').val('').text('Semua Status').appendTo(selectStatus);
+			// $('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
+			// $('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
 
-        // 			if (confirm('{{ trans('global.areYouSure') }}')) {
-        // 				$.ajax({
-        // 				headers: {'x-csrf-token': _token},
-        // 				method: 'POST',
-        // 				url: config.url,
-        // 				data: { ids: ids, _method: 'DELETE' }})
-        // 				.done(function () { location.reload() })
-        // 			}
-        // 		}
-        // 	}
-        // 	dtButtons.push(deleteButton)
-        // @endcan
+			// // Add the select elements before the first datatable button in the second table
+			// $('#verifprogress_wrapper .dt-buttons').before(selectStatus);
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			// Initialize the year picker
+			$('.yearpicker').datepicker({
+				format: 'yyyy',
+				viewMode: 'years',
+				minViewMode: 'years',
+				autoclose: true
+			});
+			$('#periodetahun').on('change', function() {
+				var periodetahun = $(this).val();
+				var url = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
+				url = url.replace(':periodetahun', periodetahun);
 
-        let dtOverrideGlobals = {
-            processing: true,
-            serverside: true,
-            responsive: true,
-            lengthChange: false,
-            pageLength: 10,
-            order: [
-                [0, 'asc']
-            ],
-            buttons: dtButtons,
-            
-            //aaSorting: [],
-            
-            //ajax: "#",
-            // columns: [
-            // 	{ data: 'placeholder', name: 'placeholder' },
-            // 	{ data: 'name', name: 'name' },
-            // 	{ data: 'username', name: 'username' },
-            // 	{ data: 'roleaccess', name: 'roleaccess' },
-            // 	{ data: 'email', name: 'email' },
-            // 	//{ data: 'email_verified_at', name: 'email_verified_at' },
-            // 	{ data: 'roles', name: 'roles.title' },
-            // 	{ data: 'actions', name: '{{ trans('global.actions') }}' }
-            // ],
-            
-        };
-        let table = $('#sum_verif').DataTable(dtOverrideGlobals);
-        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
-            $($.fn.dataTable.tables(true)).DataTable()
-                .columns.adjust();
-        });
-	});
-</script>
-<!-- barchart Tanam c3 -->
-<script>
-	var colors = [color.primary._500, color.info._500, color.success._500, color.danger._500, color.warning._500];
-	
-	var barChart = c3.generate(
-	{
-		bindto: "#barTanam",
-		data:
-		{
-			columns: [
-				['Kewajiban', 157],
-				['Realisasi', 149],
-				['Verifikasi', 145]
-			],
-			type: 'bar'
-		},
-		color:
-		{
-			pattern: ['#63e9db','#37e2d0','#1dc9b7']
-		},
-		axis: {
-			x: {
-				type: 'category',
-				categories: 
-				[""]
-			},
-			y:{
-				show: true
-			}
-		},
-		bar:
-		{
-			width:
-			{
-				ratio: 0.5 // this makes bar width 50% of length between ticks
-			},
-			space: 0.25
-			// or
-			//width: 100 // this makes bar width 100px
-		}
-	});
-	
-	var barChart = c3.generate(
-	{
-		bindto: "#barProduksi",
-		data:
-		{
-			columns: [
-				['Kewajiban', 157],
-				['Realisasi', 149],
-				['Verifikasi', 145]
-			],
-			type: 'bar'
-		},
-		color:
-		{
-			pattern: ['#ffd274','#ffc241','#ffb20e']
-		},
-		axis: {
-			x: {
-				type: 'category',
-				categories: 
-				[""]
-			},
-			y:{
-				show: true
-			}
-		},
-		bar:
-		{
-			width:
-			{
-				ratio: 0.5 // this makes bar width 50% of length between ticks
-			},
-			space: 0.25
-			// or
-			//width: 100 // this makes bar width 100px
-		}
-	});
-</script>
+				$.get(url, function (data) {
+					$('#ajucount').text(data.ajucount);
+					$('#proccesscount').text(data.proccesscount);
+					$('#verifiedcount').text(data.verifiedcount);
+					$('#recomendationcount').text(data.recomendationcount);
+					$('#lunascount').text(data.lunascount);
 
+					// // Build table for pengajuan
+					var tableBody = $("#verifprogress tbody");
+					tableBody.empty(); // Clear previous table data
+					$.each(data.verifikasis, function (index, verifikasi) {
+						console.log('Verifikasi:', verifikasi);
+						var row = $("<tr></tr>");
+						var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
+						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
+						var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+						
+						var ajuCell = $('<td class="text-center"></td>').html(function() {
+							if (verifikasi.status) {
+								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
+							}
+						});
 
+						var dataCell = $('<td class="text-center"></td>').html(function() {
+							if (verifikasi.status === '2') {
+								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
+							} else if (verifikasi.status === '3') {
+								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
+							}
+						});
+
+						var lapanganCell = $('<td class="text-center"></td>').html(function() {
+							if (verifikasi.status === '2' && !verifikasi.onfarmstatus) {
+								return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diperiksa</span>';
+							} else if (verifikasi.status === '4') {
+								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
+							} else if (verifikasi.status === '5') {
+								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
+							}
+						});
+
+						var lunasCell = $('<td></td>').html(function() {
+							if (verifikasi.status === '6') {
+								return '<span class="badge badge-xs badge-primary"><i class="fal fa-file-signature mr-1"></i>Rekomendasi</span>';
+							} else if (verifikasi.status === '7') {
+								return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span> <span hidden>7</span>';
+							}
+						});
+
+						row.append(namaPerusahaan, nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
+						tableBody.append(row);
+					});
+				
+					function formatNumber(number) {
+						return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+					}
+
+					function formatdecimals(number) {
+						var parts = number.toFixed(2).toString().split(".");
+						var formattedNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+						if (parts.length > 1) {
+							formattedNumber += "," + parts[1];
+						} else {
+							formattedNumber += ",00"; // Add two decimal places if there are none
+						}
+						return formattedNumber;
+					}
+				});
+			});
+		});
+	</script>
 @endsection

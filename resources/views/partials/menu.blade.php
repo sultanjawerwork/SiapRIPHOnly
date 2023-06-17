@@ -134,7 +134,7 @@
 								<a href="{{ route('admin.dashboard') }}" class="c-sidebar-nav-link"
 									data-filter-tags="{{ strtolower(trans('cruds.dashboardVerifikator.title_lang')) }}">
 									<i
-										class="fa-fw fal fa-stamp c-sidebar-nav-icon"></i>{{ trans('cruds.dashboardVerifikator.title_lang') }}
+										class="fa-fw fal fa-stamp c-sidebar-nav-icon"></i>Monitoring {{ trans('cruds.dashboardVerifikator.title_lang') }}
 								</a>
 							</li>
 							<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard/map') ? 'active' : '' }}">
@@ -225,7 +225,7 @@
 						<a href="#" title="Kelompok tani"
 							data-filter-tags="data master kelompoktani poktan penangkar pks">
 							<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">{{ trans('cruds.kelompoktani.title_lang') }} dan Penangkar</span>
+							<span class="nav-link-text">Master Penangkar dan Saprodi</span>
 						</a>
 						<ul>
 							@can('poktan_access')
@@ -355,7 +355,7 @@
 			@endif
 
 			{{-- pengelolaan berkas --}}
-			@can('folder_access')
+			{{-- @can('folder_access')
 				<li class="nav-title">Pengelolaan Berkas</li>
 				<li class="{{ request()->is('admin/task/berkas*') 
 					|| request()->is('admin/task/galeri*') 
@@ -370,7 +370,7 @@
 						@can('berkas_access')
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/berkas') 
 								|| request()->is('admin/task/berkas/*') ? 'active' : '' }}">
-								<a href="{{-- {{ route('admin.task.berkas') }} --}} javascript:void()" title="Berkas"
+								<a href="{{ route('admin.task.berkas') }} javascript:void()" title="Berkas"
 									data-filter-tags="berkas file unggahan unduhan" class="disabled"> 
 									<i class="fa-fw fal fa-file c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.berkas.title_lang') }}</span>
@@ -381,7 +381,8 @@
 						
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/galeri') 
 								|| request()->is('admin/task/skl/*') ? 'active' : '' }}">
-								<a href="{{-- {{ route('admin.task.galeri') }} --}} javascript:void()" title="Galeri"
+								
+								<a href="{{ route('admin.task.galeri') }} javascript:void()" title="Galeri"
 									data-filter-tags="galeri gallery daftar foto">
 									<i class="fa-fw fal fa-images c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.galeri.title_lang') }}</span>
@@ -391,11 +392,11 @@
 						@can('template_access')
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') 
 								|| request()->is('admin/task/template/*') ? 'active' : '' }}">
-								{{-- <a href="{{ route('admin.task.template') }}" title="Skl"
+								<a href="{{ route('admin.task.template') }}" title="Skl"
 									data-filter-tags="daftar berkas file template">
 									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.template.title_lang') }}</span>
-								</a> --}}
+								</a>
 								<a href="{{ route('admin.task.template') }}" title="Skl"
 									data-filter-tags="daftar berkas file template">
 									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
@@ -403,10 +404,9 @@
 								</a>
 							</li>
 						@endcan
-
 					</ul>
 				</li>
-			@endcan
+			@endcan --}}
 
 			{{-- Feed & Messages --}}
 			@can('feedmsg_access')
