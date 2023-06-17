@@ -269,7 +269,7 @@
 							@endphp
 
 							@if ($unverified > 0)
-								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
 							@endif
 						</a>
 					</li>

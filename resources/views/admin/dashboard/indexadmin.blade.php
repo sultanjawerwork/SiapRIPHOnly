@@ -26,8 +26,8 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="jumlah_importir"></span>
-						<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1"></span>Terdaftar</small> 
+						<span id="jumlah_importir">{{$jumlah_importir}}</span>
+						<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1">{{$company}}</span>Terdaftar</small> 
 					</h3>
 				</div>
 			</div>
@@ -40,7 +40,7 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah volume import pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_pengajuan_import"></span>
+						<span id="v_pengajuan_import">{{ number_format($v_pengajuan_import, 0, ',', '.') }}</span>
 						<small class="m-0 l-h-n">Volume Import (ton)</small>
 					</h3>
 				</div>
@@ -54,7 +54,7 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_beban_tanam"></span>
+						<span id="v_beban_tanam">{{ number_format($v_beban_tanam, 2, ',', '.') }}</span>
 						<small class="m-0 l-h-n">Kewajiban Tanam (ha)</small>
 					</h3>
 				</div>
@@ -68,7 +68,7 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="v_beban_produksi"></span>
+						<span id="v_beban_produksi">{{ number_format($v_beban_produksi, 2, ',', '.') }}</span>
 						<small class="m-0 l-h-n">Kewajiban Produksi (ton)</small>
 					</h3>
 				</div>
@@ -94,17 +94,19 @@
 								<div 
 									id = "naschartTanam"
 									class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center"
-									data-percent=""
+									data-percent="{{ number_format($prosenTanam, 2, ',', '.') }}"
 									data-piesize="145"
 									data-linewidth="10"
 									data-linecap="butt"
 									data-scalelength="7"
 									data-toggle="tooltip"
-									title data-original-title="% dari total kewajiban."
+									title data-original-title="{{ number_format($prosenTanam, 2, ',', '.') }}% dari total kewajiban."
 									data-placement="bottom">
 									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
 										<span class="fs-xxl fw-500 text-dark">
-											<span name="prosenTanam" id="prosenTanam"></span>
+											<span name="prosenTanam" id="prosenTanam">
+												{{ number_format($prosenTanam, 2, ',', '.') }}
+											</span>
 											<sup>%</sup>
 										</span>
 									</div>
@@ -116,7 +118,7 @@
 								<div class="card-body">
 									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
 										<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-										<span id="total_luastanam"></span> ha
+										<span id="total_luastanam">{{ number_format($total_luastanam, 2, ',', '.') }}</span> ha
 										<small class="m-0 l-h-n">Total realisasi luas tanam.</small> 
 									</h4>
 								</div>
@@ -143,18 +145,20 @@
 							<div class="c-chart-wrapper">
 								<div
 									id = "naschartProduksi"
-									data-percent=""
+									data-percent="{{ number_format($prosenProduksi, 2, ',', '.') }}"
 									data-piesize="145"
 									data-linewidth="10"
 									data-linecap="butt"
 									data-scalelength="7"
 									data-toggle="tooltip"
-									title data-original-title="% dari total kewajiban."
+									title data-original-title="{{ number_format($prosenProduksi, 2, ',', '.') }}% dari total kewajiban."
 									data-placement="bottom"
 									class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center">
 									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
 										<span class="fs-xxl fw-500 text-dark">
-											<span name="prosenProduksi" id="prosenProduksi"></span>
+											<span name="prosenProduksi" id="prosenProduksi">
+												{{ number_format($prosenProduksi, 2, ',', '.') }}
+											</span>
 											<sup>%</sup>
 										</span>
 									</div>
@@ -165,7 +169,7 @@
 							<div class="shadow-1 p-2 bg-warning-600 rounded overflow-hidden position-relative text-white mb-2">
 								<div class="card-body">
 									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
-										<span id="total_volume"></span> ha
+										<span id="total_volume">{{ number_format($total_volume, 2, ',', '.') }}</span> ha
 										<small class="m-0 l-h-n">Total realisasi produksi.</small> 
 									</h4>
 								</div>
@@ -198,7 +202,7 @@
 								{{-- where status != empty, seluruh data pengajuan yang memiliki status (1 s.d 7) --}}
 								<div data-toggle="tooltip" title data-original-title="Jumlah Pengajuan Verifikasi Wajib Tanam-Produksi">
 									<div class="d-flex">
-										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="ajucount">0</h5>
+										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="ajucount">{{$ajucount ? $ajucount : 0}}</h5>
 										<span>RIPH</span>
 									</div>
 									<span class="small">Pengajuan</span>
@@ -211,7 +215,7 @@
 							<div class="shadow-1 p-2 bg-primary-200 rounded overflow-hidden position-relative text-white mb-2">
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH yang sedang diverifikasi">
 									<div class="d-flex">
-										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="proccesscount">0</h5>
+										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="proccesscount">{{$proccesscount ? $proccesscount : 0}}</h5>
 										<span>RIPH</span>
 									</div>
 									<span class="small">Dalam Proses</span>
@@ -224,7 +228,7 @@
 							<div class="shadow-1 p-2 bg-primary-300 rounded overflow-hidden position-relative text-white mb-2">
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH yang telah diverifikasi">
 									<div class="d-flex">
-										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="verifiedcount">0</h5>
+										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="verifiedcount">{{$verifiedcount ? $verifiedcount : 0}}</h5>
 										<span>RIPH</span>
 									</div>
 									<span class="small">Terverifikasi</span>
@@ -236,10 +240,14 @@
 							<div class="shadow-1 p-2 bg-primary-500 rounded overflow-hidden position-relative text-white mb-2">
 								{{-- where status = '7' --}}
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH Lunas Wajib Tanam-Produksi">
-									<div class="d-flex">
-										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunascount">0</h5>
-										<span>RIPH</span>
+									<div class="d-flex justify-content-between">
+										<div class="d-flex">
+											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunascount">{{$lunascount ? $lunascount : 0}}</h5>
+											<span>RIPH</span>
+										</div>
+										<span class="fw-700">LUNAS</span>
 									</div>
+
 									<div class="d-flex">
 										<div class="d-flex">
 											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunasLuas">0</h5>
@@ -250,7 +258,6 @@
 											<span>ton</span>
 										</div>
 									</div>
-									<span class="small">LUNAS</span>
 								</div>
 								<i class="fal fa-award position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:3rem"></i>
 							</div>
@@ -267,7 +274,41 @@
 							<th>Tahap 3</th>
 						</thead>
 						<tbody>
-							
+							@foreach ($allPengajuan as $pengajuan)
+								<tr>
+									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
+									<td>{{$pengajuan->no_pengajuan}}</td>
+									<td>{{$pengajuan->no_ijin}}</td>
+									<td class="text-center">
+										@if ($pengajuan->status)
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '2')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '3')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->status === '6')
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
+										@elseif ($pengajuan->status === '7')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
+										@elseif ($pengajuan->status === '8')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+								</tr>
+							@endforeach
 						</tbody>
 					</table>
 					<hr>
@@ -490,39 +531,3 @@
 		});
 	</script>
 @endsection
-
-{{-- @foreach ($allPengajuan as $pengajuan)
-								<tr>
-									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
-									<td>{{$pengajuan->no_pengajuan}}</td>
-									<td>{{$pengajuan->no_ijin}}</td>
-									<td class="text-center">
-										@if ($pengajuan->status)
-											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
-										@endif
-									</td>
-									<td class="text-center">
-										@if ($pengajuan->onlinestatus === '2')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onlinestatus === '3')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
-										@endif
-									</td>
-									<td class="text-center">
-										@if ($pengajuan->onlinestatus === '4')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onlinestatus === '5')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
-										@endif
-									</td>
-									<td class="text-center">
-										@if ($pengajuan->status === '6')
-											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
-										@elseif ($pengajuan->status === '7')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
-										@elseif ($pengajuan->status === '8')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
-										@endif
-									</td>
-								</tr>
-							@endforeach --}}

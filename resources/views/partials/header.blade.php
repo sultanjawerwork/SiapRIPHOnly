@@ -52,7 +52,7 @@
 
             <a href="#" class="header-icon" data-toggle="dropdown"
                 title="You got {{ $unreadmsg }} notifications">
-                <i class="fal fa-bell"></i>
+                <i class="fal fa-envelope"></i>
                 <span class="badge badge-icon">{{ $unreadmsg }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
