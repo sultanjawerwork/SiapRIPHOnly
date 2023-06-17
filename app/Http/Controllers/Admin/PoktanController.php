@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Poktan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class PoktanController extends Controller
 {
