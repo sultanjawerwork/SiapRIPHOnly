@@ -36,13 +36,21 @@
 												<label for="" class="col-3">Periode</label>
 												<input type="text" class="form-control form-control-sm" name="periodetahun" id="periodetahun" value="{{ old('periodetahun', $oldskl->periodetahun) }}">
 											</li>
+											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+												<label for="" class="col-3">Nomor SKL</label>
+												<input type="text" class="form-control form-control-sm" name="no_skl" id="no_skl" value="{{ old('no_skl', $oldskl->no_skl) }}">
+											</li>
 										</ul>
 									</div>
 									<div class="col-md-6">
 										<ul class="list-group">
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-												<label for="" class="col-3">Nomor SKL</label>
-												<input type="text" class="form-control form-control-sm" name="no_skl" id="no_skl" value="{{ old('no_skl', $oldskl->no_skl) }}">
+												<label for="" class="col-3">Luas tanam</label>
+												<input type="number" step="0.01" class="form-control form-control-sm" name="luas_tanam" id="luas_tanam" placeholder="Luas total tanam" value="{{ old('luas_tanam', $oldskl->luas_tanam) }}">
+											</li>
+											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+												<label for="" class="col-3">Volume Produksi</label>
+												<input type="number" step="0.01" class="form-control form-control-sm" name="volume" id="volume" placeholder="Volume total produksi" value="{{ old('volume', $oldskl->volume) }}">
 											</li>
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Tanggal Terbit</label>

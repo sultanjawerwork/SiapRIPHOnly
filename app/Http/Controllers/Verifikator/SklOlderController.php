@@ -61,6 +61,8 @@ class SklOlderController extends Controller
 		$oldskl->no_ijin = $request->input('no_ijin');
 		$oldskl->periodetahun = $request->input('periodetahun');
 		$oldskl->published_date = $request->input('published_date');
+		$oldskl->luas_tanam = $request->input('luas_tanam');
+		$oldskl->volume = $request->input('volume');
 		$oldskl->submit_by = $user->id;
 
 		$completed = new Completed();
@@ -132,20 +134,34 @@ class SklOlderController extends Controller
 		$oldskl->npwp = $request->input('npwp');
 		$oldskl->no_ijin = $request->input('no_ijin');
 		$oldskl->periodetahun = $request->input('periodetahun');
-		$oldskl->published_date = $request->input('published_date');
-
+		$oldskl->published_date = date('Y-m-d', strtotime(str_replace('/', '-', $request->input('published_date'))));
+		$oldskl->luas_tanam = $request->input('luas_tanam');
+		$oldskl->volume = $request->input('volume');
 		$oldskl->submit_by = $user->id;
+
+		$completed = Completed::where('no_ijin', $oldskl->no_ijin)->first();
+		$completed->no_skl = $request->input('no_skl');
+		$completed->npwp = $request->input('npwp');
+		$completed->no_ijin = $request->input('no_ijin');
+		$completed->periodetahun = $request->input('periodetahun');
+		$completed->published_date = date('Y-m-d', strtotime(str_replace('/', '-', $request->input('published_date'))));
+		$completed->luas_tanam = $request->input('luas_tanam');
+		$completed->volume = $request->input('volume');
+		$completed->status = 'Lunas';
+
 		$filenpwp = str_replace(['.', '-'], '', $request->input('npwp'));
 		$noIjin = str_replace(['.', '/'], '', $request->input('no_ijin'));
 
 		if ($request->hasFile('sklfile')) {
 			$file = $request->file('sklfile');
 			$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $request->input('periodetahun'), $filename, 'public');
+			$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
 			$oldskl->sklfile = $filename;
+			$completed->url = $filePath;
 		}
-		// dd($oldskl);
+		// dd($completed);
 		$oldskl->save();
+		$completed->save();
 		return redirect()->route('verification.oldskl.index')
 			->with('success', 'Data SKL berhasil diperbarui.');
 	}
