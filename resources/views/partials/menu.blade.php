@@ -321,6 +321,16 @@
 						</a>
 					</li>
 				@endcan
+				@can('completed_access')
+				<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
+					request()->is('verification/arsip/completed*') ? 'active' : '' }}">
+					<a href="{{ route('verification.arsip.completed') }}"
+						data-filter-tags="verifikasi selesai">
+						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+						<span class="nav-link-text text-wrap">Completeds</span>
+					</a>
+				</li>
+				@endcan
 			@endcan
 			{{-- direktur task --}}
 			@if (Auth::user()->roles[0]->title == 'Pejabat')
@@ -340,7 +350,7 @@
 						@endphp
 
 						@if ($newRecomendation > 0)
-							<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
 						@endif
 					</a>
 				</li>
