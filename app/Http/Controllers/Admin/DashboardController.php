@@ -91,9 +91,9 @@ class DashboardController extends Controller
 			$heading_class = 'fal fa-tachometer';
 
 			$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
-			$maxYear = PullRiph::groupBy('periodetahun')->pluck('periodetahun')->max();
+			$currentYear = date('Y');
 
-			$commitments = PullRiph::where('periodetahun', $maxYear)
+			$commitments = PullRiph::whereYear('periodetahun', $currentYear)
 				->where('npwp', $npwpuser)
 				->get();
 
@@ -118,7 +118,7 @@ class DashboardController extends Controller
 			$prosenProduksi = $realisasi_produksi / $wajib_produksi;
 
 
-			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'total_saprodi', 'prosenTanam', 'prosenProduksi', 'maxYear'));
+			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'total_saprodi', 'prosenTanam', 'prosenProduksi', 'currentYear'));
 		}
 		if (($roleaccess == 3)) {
 			$module_name = 'Dashboard';

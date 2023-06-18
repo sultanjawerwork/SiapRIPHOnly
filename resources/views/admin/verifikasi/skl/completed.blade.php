@@ -10,7 +10,7 @@
 					<div class="panel-container show">
 						<div class="panel-content">
 							<div class="table">
-								<table id="OldSkl" class="table table-sm table-bordered table-hover table-striped w-100">
+								<table id="completeds" class="table table-sm table-bordered table-hover table-striped w-100">
 									<thead>
 										<tr>
 											@if (Auth::user()->roleaccess === 1)
@@ -25,42 +25,24 @@
 										</tr>
 									</thead>
 									<tbody>
-										@foreach ($oldskls as $oldskl)
+										@foreach ($completeds as $completed)
 											<tr>
-												@if (Auth::user()->roleaccess === 1)
-													<td>{{$oldskl->datauser->company_name}}</td>
-												@endif
-												<td>{{$oldskl->periodetahun}}</td>
-												<td>{{$oldskl->no_ijin}}</td>
-												<td>{{$oldskl->no_skl}}</td>
-												<td class="text-center">{{ date('d-m-Y', strtotime($oldskl->published_date)) }}</td>
-												<td class="text-center">{{ date('d-m-Y', strtotime($oldskl->created_at)) }}</td>
+												{{-- @if (Auth::user()->roleaccess === 1) --}}
+													<td>{{$completed->datauser->company_name}}</td>
+												{{-- @endif --}}
+												<td>{{$completed->periodetahun}}</td>
+												<td>{{$completed->no_ijin}}</td>
+												<td>{{$completed->no_skl}}</td>
+												<td class="text-center">{{ date('d-m-Y', strtotime($completed->published_date)) }}</td>
+												<td class="text-center">{{ date('d-m-Y', strtotime($completed->created_at)) }}</td>
 												<td class="text-center d-flex justify-content-center">
-													@can('old_skl_show')
-														@if (Auth::user()->roles[0]->title === 'User')
-															<a href="{{route('admin.task.user.oldskl.show', $oldskl->id)}}" class="btn btn-icon btn-primary btn-xs mr-1" title="Lihat">
+													{{-- @can('old_skl_show') --}}
+														{{-- @if (Auth::user()->roles[0]->title === 'User') --}}
+															<a href="{{$completed->url}}" class="btn btn-icon btn-primary btn-xs mr-1" title="Lihat">
 																<i class="fal fa-file-search"></i>
 															</a>
-														@else
-															<a href="{{route('verification.oldskl.show', $oldskl->id)}}" class="btn btn-icon btn-primary btn-xs mr-1" title="Lihat">
-																<i class="fal fa-file-search"></i>
-															</a>
-														@endif
-													@endcan
-													@can('old_skl_edit')
-														<a href="{{route('verification.oldskl.edit', $oldskl->id)}}" class="btn btn-icon btn-warning btn-xs mr-1" title="Ubah Data">
-															<i class="fal fa-edit"></i>
-														</a>
-													@endcan
-													@can('old_skl_delete')
-														<form action="{{route('verification.oldskl.delete', $oldskl->id)}}" method="post">
-															@csrf
-															@method('delete')
-															<button class="btn btn-icon btn-danger btn-xs mr-1" type="submit" title="Hapus Data" onclick="return confirm('Anda yakin ingin menghapus data ini?');">
-																<i class="fal fa-trash"></i>
-															</button>
-														</form>
-													@endcan
+														{{-- @endif --}}
+													{{-- @endcan --}}
 												</td>
 											</tr>
 										@endforeach
@@ -82,7 +64,7 @@
 	$(document).ready(function()
 	{
 		// initialize tblPenangkar
-		$('#OldSkl').dataTable(
+		$('#completeds').dataTable(
 		{
 			responsive: true,
 			lengthChange: false,
@@ -120,19 +102,7 @@
 					text: '<i class="fa fa-print"></i>',
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				
-				@can('old_skl_create')
-				{
-					text: '<i class="fa fa-plus mr-1"></i>SKL',
-					titleAttr: 'Rekam Data SKL',
-					className: 'btn btn-info btn-xs ml-2',
-						action: function(e, dt, node, config) {
-							window.location.href = '{{ route('verification.oldskl.create') }}';
-						}
 				}
-					@else
-					@endcan
 			]
 		});
 

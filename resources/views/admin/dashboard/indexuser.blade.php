@@ -13,7 +13,7 @@
 			<div class="form-group row">
 				<label for="periodetahun" class="col-sm-4 col-form-label text-right">Tahun</label>
 				<div class="col-sm-8">
-					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$maxYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
+					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$currentYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
 				</div>
 			</div>
 		</div>

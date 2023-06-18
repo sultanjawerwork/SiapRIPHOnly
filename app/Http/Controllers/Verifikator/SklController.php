@@ -8,12 +8,17 @@ use App\Models\Skl;
 use App\Models\PullRiph;
 use App\Models\Pengajuan;
 use App\Models\User;
+use App\Models\Completed;
+
 use Illuminate\Http\Request;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Route;
+
 
 class SklController extends Controller
 {
@@ -122,9 +127,33 @@ class SklController extends Controller
 		$commitment->status = '7';
 		$commitment->skl = $skl->no_skl;
 
+		$completed = new Completed();
+		$completed->no_skl = $skl->no_skl;
+		$completed->npwp = $skl->npwp;
+		$completed->no_ijin = $skl->no_ijin;
+		$completed->periodetahun = $commitment->periodetahun;
+		$completed->published_date = Carbon::now();
+		$completed->luas_tanam = $pengajuan->luas_verif;
+		$completed->volume = $pengajuan->volume_verif;
+		$completed->status = 'Lunas';
+		$completed->url = route('verification.arsip.skl', $skl->id);
+
+		$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+		$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
+
+		// if ($request->hasFile('sklfile')) {
+		// 	$file = $request->file('sklfile');
+		// 	$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
+		// 	$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
+		// 	$oldskl->sklfile = $filename;
+		// 	$completed->url = $filePath;
+		// }
+		// dd($completed);
+
 		$skl->save();
 		$pengajuan->save();
 		$commitment->save();
+		$completed->save();
 
 		return redirect()->route('verification.skl.published', ['id' => $skl->id]);
 	}
@@ -192,7 +221,7 @@ class SklController extends Controller
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
 			'Status' => 'LUNAS',
-			'Tautan' => route('verification.arsip.skl', $skl->id),
+			'Tautan' => route('verification.skl.show', $skl->id),
 		];
 
 		// $QrCode = QrCode::size(70)->generate(json_encode($data));
@@ -225,6 +254,18 @@ class SklController extends Controller
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
 		return view('admin.verifikasi.skl.sklPdf', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+	}
+
+	public function completedindex()
+	{
+		$module_name = 'SKL';
+		$page_title = 'Surat Keterangan Lunas';
+		$page_heading = 'SKL Diterbitkan';
+		$heading_class = 'fa fa-award';
+
+		$completeds = Completed::all();
+
+		return view('admin.verifikasi.skl.completed', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'completeds'));
 	}
 
 	/**

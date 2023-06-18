@@ -32,19 +32,27 @@
 											</li>
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Periode</label>
-												<input type="text" class="form-control form-control-sm" name="periodetahun" id="periodetahun" placeholder="Tahun terbit RIPH">
+												<input type="number" class="form-control form-control-sm" name="periodetahun" id="periodetahun" placeholder="Tahun terbit RIPH">
+											</li>
+											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+												<label for="" class="col-3">Nomor SKL</label>
+												<input type="text" class="form-control form-control-sm" name="no_skl" id="no_skl" placeholder="Nomor SKL">
 											</li>
 										</ul>
 									</div>
 									<div class="col-md-6">
 										<ul class="list-group">
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-												<label for="" class="col-3">Nomor SKL</label>
-												<input type="text" class="form-control form-control-sm" name="no_skl" id="no_skl" placeholder="Nomor SKL">
-											</li>
-											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Tanggal Terbit</label>
 												<input type="date" class="form-control form-control-sm" name="published_date" id="published_date" placeholder="Tanggal Terbit SKL">
+											</li>
+											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+												<label for="" class="col-3">Luas tanam</label>
+												<input type="number" step="0.01" class="form-control form-control-sm" name="luas_tanam" id="luas_tanam" placeholder="Luas total tanam">
+											</li>
+											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+												<label for="" class="col-3">Volume Produksi</label>
+												<input type="number" step="0.01" class="form-control form-control-sm" name="volume" id="volume" placeholder="Volume total produksi">
 											</li>
 											<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 												<label for="" class="col-3">Unggah SKL</label>

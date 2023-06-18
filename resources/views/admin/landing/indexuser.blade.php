@@ -10,7 +10,7 @@
 				<span class="display-4 fw-700 hidden-md-down">{{ Auth::user()->name }}</span>
 				<h2 class="display-4 hidden-sm-up">Hallo, <span class="fw-700">{{ Auth::user()->name }}</span></h2>
 				<h4 class="hidden-md-down">
-					<p> {{ $quote }}</p>
+					<p class="text-muted">{!! $quote !!}</p>
 				</h4>
 			</div>
 		</div>

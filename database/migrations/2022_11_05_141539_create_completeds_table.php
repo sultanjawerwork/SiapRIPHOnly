@@ -14,8 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('completeds', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->string('no_skl')->nullable();
+            $table->string('periodetahun')->nullable();
+            $table->string('no_ijin')->nullable();
+            $table->string('npwp')->nullable();
+            $table->date('published_date')->nullable();
+            $table->decimal('luas_tanam')->nullable();
+            $table->decimal('volume')->nullable();
+            $table->string('status')->nullable();
+            $table->text('url')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
