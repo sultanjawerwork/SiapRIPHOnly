@@ -103,8 +103,8 @@ class DashboardController extends Controller
 			$wajib_produksi = $commitments->sum('volume_produksi');
 			$no_ijins = $commitments->pluck('no_ijin');
 			$pks = Pks::whereIn('no_ijin', $no_ijins)->get();
-			$lokasis = Lokasi::where('no_ijin', $no_ijins)->get();
-			$saprodis = Saprodi::where('no_ijin', $no_ijins)->get();
+			$lokasis = Lokasi::whereIn('no_ijin', $no_ijins)->get();
+			$saprodis = Saprodi::whereIn('no_ijin', $no_ijins)->get();
 
 			$jumlah_poktan = $pks->count('id');
 			$jumlah_anggota = $lokasis->count('id');
@@ -114,8 +114,9 @@ class DashboardController extends Controller
 				return $saprodi->volume * $saprodi->harga;
 			});
 
-			$prosenTanam = $realisasi_tanam / $wajib_tanam;
-			$prosenProduksi = $realisasi_produksi / $wajib_produksi;
+			
+			$prosenTanam = $realisasi_tanam / ($wajib_tanam == 0 ?? 1);
+			$prosenProduksi = $realisasi_produksi / ($wajib_produksi == 0 ?? 1);
 
 
 			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'total_saprodi', 'prosenTanam', 'prosenProduksi', 'currentYear'));

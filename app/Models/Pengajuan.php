@@ -14,10 +14,11 @@ class Pengajuan extends Model
 	use SoftDeletes;
 	use Auditable;
 	use RandomId;
-
-
+	use \Awobaz\Compoships\Compoships;
+	
+	
 	public $table = 'pengajuans';
-
+	
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -71,6 +72,11 @@ class Pengajuan extends Model
 		return self::whereNull('onlinedate')->count();
 	}
 
+	public static function getNewPengajuan()
+	{
+		return self::whereNull('onlinedate')->get();
+	}
+
 	public function NewOnlineRequest(): int
 	{
 		return self::whereNull('onlinedate')->count();
@@ -101,7 +107,7 @@ class Pengajuan extends Model
 
 	public function datauser()
 	{
-		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+		return $this->belongsTo(DataUser::class, ['npwp_company'], ['npwp']);
 	}
 
 	public function skl()

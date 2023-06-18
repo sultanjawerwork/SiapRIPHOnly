@@ -406,8 +406,8 @@
 								</div> --}}
 								<div class="row">
 									<div class="form-group col-md-6">
-										<label for="onlinestatus">Status Pemeriksaan</label>
-										<select class="custom-select" name="onlinestatus" id="onlinestatus">
+										<label for="onlinestatus" class="required">Status Pemeriksaan</label>
+										<select class="custom-select" name="onlinestatus" id="onlinestatus" required>
 											<option value="" hidden>-- pilih</option>
 											<option value="2" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '2' ? 'selected' : '' }}>Selesai</option>
 											<option value="3" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '3' ? 'selected' : '' }}>Perbaikan Data</option>

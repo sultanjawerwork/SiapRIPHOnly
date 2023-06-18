@@ -13,7 +13,8 @@ class DataUser extends Model
     use SoftDeletes;
     use Auditable;
     use HasFactory;
-
+    use \Awobaz\Compoships\Compoships;
+    
     public $table = 'data_users';
 
     protected $dates = [
