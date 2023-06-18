@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
             // UsersTableSeeder::class,
             // RoleUserTableSeeder::class,
             // VarietasTableSeeder::class,
-            AdminTableSeeder::class,
+            // AdminTableSeeder::class,
         ]);
 
         // \App\Models\Category::factory(5)->create();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Verifikator;
 
 use App\Http\Controllers\Controller;
+use App\Models\Completed;
 use App\Models\DataUser;
 use App\Models\SklOlder;
 use Illuminate\Http\Request;
@@ -45,6 +46,12 @@ class SklOlderController extends Controller
 		return view('admin.oldskl.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'datauser'));
 	}
 
+	private function uploadFile($file, $filenpwp, $periodetahun, $filename)
+	{
+		$file->storeAs('uploads/' . $filenpwp . '/' . $periodetahun, $filename, 'public');
+		return asset('storage/uploads/' . $filenpwp . '/' . $periodetahun . '/' . $filename);
+	}
+
 	public function store(Request $request)
 	{
 		$user = Auth::user();
@@ -54,19 +61,31 @@ class SklOlderController extends Controller
 		$oldskl->no_ijin = $request->input('no_ijin');
 		$oldskl->periodetahun = $request->input('periodetahun');
 		$oldskl->published_date = $request->input('published_date');
-
 		$oldskl->submit_by = $user->id;
+
+		$completed = new Completed();
+		$completed->no_skl = $request->input('no_skl');
+		$completed->npwp = $request->input('npwp');
+		$completed->no_ijin = $request->input('no_ijin');
+		$completed->periodetahun = $request->input('periodetahun');
+		$completed->published_date = $request->input('published_date');
+		$completed->luas_tanam = $request->input('luas_tanam');
+		$completed->volume = $request->input('volume');
+		$completed->status = 'Lunas';
+
 		$filenpwp = str_replace(['.', '-'], '', $request->input('npwp'));
 		$noIjin = str_replace(['.', '/'], '', $request->input('no_ijin'));
 
 		if ($request->hasFile('sklfile')) {
 			$file = $request->file('sklfile');
 			$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $request->input('periodetahun'), $filename, 'public');
+			$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
 			$oldskl->sklfile = $filename;
+			$completed->url = $filePath;
 		}
 
 		$oldskl->save();
+		$completed->save();
 
 		return redirect()->route('verification.oldskl.index')
 			->with('success', 'Data SKL berhasil diunggah dan disimpan.');

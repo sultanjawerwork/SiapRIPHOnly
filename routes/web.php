@@ -243,6 +243,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
 	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
 	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
+	Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed');
 
 	//SKL Old/Manual
 	Route::get('oldskl/index', 'SklOlderController@index')->name('oldskl.index');
