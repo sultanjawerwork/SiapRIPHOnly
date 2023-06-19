@@ -30,7 +30,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'id'             => 3,
-                'name'           => 'Pejabat',
+                'name'           => 'Andi Muhammad Idil Fitri, SE, MM',
                 'email'          => 'pejabat@admin.com',
                 'password'       => bcrypt('password'),
                 'remember_token' => null,

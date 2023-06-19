@@ -58,8 +58,17 @@ class DashboardController extends Controller
 				$recomendationcount = $allPengajuan->where('status', '6')->count() > 0;
 				$lunascount = $allPengajuan->where('status', '7')->count() > 0;
 
-				$prosenTanam = $total_luastanam / $v_beban_tanam * 100;
-				$prosenProduksi = $total_volume / $v_beban_produksi * 100;
+				// $prosenTanam = $total_luastanam / $v_beban_tanam * 100;
+				$prosenTanam = 0; // Initialize the variable with a default value
+				$prosenProduksi = 0; // Initialize the variable with a default value
+
+				if ($v_beban_tanam != 0) {
+					$prosenTanam = $total_luastanam / $v_beban_tanam * 100;
+				}
+
+				if ($v_beban_produksi != 0) {
+					$prosenProduksi = $total_volume / $v_beban_produksi * 100;
+				}
 
 				// dd($prosenTanam);
 				return view('admin.dashboard.indexadmin', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'currentYear', 'riphData', 'company', 'jumlah_importir', 'v_pengajuan_import', 'v_beban_tanam', 'v_beban_produksi', 'total_luastanam', 'total_volume', 'allPengajuan', 'ajucount', 'proccesscount', 'verifiedcount', 'recomendationcount', 'lunascount', 'prosenTanam', 'prosenProduksi'));
