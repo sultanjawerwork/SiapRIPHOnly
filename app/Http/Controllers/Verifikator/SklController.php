@@ -18,10 +18,15 @@ use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
-
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class SklController extends Controller
 {
+	protected $sklid = -1;
+	protected $msg = '';
+
 	//digunakan oleh Administrator/Verifikator untuk melihat daftar verifikasi yang siap direkomendasikan terbit skl.
 	public function index()
 	{
@@ -110,36 +115,13 @@ class SklController extends Controller
 	//oleh pejabat
 	public function storerecom($id)
 	{
+		
+		
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
 			abort(403, 'Unauthorized');
 		}
 
-		$skl = Skl::find($id);
-		$skl->approved_by = Auth::user()->id;
-		$skl->approved_at = Carbon::now();
-		$skl->published_date = Carbon::now();
-		// dd($skl);
-		$pengajuan = Pengajuan::find($skl->pengajuan_id);
-		$commitment = PullRiph::find($pengajuan->commitment_id);
-		//$commitment = PullRiph::where('no_ijin', $pengajuan->no_ijin)->first();
-
-		$pengajuan->status = '7';
-		$commitment->status = '7';
-		$commitment->skl = $skl->no_skl;
-
-		$completed = new Completed();
-		$completed->no_skl = $skl->no_skl;
-		$completed->npwp = $skl->npwp;
-		$completed->no_ijin = $skl->no_ijin;
-		$completed->periodetahun = $commitment->periodetahun;
-		$completed->published_date = Carbon::now();
-		$completed->luas_tanam = $pengajuan->luas_verif;
-		$completed->volume = $pengajuan->volume_verif;
-		$completed->status = 'Lunas';
-		$completed->url = route('verification.arsip.skl', $skl->id);
-
-		$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
-		$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
+		$this->sklid = $id;
 
 		// if ($request->hasFile('sklfile')) {
 		// 	$file = $request->file('sklfile');
@@ -149,13 +131,103 @@ class SklController extends Controller
 		// 	$completed->url = $filePath;
 		// }
 		// dd($completed);
+		DB::transaction(function () {
+			try{
+				$skl = Skl::find($this->sklid);
+				$skl->approved_by = Auth::user()->id;
+				$skl->approved_at = Carbon::now();
+				$skl->published_date = Carbon::now();
+				// dd($skl);
+				$pengajuan = Pengajuan::find($skl->pengajuan_id);
+				$commitment = PullRiph::find($pengajuan->commitment_id);
+				//$commitment = PullRiph::where('no_ijin', $pengajuan->no_ijin)->first();
+				
 
-		$skl->save();
-		$pengajuan->save();
-		$commitment->save();
-		$completed->save();
+				$pengajuan->status = '7';
+				$commitment->status = '7';
+				$commitment->skl = $skl->no_skl;
 
-		return redirect()->route('verification.skl.published', ['id' => $skl->id]);
+				$completed = new Completed();
+				$completed->no_skl = $skl->no_skl;
+				$completed->npwp = $skl->npwp;
+				$completed->no_ijin = $skl->no_ijin;
+				$completed->periodetahun = $commitment->periodetahun;
+				$completed->published_date = Carbon::now();
+				$completed->luas_tanam = $pengajuan->luas_verif;
+				$completed->volume = $pengajuan->volume_verif;
+				$completed->status = 'Lunas';
+				$completed->url = route('verification.arsip.skl', $skl->id);
+
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
+				$pejabat = User::find($skl->approved_by);
+
+
+				$wajib_tanam = $commitment->volume_riph * 0.05 / 6;
+				$luas_verif = $pengajuan->luas_verif;
+				$wajib_produksi = $commitment->volume_riph * 0.05;
+				$volume_verif = $pengajuan->volume_verif;
+				$total_luas = $commitment->lokasi->sum('luas_tanam');
+				$total_volume = $commitment->lokasi->sum('volume');
+				$data = [
+					'Perusahaan' => $commitment->datauser->company_name,
+					'No. RIPH' => $commitment->no_ijin,
+					'Status' => 'LUNAS',
+					'Tautan' => route('verification.skl.show', $skl->id),
+				];
+
+				// $QrCode = QrCode::size(70)->generate(json_encode($data));
+				$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+
+				// dd($commitment);
+				// dompdf disini
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+				$thn = substr($skl->no_ijin, -4);
+				
+				
+				$view = view('admin.verifikasi.skl.domskl', compact( 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+				$html = mb_convert_encoding($view, 'HTML-ENTITIES', 'UTF-8');
+				
+
+				// dd($html);
+				$pdf = app('dompdf.wrapper');
+				$pdf->setPaper('A4', 'portrait');
+				$pdf->loadHtml($html);
+
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+				$thn = substr($skl->no_ijin, -4);
+				Storage::disk('public')->put('uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf', $pdf->output());
+				$pdfUrl = 'uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf';
+				// dd($pdfUrl);
+				$skl->file_name = $pdfUrl;
+		
+
+				// $pdf->stream();
+
+				//debug only
+				$skl->save();
+				// $pengajuan->save();
+				// $commitment->save();
+				// $completed->save();
+
+				
+				DB::commit();
+				
+			} catch (\Exception $e) {
+                // Something went wrong, rollback the transaction
+                DB::rollback();
+                $this->msg = 'Error terbitkan SKL!';
+            }
+			
+		});
+		if ($this->msg === ''){
+			return redirect()->route('verification.skl.published', ['id' => $this->sklid]);
+		} else {
+			return back()->with(['message' => $this->msg]);
+		}
+		
 	}
 
 	//daftar ini digunakan oleh semua user role.
@@ -194,13 +266,22 @@ class SklController extends Controller
 		return view('admin.verifikasi.skl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl'));
 	}
 
+	public function published($id)
+	{
+		$skl = Skl::findOrfail($id);
+		if (Storage::disk('public')->exists($skl->file_name)){
+
+			return Storage::disk('public')->response($skl->file_name);	
+		}
+	}
+
 	/**
 	 * Menampilkan halaman SKL (print)
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function published($id)
+	public function published_old($id)
 	{
 		$module_name = 'SKL';
 		$page_title = 'Surat Keterangan Lunas';
@@ -228,7 +309,28 @@ class SklController extends Controller
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
 		// dd($commitment);
-		return view('admin.verifikasi.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		// dompdf disini
+		$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+		$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+		$thn = substr($skl->no_ijin, -4);
+		
+		
+		$view = view('admin.verifikasi.skl.domskl', compact( 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		$html = mb_convert_encoding($view, 'HTML-ENTITIES', 'UTF-8');
+        
+
+		// dd($html);
+		$pdf = app('dompdf.wrapper');
+		$pdf->setPaper('A4', 'portrait');
+		$pdf->loadHtml($html);
+		return $pdf->stream();
+
+		// $pdfUrl = Storage::disk('public')->put('uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf', $pdf->output());
+		
+		// $skl->file_name = $pdfUrl;
+		// $skl->save();
+
+		
 	}
 
 	public function arsipskl($id)
@@ -248,12 +350,46 @@ class SklController extends Controller
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
 			'Status' => 'LUNAS',
-			'Tautan' => route('verification.arsip.skl.topdf', $skl->id)
+			'Tautan' => route('verification.skl.published', $skl->id)
 		];
 
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
 		return view('admin.verifikasi.skl.sklPdf', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+	}
+
+	public function arsipskl_baru($id)
+	{
+		$skl = Skl::findOrFail($id);
+		$pengajuan = Pengajuan::find($skl->pengajuan_id);
+		$commitment = PullRiph::where('no_ijin', $skl->no_ijin)->first();
+		$pejabat = User::find($skl->approved_by);
+		$wajib_tanam = $commitment->volume_riph * 0.05 / 6;
+		$luas_verif = $pengajuan->luas_verif;
+		$wajib_produksi = $commitment->volume_riph * 0.05;
+		$volume_verif = $pengajuan->volume_verif;
+		$total_luas = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
+
+		$data = [
+			'Perusahaan' => $commitment->datauser->company_name,
+			'No. RIPH' => $commitment->no_ijin,
+			'Status' => 'LUNAS',
+			'Tautan' => route('verification.skl.published', $skl->id)
+		];
+
+		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+
+		$view = view('admin.verifikasi.skl.sklPdf', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		$html = mb_convert_encoding($view, 'HTML-ENTITIES', 'UTF-8');
+        
+        $pdf = app('dompdf.wrapper');
+        // $options = $pdf->getOptions();
+        //  $options->set('orientation', 'landscape');
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->loadHTML($html);
+
+        return $pdf->download('sklpdf');
 	}
 
 	public function completedindex()
