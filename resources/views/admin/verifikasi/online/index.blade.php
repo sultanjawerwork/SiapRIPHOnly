@@ -72,19 +72,19 @@
 												@endif
 											</td>
 											<td>
-												@if($verifikasi->onlinestatus)
+												{{-- @if($verifikasi->onlinestatus) --}}
 													<a href="{{route('verification.data.show', $verifikasi->id)}}" {{-- route to show --}}
 														title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-search"></i>
 													</a>
-												@else
+												{{-- @else --}}
 												{{-- route to verify --}}
 												{{-- {{route('admin.task.onfarmv2.list', $verifikasi->id)}} --}}
 													<a href="{{route('verification.data.check', $verifikasi->id)}}" class="btn btn-icon btn-xs btn-primary"
 														title="Mulai/Lanjutkan Pemeriksaan">
 														<i class="fal fa-file-search"></i>
 													</a>
-												@endif
+												{{-- @endif --}}
 											</td>
 										</tr>
 									@endforeach

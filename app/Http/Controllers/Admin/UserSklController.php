@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Skl;
+use App\Models\SklOlder;
 use App\Models\PullRiph;
 use App\Models\Pengajuan;
 use App\Models\User;
@@ -105,7 +106,7 @@ class UserSklController extends Controller
 		$heading_class = 'fa fa-file-certificate';
 
 		$oldskl = SklOlder::find($id);
-		dd($oldskl);
+		// dd($oldskl);
 
 		return view('admin.oldskl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'oldskl'));
 	}

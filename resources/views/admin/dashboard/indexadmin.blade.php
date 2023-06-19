@@ -322,26 +322,30 @@
 									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
 								</ul>
 							</div>
-							<div class="col-md-5 col-sm-6">
+							<div class="col-md-4 col-sm-6">
 								<ul>
-									<li>
-										<span class="btn btn-icon btn-xs btn-success">
-											<i class="fal fa-check-circle mr-1"></i>
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-check-circle"></i>
 										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
 									</li>
 									<li>
-										<span class="btn btn-icon btn-xs btn-danger">
-											<i class="fal fa-ban mr-1"></i>
+										<span class="btn btn-icon btn-xs btn-danger mr-1">
+											<i class="fa fa-ban"></i>
 										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
 									</li>
-									<li>
-										<span class="btn btn-icon btn-xs btn-info">
-											<i class="fal fa-file-signature mr-1"></i>
+								</ul>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-info mr-1">
+											<i class="fa fa-file-signature"></i>
 										</span> : Rekomendasi penerbitan SKL.</span>.
 									</li>
 									<li>
-										<span class="btn btn-icon btn-xs btn-success">
-											<i class="fal fa-award mr-1"></i>
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-award"></i>
 										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
 									</li>
 								</ul>

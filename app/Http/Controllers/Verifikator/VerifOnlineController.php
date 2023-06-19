@@ -164,7 +164,6 @@ class VerifOnlineController extends Controller
 		$heading_class = 'fal fa-ballot-check';
 
 		$pks = Pks::where('poktan_id', $poktan_id)->latest()->first();
-		// dd($pks);
 		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)
 			->first();
 		$verifikasi = Pengajuan::where('no_ijin', $commitment->no_ijin)
@@ -173,7 +172,6 @@ class VerifOnlineController extends Controller
 		$commitmentcheck = CommitmentCheck::where('no_pengajuan', $verifikasi->no_pengajuan)
 			->first();
 		$pkscheck = PksCheck::find($pks->id);
-		// dd($verifikasi);
 		return view('admin.verifikasi.online.pkscheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck'));
 	}
 
@@ -204,6 +202,22 @@ class VerifOnlineController extends Controller
 	public function pksedit($poktan_id)
 	{
 		$pkscheck = PksCheck::where('poktan_id', $poktan_id)->latest()->first();
+		$module_name = 'Verifikasi';
+		$page_title = 'Verifikasi Data';
+		$page_heading = 'Data dan Berkas PKS';
+		$heading_class = 'fal fa-ballot-check';
+
+		$pks = Pks::where('poktan_id', $poktan_id)->latest()->first();
+		// dd($pks);
+		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)
+			->first();
+		$verifikasi = Pengajuan::where('no_ijin', $commitment->no_ijin)
+			->latest()
+			->first();
+		$commitmentcheck = CommitmentCheck::where('no_pengajuan', $verifikasi->no_pengajuan)
+			->first();
+		$pkscheck = PksCheck::find($pks->id);
+
 		dd($pkscheck);
 	}
 

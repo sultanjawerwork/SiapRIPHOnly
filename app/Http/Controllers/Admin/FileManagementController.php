@@ -76,7 +76,7 @@ class FileManagementController extends Controller
 			$template->lampiran = $filename;
 		}
 		$template->save();
-		dd($template);
+		// dd($template);
 	}
 
 	/**

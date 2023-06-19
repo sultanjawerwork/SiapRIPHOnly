@@ -111,7 +111,7 @@
 												@endif
 												@if ($isThirdGroupIncomplete)
 													<i class="fal fa-balance-scale text-danger fw-bold"
-													data-toggle="tooltip" data-original-title="Data Tanam belum lengkap!"></i>
+													data-toggle="tooltip" data-original-title="Data Produksi belum lengkap!"></i>
 												@endif
 											</sup>
 										</div>
@@ -135,15 +135,6 @@
 											<i class="fa fa-check"></i>
 										</a>
 										@endif
-										<form action=""
-											method="POST" style="display: inline-block;">
-											@csrf
-											@method('DELETE')
-											<button type="submit" class="ml-3 btn btn-icon btn-xs btn-danger" title="Hapus data lokasi ini"
-												onclick="return confirm('Are you sure you want to delete this item?');">
-												<i class="fal fa-trash-alt"></i>
-											</button>
-										</form>
 									</td>
 								</tr>
 								@endforeach

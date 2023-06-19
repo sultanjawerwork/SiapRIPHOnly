@@ -564,7 +564,7 @@
 				{
 					text: '<i class="fa fa-plus mr-1"></i>Penangkar',
 					titleAttr: 'Tambah Penangkar Mitra',
-					className: 'btn btn-info btn-sm ml-2',
+					className: 'btn btn-info btn-xs ml-2',
 					action: function(e, dt, node, config) {
 						window.location.href = '{{ route('admin.task.commitment.penangkar', $commitment->id) }}';
 					}

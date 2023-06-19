@@ -57,7 +57,7 @@
 		<div id="totalProduksi" class="p-3 bg-danger-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah Realisasi Produksi yang telah dilaporkan oleh pelaku usaha hingga saat ini.">
-					<span id="total_saprodi">{{ number_format($total_saprodi, 0, ',', '.') }}</span>
+					<span id="total_saprodi"></span>
 					<small class="m-0 l-h-n">Total bantuan sarana produksi.</small>
 				</h3>
 			</div>
@@ -83,17 +83,17 @@
 								<div 
 									id = "naschartTanam"
 									class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center"
-									data-percent=""
+									data-percent="{{ number_format($prosentanam, 2, ',', '.') }}"
 									data-piesize="145"
 									data-linewidth="10"
 									data-linecap="butt"
 									data-scalelength="7"
 									data-toggle="tooltip"
-									title data-original-title="{{ number_format($prosenTanam, 2, ',', '.') }}% dari kewajiban"
+									title data-original-title="{{ number_format($prosentanam, 2, ',', '.') }}% dari kewajiban"
 									data-placement="bottom">
 									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
 										<span class="fs-xxl fw-500 text-dark">
-											<span name="prosenTanam" id="prosenTanam">{{ number_format($prosenTanam, 2, ',', '.') }}</span>
+											<span name="prosenTanam" id="prosenTanam">{{ number_format($prosentanam, 2, ',', '.') }}</span>
 											<sup>%</sup>
 										</span>
 									</div>
@@ -146,12 +146,12 @@
 									data-linecap="butt"
 									data-scalelength="7"
 									data-toggle="tooltip"
-									title data-original-title="{{ number_format($prosenProduksi, 2, ',', '.') }}% dari Kewajiban"
+									title data-original-title="{{ number_format($prosenproduksi, 2, ',', '.') }}% dari Kewajiban"
 									data-placement="bottom"
 									class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center" >
 									<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
 										<span class="fs-xxl fw-500 text-dark">
-											<span name="prosenProduksi" id="prosenProduksi">{{ number_format($prosenProduksi, 2, ',', '.') }}</span>
+											<span name="prosenProduksi" id="prosenProduksi">{{ number_format($prosenproduksi, 2, ',', '.') }}</span>
 											<sup>%</sup>
 										</span>
 									</div>
@@ -201,11 +201,47 @@
 						<thead>
 							<th>Nomor Pengajuan</th>
 							<th>Nomor RIPH</th>
+							<th>Pengajuan</th>
 							<th>Tahap 1</th>
 							<th>Tahap 2</th>
 							<th>Tahap 3</th>
 						</thead>
-						<tbody></tbody>
+						<tbody>
+							@foreach ($allPengajuan as $pengajuan)
+								<tr>
+									<td>{{$pengajuan->no_pengajuan}}</td>
+									<td>{{$pengajuan->no_ijin}}</td>
+									<td class="text-center">
+										@if ($pengajuan->status)
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '2')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '3')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onfarmstatus === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onfarmstatus === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->status === '6')
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
+										@elseif ($pengajuan->status === '7')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
+										@elseif ($pengajuan->status === '8')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
 					</table><hr>
 					<span class="help-block mt-2">
 						<label for="" class="form-label">Keterangan:</label>
@@ -217,30 +253,30 @@
 									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
 								</ul>
 							</div>
-							<div class="col-md-5 col-sm-6">
+							<div class="col-md-4 col-sm-6">
 								<ul>
-									<li>
-										<span class="badge badge-xs badge-success">
-											<i class="fal fa-check-circle mr-1"></i>
-											Selesai
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-check-circle"></i>
 										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
 									</li>
 									<li>
-										<span class="badge badge-xs badge-danger">
-											<i class="fal fa-ban mr-1"></i>
-											Gugur
+										<span class="btn btn-icon btn-xs btn-danger mr-1">
+											<i class="fa fa-ban"></i>
 										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
 									</li>
-									<li>
-										<span class="badge badge-xs badge-primary">
-											<i class="fal fa-file-signature mr-1"></i>
-											Rekomendasi
+								</ul>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-info mr-1">
+											<i class="fa fa-file-signature"></i>
 										</span> : Rekomendasi penerbitan SKL.</span>.
 									</li>
 									<li>
-										<span class="badge badge-xs badge-success">
-											<i class="fal fa-award mr-1"></i>
-											Lunas
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-award"></i>
 										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
 									</li>
 								</ul>
@@ -338,7 +374,7 @@
 				$('#volumeImport').text(formatNumber(data.volumeImport));
 				$('#count_poktan').text(formatNumber(data.count_poktan));
 				$('#count_anggota').text(formatNumber(data.count_anggota));
-				$('#total_saprodi').text(formatNumber(data.total_saprodi));
+				
 				$('#wajib_tanam').text(formatdecimals(data.wajib_tanam));
 				$('#wajib_produksi').text(formatdecimals(data.wajib_produksi));
 				$('#total_luastanam').text(formatdecimals(data.total_luastanam));
@@ -389,37 +425,37 @@
 					
 					var dataCell = $('<td class="text-center"></td>').html(function() {
 						if (!verifikasi.status) {
-							return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diajukan</span>';
+							return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
 						} else if (verifikasi.status === '1' && !verifikasi.onlinestatus) {
-							return '<span class="badge badge-xs badge-primary"><i class="fal fa-check-upload mr-1"></i>Diajukan</span>';
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-check-upload"></i></span>';
 						} else if (verifikasi.onlinestatus === '2') {
-							return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
+							return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
 						} else if (verifikasi.onlinestatus === '3') {
-							return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Gugur</span>';
+							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>';
 						}
 					});
 
 					var lapanganCell = $('<td class="text-center"></td>').html(function() {
 						if (verifikasi.status === '2' && !verifikasi.onfarmstatus) {
-							return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diperiksa</span>';
+							return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
 						} else if (verifikasi.onfarmstatus === '4') {
-							return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
+							return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
 						} else if (verifikasi.onfarmstatus === '5') {
-							return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Gugur</span>';
+							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>';
 						}
 					});
 
-					var lunasCell = $('<td></td>').html(function() {
+					var lunasCell = $('<td class="text-center"></td>').html(function() {
 						if (verifikasi.status === '6') {
-							return '<span class="badge badge-xs badge-primary"><i class="fal fa-file-signature mr-1"></i>Rekomendasi</span>';
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-file-signature"></i></span>';
 						} else if (verifikasi.status === '7') {
-							return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span>';
+							return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>';
 						}else if (verifikasi.status === '8') {
-							return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Gugur</span>';
+							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>';
 						}
 					});
 
-					row.append(ajuCell, nomorPengajuan, namaPerusahaan, nomorRIPH, dataCell, lapanganCell, lunasCell);
+					row.append(nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
 					tableBody.append(row);
 				});
 				
