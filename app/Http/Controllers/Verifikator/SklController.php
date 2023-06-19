@@ -156,7 +156,7 @@ class SklController extends Controller
 				$completed->luas_tanam = $pengajuan->luas_verif;
 				$completed->volume = $pengajuan->volume_verif;
 				$completed->status = 'Lunas';
-				$completed->url = route('verification.arsip.skl', $skl->id);
+				
 
 				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
 				$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
@@ -200,17 +200,15 @@ class SklController extends Controller
 				$thn = substr($skl->no_ijin, -4);
 				Storage::disk('public')->put('uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf', $pdf->output());
 				$pdfUrl = 'uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf';
-				// dd($pdfUrl);
+				
 				$skl->file_name = $pdfUrl;
-		
-
-				// $pdf->stream();
-
-				//debug only
+				$pdfpublic = Storage::disk('public')->url($pdfUrl);
+				$completed->url = $pdfpublic;
+				
 				$skl->save();
-				// $pengajuan->save();
-				// $commitment->save();
-				// $completed->save();
+				$pengajuan->save();
+				$commitment->save();
+				$completed->save();
 
 				
 				DB::commit();

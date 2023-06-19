@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 Route::post('getToken', 'Api\\AuthController@getToken');
 
 Route::group(['namespace' => 'Api'], function () {
-
+    
     
     //dashboard
     Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');
