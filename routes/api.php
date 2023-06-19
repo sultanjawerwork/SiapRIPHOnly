@@ -4,14 +4,17 @@ use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Api\AnggotaMitraController;
 use App\Http\Controllers\Api\GetWilayahController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\SKLController;
 
 
 //getToken
 Route::post('getToken', 'Api\\AuthController@getToken');
 
-Route::group(['namespace' => 'Api'], function () {
+Route::group(['as' => 'api.', 'namespace' => 'Api', 'middleware' => ['auth:sanctum']], function () {
     
-    
+    //getCompletedSKL
+    Route::get('getSKL/{npwp}', 'SKLController@getSKL'); 
+
     //dashboard
     Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');
 

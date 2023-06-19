@@ -7,9 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
-class Controller extends BaseController
-{
-    /**
+/**
      * @OA\Info(
      *      version="1.0.0",
      *      title="Simethris API Documentation",
@@ -34,5 +32,8 @@ class Controller extends BaseController
      *     description="API Endpoints"
      * )
      */
+class Controller extends BaseController
+{
+    
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }

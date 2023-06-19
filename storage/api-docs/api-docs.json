@@ -24,7 +24,7 @@
                 "tags": [
                     "Get Access Token"
                 ],
-                "summary": "Post your email and password and we will return a token. Use the token in the 'Authorization' header like so 'Bearer YOUR_TOKEN'",
+                "summary": "Post your username and password to get token. Use the token in the 'Authorization' header like so 'Bearer YOUR_TOKEN'",
                 "description": "get token for Access API",
                 "operationId": "getToken",
                 "requestBody": {
@@ -60,6 +60,48 @@
                     }
                 }
             }
+        },
+        "/getSKL/{npwp}": {
+            "get": {
+                "tags": [
+                    "SKL"
+                ],
+                "summary": "Get list of completed skl",
+                "description": "Returns list of skl",
+                "operationId": "getSKL",
+                "parameters": [
+                    {
+                        "name": "npwp",
+                        "in": "path",
+                        "description": "npwp importir",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "simethrisToken": []
+                    }
+                ]
+            }
         }
     },
     "tags": [
@@ -67,5 +109,15 @@
             "name": "Simethris",
             "description": "API Endpoints"
         }
-    ]
+    ],
+    "components": {
+        "securitySchemes": {
+            "simethrisToken": {
+                "type": "http",
+                "scheme": "bearer",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
 }
