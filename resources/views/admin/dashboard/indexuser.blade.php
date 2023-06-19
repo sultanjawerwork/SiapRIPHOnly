@@ -380,6 +380,12 @@
 					var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
 					var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
 					var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+
+					var ajuCell = $('<td class="text-center"></td>').html(function() {
+							if (verifikasi.status) {
+								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
+							}
+						});
 					
 					var dataCell = $('<td class="text-center"></td>').html(function() {
 						if (!verifikasi.status) {
@@ -413,7 +419,7 @@
 						}
 					});
 
-					row.append(nomorPengajuan, namaPerusahaan, nomorRIPH, dataCell, lapanganCell, lunasCell);
+					row.append(ajuCell, nomorPengajuan, namaPerusahaan, nomorRIPH, dataCell, lapanganCell, lunasCell);
 					tableBody.append(row);
 				});
 				

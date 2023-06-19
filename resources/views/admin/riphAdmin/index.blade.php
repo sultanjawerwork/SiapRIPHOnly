@@ -12,7 +12,7 @@
 				<div class="form-group col-md-2">
 					<label for="" class="col-form-label mr-2">Status:</label>
 					<span id="keterangan"></span>
-					<input type="text" id="status" name="status">
+					{{-- <input type="text" id="status" name="status"> --}}
 				</div>
 				<div class="col-md-10">
 					<div class="row">

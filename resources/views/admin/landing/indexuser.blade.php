@@ -14,7 +14,7 @@
 		<div class="row mb-5">
 			<div class="col text-center">
 				<h1 class="hidden-md-down">Selamat Datang di Simethris,</h1><br>
-				<span class="display-4 fw-700 hidden-md-down">{{ Auth::user()->name }}</span>
+				<span class="display-4 fw-700 hidden-md-down">{{ Auth::user()->data_user->company_name ?? Auth::user()->name }}</span>
 				<h2 class="display-4 hidden-sm-up">Hallo, <span class="fw-700">{{ Auth::user()->name }}</span></h2>
 				<h4 class="hidden-md-down">
 					<p class="text-muted">{!! $quote !!}</p>
