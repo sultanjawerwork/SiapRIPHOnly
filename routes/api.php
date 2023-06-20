@@ -13,7 +13,7 @@ Route::post('getToken', 'Api\\AuthController@getToken');
 Route::group(['as' => 'api.', 'namespace' => 'Api', 'middleware' => ['auth:sanctum']], function () {
     
     //getCompletedSKL
-    Route::get('getSKL/{npwp}', 'SKLController@getSKL'); 
+    Route::get('getSKL/{no_ijin}', 'SKLController@getSKL'); 
 
     //dashboard
     Route::get('getApiDashboardDatabyYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear');

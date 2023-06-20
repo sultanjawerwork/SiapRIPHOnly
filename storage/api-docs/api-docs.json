@@ -61,7 +61,7 @@
                 }
             }
         },
-        "/getSKL/{npwp}": {
+        "/getSKL/{no_ijin}": {
             "get": {
                 "tags": [
                     "SKL"
@@ -71,9 +71,9 @@
                 "operationId": "getSKL",
                 "parameters": [
                     {
-                        "name": "npwp",
+                        "name": "no_ijin",
                         "in": "path",
-                        "description": "npwp importir",
+                        "description": "No ijin/Riph yg dicari datanya (* tanpa . & /)",
                         "required": true,
                         "schema": {
                             "type": "string"
