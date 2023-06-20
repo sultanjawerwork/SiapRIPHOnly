@@ -15,10 +15,10 @@ class Pengajuan extends Model
 	use Auditable;
 	use RandomId;
 	use \Awobaz\Compoships\Compoships;
-	
-	
+
+
 	public $table = 'pengajuans';
-	
+
 	/**
 	 * Indicates if the IDs are auto-incrementing.
 	 *
@@ -51,6 +51,7 @@ class Pengajuan extends Model
 		//onfarm
 		'luas_verif',
 		'volume_verif',
+		'metode',
 		'onfarmstatus',
 		'onfarmnote',
 		'onfarmdate',

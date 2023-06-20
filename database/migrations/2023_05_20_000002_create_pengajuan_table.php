@@ -31,6 +31,7 @@ return new class extends Migration
 
 			$table->decimal('luas_verif')->nullable();
 			$table->decimal('volume_verif')->nullable();
+			$table->string('metode')->nullable();
 			$table->string('onfarmstatus')->nullable();
 			$table->text('onfarmnote')->nullable();
 			$table->date('onfarmdate')->nullable();

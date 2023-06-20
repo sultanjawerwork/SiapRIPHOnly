@@ -219,8 +219,8 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
 	Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
 	Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
-	Route::get('data/pks/{poktan_id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
-	Route::put('data/pks/{poktan_id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
+	Route::get('data/pks/{id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
+	Route::put('data/pks/{id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
 	Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
 	Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
 	Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');

@@ -10,7 +10,7 @@ return new class extends Migration
 	 * Run the migrations.
 	 *
 	 * @return void
-	
+
 	 */
 	public function up()
 	{
@@ -31,6 +31,7 @@ return new class extends Migration
 			$table->unsignedBigInteger('onlineverif_by')->nullable();
 
 			//diisi oleh onfarm verifikator, data geolokasi
+			$table->string('metode')->nullable();
 			$table->text('latitude')->nullable();
 			$table->text('longitude')->nullable();
 			$table->text('altitude')->nullable();

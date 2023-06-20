@@ -28,7 +28,7 @@ class VerifOnfarmController extends Controller
 	 */
 	public function index()
 	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 		//page level
 		$module_name = 'Permohonan';
 		$page_title = 'Daftar Pengajuan';
@@ -96,7 +96,7 @@ class VerifOnfarmController extends Controller
 
 	public function farmlist($id)
 	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 		$module_name = 'Verifikasi';
 		$page_title = 'Verifikasi Lapangan';
 		$page_heading = 'Daftar Lokasi Sampling';
@@ -176,12 +176,14 @@ class VerifOnfarmController extends Controller
 		// $lokasicheck->tgl_timbang = $request->input('tgl_timbang');
 		$lokasicheck->volume_verif = $request->input('volume_verif');
 		$lokasicheck->volume_verif = $request->input('volume_verif');
+		$lokasicheck->metode = $request->input('metode');
 		$lokasicheck->onfarmnote = $request->input('onfarmnote');
 		$lokasicheck->onfarmstatus = $request->input('onfarmstatus');
+		$lokasicheck->metode = $request->input('metode');
 		// $no_ijin = $request->input('mod_noijin');
 		// dd($no_ijin);
-
-		$lokasicheck->save();
+		dd($lokasicheck);
+		// $lokasicheck->save();
 		return redirect()->route('verification.onfarm.farmlist', $lokasicheck->pengajuan_id)
 			->with('success', 'Data berhasil disimpan');
 	}
@@ -215,40 +217,16 @@ class VerifOnfarmController extends Controller
 	 */
 	public function show($id)
 	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-		//page level
-		$module_name = 'Permohonan';
-		$page_title = 'Data Pengajuan';
-		$page_heading = 'Data Pengajuan Verifikasi';
-		$heading_class = 'fa fa-file-search';
 
-		//populate related data
+		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		$module_name = 'Verifikasi';
+		$page_title = 'Verifikasi Lapangan';
+		$page_heading = 'Daftar Lokasi Sampling';
+		$heading_class = 'fal fa-map-marked-alt';
+
 		$verifikasi = Pengajuan::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)
-			->firstorFail();
-
-		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
-			->firstOrFail();
-
-		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
-		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)
-			->orderBy('created_at', 'desc')
-			->get();
-
-		$pkss = Pks::withCount('lokasi')
-			->where('no_ijin', $commitment->no_ijin)->get();
-		$lokasis = collect();
-		foreach ($pkschecks as $pkscheck) {
-			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
-				->where('no_ijin', $commitmentcheck->no_ijin)
-				->get();
-			$lokasis->push($lokasi);
-		};
-
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
-		// dd($lokasis);
-		return view('admin.verifikasi.online.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'commitmentcheck', 'pkschecks', 'lokasichecks', 'pkss', 'lokasis', 'total_luastanam', 'total_volume'));
+		$onfarms = LokasiCheck::where('pengajuan_id', $id)->get();
+		return view('admin.verifikasi.onfarm.farmlist', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'onfarms'));
 	}
 
 	public function edit($id)
@@ -273,6 +251,7 @@ class VerifOnfarmController extends Controller
 		$verifikasi->volume_verif = $request->input('volume_verif');
 		$verifikasi->onfarmstatus = $request->input('onfarmstatus');
 		$verifikasi->status = $request->input('onfarmstatus');
+		$verifikasi->metode = $request->input('metode');
 		$verifikasi->onfarmnote = $request->input('onfarmnote');
 		$filenpwp = $request->input('npwp');
 		$noIjin = $request->input('noIjin');

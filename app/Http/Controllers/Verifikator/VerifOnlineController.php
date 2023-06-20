@@ -20,6 +20,7 @@ use App\Models\PenangkarRiph;
 use App\Models\PullRiph;
 use App\Models\MasterAnggota;
 use App\Models\DataUser;
+use App\Models\MasterDesa;
 use App\Models\Pks;
 use App\Models\Poktans;
 
@@ -199,31 +200,40 @@ class VerifOnlineController extends Controller
 			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
-	public function pksedit($poktan_id)
+	public function pksedit($id)
 	{
-		$pkscheck = PksCheck::where('poktan_id', $poktan_id)->latest()->first();
+
 		$module_name = 'Verifikasi';
 		$page_title = 'Verifikasi Data';
-		$page_heading = 'Data dan Berkas PKS';
+		$page_heading = 'Ubah data Verifikasi PKS';
 		$heading_class = 'fal fa-ballot-check';
 
-		$pks = Pks::where('poktan_id', $poktan_id)->latest()->first();
-		// dd($pks);
-		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)
+		$pkscheck = PksCheck::find($id);
+		$pks = Pks::where('poktan_id', $pkscheck->poktan_id)->first();
+		$commitment = PullRiph::where('no_ijin', $pkscheck->no_ijin)
 			->first();
-		$verifikasi = Pengajuan::where('no_ijin', $commitment->no_ijin)
-			->latest()
+		$verifikasi = Pengajuan::find($pkscheck->pengajuan_id);
+		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
 			->first();
-		$commitmentcheck = CommitmentCheck::where('no_pengajuan', $verifikasi->no_pengajuan)
-			->first();
-		$pkscheck = PksCheck::find($pks->id);
 
-		dd($pkscheck);
+		// dd($pkscheck);
+		return view('admin.verifikasi.online.pksedit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck'));
 	}
 
-	public function pksupdate($poktan_id)
+	public function pksupdate(Request $request, $id)
 	{
-		dd('UPDATE');
+		$user = Auth::user();
+
+		$pkscheck = PksCheck::find($id);
+		// dd($pkscheck);
+		$pkscheck->note = $request->input('note');
+		$pkscheck->status = $request->input('status');
+		$pkscheck->verif_at = Carbon::now();
+		$pkscheck->verif_by = $user->id;
+
+		$pkscheck->save();
+		return redirect()->route('verification.data.show', $pkscheck->pengajuan_id)
+			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
 	public function lokasicheck($noIjin, $anggota_id)

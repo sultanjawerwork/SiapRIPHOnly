@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: lasimethris04
+-- Host: localhost    Database: lasimethris05
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -94,7 +94,7 @@ CREATE TABLE `role_user` (
 
 LOCK TABLES `role_user` WRITE;
 /*!40000 ALTER TABLE `role_user` DISABLE KEYS */;
-INSERT INTO `role_user` VALUES (1,1),(15,4),(23,2),(44,4),(45,4),(21,2),(51,4),(53,2),(54,2),(2,4),(8,2),(2,2),(4,2),(3,5),(5,3),(6,2);
+INSERT INTO `role_user` VALUES (1,1),(2,4),(4,2),(3,5),(5,2);
 /*!40000 ALTER TABLE `role_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,4 +134,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-20  1:10:57
+-- Dump completed on 2023-06-20  2:23:13

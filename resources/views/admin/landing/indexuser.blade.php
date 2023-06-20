@@ -172,7 +172,7 @@
 								@foreach ($newpengajuan as $item)
 									<li>
 										<a href="{{ route('verification.data.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-                                            <span class="mr-2">
+											<span class="mr-2">
 												@if (!empty($item->data_user->logo))
 													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
 														class="profile-image rounded-circle" alt="">
@@ -184,14 +184,12 @@
 											<span class="d-flex flex-column flex-1">
 												<span class="name">{{ $item->datauser->company_name }} <span
 													class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-                                                
-                                                <span class="msg-a fs-sm">
-                                                    {{ $item->no_pengajuan }}
-                                                </span>
-                                                <span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-                                            </span>
-                                            
-                                        </a>
+												<span class="msg-a fs-sm">
+													{{ $item->no_pengajuan }}
+												</span>
+												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+											</span>
+										</a>
 									</li>
 								@endforeach
 							</ul>
@@ -201,7 +199,6 @@
 				@endif
 			</div>
 		</div>
-
 		<!-- Page Content -->
 	@endcan
 @endsection

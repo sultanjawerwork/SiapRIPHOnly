@@ -30,7 +30,7 @@
 			@else
 				<img src="{{ asset('/img/avatars/farmer.png') }}" class="profile-image rounded-circle" alt="">
 			@endif
-			
+
 			<div class="info-card-text">
 				<a href="#" class="d-flex align-items-center text-white">
 					<span class="text-truncate text-truncate-sm d-inline-block">
@@ -206,7 +206,7 @@
 					</li>
 				@endcan
 				@can('old_skl_access')
-					<li 
+					<li
 						class="{{ request()->is('admin/task/user/oldskl/index') || request()->is('admin/task/user/oldskl/*') ? 'active' : '' }}">
 						<a href="{{route('admin.task.user.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
 							data-filter-tags="surat keterangan lunas lama dulu old">
@@ -216,11 +216,11 @@
 					</li>
 				@endcan
 				@can('kelompoktani_access')
-					<li class="{{ request()->is('admin/task/masterpenangkar') 
-						|| request()->is('admin/task/kelompoktani') 
+					<li class="{{ request()->is('admin/task/masterpenangkar')
+						|| request()->is('admin/task/kelompoktani')
 						|| request()->is('admin/task/masterpoktan')
-						|| request()->is('admin/task/kelompoktani/*') 
-						|| request()->is('admin/task/pks') 
+						|| request()->is('admin/task/kelompoktani/*')
+						|| request()->is('admin/task/pks')
 						|| request()->is('admin/task/pks/*') ? 'active open' : '' }}">
 						<a href="#" title="Kelompok tani"
 							data-filter-tags="data master kelompoktani poktan penangkar pks">
@@ -233,7 +233,7 @@
 									{{-- for later use only --}}
 								@else
 								@endif
-								<li class="c-sidebar-nav-item {{ request()->is('admin/task/penangkar') 
+								<li class="c-sidebar-nav-item {{ request()->is('admin/task/penangkar')
 									|| request()->is('admin/task/penangkar/*') ? 'active' : '' }}">
 									<a href="{{route('admin.task.penangkar')}}" title="Daftar Penangkar Benih Bawang Putih Berlabel"
 										data-filter-tags="daftar master penangkar benih">
@@ -287,7 +287,7 @@
 							@endphp
 
 							@if ($unverified > 0)
-								<span class="dl-ref bg-primary-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
 							@endif
 						</a>
 					</li>
@@ -310,9 +310,9 @@
 						</a>
 					</li>
 				@endcan
-				
+
 				@can('old_skl_access')
-					<li 
+					<li
 						class="{{ request()->is('verification/oldskl/index') || request()->is('verification/oldskl/*') ? 'active' : '' }}">
 						<a href="{{route('verification.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
 							data-filter-tags="surat keterangan lunas lama dulu old">
@@ -367,8 +367,8 @@
 			{{-- pengelolaan berkas --}}
 			{{-- @can('folder_access')
 				<li class="nav-title">Pengelolaan Berkas</li>
-				<li class="{{ request()->is('admin/task/berkas*') 
-					|| request()->is('admin/task/galeri*') 
+				<li class="{{ request()->is('admin/task/berkas*')
+					|| request()->is('admin/task/galeri*')
 					|| request()->is('admin/task/template*') ? 'active open' : '' }} ">
 					<a href="#" title="Pengelolaan Berkas"
 						data-filter-tags="pengelolaan manajemen manajer berkas file unggahan unduhan foto">
@@ -376,22 +376,22 @@
 						<span class="nav-link-text">{{ trans('cruds.folder.title_lang') }}</span>
 					</a>
 					<ul>
-						
+
 						@can('berkas_access')
-							<li class="c-sidebar-nav-item {{ request()->is('admin/task/berkas') 
+							<li class="c-sidebar-nav-item {{ request()->is('admin/task/berkas')
 								|| request()->is('admin/task/berkas/*') ? 'active' : '' }}">
 								<a href="{{ route('admin.task.berkas') }} javascript:void()" title="Berkas"
-									data-filter-tags="berkas file unggahan unduhan" class="disabled"> 
+									data-filter-tags="berkas file unggahan unduhan" class="disabled">
 									<i class="fa-fw fal fa-file c-sidebar-nav-icon"></i>
 									<span class="nav-link-text">{{ trans('cruds.berkas.title_lang') }}</span>
 								</a>
 							</li>
 						@endcan
 						@can('galeri_access')
-						
-							<li class="c-sidebar-nav-item {{ request()->is('admin/task/galeri') 
+
+							<li class="c-sidebar-nav-item {{ request()->is('admin/task/galeri')
 								|| request()->is('admin/task/skl/*') ? 'active' : '' }}">
-								
+
 								<a href="{{ route('admin.task.galeri') }} javascript:void()" title="Galeri"
 									data-filter-tags="galeri gallery daftar foto">
 									<i class="fa-fw fal fa-images c-sidebar-nav-icon"></i>
@@ -400,7 +400,7 @@
 							</li>
 						@endcan
 						@can('template_access')
-							<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') 
+							<li class="c-sidebar-nav-item {{ request()->is('admin/task/template')
 								|| request()->is('admin/task/template/*') ? 'active' : '' }}">
 								<a href="{{ route('admin.task.template') }}" title="Skl"
 									data-filter-tags="daftar berkas file template">
@@ -422,7 +422,7 @@
 			@can('feedmsg_access')
 				<li class="nav-title">BERITA & PESAN</li>
 				@can('feeds_access')
-					<li class="{{ request()->is('admin/posts*') 
+					<li class="{{ request()->is('admin/posts*')
 						|| request()->is('admin/categories*') ? 'active open' : '' }}">
 						<a href="#" title="Artikel/Berita"
 							data-filter-tags="artikel berita informasi">
@@ -431,7 +431,7 @@
 						</a>
 						<ul>
 							@can('feeds_access')
-							<li class="c-sidebar-nav-item {{ request()->is('admin/categories') 
+							<li class="c-sidebar-nav-item {{ request()->is('admin/categories')
 								|| request()->is('admin/categories/*') ? 'active' : '' }}">
 								<a href="{{ route('admin.categories.index') }}" title="Categories"
 									data-filter-tags="categories kategori">
@@ -439,7 +439,7 @@
 									Categories
 								</a>
 							</li>
-							<li class="c-sidebar-nav-item {{ request()->is('admin/posts') 
+							<li class="c-sidebar-nav-item {{ request()->is('admin/posts')
 								|| request()->is('admin/posts/*') ? 'active' : '' }}">
 								<a href="{{ route('admin.posts.index') }}" title="Posts"
 									data-filter-tags="post artikel berita">
@@ -453,7 +453,7 @@
 				@endcan
 				@can('messenger_access')
 					@php($unread = \App\Models\QaTopic::unreadCount())
-					<li class="c-sidebar-nav-item {{ request()->is('admin/messenger') 
+					<li class="c-sidebar-nav-item {{ request()->is('admin/messenger')
 						|| request()->is('admin/messenger/*') ? 'active' : '' }}">
 						<a href="{{ route('admin.messenger.index') }}"
 							data-filter-tags="kirim pesan perpesanan send message messenger">
@@ -475,8 +475,8 @@
 				<li class="nav-title" data-i18n="nav.administation">ADMINISTRATOR</li>
 				{{-- user Management --}}
 				@can('user_management_access')
-					<li class="{{ request()->is('admin/permissions*') 
-						|| request()->is('admin/roles*') || request()->is('admin/users*') 
+					<li class="{{ request()->is('admin/permissions*')
+						|| request()->is('admin/roles*') || request()->is('admin/users*')
 						|| request()->is('admin/audit-logs*') ? 'active open' : '' }} ">
 						<a href="#" title="User Management"
 							data-filter-tags="setting permission user">
@@ -485,7 +485,7 @@
 						</a>
 						<ul>
 							@can('permission_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/permissions') 
+								<li class="c-sidebar-nav-item {{ request()->is('admin/permissions')
 									|| request()->is('admin/permissions/*') ? 'active' : '' }}">
 									<a href="{{ route('admin.permissions.index') }}" title="Permission"
 										data-filter-tags="setting daftar permission user">
@@ -495,7 +495,7 @@
 								</li>
 							@endcan
 							@can('role_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/roles') 
+								<li class="c-sidebar-nav-item {{ request()->is('admin/roles')
 									|| request()->is('admin/roles/*') ? 'active' : '' }}">
 									<a href="{{ route('admin.roles.index') }}" title="Roles"
 										data-filter-tags="setting role user">
@@ -505,7 +505,7 @@
 								</li>
 							@endcan
 							@can('user_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/users') 
+								<li class="c-sidebar-nav-item {{ request()->is('admin/users')
 									|| request()->is('admin/users/*') ? 'active' : '' }}">
 									<a href="{{ route('admin.users.index') }}" title="User"
 										data-filter-tags="setting user pengguna">
@@ -515,7 +515,7 @@
 								</li>
 							@endcan
 							@can('audit_log_access')
-								<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs') 
+								<li class="c-sidebar-nav-item {{ request()->is('admin/audit-logs')
 									|| request()->is('admin/audit-logs/*') ? 'active' : '' }}">
 									<a href="{{ route('admin.audit-logs.index') }}" title="Audit Log"
 										data-filter-tags="setting log_access audit">
@@ -602,7 +602,7 @@
 					</li>
 				@endcan
 
-				
+
 				@can('varietas_access')
 					{{-- <li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
 						<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"

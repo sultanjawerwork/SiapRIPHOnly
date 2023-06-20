@@ -48,6 +48,7 @@ class LokasiCheck extends Model
 		'volume_verif',
 		'tgl_timbang',
 
+		'metode',
 		'onfarmstatus',
 		'onfarmnote',
 		'onfarmverif_at',

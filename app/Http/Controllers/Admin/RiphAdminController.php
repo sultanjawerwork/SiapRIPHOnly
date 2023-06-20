@@ -61,6 +61,11 @@ class RiphAdminController extends Controller
 		$importir = $request->input('importir');
 		$volumeRiph = $request->input('volumeRIPH');
 
+		if ($status == '') {
+			return redirect()->route('admin.riphAdmin.index')
+				->with('error', 'Tekan tombol cari terlebih dahulu! Anda dapat menyimpannya setelah data muncul pada kolom di bawah ini.');
+		}
+
 		if ($status == 'SUCCESS') {
 			$v_beban_tanam = $volumeRiph * 0.05 / 6;
 			$v_beban_produksi = $volumeRiph * 0.05;
