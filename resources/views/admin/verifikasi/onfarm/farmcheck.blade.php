@@ -143,7 +143,7 @@
 													</div>
 													<input id="mapId" name="mapId" placeholder="Id peta publik" class="form-control">
 													<div class="input-group-append">
-														
+
 														<button class="btn btn-default waves-effect waves-themed"
 															onclick="link_parser()">Open</button>
 													</div>
@@ -249,7 +249,7 @@
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
 										<input type="text" name="mod_noijin" value="{{$mod_noijin}}" hidden>
 										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
-										<table class="table table-striped table-bordered w-100" id="dataVerif">
+										<table class="table table-sm table-striped table-bordered w-100" id="dataVerif">
 											<thead>
 												<th class="text-center">Data</th>
 												<th class="text-center" style="width: 30%">Data Realisasi</th>
@@ -350,11 +350,11 @@
 									<div class="panel-content">
 										<div class="row">
 											<div class="col-md-6">
-												
+
 											</div>
 											<div class="form-group col-12">
 												<label for="">Catatan Pemeriksaan</label>
-												<textarea class="form-control form-control-sm" name="onfarmnote" id="onfarmnote" rows="7" required>{{ old('onfarmnote', $veriflokasi->onfarmnote) }}</textarea>
+												<textarea class="form-control form-control-sm" name="onfarmnote" id="onfarmnote" rows="3" required>{{ old('onfarmnote', $veriflokasi->onfarmnote) }}</textarea>
 												<small id="helpId" class="text-muted">Berikan catatan hasil pemeriksaan lapangan.</small>
 											</div>
 										</div>
@@ -407,17 +407,17 @@
 				name: "Dokumen Panen"
 			}
 		];
-	
+
 		pdfUrls.forEach(function (item) {
 			const option = document.createElement('option');
 			option.value = item.url;
 			option.textContent = item.name;
 			pdfSelect.appendChild(option);
 		});
-	
+
 		// Set the default value to the Tanam Doc url
 		pdfSelect.value = pdfUrls[0].url;
-	
+
 		pdfSelect.addEventListener('change', function () {
 			const pdfUrl = this.value;
 			pdfIframe.src = pdfUrl;

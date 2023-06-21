@@ -323,7 +323,7 @@ class CommitmentController extends Controller
 		$total_volume = $commitment->lokasi->sum('volume');
 
 
-		dd($total_volume);
+		// dd($total_volume);
 		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 	}
 

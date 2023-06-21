@@ -8,9 +8,9 @@
 			<div class="col-12">
 				<div class="text-center">
 					<i class="fal fa-badge-check fa-3x subheader-icon"></i>
-					<h2 class="display-5 d-block l-h-n m-0 fw-500 mb-2">{{$importir->name}}</h2>
+					<h2 class="display-5 d-block l-h-n m-0 fw-500 mb-2">{{$importir->company_name}}</h2>
 					<div class="row justify-content-center">
-						<p class="lead">{{$importir->company_name}}</p>
+						<p class="lead">{{$importir->name}}</p>
 					</div>
 				</div>
 				<div class="panel" id="panel-1">
@@ -68,7 +68,7 @@
 					</div>
 					<div class="panel-container show">
 						<div class="panel-content">
-							<table class="table table-striped table-bordered w-100" id="mainCheck">
+							<table class="table table-sm table-striped table-bordered w-100" id="mainCheck">
 								<thead>
 									<th class="text-muted text-uppercase">Data</th>
 									<th class="text-muted text-uppercase">Kewajiban</th>
@@ -123,19 +123,20 @@
 						</div>
 					</div>
 					<div class="card-header show">
-						<div class="d-flex justify-content-between align-item-center">
-							<div class="form-group row">
-							</div>
-							<div>
+						<div class="d-flex justify-content-between align-items-center">
+							@if (empty($skl->skl_upload))
+								<a href="{{route('verification.draft.skl', $skl->id)}}" class="btn btn-sm btn-primary">
+									<i class="fas fa-file-invoice mr-1"></i>Draft SKL
+								</a>
 								<form action="{{route('verification.skl.recomendations.store', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH terkait?')">
-									<a class="btn btn-sm btn-danger" href="{{route('verification.skl.recomendations')}}" role="button"><i class="fal fa-times text-align-center mr-1"></i> Batalkan</a>
+									<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendations')}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
 									@csrf
 									@method('PUT')
-									<button class="btn btn-sm btn-primary" type="submit">
-										<i class="fas fa-upload text-align-center mr-1"></i> Terbitkan
+									<button class="btn btn-sm btn-danger" type="submit">
+										<i class="fas fa-upload text-align-center mr-1"></i>Terbitkan SKL
 									</button>
 								</form>
-							</div>
+							@endif
 						</div>
 					</div>
 				</div>

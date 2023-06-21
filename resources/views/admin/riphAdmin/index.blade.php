@@ -12,7 +12,7 @@
 				<div class="form-group col-md-2">
 					<label for="" class="col-form-label mr-2">Status:</label>
 					<span id="keterangan"></span>
-					<input type="text" id="status" name="status">
+					<input type="text" id="status" name="status" hidden>
 				</div>
 				<div class="col-md-10">
 					<div class="row">
@@ -31,10 +31,10 @@
 							<div class="input-group">
 								<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="Pilih Tahun" aria-label="Pilih tahun" aria-describedby="basic-addon2">
 								<div class="input-group-append">
-									<button class="btn btn-primary btn-sm" type="button" id="fetchDataButton" data-toggle="collapse" data-target="#responseData">
+									<button class="btn btn-primary btn-sm" type="button" id="fetchDataButton" data-toggle="collapse" data-target="#responseData" title="Cari data">
 										<i class="fal fa-search"></i></button>
 									</button>
-									<button class="btn btn-warning btn-sm" type="submit">
+									<button class="btn btn-warning btn-sm" title="Simpan data" type="submit">
 										<i class="fal fa-save"></i></button>
 									</button>
 								</div>

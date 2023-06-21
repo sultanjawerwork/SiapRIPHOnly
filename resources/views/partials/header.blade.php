@@ -2,6 +2,14 @@
 @php($unreadmsg = \App\Models\QaTopic::unreadCount())
 @php($msgs = \App\Models\QaTopic::unreadMsg())
 
+@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+@php($cntpengajuan = \App\Models\Pengajuan::newPengajuanCount())
+@php($newpengajuan = \App\Models\Pengajuan::getNewPengajuan())
+@else
+@php($cntpengajuan = 0)
+@php($newpengajuan = null)
+@endif
+
 <header class="page-header" role="banner">
     <!-- we need this logo when user switches to nav-function-top -->
     <div class="page-logo">
@@ -51,16 +59,19 @@
 
 
             <a href="#" class="header-icon" data-toggle="dropdown"
-                title="You got {{ $unreadmsg }} notifications">
+                title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+                , {{ $cntpengajuan }} pengajuan baru @endif">
                 <i class="fal fa-envelope"></i>
-                <span class="badge badge-icon">{{ $unreadmsg }}</span>
+                <span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan}} </span>
             </a>
             <div class="dropdown-menu dropdown-menu-animated dropdown-xl">
                 <div
                     class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
                     <h4 class="m-0 text-center color-white">
-
-                        <small class="mb-0 opacity-80">{{ $unreadmsg }} Notifikasi baru</small>
+                        @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+                            <small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
+                        @endif
+                        <small class="mb-0 opacity-80">{{ $unreadmsg }} Pesan baru</small>
                     </h4>
                 </div>
                 <ul class="nav nav-tabs nav-tabs-clean" role="tablist">
@@ -68,11 +79,13 @@
                         <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-messages"
                             data-i18n="drpdwn.messages">Pesan</a>
                     </li>
-                    {{-- <li class="nav-item">
+                    @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+                        
+                    <li class="nav-item">
                         <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds"
-                            data-i18n="drpdwn.feeds">Artikel & Berita</a>
-                    </li> --}}
-
+                            data-i18n="drpdwn.feeds">Pengajuan</a>
+                    </li>
+                    @endif
                 </ul>
                 <div class="tab-content tab-notification">
 
@@ -110,25 +123,23 @@
                     <div class="tab-pane" id="tab-feeds" role="tabpanel">
                         <div class="custom-scroll h-100">
                             <ul class="notification">
-                                {{-- @foreach ($posts as $post) --}}
-                                <li class="unread">
-                                    <div class="d-flex align-items-center show-child-on-hover">
-                                        <span class="d-flex flex-column flex-1">
-                                            <span class="name d-flex align-items-center">Administrator <span
-                                                    class="badge badge-success fw-n ml-1">UPDATE</span></span>
-                                            <span class="msg-a fs-sm">
-                                                System updated to version <strong>4.5.1</strong> <a
-                                                    href="docs_buildnotes.html">(patch notes)</a>
+                                @if ($newpengajuan)
+                                    @foreach ($newpengajuan as $pengajuan)
+                                    <li class="unread">
+                                        <a href="{{ route('verification.data.check', [$pengajuan->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+                                            <span class="d-flex flex-column flex-1">
+                                                <span class="name d-flex align-items-center">{{ $pengajuan->datauser->company_name }} <span
+                                                        class="badge badge-success fw-n ml-1">New</span></span>
+                                                <span class="msg-a fs-sm">
+                                                    {{ $pengajuan->no_pengajuan }}
+                                                </span>
+                                                <span class="fs-nano text-muted mt-1">{{ $pengajuan->created_at->diffForHumans() }}</span>
                                             </span>
-                                            <span class="fs-nano text-muted mt-1">5 mins ago</span>
-                                        </span>
-                                        <div class="show-on-hover-parent position-absolute pos-right pos-bottom p-3">
-                                            <a href="#" class="text-muted" title="delete"><i
-                                                    class="fal fa-trash-alt"></i></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                {{-- @endforeach --}}
+                                            
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>

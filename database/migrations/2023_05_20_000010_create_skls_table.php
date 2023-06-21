@@ -26,6 +26,8 @@ return new class extends Migration
 			$table->text('nota_attch')->nullable();
 			$table->string('approved_by')->nullable();
 			$table->string('approved_at')->nullable();
+			$table->string('skl_upload')->nullable();
+			$table->string('skl_auto')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

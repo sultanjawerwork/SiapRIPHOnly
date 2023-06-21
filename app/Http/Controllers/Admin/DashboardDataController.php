@@ -148,45 +148,51 @@ class DashboardDataController extends Controller
 			->get();
 
 		$volumeImport = $commitments->sum('volume_riph');
-
 		$wajib_tanam = $commitments->sum('luas_wajib_tanam');
 		$wajib_produksi = $commitments->sum('volume_produksi');
-		$no_ijins = $commitments->pluck('no_ijin');
-		$pks = Pks::whereIn('no_ijin', $no_ijins)->get();
-		$lokasis = Lokasi::where('no_ijin', $no_ijins)->get();
-		$saprodis = Saprodi::where('no_ijin', $no_ijins)->get();
 
-		$jumlah_poktan = $pks->count('id');
-		$jumlah_anggota = $lokasis->count('id');
-		$realisasi_tanam = $lokasis->sum('luas_tanam');
-		$realisasi_produksi = $lokasis->sum('volume');
-		$total_saprodi = $saprodis->sum(function ($saprodi) {
-			return $saprodi->volume * $saprodi->harga;
-		});
+		$jumlah_poktan = $commitments->flatMap(function ($commitment) {
+			return $commitment->pks->pluck('id');
+		})->count();
+		$jumlah_anggota = $commitments->flatMap(function ($commitment) {
+			return $commitment->lokasi->pluck('id');
+		})->count();
+		$realisasi_tanam = $commitments->flatMap(function ($commitment) {
+			return $commitment->lokasi->pluck('luas_tanam');
+		})->sum();
+		$realisasi_produksi = $commitments->flatMap(function ($commitment) {
+			return $commitment->lokasi->pluck('volume');
+		})->sum();
 
-		$prosentanam = $realisasi_tanam / $wajib_tanam;
-		$prosenproduksi = $realisasi_produksi / $wajib_produksi;
 
-		$verifikasis = [];
-		foreach ($commitments as $commitment) {
-			$verifikasis = array_merge($verifikasis, $commitment->pengajuan->map(function ($verifikasi) {
-				return [
-					'no_pengajuan' => $verifikasi->no_pengajuan,
-					'commitment' => [
-						'datauser' => [
-							'company_name' => $verifikasi->commitment->datauser->company_name,
-						],
-					],
-					'no_ijin' => $verifikasi->commitment->no_ijin,
-
-					'status' => $verifikasi->status,
-					'onlinestatus' => $verifikasi->onlinestatus,
-					'onfarmstatus' => $verifikasi->onfarmstatus,
-				];
-			})->toArray());
-
-			// $skls[] = $commitment->skl ? $commitment->skl->toArray() : null;
+		if ($wajib_tanam == 0) {
+			$prosentanam = 0;
+		} else {
+			$prosentanam = $realisasi_tanam / $wajib_tanam;
 		}
+		if ($wajib_produksi == 0) {
+			$prosenproduksi = 0;
+		} else {
+			$prosenproduksi = $realisasi_produksi / $wajib_produksi;
+		}
+
+		$allPengajuan = Pengajuan::whereNotNull('status')
+			->whereYear('created_at', $periodetahun)
+			->get();
+		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+			return [
+				'no_pengajuan' => $singlePengajuan->no_pengajuan,
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $singlePengajuan->commitment->datauser->company_name,
+					],
+				],
+				'no_ijin' => $singlePengajuan->commitment->no_ijin,
+				'status' => $singlePengajuan->status,
+				'onlinestatus' => $singlePengajuan->onlinestatus,
+				'onfarmstatus' => $singlePengajuan->onfarmstatus,
+			];
+		});
 
 		$data = [
 			'volumeImport'			=> $volumeImport,
@@ -196,7 +202,6 @@ class DashboardDataController extends Controller
 			'total_volume'			=> $realisasi_produksi,
 			'count_poktan'			=> $jumlah_poktan,
 			'count_anggota'			=> $jumlah_anggota,
-			'total_saprodi'			=> $total_saprodi,
 			'prosenTanam'			=> $prosentanam,
 			'prosenProduksi'		=> $prosenproduksi,
 			'verifikasis'			=> $verifikasis,

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: simevi
+-- Host: localhost    Database: lasimethris04
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `kecamatans`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kecamatans` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `kd_kab_id` int DEFAULT NULL,
-  `kd_kec` int NOT NULL,
-  `nm_kec` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kabupaten_id` int DEFAULT NULL,
+  `kecamatan_id` int NOT NULL,
+  `nama_kecamatan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `kd_bast` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lat` double(13,10) DEFAULT NULL,
   `lng` double(13,10) DEFAULT NULL,
@@ -34,9 +34,7 @@ CREATE TABLE `kecamatans` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `kecamatans_kd_kec_unique` (`kd_kec`),
-  KEY `kd_kab_fk_6477212` (`kd_kab_id`),
-  CONSTRAINT `kd_kab_fk_6477212` FOREIGN KEY (`kd_kab_id`) REFERENCES `kabupatens` (`kd_kab`)
+  UNIQUE KEY `kecamatans_kd_kec_unique` (`kecamatan_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-05  1:07:59
+-- Dump completed on 2023-06-20  3:48:02

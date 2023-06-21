@@ -4,7 +4,7 @@
 	@include('partials.subheader')
 	@can('online_access')
 		@include('partials.sysalert')
-		<div class="row">
+		<div class="row" id="contentToPrint">
 			@php
 				$npwp = str_replace(['.', '-'], '', $commitment->npwp);
 			@endphp
@@ -61,7 +61,7 @@
 							Ringkasan Data Realisasi
 						</h2>
 						<div class="panel-toolbar">
-							
+
 						</div>
 					</div>
 					<div class="panel-container show">
@@ -282,13 +282,13 @@
 											</td>
 											<td>{{$pkscheck->verif_at}}</td>
 											<td class="text-center">
-												@if ($pkscheck->status === '1')
+												@if ($pkscheck->status === '2')
 													<span class="badge btn-xs btn-icon btn-success"
 														data-toggle="tooltip" title
 														data-original-title="Pemeriksaan Selesai. Catatan: {{$pkscheck->note}}">
 														<i class="fa fa-check-circle"></i>
 													</span>
-												@elseif ($pkscheck->status === '2')
+												@elseif ($pkscheck->status === '3')
 													<span class="badge btn-xs btn-icon btn-danger" data-toggle="tooltip" title
 													data-original-title="Pemeriksaan Selesai, Pelaku usaha harus memperbaiki kekurangan. Catatan: {{$pkscheck->note}}">
 														<i class="fa fa-exclamation-circle"></i>
@@ -302,7 +302,7 @@
 											</td>
 											<td>
 												@if($pkscheck->id)
-													<a href="{{route('verification.data.pkscheck.edit', $pkscheck->poktan_id)}}" data-toggle="tooltip"
+													<a href="{{route('verification.data.pkscheck.edit', $pkscheck->id)}}" data-toggle="tooltip"
 														data-original-title="Ubah Pemeriksaan"
 														class="btn btn-xs btn-icon btn-primary mr-1">
 														<i class="fal fa-edit"></i>
@@ -355,7 +355,15 @@
 												</span>
 											@endif
 										</td>
-										<td>{{$lokasicheck->id}}</td>
+										<td>
+											@php
+												$noIjin = str_replace(['.','/'], '', $commitment->no_ijin);
+											@endphp
+											<a href="{{ route('verification.data.lokasicheck', ['noIjin' => $noIjin, 'anggota_id' => $lokasicheck->anggota_id]) }}"
+											class="btn btn-icon btn-xs btn-primary">
+											<i class="fal fa-search"></i>
+											</a>
+										</td>
 									</tr>
 									@endforeach
 								</tbody>
@@ -406,8 +414,8 @@
 								</div> --}}
 								<div class="row">
 									<div class="form-group col-md-6">
-										<label for="onlinestatus">Status Pemeriksaan</label>
-										<select class="custom-select" name="onlinestatus" id="onlinestatus">
+										<label for="onlinestatus" class="required">Status Pemeriksaan</label>
+										<select class="custom-select" name="onlinestatus" id="onlinestatus" required>
 											<option value="" hidden>-- pilih</option>
 											<option value="2" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '2' ? 'selected' : '' }}>Selesai</option>
 											<option value="3" {{ old('onlinestatus', $verifikasi ? $verifikasi->onlinestatus : '') == '3' ? 'selected' : '' }}>Perbaikan Data</option>
@@ -621,7 +629,7 @@
 			// get the input value and the current username from the page
 			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
-			
+
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				return true; // allow form submission

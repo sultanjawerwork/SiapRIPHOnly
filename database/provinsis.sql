@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: simevi
+-- Host: localhost    Database: lasimethris04
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `provinsis`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `provinsis` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `kd_prop` int NOT NULL,
-  `nm_prop` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `provinsi_id` int NOT NULL,
+  `nama` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `kd_bast` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lat` double(13,10) DEFAULT NULL,
   `lng` double(13,10) DEFAULT NULL,
@@ -33,8 +33,8 @@ CREATE TABLE `provinsis` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `provinsis_kd_prop_unique` (`kd_prop`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `provinsis_kd_prop_unique` (`provinsi_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-05  1:07:11
+-- Dump completed on 2023-06-20  3:48:45

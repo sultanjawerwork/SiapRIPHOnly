@@ -83,7 +83,7 @@ class SklOlderController extends Controller
 			$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
 			$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
 			$oldskl->sklfile = $filename;
-			$completed->url = $filePath;
+			$completed->skl_upload = $filePath;
 		}
 
 		$oldskl->save();

@@ -130,11 +130,13 @@
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Varietas</span>
 											<span class="fw-500">
-												@php
-													$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
-													$nama_varietas = $varietas->nama_varietas;
-												@endphp
-												{{$nama_varietas}}
+												@if ($pks->varietas_tanam)
+													@php
+														$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
+														$nama_varietas = $varietas->nama_varietas;
+													@endphp
+													{{$nama_varietas}}
+												@endif
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -149,11 +151,11 @@
 												<div class="row flex-column text-uppercase">
 													@php
 														$desa = \App\Models\MasterDesa::where('kelurahan_id', $pks->masterpoktan->id_kelurahan)->value('nama_desa');
-														
+
 														$kecamatan = \App\Models\MasterKecamatan::where('kecamatan_id', $pks->masterpoktan->id_kecamatan)->value('nama_kecamatan');
 
 														$kabupaten = \App\Models\MasterKabupaten::where('kabupaten_id', $pks->masterpoktan->id_kabupaten)->value('nama_kab');
-														
+
 														$provinsiId = substr($pks->masterpoktan->id_kabupaten, 0, 2);
 														$provinsi = \App\Models\MasterProvinsi::where('provinsi_id', $provinsiId)->value('nama');
 													@endphp
@@ -176,7 +178,7 @@
 									@include('partials.globaltoolbar')
 								</div>
 							</div>
-							<form action="{{route('verification.data.pkscheck.store', $pks->id)}}" method="POST" enctype="multipart/form-data">
+							<form action="{{route('verification.data.pkscheck.store', $pks->poktan_id)}}" method="POST" enctype="multipart/form-data">
 								@csrf
 								<div class="panel-container show">
 									<div class="panel-content">
@@ -195,8 +197,8 @@
 											<label for="">Status Pemeriksaan</label>
 											<select type="text" id="status" name="status" class="form-control form-control-sm" required>
 												<option hidden value="">- pilih status periksa</option>
-												<option value="1">Selesai</option>
-												<option value="2">Perbaikan</option>
+												<option value="2">Selesai</option>
+												<option value="3">Perbaikan</option>
 											</select>
 											<small id="helpId" class="text-muted">Berikan status hasil pemeriksaan.</small>
 										</div>
@@ -235,7 +237,7 @@
 			// get the input value and the current username from the page
 			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
-			
+
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				return true; // allow form submission

@@ -8,12 +8,12 @@
 
 @endsection
 @section('content')
-@include('partials.breadcrumb')
+{{-- @include('partials.breadcrumb') --}}
 @include('partials.subheaderwithfilter')
 @include('partials.sysalert')
 {{-- @can('commitment_show')  --}}
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-12">
 			<div class="panel" id="panel-1">
 				<div class="panel-container show">
 					<div id="allMap" style="height: 500px; width: 100%;" class="shadow-sm border-1"></div>
@@ -89,8 +89,11 @@
 
 <script>
     $(document).ready(function() {
-        $(".select2-tahun").select2({
+        $("#periodetahun").select2({
             placeholder: "--Pilih tahun",
+        });
+		$("#company").select2({
+            placeholder: "--Pilih Pelaku Usaha",
         });
 		// Add an event listener to the periodetahun select element
 			//

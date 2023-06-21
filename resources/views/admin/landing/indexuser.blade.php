@@ -4,10 +4,17 @@
 	@can('landing_access')
 		@php($unreadmsg = \App\Models\QaTopic::unreadCount())
 		@php($msgs = \App\Models\QaTopic::unreadMsg())
+		@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+			@php($cntpengajuan = \App\Models\Pengajuan::newPengajuanCount())
+			@php($newpengajuan = \App\Models\Pengajuan::getNewPengajuan())
+		@else
+			@php($cntpengajuan = 0)
+			@php($newpengajuan = null)
+		@endif
 		<div class="row mb-5">
 			<div class="col text-center">
 				<h1 class="hidden-md-down">Selamat Datang di Simethris,</h1><br>
-				<span class="display-4 fw-700 hidden-md-down">{{ Auth::user()->name }}</span>
+				<span class="display-4 fw-700 hidden-md-down">{{ Auth::user()->data_user->company_name ?? Auth::user()->name }}</span>
 				<h2 class="display-4 hidden-sm-up">Hallo, <span class="fw-700">{{ Auth::user()->name }}</span></h2>
 				<h4 class="hidden-md-down">
 					<p class="text-muted">{!! $quote !!}</p>
@@ -146,9 +153,52 @@
 						</div>
 					</div>
 				</div>
+				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+				<div id="panel-2" class="panel">
+					<div class="panel-hdr">
+						<h2>
+							<i class="subheader-icon fal fa-ballot-check mr-1"></i><span class="color-info-700 fw-700"
+								style="text-transform:uppercase">Pengajuan Baru</span>
+						</h2>
+						<div class="panel-toolbar">
+							<a href="{{ route('verification.data') }}" data-toggle="tooltip" title
+								data-original-title="Lihat semua pengajuan" class="btn btn-xs btn-warning waves-effect waves-themed"
+								type="button" href="/">Lihat</a>
+						</div>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content p-0">
+							<ul class="notification">
+								@foreach ($newpengajuan as $item)
+									<li>
+										<a href="{{ route('verification.data.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+											<span class="mr-2">
+												@if (!empty($item->data_user->logo))
+													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+														class="profile-image rounded-circle" alt="">
+												@else
+													<img src="{{ asset('/img/avatars/farmer.png') }}"
+														class="profile-image rounded-circle" alt="">
+												@endif
+											</span>
+											<span class="d-flex flex-column flex-1">
+												<span class="name">{{ $item->datauser->company_name }} <span
+													class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+												<span class="msg-a fs-sm">
+													{{ $item->no_pengajuan }}
+												</span>
+												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+											</span>
+										</a>
+									</li>
+								@endforeach
+							</ul>
+						</div>
+					</div>
+				</div>
+				@endif
 			</div>
 		</div>
-
 		<!-- Page Content -->
 	@endcan
 @endsection
@@ -158,24 +208,24 @@
 	<script>
 		$(document).ready(function() {
 			// initialize datatable
-			$('#dt_feeds').dataTable({
-				// pagingType: 'full_numbers',
-				responsive: true,
-				lengthChange: false,
-				pageLength: 10,
-				order: [
-					[0, 'desc']
-				],
-				dom:
+			// $('#dt_feeds').dataTable({
+			// 	// pagingType: 'full_numbers',
+			// 	responsive: true,
+			// 	lengthChange: false,
+			// 	pageLength: 10,
+			// 	order: [
+			// 		[0, 'desc']
+			// 	],
+			// 	dom:
 					
-					"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
-					"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
-					"<'row'<'col-sm-12't>>" +
-					"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-				buttons: [
+			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
+			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
+			// 		"<'row'<'col-sm-12't>>" +
+			// 		"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
+			// 	buttons: [
 					
-				]
-			});
+			// 	]
+			// });
 
 		});
 	</script>

@@ -137,33 +137,23 @@
 								<div class="row d-flex justify-content-between mb-3">
 									<input type="text" name="npwp" value="{{$npwp}}" hidden>
 									<input type="text" name="noIjin" value="{{$noIjin}}" hidden>
-									<div class="col-md-7">
-										<div class="form-group">
-											<label for="">Catatan Hasil Pemeriksaan</label>
-											<textarea name="onfarmnote" id="onfarmnote" rows="7" class="form-control " required>{{ old('onfarmnote', $verifikasi ? $verifikasi->onfarmnote : '') }}</textarea>
-										</div>
-									</div>
-									<div class="col-md-5">
-										<div class="form-group">
-											<label for="">Luas Verifikasi (ha)</label>
-											<input name="luas_verif" id="luas_verif"class="form-control form-control-sm" required value="{{ old('luas_verif', $verifikasi ? $verifikasi->luas_verif : '') }}"
-											placeholder="wajib tanam: {{ number_format($verifikasi->commitment->volume_riph*0.05/6,2,',', '.')}}"/>
-											<span class="help-block">
-												Perkiraan total luas yang direalisasikan oleh Pelaku Usaha dari sampling yang diverifikasi.
-											</span>
-										</div>
-										<div class="form-group">
-											<label for="">Volume Verifikasi (ton)</label>
-											<input name="volume_verif" id="volume_verif"class="form-control form-control-sm" required value="{{ old('volume_verif', $verifikasi ? $verifikasi->volume_verif : '') }}" placeholder="wajib produksi: {{$verifikasi->commitment->volume_riph*0.05}}" />
-											<span class="help-block">
-												Perkiraan total panen yang direalisasikan oleh Pelaku Usaha dari sampling yang diverifikasi.
-											</span>
-										</div>
-									</div>
-								</div>
-								<div class="row">
 									<div class="form-group col-md-4">
-										<label class="form-label">
+										<label for="">Luas Verifikasi (ha)</label>
+										<input name="luas_verif" id="luas_verif"class="form-control" required value="{{ old('luas_verif', $verifikasi ? $verifikasi->luas_verif : '') }}"
+										placeholder="wajib tanam: {{ number_format($verifikasi->commitment->volume_riph*0.05/6,2,',', '.')}}"/>
+										<span class="help-block">
+											Perkiraan total luas yang direalisasikan oleh Pelaku Usaha.
+										</span>
+									</div>
+									<div class="form-group col-md-4">
+										<label for="">Volume Verifikasi (ton)</label>
+										<input name="volume_verif" id="volume_verif"class="form-control" required value="{{ old('volume_verif', $verifikasi ? $verifikasi->volume_verif : '') }}" placeholder="wajib produksi: {{$verifikasi->commitment->volume_riph*0.05}}" />
+										<span class="help-block">
+											Perkiraan total panen yang direalisasikan oleh Pelaku Usaha.
+										</span>
+									</div>
+									<div class="form-group col-md-4">
+										<label class="">
 											Berkas Berita Acara.
 											@if (!empty($verifikasi->baonfarm))
 											<a class="ml-1" href="" target="blank">(Lihat Berkas Berita Acara)</a>
@@ -182,15 +172,28 @@
 										</div>
 										<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
 									</div>
-									<div class="form-group col-md-3">
-										<label for="">Status Pemeriksaan</label>
+									<div class="form-group col-md-12">
+										<label for="">Catatan Hasil Pemeriksaan</label>
+										<textarea name="onfarmnote" id="onfarmnote" rows="3" class="form-control " required>{{ old('onfarmnote', $verifikasi ? $verifikasi->onfarmnote : '') }}</textarea>
+									</div>
+									<div class="form-group col-md-4">
+										<label for="">Metode Verifikasi</label>
+										<select name="metode" id="metode" class="custom-select">
+											<option value="" hidden>--pilih metode</option>
+											<option value="Onsite" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Onsite' ? 'selected' : '' }}>Onsite</option>
+											<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
+										</select>
+										<small id="helpId" class="text-muted">Metode verifikasi yang diterapkan.</small>
+									</div>
+									<div class="form-group col-md-4">
+										<label for="">Status Verifikasi</label>
 										<select class="custom-select" name="onfarmstatus" id="onfarmstatus">
-											<option value="" hidden>-- pilih</option>
+											<option value="" hidden>-- pilih status</option>
 											<option value="4" {{ old('onfarmstatus', $verifikasi ? $verifikasi->onfarmstatus : '') == '1' ? 'selected' : '' }}>Selesai</option>
 											<option value="5" {{ old('onfarmstatus', $verifikasi ? $verifikasi->onfarmstatus : '') == '2' ? 'selected' : '' }}>Perbaikan Data</option>
 										</select>
 									</div>
-									<div class="form-group col-md-5">
+									<div class="form-group col-md-4">
 										<label class="">Konfirmasi</label>
 										<div class="input-group">
 											<input type="text" class="form-control" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
@@ -258,7 +261,7 @@
 					}
 				]
 			});
-	
+
 			// Create the "Status" select element and add the options
 			var selectStatus = $('<select>')
 				.attr('id', 'selectdataPengajuanStatus')
@@ -267,12 +270,12 @@
 					var status = $(this).val();
 					table.column(7).search(status).draw();
 				});
-	
+
 			$('<option>').val('').text('Semua Status').appendTo(selectStatus);
 			$('<option>').val('1').text('Selesai').appendTo(selectStatus);
 			$('<option>').val('2').text('Perbaikan').appendTo(selectStatus);
 			$('<option>').val('3').text('Belum Periksa').appendTo(selectStatus);
-	
+
 			// Add the select element before the first datatable button in the second table
 			$('#dataPengajuan_wrapper .dt-buttons').before(selectStatus);
 		});

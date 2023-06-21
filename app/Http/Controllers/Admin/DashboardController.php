@@ -14,6 +14,7 @@ use App\Models\Lokasi;
 use App\Models\RiphAdmin;
 use App\Models\Saprodi;
 use App\Models\Pengajuan;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -57,8 +58,17 @@ class DashboardController extends Controller
 				$recomendationcount = $allPengajuan->where('status', '6')->count() > 0;
 				$lunascount = $allPengajuan->where('status', '7')->count() > 0;
 
-				$prosenTanam = $total_luastanam / $v_beban_tanam * 100;
-				$prosenProduksi = $total_volume / $v_beban_produksi * 100;
+				// $prosenTanam = $total_luastanam / $v_beban_tanam * 100;
+				$prosenTanam = 0; // Initialize the variable with a default value
+				$prosenProduksi = 0; // Initialize the variable with a default value
+
+				if ($v_beban_tanam != 0) {
+					$prosenTanam = $total_luastanam / $v_beban_tanam * 100;
+				}
+
+				if ($v_beban_produksi != 0) {
+					$prosenProduksi = $total_volume / $v_beban_produksi * 100;
+				}
 
 				// dd($prosenTanam);
 				return view('admin.dashboard.indexadmin', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'currentYear', 'riphData', 'company', 'jumlah_importir', 'v_pengajuan_import', 'v_beban_tanam', 'v_beban_produksi', 'total_luastanam', 'total_volume', 'allPengajuan', 'ajucount', 'proccesscount', 'verifiedcount', 'recomendationcount', 'lunascount', 'prosenTanam', 'prosenProduksi'));
@@ -93,32 +103,44 @@ class DashboardController extends Controller
 			$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
 			$currentYear = date('Y');
 
-			$commitments = PullRiph::whereYear('periodetahun', $currentYear)
+			$commitments = PullRiph::where('periodetahun',  $currentYear)
 				->where('npwp', $npwpuser)
 				->get();
-
 			$volumeImport = $commitments->sum('volume_riph');
-
 			$wajib_tanam = $commitments->sum('luas_wajib_tanam');
 			$wajib_produksi = $commitments->sum('volume_produksi');
-			$no_ijins = $commitments->pluck('no_ijin');
-			$pks = Pks::whereIn('no_ijin', $no_ijins)->get();
-			$lokasis = Lokasi::where('no_ijin', $no_ijins)->get();
-			$saprodis = Saprodi::where('no_ijin', $no_ijins)->get();
 
-			$jumlah_poktan = $pks->count('id');
-			$jumlah_anggota = $lokasis->count('id');
-			$realisasi_tanam = $lokasis->sum('luas_tanam');
-			$realisasi_produksi = $lokasis->sum('volume');
-			$total_saprodi = $saprodis->sum(function ($saprodi) {
-				return $saprodi->volume * $saprodi->harga;
-			});
-
-			$prosenTanam = $realisasi_tanam / $wajib_tanam;
-			$prosenProduksi = $realisasi_produksi / $wajib_produksi;
+			$jumlah_poktan = $commitments->flatMap(function ($commitment) {
+				return $commitment->pks->pluck('id');
+			})->count();
+			$jumlah_anggota = $commitments->flatMap(function ($commitment) {
+				return $commitment->lokasi->pluck('id');
+			})->count();
+			$realisasi_tanam = $commitments->flatMap(function ($commitment) {
+				return $commitment->lokasi->pluck('luas_tanam');
+			})->sum();
+			$realisasi_produksi = $commitments->flatMap(function ($commitment) {
+				return $commitment->lokasi->pluck('volume');
+			})->sum();
 
 
-			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'total_saprodi', 'prosenTanam', 'prosenProduksi', 'currentYear'));
+			if ($wajib_tanam == 0) {
+				$prosentanam = 0;
+			} else {
+				$prosentanam = $realisasi_tanam / $wajib_tanam;
+			}
+			if ($wajib_produksi == 0) {
+				$prosenproduksi = 0;
+			} else {
+				$prosenproduksi = $realisasi_produksi / $wajib_produksi;
+			}
+
+			$allPengajuan = Pengajuan::whereNotNull('status')
+				->whereYear('created_at', $currentYear)
+				->get(['no_pengajuan', 'no_ijin', 'status', 'onlinestatus', 'onfarmstatus']);
+
+
+			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'prosentanam', 'prosenproduksi', 'currentYear', 'allPengajuan'));
 		}
 		if (($roleaccess == 3)) {
 			$module_name = 'Dashboard';
@@ -152,9 +174,13 @@ class DashboardController extends Controller
 		])->get();
 
 		$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
+		$users = User::where('roleaccess', 2)
+			->has('data_user')
+			->get();
 
+		// dd($users);
 
-		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'anggotaMitras', 'page_desc', 'periodeTahuns'));
+		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'anggotaMitras', 'page_desc', 'periodeTahuns', 'users'));
 	}
 
 	public function monitoring(Request $request)

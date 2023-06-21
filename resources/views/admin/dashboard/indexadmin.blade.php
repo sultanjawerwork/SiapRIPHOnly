@@ -292,9 +292,9 @@
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->onlinestatus === '4')
+										@if ($pengajuan->onfarmstatus === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onlinestatus === '5')
+										@elseif ($pengajuan->onfarmstatus === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
@@ -322,26 +322,30 @@
 									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
 								</ul>
 							</div>
-							<div class="col-md-5 col-sm-6">
+							<div class="col-md-4 col-sm-6">
 								<ul>
-									<li>
-										<span class="btn btn-icon btn-xs btn-success">
-											<i class="fal fa-check-circle mr-1"></i>
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-check-circle"></i>
 										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
 									</li>
 									<li>
-										<span class="btn btn-icon btn-xs btn-danger">
-											<i class="fal fa-ban mr-1"></i>
+										<span class="btn btn-icon btn-xs btn-danger mr-1">
+											<i class="fa fa-ban"></i>
 										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
 									</li>
-									<li>
-										<span class="btn btn-icon btn-xs btn-info">
-											<i class="fal fa-file-signature mr-1"></i>
+								</ul>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li class="mb-1">
+										<span class="btn btn-icon btn-xs btn-info mr-1">
+											<i class="fa fa-file-signature"></i>
 										</span> : Rekomendasi penerbitan SKL.</span>.
 									</li>
 									<li>
-										<span class="btn btn-icon btn-xs btn-success">
-											<i class="fal fa-award mr-1"></i>
+										<span class="btn btn-icon btn-xs btn-success mr-1">
+											<i class="fa fa-award"></i>
 										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
 									</li>
 								</ul>
@@ -483,28 +487,28 @@
 						});
 
 						var dataCell = $('<td class="text-center"></td>').html(function() {
-							if (verifikasi.status === '2') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
-							} else if (verifikasi.status === '3') {
-								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
+							if (verifikasi.onlinestatus === '2') {
+								return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
+							} else if (verifikasi.onlinestatus === '3') {
+								return '<span class="btn btn-xs btn-danger"><i class="fa fa-ban"></i></span>';
 							}
 						});
 
 						var lapanganCell = $('<td class="text-center"></td>').html(function() {
 							if (verifikasi.status === '2' && !verifikasi.onfarmstatus) {
-								return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diperiksa</span>';
-							} else if (verifikasi.status === '4') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
-							} else if (verifikasi.status === '5') {
-								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
+								return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
+							} else if (verifikasi.onfarmstatus === '4') {
+								return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
+							} else if (verifikasi.onfarmstatus === '5') {
+								return '<span class="btn btn-xs btn-icon btn-btn"><i class="fa fa-ban"></i></span>';
 							}
 						});
 
-						var lunasCell = $('<td></td>').html(function() {
+						var lunasCell = $('<td class="text-center"></td>').html(function() {
 							if (verifikasi.status === '6') {
-								return '<span class="badge badge-xs badge-primary"><i class="fal fa-file-signature mr-1"></i>Rekomendasi</span>';
+								return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-file-signature"></i></span>';
 							} else if (verifikasi.status === '7') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span> <span hidden>7</span>';
+								return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span> <span hidden>7</span>';
 							}
 						});
 

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
--- Host: localhost    Database: simevi
+-- Host: localhost    Database: lasimethris04
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `kabupatens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `kabupatens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `kd_prop_id` int DEFAULT NULL,
-  `kd_kab` int NOT NULL,
+  `provinsi_id` int DEFAULT NULL,
+  `kabupaten_id` int NOT NULL,
   `nama_kab` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `lat` double(13,10) DEFAULT NULL,
   `lng` double(13,10) DEFAULT NULL,
@@ -34,9 +34,7 @@ CREATE TABLE `kabupatens` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `kabupatens_kd_kab_unique` (`kd_kab`),
-  KEY `kd_prop_fk_6477198` (`kd_prop_id`),
-  CONSTRAINT `kd_prop_fk_6477198` FOREIGN KEY (`kd_prop_id`) REFERENCES `provinsis` (`kd_prop`)
+  UNIQUE KEY `kabupatens_kd_kab_unique` (`kabupaten_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=615 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-05  1:07:38
+-- Dump completed on 2023-06-20  3:48:21

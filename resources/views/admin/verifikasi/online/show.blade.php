@@ -119,7 +119,7 @@
 												</span>
 												<span class="d-none d-print-block text-success fw-500">Terpenuhi</span>
 											@else
-												<span class="badge btn-xs btn-icon btn-success" title="Tidak terpenuhi">
+												<span class="badge btn-xs btn-icon btn-danger" title="Tidak terpenuhi">
 													<i class="fa fa-exclamation-circle"></i>
 												</span>
 												<span class="d-none d-print-block text-success fw-500">Tidak terpenuhi</span>
@@ -136,7 +136,7 @@
 												</span>
 												<span class="d-none d-print-block text-success fw-500">Terpenuhi</span>
 											@else
-												<span class="badge btn-xs btn-icon btn-success" title="Tidak terpenuhi">
+												<span class="badge btn-xs btn-icon btn-danger" title="Tidak terpenuhi">
 													<i class="fa fa-exclamation-circle"></i>
 												</span>
 												<span class="d-none d-print-block text-success fw-500">Tidak terpenuhi</span>
@@ -285,12 +285,12 @@
 										<td>{{$pksmitra->pks->no_perjanjian}}</td>
 										<td>{{$pksmitra->pks->masterpoktan->nama_kelompok}}</td>
 										<td>
-											@if($pksmitra->status === '1')
+											@if($pksmitra->status === '2')
 												<span class="badge btn-xs btn-icon btn-success" title="Selesai">
 													<i class="fa fa-check-circle"></i>
 												</span>
 												<span class="d-none d-print-block text-success fw-500">Selesai</span>
-											@elseif($pksmitra->status === '2')
+											@elseif($pksmitra->status === '3')
 												<span class="badge btn-xs btn-icon btn-danger" title="Perbaikan">
 													<i class="fa fa-exclamation-circle"></i>
 												</span>

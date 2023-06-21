@@ -14,6 +14,7 @@ class Pengajuan extends Model
 	use SoftDeletes;
 	use Auditable;
 	use RandomId;
+	use \Awobaz\Compoships\Compoships;
 
 
 	public $table = 'pengajuans';
@@ -50,6 +51,7 @@ class Pengajuan extends Model
 		//onfarm
 		'luas_verif',
 		'volume_verif',
+		'metode',
 		'onfarmstatus',
 		'onfarmnote',
 		'onfarmdate',
@@ -69,6 +71,11 @@ class Pengajuan extends Model
 	public static function newPengajuanCount(): int
 	{
 		return self::whereNull('onlinedate')->count();
+	}
+
+	public static function getNewPengajuan()
+	{
+		return self::whereNull('onlinedate')->get();
 	}
 
 	public function NewOnlineRequest(): int
@@ -101,7 +108,7 @@ class Pengajuan extends Model
 
 	public function datauser()
 	{
-		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+		return $this->belongsTo(DataUser::class, ['npwp_company'], ['npwp']);
 	}
 
 	public function skl()

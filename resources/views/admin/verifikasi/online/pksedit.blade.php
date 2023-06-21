@@ -1,7 +1,5 @@
 @extends('layouts.admin')
 @section('styles')
-
-
 @endsection
 @section('content')
 	@include('partials.breadcrumb')
@@ -9,6 +7,9 @@
 	@can('online_access')
 		@include('partials.sysalert')
 		<div class="row d-flex">
+			@php
+				$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+			@endphp
 			<div class="col-12">
 				<div id="panel-1" class="panel">
 					<div class="panel-container show">
@@ -23,7 +24,7 @@
 											</span>
 										</div>
 										<input type="text" class="form-control form-control-sm" id="no_pengajuan"
-											value="{{$verifpks->verifcommit->pengajuanV2->no_pengajuan}}" disabled>
+											value="{{$verifikasi->no_pengajuan}}" disabled>
 									</div>
 									<span class="help-block">Nomor Pengajuan Verifikasi.</span>
 								</div>
@@ -36,9 +37,9 @@
 											</span>
 										</div>
 										<input type="text" class="form-control form-control-sm" id="no_ijin"
-											value="{{$verifpks->verifcommit->pengajuanv2->commitmentbackdate->no_ijin}}" disabled>
+											name="no_ijin" value="{{$verifikasi->no_ijin}}" disabled>
 									</div>
-									<span class="help-block">Nomor Ijin RIPH.</span>
+									<span class="help-block">Nomor Pengajuan Verifikasi.</span>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="form-label" for="statusVerif">Tanggal Pengajuan</label>
@@ -49,9 +50,9 @@
 											</span>
 										</div>
 										<input type="text" class="form-control form-control-sm" id="created_at"
-											value="{{$verifpks->pengajuanV2->created_at}}" disabled>
+											value="{{ date('d-m-Y', strtotime($verifikasi->created_at)) }}" disabled>
 									</div>
-									<span class="help-block">Tanggal pengajuan permohonan dibuat.</span>
+									<span class="help-block">Status Pemeriksaan</span>
 								</div>
 							</div>
 						</div>
@@ -69,10 +70,10 @@
 								@include('partials.globaltoolbar')
 							</div>
 						</div>
-						@if ($verifpks->pksmitra->berkas_pks)
+						@if ($pks->berkas_pks)
 							<div class="panel-container show card-body embed-responsive embed-responsive-16by9">
 								<iframe class="embed-responsive-item"
-									src="{{ url('storage/docs/' . $verifpks->verifcommit->pengajuanv2->commitmentbackdate->periodetahun . '/commitment_'.$verifpks->verifcommit->pengajuanv2->commitmentbackdate->id.'/pks/'.$verifpks->pksmitra->berkas_pks) }}" width="100%" frameborder="0">
+									src="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$pks->berkas_pks) }}" width="100%" frameborder="0">
 								</iframe>
 							</div>
 						@else
@@ -99,51 +100,65 @@
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Nomor Perjanjian</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->no_perjanjian}}
+												{{$pks->no_perjanjian}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Kelompoktani</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->masterkelompok->nama_kelompok}}
+												{{$pks->masterpoktan->nama_kelompok}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Berlaku sejak</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->tgl_perjanjian_start}}
+												{{$pks->tgl_perjanjian_start}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Berakhir pada</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->tgl_perjanjian_end}}
+												{{$pks->tgl_perjanjian_end}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Luas Rencana</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->luas_rencana}} ha
+												{{$pks->luas_rencana}} ha
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Varietas</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->varietas_tanam}}
+												@php
+													$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
+													$nama_varietas = $varietas->nama_varietas;
+												@endphp
+												{{$nama_varietas}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Periode Tanam</span>
 											<span class="fw-500">
-												{{$verifpks->pksmitra->periode_tanam}}
+												{{$pks->periode_tanam}}
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Lokasi Perjanjian</span>
 											<span class="fw-500 text-right">
 												<div class="row flex-column text-uppercase">
-													<span>Desa/Kel. {{$verifpks->pksmitra->desa->nama_desa}} - Kec. {{$verifpks->pksmitra->kecamatan->nama_kecamatan}}</span>
-													<span>{{$verifpks->pksmitra->kabupaten->nama_kab}} - {{$verifpks->pksmitra->provinsi->nama}}</span>
+													@php
+														$desa = \App\Models\MasterDesa::where('kelurahan_id', $pks->masterpoktan->id_kelurahan)->value('nama_desa');
+
+														$kecamatan = \App\Models\MasterKecamatan::where('kecamatan_id', $pks->masterpoktan->id_kecamatan)->value('nama_kecamatan');
+
+														$kabupaten = \App\Models\MasterKabupaten::where('kabupaten_id', $pks->masterpoktan->id_kabupaten)->value('nama_kab');
+
+														$provinsiId = substr($pks->masterpoktan->id_kabupaten, 0, 2);
+														$provinsi = \App\Models\MasterProvinsi::where('provinsi_id', $provinsiId)->value('nama');
+													@endphp
+													<span>Desa/Kel. {{$desa}} - Kec. {{$kecamatan}}</span>
+													<span>{{$kabupaten}} - {{$provinsi}}</span>
 												</div>
 											</span>
 										</li>
@@ -161,28 +176,29 @@
 									@include('partials.globaltoolbar')
 								</div>
 							</div>
-							<form action="{{route('admin.task.onlinev2.pks.update', $verifpks->id)}}" method="POST" enctype="multipart/form-data">
+							<form action="{{route('verification.data.pkscheck.update', $pkscheck->id)}}" method="POST" enctype="multipart/form-data">
 								@csrf
-								@method('PUT')
+								@method('put')
 								<div class="panel-container show">
 									<div class="panel-content">
+										{{$pkscheck->id}}
+										<input type="text" name="pks_id" value="{{$pks->id}}" hidden>
+										<input type="text" name="poktan_id" value="{{$pks->poktan_id}}" hidden>
+										<input type="text" name="commitmentcheck_id" value="{{$commitmentcheck->id}}" hidden>
+										<input type="text" name="pengajuan_id" value="{{$verifikasi->id}}" hidden>
+										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
+										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
 										<div class="form-group">
 											<label for="">Catatan Pemeriksaan</label>
-											<textarea class="form-control form-control-sm" name="note" id="note" rows="3" required>{{ old('note', $verifpks ? $verifpks->note : '') }}</textarea>
-											<small id="helpId" class="text-muted">Berikan catatan hasil pemeriksaan.</small>
+											<textarea class="form-control form-control-sm" name="note" id="note" rows="3" required>{{$pkscheck->note}}</textarea>
+											<small id="helpId" class="text-muted">Berikan catatan atau keterangan hasil pemeriksaan.</small>
 										</div>
 										<div class="form-group">
 											<label for="">Status Pemeriksaan</label>
 											<select type="text" id="status" name="status" class="form-control form-control-sm" required>
-												<option hidden value="">- pilih status periksa</option>
-												<option value="1"
-													{{ $verifpks && $verifpks->status == '1' ? 'selected' : '' }}>
-													Selesai
-												</option>
-												<option value="2"
-													{{ $verifpks && $verifpks->status == '2' ? 'selected' : '' }}>
-													Perbaikan
-												</option>
+												{{-- <option hidden value="">- pilih status periksa</option> --}}
+												<option value="2" {{ old('status', $pkscheck->status) == '2' ? 'selected' : '' }}>Selesai</option>
+												<option value="3" {{ old('status', $pkscheck->status) == '3' ? 'selected' : '' }}>Perbaikan</option>
 											</select>
 											<small id="helpId" class="text-muted">Berikan status hasil pemeriksaan.</small>
 										</div>
@@ -221,7 +237,7 @@
 			// get the input value and the current username from the page
 			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
-			
+
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				return true; // allow form submission
