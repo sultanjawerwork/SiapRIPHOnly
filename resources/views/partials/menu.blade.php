@@ -191,27 +191,16 @@
 					</li>
 				@endcan
 				{{-- Skl terbit --}}
+
 				@can('permohonan_access')
-					<li class="c-sidebar-nav-item {{request()->is('admin/task/user/skl')
-						|| request()->is('admin/task/user/skl*')? 'active' : '' }}">
-						@if (Auth::user()->roles[0]->title == 'User')
-						<a href="{{route('admin.task.user.skl')}}" title="Daftar SKL Terbit/RIPH Lunas"
-							data-filter-tags="daftar skl riph lunas">
-							<i class="fa-fw fal fa-award c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Daftar SKL Terbit</span>
-						</a>
-						@else
-							{{-- for later use --}}
-						@endif
-					</li>
-				@endcan
-				@can('old_skl_access')
-					<li
-						class="{{ request()->is('admin/task/user/oldskl/index') || request()->is('admin/task/user/oldskl/*') ? 'active' : '' }}">
-						<a href="{{route('admin.task.user.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
-							data-filter-tags="surat keterangan lunas lama dulu old">
-							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">SKL Terdahulu</span>
+					<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
+						request()->is('admin/task/skl/index') ? 'active' : '' }}">
+						<a href="{{ route('admin.task.skl.index') }}"
+							data-filter-tags="verifikasi selesai">
+							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+							<span class="nav-link-text text-wrap">
+								Daftar SKL Terbit
+							</span>
 						</a>
 					</li>
 				@endcan
@@ -354,12 +343,14 @@
 						@endif
 					</a>
 				</li>
-				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/publish*') ? 'active' : '' }}">
-					<a href="{{ route('verification.skl.publishes') }}"
-						data-filter-tags="daftar skl diterbitkan"
-						title="Daftar SKL yang telah diterbitkan">
-						<i class="fa-fw fal fa-file-certificate c-sidebar-nav-icon"></i>
-						SKL Diterbitkan
+				<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
+					request()->is('verification/arsip/completed*') ? 'active' : '' }}">
+					<a href="{{ route('verification.arsip.completed') }}"
+						data-filter-tags="verifikasi selesai">
+						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+						<span class="nav-link-text text-wrap">
+							SKL Diterbitkan
+						</span>
 					</a>
 				</li>
 			@endif

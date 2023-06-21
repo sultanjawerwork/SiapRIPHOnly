@@ -48,14 +48,21 @@
 													@endif
 												</td>
 												<td class="text-center">
-													@if($recomend->skl?->published_date)
-														<a href="{{route('verification.skl.show', $recomend->skl->id)}}" class="btn btn-xs btn-icon btn-success" title="SKL sudah terbit.">
-															<i class="fal fa-file-certificate"></i>
-														</a>
-													@elseif($recomend->skl && $recomend->skl->created_at && !$recomend->skl->published_date)
+													@if($recomend->skl && $recomend->skl->created_at && !$recomend->skl->published_date)
 														<span class="btn btn-xs btn-icon btn-info" title="Sudah direkomendasikan kepada pimpinan.">
 															<i class="fal fa-check"></i>
 														</span>
+													@elseif($recomend->skl && $recomend->skl?->approved_by && !$recomend->skl?->skl_upload)
+														<a href="{{route('verification.skl.printReadySkl', $recomend->skl->id)}}" class="btn btn-xs btn-icon btn-danger" title="Disetujui. Segera cetak SKL">
+															<i class="fal fa-print"></i>
+														</a>
+														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$recomend->id}}">
+															<i class="fas fa-upload text-align-center mr-1"></i>
+														</button>
+													@elseif($recomend->skl && $recomend->skl?->skl_upload)
+														<a href="{{route('verification.skl.show', $recomend->skl->id)}}" class="btn btn-xs btn-icon btn-success" title="SKL sudah terbit.">
+															<i class="fal fa-award"></i>
+														</a>
 													@else
 														<button class="btn btn-xs btn-primary" type="button" title="Rekomendasikan kepada Pimpinan" data-toggle="modal" data-target="#modal{{$recomend->id}}">
 															<i class="fas fa-upload text-align-center mr-1"></i>Rekomendasi
@@ -98,6 +105,46 @@
 																	</button>
 																	<button class="btn btn-primary btn-sm" type="submit">
 																		<i class="fal fa-upload"></i> Rekomendasikan
+																	</button>
+																</div>
+															</form>
+														</div>
+													</div>
+												</div>
+												{{-- modal upload skl --}}
+												<div class="modal fade" id="modalUploadSkl{{$recomend->id}}"
+													tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+													<div class="modal-dialog modal-dialog-center" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<div>
+																	<h5 class="modal-title" id="myModalLabel">Unggah Berkas SKL</h5>
+																	<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
+																</div>
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<form action="{{route('verification.skl.sklUpload', $recomend->skl->id)}}" method="post" enctype="multipart/form-data">
+																@csrf
+																@method('put')
+																<div class="modal-body">
+																	<div class="form-group">
+																		<label class="">Unggah hasil cetak SKL</label>
+																		<div class="custom-file input-group">
+																			<input type="file" class="custom-file-input" name="skl_upload" id="skl_upload">
+																			<label class="custom-file-label" for="">Pilih berkas...</label>
+																		</div>
+																		<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
+																	</div>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-warning btn-sm"
+																		data-dismiss="modal">
+																		<i class="fal fa-times-circle text-danger fw-500"></i> Close
+																	</button>
+																	<button class="btn btn-primary btn-sm" type="submit">
+																		<i class="fal fa-upload mr-1"></i>Unggah
 																	</button>
 																</div>
 															</form>

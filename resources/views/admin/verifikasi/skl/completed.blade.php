@@ -2,7 +2,7 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-	@can('old_skl_access')
+	{{-- @can('old_skl_access') --}}
 		@include('partials.sysalert')
 		<div class="row">
 			<div class="col-lg-12">
@@ -27,9 +27,9 @@
 									<tbody>
 										@foreach ($completeds as $completed)
 											<tr>
-												{{-- @if (Auth::user()->roleaccess === 1) --}}
+												@if (Auth::user()->roleaccess === 1)
 													<td>{{$completed->datauser->company_name}}</td>
-												{{-- @endif --}}
+												@endif
 												<td>{{$completed->periodetahun}}</td>
 												<td>{{$completed->no_ijin}}</td>
 												<td>{{$completed->no_skl}}</td>
@@ -38,8 +38,8 @@
 												<td class="text-center d-flex justify-content-center">
 													{{-- @can('old_skl_show') --}}
 														{{-- @if (Auth::user()->roles[0]->title === 'User') --}}
-															<a href="{{$completed->url}}" class="btn btn-icon btn-primary btn-xs mr-1" title="Lihat">
-																<i class="fal fa-file-search"></i>
+															<a href="{{$completed->skl_upload}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL">
+																<i class="fal fa-file-certificate"></i>
 															</a>
 														{{-- @endif --}}
 													{{-- @endcan --}}
@@ -54,7 +54,7 @@
 				</div>
 			</div>
 		</div>
-	@endcan
+	{{-- @endcan --}}
 @endsection
 
 @section('scripts')

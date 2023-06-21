@@ -205,25 +205,6 @@
 										</div>
 										<span class="help-block">Dengan ini kami menyatakan verifikasi pada bagian ini telah SELESAI.</span>
 									</div>
-									{{-- <div class="col-md-6">
-										<div class="form-group">
-
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-
-										</div>
-										<div class="form-group">
-
-										</div>
-									</div> --}}
-								</div>
-								<div class="row">
-
-									<div class="form-group col-md-5">
-
-									</div>
 								</div>
 							</div>
 						</form>

@@ -4,9 +4,6 @@
 	@include('partials.subheader')
 	@can('online_access')
 		@include('partials.sysalert')
-		<button id="printButton" class="btn btn-sm btn-primary btn-sm">
-			<i class="fal fa-print mr-1"></i> Cetak SKL
-		</button>
 		<div class="row" id="contentToPrint">
 			@php
 				$npwp = str_replace(['.', '-'], '', $commitment->npwp);

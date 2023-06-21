@@ -217,7 +217,6 @@ class VerifOnfarmController extends Controller
 	 */
 	public function show($id)
 	{
-
 		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 		$module_name = 'Verifikasi';
 		$page_title = 'Verifikasi Lapangan';

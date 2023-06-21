@@ -130,11 +130,13 @@
 										<li class="list-group-item d-flex justify-content-between align-items-center">
 											<span class="text-muted">Varietas</span>
 											<span class="fw-500">
-												@php
-													$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
-													$nama_varietas = $varietas->nama_varietas;
-												@endphp
-												{{$nama_varietas}}
+												@if ($pks->varietas_tanam)
+													@php
+														$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
+														$nama_varietas = $varietas->nama_varietas;
+													@endphp
+													{{$nama_varietas}}
+												@endif
 											</span>
 										</li>
 										<li class="list-group-item d-flex justify-content-between align-items-center">

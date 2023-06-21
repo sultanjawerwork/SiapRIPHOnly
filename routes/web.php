@@ -180,9 +180,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
 		//Daftar SKL untuk user
-		Route::get('user/skl', 'UserSklController@index')->name('user.skl');
-		Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
-		Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
+		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');
+		// Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
+		// Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
+
+		//daftar seluruh skl yang telah terbit (lama & baru)
+		Route::get('skl/index', function () {
+			return redirect()->route('verification.arsip.completed');
+		})->name('skl.index');
 
 		Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
 		Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
@@ -234,16 +239,21 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
 
 	// Route::resource('skl', 'SklController');
-	Route::get('skl', 'SklController@index')->name('skl');
-	Route::post('skl/recomend', 'SklController@recomend')->name('skl.recomend');
-	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations');
-	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show');
-	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store');
+	Route::get('skl', 'SklController@index')->name('skl'); //daftar siap rekomendasi
+	Route::post('skl/recomend', 'SklController@recomend')->name('skl.recomend'); //submit rekomendasi
+	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations'); //daftar rekomendasi skl untuk pejabat
+	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show'); //detail rekomendasi untuk pejabat
+	Route::get('skl/{id}/draft', 'SKLCOntroller@draftSKL')->name('draft.skl'); //preview draft skl untuk pejabat
+	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store'); //fungsi untuk pejabat menyetujui penerbitan.
+	Route::get('skl/printReadySkl/{id}', 'SklController@printReadySkl')->name('skl.printReadySkl'); //form view skl untuk admin
+	Route::put('skl/sklUpload/{id}', 'SklController@sklUpload')->name('skl.sklUpload'); //fungsi upload untuk admin
+	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show'); //summary skl
+	Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed'); //daftar seluruh skl yang telah terbit (lama & baru)
+
+	//ke bawah ini mungkin di hapus
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
-	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
 	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
 	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
-	Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed');
 
 	//SKL Old/Manual
 	Route::get('oldskl/index', 'SklOlderController@index')->name('oldskl.index');

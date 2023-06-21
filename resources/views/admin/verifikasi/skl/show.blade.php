@@ -38,15 +38,9 @@
 										</li>
 										<li class="list-group-item list-group-item-action d-flex justify-content-start align-items-center">
 											<label for="" class="col-3">Berkas SKL</label>
-											@if (Auth::user()->roleaccess === 1)
-												<a href="{{route('verification.skl.published', $skl->id)}}" target="_blank">
-													Unduh Surat Keterangan Lunas
-												</a>
-											@else
-												<a href="{{route('admin.task.user.skl.print', $skl->id)}}" target="_blank">
-													Unduh Surat Keterangan Lunas
-												</a>
-											@endif
+											<a href="{{$skl->completed->skl_upload}}" target="_blank">
+												Unduh Surat Keterangan Lunas
+											</a>
 										</li>
 									</ul>
 								</div>

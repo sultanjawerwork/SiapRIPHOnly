@@ -63,7 +63,6 @@
 														<i class="fal fa-file-search"></i>
 													</a>
 												@else
-												{{-- {{route('admin.task.onfarmv2.list', $verifikasi->id)}} --}}
 													<a href="{{route('verification.onfarm.farmlist', $verifikasi->id)}}" class="btn btn-icon btn-xs btn-primary"
 														title="Mulai/Lanjutkan Pemeriksaan">
 														<i class="fal fa-file-search"></i>
@@ -127,7 +126,7 @@
 						className: 'btn-outline-primary btn-sm btn-icon mr-1'
 					}]
 				});
-		
+
 				// Get the unique values of the "Year" column
 				var table = $('#dataPengajuan').DataTable();
 				var years = table.column(2).data().unique().sort();
