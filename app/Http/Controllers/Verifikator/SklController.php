@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SPDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 
 class SklController extends Controller
@@ -154,6 +155,7 @@ class SklController extends Controller
 	}
 
 	//oleh pejabat bagian ini ditunda dulu sementara. diganti dengan storerecom di bawahnya
+	// auto generate pdf
 	public function storerecom($id)
 	{
 		if (Auth::user()->roles[0]->title !== 'Pejabat') {
@@ -161,14 +163,7 @@ class SklController extends Controller
 		}
 		
 		$this->sklid = $id;
-		// if ($request->hasFile('sklfile')) {
-		// 	$file = $request->file('sklfile');
-		// 	$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
-		// 	$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
-		// 	$oldskl->sklfile = $filename;
-		// 	$completed->url = $filePath;
-		// }
-		// dd($completed);
+		
 		DB::transaction(function () {
 			try {
 				$skl = Skl::find($this->sklid);
@@ -213,10 +208,12 @@ class SklController extends Controller
 				];
 
 				// $QrCode = QrCode::size(70)->generate(json_encode($data));
-				$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
-
-				// dd($commitment);
-				// dompdf disini
+				//$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+				$dtQr = $data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan'];
+				$dtPath =  storage_path('temp/') . Str::random(6) . '.png';
+				// dd($dtPath);
+				//QrCode::format('png')->size(200)->generate($dtQr, $dtPath);
+				
 				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
 				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
 				$thn = substr($skl->no_ijin, -4);
@@ -260,20 +257,67 @@ class SklController extends Controller
 				$this->fpdf->SetXY( 8, 120 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nama Perusahaan", 0, 0, 'L');
 				$this->fpdf->SetXY( 8, 127 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nomor RIPH", 0, 0, 'L');
 				$this->fpdf->SetXY( 8, 134 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Wajib Tanam", 0, 0, 'L');
-				// $this->fpdf->SetXY( 8, 120 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nama Perusahaan", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 155 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Wajib Produksi", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 48, 120 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".$companyName, 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 127 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".$commitment->no_ijin, 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 134 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Beban", 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 141 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Realisasi", 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 148 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Verifikasi", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 134 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($commitment->volume_riph * 0.05 / 6, 2, '.', ',')." ha.", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 141 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($total_luas, 2, '.', ',')." ha.", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 148 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($pengajuan->luas_verif,2,'.',',')." ha.", 0, 0, 'L');
+				
+
+				$this->fpdf->SetXY( 48, 155 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Beban", 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 162 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Realisasi", 0, 0, 'L');
+				$this->fpdf->SetXY( 48, 169 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, "Verifikasi", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 155 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($commitment->volume_riph * 0.05, 2, '.', ',')." ton.", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 162 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($total_volume, 2, '.', ',')." ton.", 0, 0, 'L');
+				$this->fpdf->SetXY( 70, 169 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, ": ".number_format($pengajuan->volume_verif,2,'.',',')." ton.", 0, 0, 'L');
+				
+
+				$this->fpdf->SetXY( 8, 180 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Telah melaksanakan kewajiban pengembangan bawang putih di dalam negeri sebagaimana ketentuan dalam Permentan", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 187 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "39 tahun 2019 dan perubahannya.", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 8, 198 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Atas perhatian dan kerjasama Saudara disampaikan terima kasih.", 0, 0, 'L');
+				
+				// -- QrCode ---
+        		// $this->Image($dtPath, 8, 210 ,17,17);
+				
+				$this->fpdf->SetXY( 105, 215); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Direktur,", 0, 0, 'L');
+				$this->fpdf->SetXY( 105, 235); $this->fpdf->SetFont('Arial','U',10); $this->fpdf->Cell( 60, 8, "Andi Muhammad Idil Fitri, SE, MM,", 0, 0, 'L');
+				$this->fpdf->SetXY( 105, 240); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "NIP.196912111997031003", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 10, 250 ); $this->fpdf->SetFont('Arial','U',10); $this->fpdf->Cell( 60, 8, "Tembusan", 0, 0, 'L');
+				$this->fpdf->SetXY( 10, 255 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "- Direktur Jenderal Hortikultura", 0, 0, 'L');
 				
 				
-				$pdfData = $this->fpdf->Output('S');
-				Storage::disk('public')->put($pdfUrl, $pdfData);
+				
 
-				$skl->file_name = $pdfUrl;
-				$pdfpublic = Storage::disk('public')->url($pdfUrl);
-				$completed->url = $pdfpublic;
+				$pdfData = $this->fpdf->Output('I'); // ini di buang untuk live
 
+				//** 
+				// PENTING !!!!
+				//setelah selesai ini harus dibuka supaya statusnya berubah 7
+				//** 
+
+				
+				// $pdfData = $this->fpdf->Output('S');
+				// Storage::disk('public')->put($pdfUrl, $pdfData);
+
+				// $skl->file_name = $pdfUrl;
+				// $pdfpublic = Storage::disk('public')->url($pdfUrl);
+				// $completed->url = $pdfpublic;
+
+				
 				// $skl->save();
 				// $pengajuan->save();
 				// $commitment->save();
 				// $completed->save();
+				
+
+				/** end remark */
 
 				DB::commit();
 			} catch (\Exception $e) {
