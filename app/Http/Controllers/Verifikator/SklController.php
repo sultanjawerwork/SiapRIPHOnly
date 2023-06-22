@@ -286,8 +286,8 @@ class SklController extends Controller
         		// $this->Image($dtPath, 8, 210 ,17,17);
 				
 				$this->fpdf->SetXY( 105, 215); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Direktur,", 0, 0, 'L');
-				$this->fpdf->SetXY( 105, 235); $this->fpdf->SetFont('Arial','U',10); $this->fpdf->Cell( 60, 8, "Andi Muhammad Idil Fitri, SE, MM,", 0, 0, 'L');
-				$this->fpdf->SetXY( 105, 240); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "NIP.196912111997031003", 0, 0, 'L');
+				$this->fpdf->SetXY( 105, 235); $this->fpdf->SetFont('Arial','U',10); $this->fpdf->Cell( 60, 8, $pejabat->dataadmin->nama, 0, 0, 'L');
+				$this->fpdf->SetXY( 105, 240); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "NIP.".$pejabat->dataadmin->nip, 0, 0, 'L');
 				
 				$this->fpdf->SetXY( 10, 250 ); $this->fpdf->SetFont('Arial','U',10); $this->fpdf->Cell( 60, 8, "Tembusan", 0, 0, 'L');
 				$this->fpdf->SetXY( 10, 255 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "- Direktur Jenderal Hortikultura", 0, 0, 'L');
@@ -295,7 +295,7 @@ class SklController extends Controller
 				
 				
 
-				$pdfData = $this->fpdf->Output('I'); // ini di buang untuk live
+				$pdfData = $this->fpdf->Output('I'); // ini dibuang / diremark untuk live
 
 				//** 
 				// PENTING !!!!
@@ -307,6 +307,7 @@ class SklController extends Controller
 				// Storage::disk('public')->put($pdfUrl, $pdfData);
 
 				// $skl->file_name = $pdfUrl;
+
 				// $pdfpublic = Storage::disk('public')->url($pdfUrl);
 				// $completed->url = $pdfpublic;
 
