@@ -13,7 +13,6 @@ use App\Models\Completed;
 use Illuminate\Http\Request;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\URL;
@@ -21,17 +20,24 @@ use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\SPDF;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+
 
 class SklController extends Controller
 {
 	protected $sklid = -1;
 	protected $msg = '';
 
+	protected $fpdf; 
+
 	//digunakan oleh Administrator/Verifikator untuk melihat daftar verifikasi yang siap direkomendasikan terbit skl.
 	public function index()
 	{
 		abort_if(Gate::denies('verification_skl_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+		
 		$module_name = 'SKL';
 		$page_title = 'Daftar Rekomendasi';
 		$page_heading = 'Daftar Rekomendasi & SKL';
@@ -148,143 +154,174 @@ class SklController extends Controller
 	}
 
 	//oleh pejabat bagian ini ditunda dulu sementara. diganti dengan storerecom di bawahnya
+	public function storerecom($id)
+	{
+		if (Auth::user()->roles[0]->title !== 'Pejabat') {
+			abort(403, 'Unauthorized');
+		}
+		
+		$this->sklid = $id;
+		// if ($request->hasFile('sklfile')) {
+		// 	$file = $request->file('sklfile');
+		// 	$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
+		// 	$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
+		// 	$oldskl->sklfile = $filename;
+		// 	$completed->url = $filePath;
+		// }
+		// dd($completed);
+		DB::transaction(function () {
+			try {
+				$skl = Skl::find($this->sklid);
+				$skl->approved_by = Auth::user()->id;
+				$skl->approved_at = Carbon::now();
+				$skl->published_date = Carbon::now();
+				// dd($skl);
+				$pengajuan = Pengajuan::find($skl->pengajuan_id);
+				$commitment = PullRiph::find($pengajuan->commitment_id);
+				//$commitment = PullRiph::where('no_ijin', $pengajuan->no_ijin)->first();
+
+
+				$pengajuan->status = '7';
+				$commitment->status = '7';
+				$commitment->skl = $skl->no_skl;
+
+				$completed = new Completed();
+				$completed->no_skl = $skl->no_skl;
+				$completed->npwp = $skl->npwp;
+				$completed->no_ijin = $skl->no_ijin;
+				$completed->periodetahun = $commitment->periodetahun;
+				$completed->published_date = Carbon::now();
+				$completed->luas_tanam = $pengajuan->luas_verif;
+				$completed->volume = $pengajuan->volume_verif;
+				$completed->status = 'Lunas';
+
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
+				$pejabat = User::find($skl->approved_by);
+
+				$wajib_tanam = $commitment->volume_riph * 0.05 / 6;
+				$luas_verif = $pengajuan->luas_verif;
+				$wajib_produksi = $commitment->volume_riph * 0.05;
+				$volume_verif = $pengajuan->volume_verif;
+				$total_luas = $commitment->lokasi->sum('luas_tanam');
+				$total_volume = $commitment->lokasi->sum('volume');
+				$data = [
+					'Perusahaan' => $commitment->datauser->company_name,
+					'No. RIPH' => $commitment->no_ijin,
+					'Status' => 'LUNAS',
+					'Tautan' => route('verification.skl.show', $skl->id),
+				];
+
+				// $QrCode = QrCode::size(70)->generate(json_encode($data));
+				$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+
+				// dd($commitment);
+				// dompdf disini
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+				$thn = substr($skl->no_ijin, -4);
+
+				
+
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
+				$thn = substr($skl->no_ijin, -4);
+
+				$today = Carbon::now()->isoFormat('dddd, D MMMM Y');
+				// Storage::disk('public')->url('uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf');
+				$pdfUrl = 'uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf';
+				$companyName = $commitment->datauser->company_name;
+				
+
+				$this->fpdf = new SPDF('KEMENTERIAN PERTANIAN','DIREKTORAT JENDERAL HORTIKULTURA','DIREKTORAT SAYURAN DAN TANAMAN OBAT');
+				$this->fpdf->SetAutoPageBreak(false);
+        		$this->fpdf->SetMargins(0,0,0,0);
+        		$this->fpdf->SetLineWidth(0.1);
+
+				$this->fpdf->AddPage('P','A4', 0);
+
+				$this->fpdf->SetXY( 8, 41 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, "Nomor", 0, 0, 'L');
+				$this->fpdf->SetXY( 24, 41 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, ": ".$skl->no_skl, 0, 0, 'L');
+				$this->fpdf->SetXY( 160, 41 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 40, 8, $today, 0, 0, 'R');
+				
+				$this->fpdf->SetXY( 8, 48 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, "Lampiran", 0, 0, 'L');
+				$this->fpdf->SetXY( 24, 48 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, ": -", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 8, 55 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, "Hal", 0, 0, 'L');
+				$this->fpdf->SetXY( 24, 55 ); $this->fpdf->SetFont('Arial','',8); $this->fpdf->Cell( 60, 8, ": Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 8, 74 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Kepada Yth.", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 80 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Pimpinan", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 86 ); $this->fpdf->SetFont('Arial','B',10); $this->fpdf->Cell( 60, 8, $companyName, 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 92 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "di", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 98 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Tempat", 0, 0, 'L');
+				
+				$this->fpdf->SetXY( 8, 110 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Berdasarkan hasil evaluasi dan validasi laporan realisasi tanam dan produksi, dengan ini kami menyatakan:", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 120 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nama Perusahaan", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 127 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nomor RIPH", 0, 0, 'L');
+				$this->fpdf->SetXY( 8, 134 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Wajib Tanam", 0, 0, 'L');
+				// $this->fpdf->SetXY( 8, 120 ); $this->fpdf->SetFont('Arial','',10); $this->fpdf->Cell( 60, 8, "Nama Perusahaan", 0, 0, 'L');
+				
+				
+				$pdfData = $this->fpdf->Output('S');
+				Storage::disk('public')->put($pdfUrl, $pdfData);
+
+				$skl->file_name = $pdfUrl;
+				$pdfpublic = Storage::disk('public')->url($pdfUrl);
+				$completed->url = $pdfpublic;
+
+				// $skl->save();
+				// $pengajuan->save();
+				// $commitment->save();
+				// $completed->save();
+
+				DB::commit();
+			} catch (\Exception $e) {
+				// Something went wrong, rollback the transaction
+				DB::rollback();
+				$this->msg = 'Error! SKL Gagal diterbitkan';
+			}
+		});
+		if ($this->msg === '') {
+			return redirect()->route('verification.skl.published', ['id' => $this->sklid]);
+		} else {
+			return back()->with(['message' => $this->msg]);
+		}
+	}
+
+	//fungsi untuk pejabat menyetujui skl diterbitkan.
 	// public function storerecom($id)
 	// {
 	// 	if (Auth::user()->roles[0]->title !== 'Pejabat') {
 	// 		abort(403, 'Unauthorized');
 	// 	}
 
-	// 	$this->sklid = $id;
-	// 	// if ($request->hasFile('sklfile')) {
-	// 	// 	$file = $request->file('sklfile');
-	// 	// 	$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
-	// 	// 	$filePath = $this->uploadFile($file, $filenpwp, $request->input('periodetahun'), $filename);
-	// 	// 	$oldskl->sklfile = $filename;
-	// 	// 	$completed->url = $filePath;
-	// 	// }
-	// 	// dd($completed);
-	// 	DB::transaction(function () {
-	// 		try {
-	// 			$skl = Skl::find($this->sklid);
+	// 	try {
+	// 		return DB::transaction(function () use ($id) {
+	// 			$skl = Skl::find($id);
 	// 			$skl->approved_by = Auth::user()->id;
 	// 			$skl->approved_at = Carbon::now();
 	// 			$skl->published_date = Carbon::now();
-	// 			// dd($skl);
 	// 			$pengajuan = Pengajuan::find($skl->pengajuan_id);
 	// 			$commitment = PullRiph::find($pengajuan->commitment_id);
-	// 			//$commitment = PullRiph::where('no_ijin', $pengajuan->no_ijin)->first();
-
 
 	// 			$pengajuan->status = '7';
 	// 			$commitment->status = '7';
 	// 			$commitment->skl = $skl->no_skl;
 
-	// 			$completed = new Completed();
-	// 			$completed->no_skl = $skl->no_skl;
-	// 			$completed->npwp = $skl->npwp;
-	// 			$completed->no_ijin = $skl->no_ijin;
-	// 			$completed->periodetahun = $commitment->periodetahun;
-	// 			$completed->published_date = Carbon::now();
-	// 			$completed->luas_tanam = $pengajuan->luas_verif;
-	// 			$completed->volume = $pengajuan->volume_verif;
-	// 			$completed->status = 'Lunas';
-
-	// 			$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
-	// 			$noIjin = str_replace(['.', '/'], '', $skl->no_ijin);
-	// 			$pejabat = User::find($skl->approved_by);
-
-	// 			$wajib_tanam = $commitment->volume_riph * 0.05 / 6;
-	// 			$luas_verif = $pengajuan->luas_verif;
-	// 			$wajib_produksi = $commitment->volume_riph * 0.05;
-	// 			$volume_verif = $pengajuan->volume_verif;
-	// 			$total_luas = $commitment->lokasi->sum('luas_tanam');
-	// 			$total_volume = $commitment->lokasi->sum('volume');
-	// 			$data = [
-	// 				'Perusahaan' => $commitment->datauser->company_name,
-	// 				'No. RIPH' => $commitment->no_ijin,
-	// 				'Status' => 'LUNAS',
-	// 				'Tautan' => route('verification.skl.show', $skl->id),
-	// 			];
-
-	// 			// $QrCode = QrCode::size(70)->generate(json_encode($data));
-	// 			$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
-
-	// 			// dd($commitment);
-	// 			// dompdf disini
-	// 			$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
-	// 			$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
-	// 			$thn = substr($skl->no_ijin, -4);
-
-	// 			$view = view('admin.verifikasi.skl.domskl', compact('skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
-	// 			$html = mb_convert_encoding($view, 'HTML-ENTITIES', 'UTF-8');
-
-	// 			// dd($html);
-	// 			$pdf = app('dompdf.wrapper');
-	// 			$pdf->setPaper('A4', 'portrait');
-	// 			$pdf->loadHtml($html);
-
-	// 			$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
-	// 			$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
-	// 			$thn = substr($skl->no_ijin, -4);
-	// 			Storage::disk('public')->put('uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf', $pdf->output());
-	// 			$pdfUrl = 'uploads/' . $filenpwp . '/' . $thn . '/' . $no_skl . '.pdf';
-
-	// 			$skl->file_name = $pdfUrl;
-	// 			$pdfpublic = Storage::disk('public')->url($pdfUrl);
-	// 			$completed->url = $pdfpublic;
+	// 			// dd($pengajuan);
 
 	// 			$skl->save();
 	// 			$pengajuan->save();
 	// 			$commitment->save();
-	// 			// $completed->save();
-
-	// 			DB::commit();
-	// 		} catch (\Exception $e) {
-	// 			// Something went wrong, rollback the transaction
-	// 			DB::rollback();
-	// 			$this->msg = 'Error! SKL Gagal diterbitkan';
-	// 		}
-	// 	});
-	// 	if ($this->msg === '') {
-	// 		return redirect()->route('verification.skl.published', ['id' => $this->sklid]);
-	// 	} else {
-	// 		return back()->with(['message' => $this->msg]);
+	// 			return redirect()->route('verification.skl.recomendations');
+	// 		});
+	// 	} catch (\Exception $e) {
+	// 		DB::rollback();
+	// 		$this->msg = 'Error! SKL Gagal diterbitkan';
+	// 		return back()->with(['error' => 'An error occurred while storing the recommendation.']);
 	// 	}
 	// }
-
-	//fungsi untuk pejabat menyetujui skl diterbitkan.
-	public function storerecom($id)
-	{
-		if (Auth::user()->roles[0]->title !== 'Pejabat') {
-			abort(403, 'Unauthorized');
-		}
-
-		try {
-			return DB::transaction(function () use ($id) {
-				$skl = Skl::find($id);
-				$skl->approved_by = Auth::user()->id;
-				$skl->approved_at = Carbon::now();
-				$skl->published_date = Carbon::now();
-				$pengajuan = Pengajuan::find($skl->pengajuan_id);
-				$commitment = PullRiph::find($pengajuan->commitment_id);
-
-				$pengajuan->status = '7';
-				$commitment->status = '7';
-				$commitment->skl = $skl->no_skl;
-
-				// dd($pengajuan);
-
-				$skl->save();
-				$pengajuan->save();
-				$commitment->save();
-				return redirect()->route('verification.skl.recomendations');
-			});
-		} catch (\Exception $e) {
-			DB::rollback();
-			$this->msg = 'Error! SKL Gagal diterbitkan';
-			return back()->with(['error' => 'An error occurred while storing the recommendation.']);
-		}
-	}
 
 	//fungsi untuk administrator mencetak dokumen skl yang diterbitkan
 	public function printReadySkl($id)
@@ -448,14 +485,14 @@ class SklController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 
-	// public function published($id)
-	// {
-	// 	$skl = Skl::findOrfail($id);
-	// 	if (Storage::disk('public')->exists($skl->file_name)) {
+	public function published($id)
+	{
+		$skl = Skl::findOrfail($id);
+		if (Storage::disk('public')->exists($skl->file_name)) {
 
-	// 		return Storage::disk('public')->response($skl->file_name);
-	// 	}
-	// }
+			return Storage::disk('public')->response($skl->file_name);
+		}
+	}
 	/**
 	 * Menampilkan halaman SKL (print)
 	 *
