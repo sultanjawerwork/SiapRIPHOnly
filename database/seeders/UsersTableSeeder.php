@@ -39,6 +39,15 @@ class UsersTableSeeder extends Seeder
 			],
 			[
 				'id'             => 4,
+				'name'           => 'Verifikator',
+				'email'          => 'verifikator@admin.com',
+				'password'       => bcrypt('password'),
+				'remember_token' => null,
+				'username'       => 'Verifikator1',
+				'roleaccess'     => 1,
+			],
+			[
+				'id'             => 5,
 				'name'           => 'SIAP RIPH',
 				'email'          => 'siapriph@email.com',
 				'password'       => bcrypt('siapriphsimethris'),

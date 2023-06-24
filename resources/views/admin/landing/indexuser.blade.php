@@ -4,7 +4,7 @@
 	@can('landing_access')
 		@php($unreadmsg = \App\Models\QaTopic::unreadCount())
 		@php($msgs = \App\Models\QaTopic::unreadMsg())
-		@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+		@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
 			@php($cntpengajuan = \App\Models\Pengajuan::newPengajuanCount())
 			@php($newpengajuan = \App\Models\Pengajuan::getNewPengajuan())
 		@else
@@ -44,7 +44,7 @@
 									<li>
 										<a href="{{ route('admin.posts.show', $post['id']) }}"
 											class="d-flex align-items-center">
-											
+
 											<span class="d-flex flex-column flex-1 ml-1">
 												<span class="fw-700 fs-md text-primary" style="text-transform: uppercase">
 													{{ $post['title'] }}
@@ -153,7 +153,7 @@
 						</div>
 					</div>
 				</div>
-				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
 				<div id="panel-2" class="panel">
 					<div class="panel-hdr">
 						<h2>
@@ -217,13 +217,13 @@
 			// 		[0, 'desc']
 			// 	],
 			// 	dom:
-					
+
 			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
 			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
 			// 		"<'row'<'col-sm-12't>>" +
 			// 		"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
 			// 	buttons: [
-					
+
 			// 	]
 			// });
 

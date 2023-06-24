@@ -2,7 +2,7 @@
 @php($unreadmsg = \App\Models\QaTopic::unreadCount())
 @php($msgs = \App\Models\QaTopic::unreadMsg())
 
-@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Pejabat')
 @php($cntpengajuan = \App\Models\Pengajuan::newPengajuanCount())
 @php($newpengajuan = \App\Models\Pengajuan::getNewPengajuan())
 @else
@@ -59,7 +59,7 @@
 
 
             <a href="#" class="header-icon" data-toggle="dropdown"
-                title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+                title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
                 , {{ $cntpengajuan }} pengajuan baru @endif">
                 <i class="fal fa-envelope"></i>
                 <span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan}} </span>
@@ -68,7 +68,7 @@
                 <div
                     class="dropdown-header bg-trans-gradient d-flex justify-content-center align-items-center rounded-top mb-2">
                     <h4 class="m-0 text-center color-white">
-                        @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
+                        @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
                             <small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
                         @endif
                         <small class="mb-0 opacity-80">{{ $unreadmsg }} Pesan baru</small>
@@ -79,8 +79,8 @@
                         <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-messages"
                             data-i18n="drpdwn.messages">Pesan</a>
                     </li>
-                    @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat') 
-                        
+                    @if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat')
+
                     <li class="nav-item">
                         <a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds"
                             data-i18n="drpdwn.feeds">Pengajuan</a>
@@ -135,7 +135,7 @@
                                                 </span>
                                                 <span class="fs-nano text-muted mt-1">{{ $pengajuan->created_at->diffForHumans() }}</span>
                                             </span>
-                                            
+
                                         </a>
                                     </li>
                                     @endforeach
