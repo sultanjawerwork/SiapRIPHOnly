@@ -164,7 +164,7 @@ class SklController extends Controller
 		
 		$this->sklid = $id;
 		
-		DB::transaction(function () {
+		// DB::transaction(function () {
 			try {
 				$skl = Skl::find($this->sklid);
 				$skl->approved_by = Auth::user()->id;
@@ -213,6 +213,13 @@ class SklController extends Controller
 				$dtPath =  storage_path('temp/') . Str::random(6) . '.png';
 				// dd($dtPath);
 				//QrCode::format('png')->size(200)->generate($dtQr, $dtPath);
+
+				// $image = QrCode::format('png')
+                //  ->size(200)->errorCorrection('H')
+                //  ->generate($dtQr);
+
+				// $dtPath = '/temp/img-' . time() . '.png';
+				// Storage::disk('local')->put($dtPath, $image); //storage/app/public/img/qr-code/img-1557309130.png
 				
 				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
 				$no_skl = str_replace(['.', '/', '-'], '', $skl->no_skl);
@@ -320,13 +327,14 @@ class SklController extends Controller
 
 				/** end remark */
 
-				DB::commit();
+				// DB::commit();
 			} catch (\Exception $e) {
 				// Something went wrong, rollback the transaction
-				DB::rollback();
+				// DB::rollback();
+				return $e->getMessage();
 				$this->msg = 'Error! SKL Gagal diterbitkan';
 			}
-		});
+		// });
 		if ($this->msg === '') {
 			return redirect()->route('verification.skl.published', ['id' => $this->sklid]);
 		} else {
