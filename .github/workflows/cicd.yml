@@ -1,0 +1,25 @@
+name: CICD Simethris 
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  
+  build-master:
+    runs-on: [PROD-simethris]
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run Script
+      run: |
+        cd ${{vars.GIT_WORKDIR_MASTER}}
+        git restore .
+        git pull
+        composer install
+        npm install
+        npm run prod
+        chmod +x artisan
+        ./artisan up
+        ./artisan optimize:clear
+        ./artisan optimize
