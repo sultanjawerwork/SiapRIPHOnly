@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>
-			{{ env('APP_NAME')}} | {{ ($page_title ?? '3.0') }} - 01
+			{{ env('APP_NAME')}} | {{ ($page_title ?? '3.0') }} - 02
 		</title>
         <meta name="description" content="Page Title">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
