@@ -16,3 +16,4 @@ jobs:
         cd ${{vars.GIT_WORKDIR_MASTER}}
         git pull
         
+
