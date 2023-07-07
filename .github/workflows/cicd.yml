@@ -15,6 +15,4 @@ jobs:
       run: |
         cd ${{vars.GIT_WORKDIR_MASTER}}
         git pull
-        ./artisan up
-        ./artisan optimize:clear
-        ./artisan optimize
+
