@@ -112,7 +112,7 @@
 													</div>
 												</div>
 												{{-- modal upload skl --}}
-												@if ($recomend && $recomend->skl && $recomend->skl->id)
+												@if($recomend->skl && $recomend->skl?->approved_by && !$recomend->skl?->skl_upload)
 												<div class="modal fade" id="modalUploadSkl{{$recomend->id}}"
 													tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 													<div class="modal-dialog modal-dialog-center" role="document">
