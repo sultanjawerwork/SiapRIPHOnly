@@ -14,10 +14,5 @@ simethris_core.zip
 simethris_public.zip
 database/simethirsstarter.sql
 public/public.zip
-storage/app/public/uploads/123456123456123/2022/formRpoRPO.pdf
-storage/app/public/uploads/123456123456123/2022/formLaLA.pdf
-storage/app/public/uploads/123456123456123/2022/formRiph_RIPH.pdf
-storage/app/public/uploads/123456123456123/2022/formRtaRTA.pdf
-storage/app/public/uploads/123456123456123/2022/formRtRT.pdf
-storage/app/public/uploads/123456123456123/2022/formSptjm_SPTJM.pdf
-storage/app/public/uploads/123456123456123/2022/logBookLOGBOOK.pdf
+/storage/*
+/storage/logs/*
