@@ -112,7 +112,7 @@
 													</div>
 												</div>
 												{{-- modal upload skl --}}
-												@if (($recomend) && ($recomend->skl) && ( $recomend->skl->id))
+
 												<div class="modal fade" id="modalUploadSkl{{$recomend->id}}"
 													tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 													<div class="modal-dialog modal-dialog-center" role="document">
@@ -126,6 +126,7 @@
 																	<span aria-hidden="true">&times;</span>
 																</button>
 															</div>
+															{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
 															<form action="{{route('verification.skl.sklUpload', $recomend->skl->id)}}" method="post" enctype="multipart/form-data">
 																@csrf
 																@method('put')
