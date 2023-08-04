@@ -126,7 +126,6 @@
 																	<span aria-hidden="true">&times;</span>
 																</button>
 															</div>
-															{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
 															<form action="{{route('verification.skl.sklUpload', $recomend->skl->id)}}" method="post" enctype="multipart/form-data">
 																@csrf
 																@method('put')
