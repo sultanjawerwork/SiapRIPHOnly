@@ -243,7 +243,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::post('skl/recomend', 'SklController@recomend')->name('skl.recomend'); //submit rekomendasi
 	Route::get('skl/recomendations', 'SklController@recomendations')->name('skl.recomendations'); //daftar rekomendasi skl untuk pejabat
 	Route::get('skl/recomendations/{id}/show', 'SklController@showrecom')->name('skl.recomendations.show'); //detail rekomendasi untuk pejabat
-	Route::get('skl/{id}/draft', 'SKLController@draftSKL')->name('draft.skl'); //preview draft skl untuk pejabat
+	Route::get('skl/{id}/draft', 'SklController@draftSKL')->name('draft.skl'); //preview draft skl untuk pejabat
 	Route::put('skl/recomendations/{id}/store', 'SklController@storerecom')->name('skl.recomendations.store'); //fungsi untuk pejabat menyetujui penerbitan.
 	Route::get('skl/printReadySkl/{id}', 'SklController@printReadySkl')->name('skl.printReadySkl'); //form view skl untuk admin
 	Route::put('skl/sklUpload/{id}', 'SklController@sklUpload')->name('skl.sklUpload'); //fungsi upload untuk admin
