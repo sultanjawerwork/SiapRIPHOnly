@@ -327,7 +327,8 @@ class SklController extends Controller
 	private function uploadFile($file, $filenpwp, $thn, $filename)
 	{
 		$path = $file->storeAs('uploads/' . $filenpwp . '/' . $thn, $filename, 'public');
-		return asset('storage/' . $path);
+		//return asset('storage/' . $path);
+		return Storage::disk('public').url($path);
 	}
 
 	//fungsi unggah skl oleh admin jika sudah di setujui terbit oleh pejabat.
