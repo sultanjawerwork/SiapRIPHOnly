@@ -320,7 +320,7 @@ class SklController extends Controller
 
 		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
 
-		return view('admin.verifikasi.skl.printReadySKL', compact('page_title', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.printReadySkl', compact('page_title', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
 	}
 
 	//sub fungsi sklupload
