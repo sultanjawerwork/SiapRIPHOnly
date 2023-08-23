@@ -65,10 +65,10 @@
 									<td>
 										<div class="d-flex justify-content-between px-2">
 											<span>
-												{{$lokasi->masteranggota->nama_petani}} - 
+												{{$lokasi->masteranggota->nama_petani}} -
 												{{$lokasi->masteranggota->ktp_petani}}
 											</span>
-											<sup class="small">
+											<span class="small">
 												@php
 													$firstGroup = [
 														$lokasi->latitude,
@@ -104,6 +104,9 @@
 												@if ($isFirstGroupIncomplete)
 													<i class="fal fa-map-marker-slash text-danger fw-bold"
 													data-toggle="tooltip" data-original-title="Data Geolokasi belum lengkap!"></i>
+												@else
+													<i class="fal fa-map-marker-check text-danger fw-bold"
+													data-toggle="tooltip" data-original-title="Data Geolokasi belum lengkap!"></i>
 												@endif
 												@if ($isSecondGroupIncomplete)
 													<i class="fal fa-seedling text-danger fw-bold"
@@ -113,7 +116,7 @@
 													<i class="fal fa-balance-scale text-danger fw-bold"
 													data-toggle="tooltip" data-original-title="Data Produksi belum lengkap!"></i>
 												@endif
-											</sup>
+											</span>
 										</div>
 									</td>
 									<td>{{$lokasi->nama_lokasi}}</td>
@@ -122,6 +125,16 @@
 									<td class="text-right">{{$lokasi->volume}} ton</td>
 									<td class="text-center">{{$lokasi->tgl_panen}}</td>
 									<td  class="text-center">
+										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
+											title="Data Geolokasi dan Realisasi Tanam" class="btn btn-xs btn-icon btn-warning"
+											data-toggle="tooltip" >
+											<i class="fal fa-map"></i>
+										</a>
+										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
+											title="Data Produksi" class="btn btn-xs btn-icon btn-danger"
+											data-toggle="tooltip" >
+											<i class="fal fa-pumpkin"></i>
+										</a>
 										@if ($isFirstGroupIncomplete || $isSecondGroupIncomplete || $isThirdGroupIncomplete)
 											<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
 												title="Buat/Ubah Laporan Realisasi" class="btn btn-xs btn-icon btn-primary"
@@ -129,11 +142,11 @@
 												<i class="fal fa-map"></i>
 											</a>
 										@else
-										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
-											title="Data sudah lengkap. klik jika ingin mengubah." class="btn btn-xs btn-icon btn-success"
-											data-toggle="tooltip" >
-											<i class="fa fa-check"></i>
-										</a>
+											<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
+												title="Data sudah lengkap. klik jika ingin mengubah." class="btn btn-xs btn-icon btn-success"
+												data-toggle="tooltip" >
+												<i class="fa fa-check"></i>
+											</a>
 										@endif
 									</td>
 								</tr>

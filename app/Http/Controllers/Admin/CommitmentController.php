@@ -142,49 +142,49 @@ class CommitmentController extends Controller
 	}
 
 
-	public function show($id)
-	{
-		$pullRiph = PullRiph::findOrFail($id);
-		$pengajuan = Pengajuan::where('no_doc', $pullRiph->no_doc)->get();
-		$npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
-		$nomor = '';
-		if (!empty($npwp)) {
-			$npwp = str_replace('.', '', $npwp);
-			$npwp = str_replace('-', '', $npwp);
-			$nomor = str_replace('.', '', $pullRiph->no_ijin);
-			$nomor = str_replace('/', '', $nomor);
-			$pullData = $this->pull($npwp, $nomor);
-		} else
-			$pullData = null;
+	// public function show($id)
+	// {
+	// 	$pullRiph = PullRiph::findOrFail($id);
+	// 	$pengajuan = Pengajuan::where('no_doc', $pullRiph->no_doc)->get();
+	// 	$npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
+	// 	$nomor = '';
+	// 	if (!empty($npwp)) {
+	// 		$npwp = str_replace('.', '', $npwp);
+	// 		$npwp = str_replace('-', '', $npwp);
+	// 		$nomor = str_replace('.', '', $pullRiph->no_ijin);
+	// 		$nomor = str_replace('/', '', $nomor);
+	// 		$pullData = $this->pull($npwp, $nomor);
+	// 	} else
+	// 		$pullData = null;
 
 
-		$access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
+	// 	$access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
 
 
-		$data_poktan = [];
-		$poktans = null;
-		if ($pullData) {
+	// 	$data_poktan = [];
+	// 	$poktans = null;
+	// 	if ($pullData) {
 
-			$query = 'select g.no_riph, g.id_kecamatan, g.nama_kelompok, g.nama_pimpinan, g.hp_pimpinan, count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas 
-            from poktans p, group_tanis g
-            where p.no_riph = "' . $pullRiph->no_ijin . '"' . ' and p.id_poktan=g.id_poktan
-            GROUP BY g.nama_kelompok';
+	// 		$query = 'select g.no_riph, g.id_kecamatan, g.nama_kelompok, g.nama_pimpinan, g.hp_pimpinan, count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas
+	//         from poktans p, group_tanis g
+	//         where p.no_riph = "' . $pullRiph->no_ijin . '"' . ' and p.id_poktan=g.id_poktan
+	//         GROUP BY g.nama_kelompok';
 
 
-			$poktans = DB::select(DB::raw($query));
+	// 		$poktans = DB::select(DB::raw($query));
 
-			foreach ($poktans as $poktan) {
-				$datakecamatan = $this->getAPIKecamatan($access_token, $poktan->id_kecamatan);
-				$kec = $datakecamatan['data'][0]['nm_kec'];
-				$poktan->kecamatan = $kec;
-			}
-		}
-		$module_name = 'Proses RIPH';
-		$page_title = 'Data RIPH';
-		$page_heading = 'Data RIPH';
-		$heading_class = 'fal fa-file-invoice';
-		return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pullRiph', 'pullData', 'pengajuan', 'poktans', 'nomor'));
-	}
+	// 		foreach ($poktans as $poktan) {
+	// 			$datakecamatan = $this->getAPIKecamatan($access_token, $poktan->id_kecamatan);
+	// 			$kec = $datakecamatan['data'][0]['nm_kec'];
+	// 			$poktan->kecamatan = $kec;
+	// 		}
+	// 	}
+	// 	$module_name = 'Proses RIPH';
+	// 	$page_title = 'Data RIPH';
+	// 	$page_heading = 'Data RIPH';
+	// 	$heading_class = 'fal fa-file-invoice';
+	// 	return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pullRiph', 'pullData', 'pengajuan', 'poktans', 'nomor'));
+	// }
 
 	public function edit($id)
 	{
@@ -197,6 +197,21 @@ class CommitmentController extends Controller
 		$heading_class = 'fal fa-file-edit';
 
 		return view('admin.commitment.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
+	}
+
+	public function show($id)
+	{
+		$npwp_company = Auth::user()->data_user->npwp_company;
+		$commitment = PullRiph::where('npwp', $npwp_company)->findOrFail($id);
+
+		$module_name = 'Komitmen';
+		$page_title = 'Data Komitmen';
+		$page_heading = 'Data Komitmen: ' . $commitment->no_ijin;
+		$heading_class = 'fal fa-file-edit';
+
+		// dd($commitment);
+
+		return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
 	}
 
 	public function update(Request $request, $id)

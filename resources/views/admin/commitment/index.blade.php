@@ -18,21 +18,22 @@
 							<th>Vol. Import</th>
 							<th>Kewajiban</th>
 							<th>Tindakan</th>
-							<th>Status</th>
 						</thead>
 						<tbody>
 							@foreach ($commitments as $commitment)
 							<tr>
 								{{-- check if commitment data are complete --}}
 								<td>
-									@if (empty($commitment->formRiph)
+									{{-- @if (empty($commitment->formRiph)
 										|| empty($commitment->formSptjm) || empty($commitment->logbook)
 										|| empty($commitment->formRt) || empty($commitment->formRta)
 										|| empty($commitment->formRpo) || empty($commitment->formLa)
 										|| empty($commitment->poktan_share))
 										<i class="fa fa-exclamation-circle text-danger" data-toggle="tooltip" data-original-title="Anda belum melengkapi Data Komitmen"></i>
-									@endif
-									{{$commitment->no_ijin}}
+									@endif --}}
+									<a href="{{ route('admin.task.commitment.show', $commitment->id) }}" title="Lihat Data Komitmen" target="_blank">
+										{{$commitment->no_ijin}}
+									</a>
 								</td>
 								<td>{{$commitment->periodetahun}}</td>
 								<td>{{$commitment->tgl_ijin}}</td>
@@ -56,45 +57,17 @@
 										</div>
 									</div>
 								</td>
-								<td>
-									@if (empty($commitment->formRiph)
-										|| empty($commitment->formSptjm) || empty($commitment->logbook)
-										|| empty($commitment->formRt) || empty($commitment->formRta)
-										|| empty($commitment->formRpo) || empty($commitment->formLa)
-										|| empty($commitment->poktan_share))
-										<a href="{{ route('admin.task.commitment.edit', $commitment->id) }}"
-											class="btn btn-icon btn-xs btn-warning"
-											title="Lengkapi Data Komitmen">
-											<i class="fal fa-edit"></i>
-										</a>
-									@else
-										@if (empty($commitment->status) || $commitment->status === '3' || $commitment->status === '5')
-											<a href="{{ route('admin.task.commitment.edit', $commitment->id) }}"
-												class="btn btn-icon btn-xs btn-info"
-												title="Ubah Data Komitmen">
-												<i class="fal fa-edit"></i>
-											</a>
-										@else
-											<a href="{{ route('admin.task.commitment.edit', $commitment->id) }}"
-												class="btn btn-icon btn-xs btn-primary"
-												title="Lihat Data Komitmen">
-												<i class="fal fa-eye"></i>
-											</a>
-										@endif
+								<td class="text-center">
+									@if (empty($commitment->status))
 										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
 											class="btn btn-icon btn-xs btn-primary"
 											title="Laporan Realisasi Komitmen">
-											<i class="fal fa-ballot-check"></i>
+											<i class="fal fa-edit"></i>
 										</a>
-									@endif
-								</td>
-								<td class="justify-content-center">
-									@if (empty($commitment->status))
-									
 										<a href="{{ route('admin.task.commitment.submit', $commitment->id) }}"
 											class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
-											title data-original-title="Ajukan Verifikasi Data">
-											<i class="fal fa-file-search"></i>
+											title data-original-title="Ajukan Verifikasi Tanam">
+											<i class="fal fa-upload"></i>
 										</a>
 										{{-- <span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Belum Mengajukan Verifikasi">
@@ -111,6 +84,11 @@
 											<i class="fal fa-file-check"></i>
 										</span>
 									@elseif ($commitment->status === '3')
+										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
+											class="btn btn-icon btn-xs btn-primary"
+											title="Laporan Realisasi Komitmen">
+											<i class="fal fa-edit"></i>
+										</a>
 										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Maaf. Verifikasi Data tidak dapat dilanjutkan. Perbaiki Data Anda terlebih dahulu">
 											<i class="fa fa-exclamation-circle"></i>
@@ -121,6 +99,11 @@
 											<i class="fal fa-map-marker-check"></i>
 										</span>
 									@elseif ($commitment->status === '5')
+										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
+											class="btn btn-icon btn-xs btn-primary"
+											title="Laporan Realisasi Komitmen">
+											<i class="fal fa-edit"></i>
+										</a>
 										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"
 											title data-original-title="Maaf. Verifikasi Lapangan tidak dapat dilanjutkan. Perbaiki Data Anda terlebih dahulu">
 											<i class="fal fa-exclamation-circle"></i>
@@ -204,7 +187,7 @@
 				}
 			]
 		});
-	
+
 		// Get the unique values of the "Year" column
 		var years = table.column(1).data().unique().sort();
 
@@ -215,7 +198,7 @@
 				var year = $.fn.dataTable.util.escapeRegex($(this).val());
 				table.column(1).search(year ? '^' + year + '$' : '', true, false).draw();
 			});
-		
+
 		$('<option>').val('').text('Semua Tahun').appendTo(select);
 		$.each(years, function(i, year) {
 			$('<option>').val(year).text(year).appendTo(select);

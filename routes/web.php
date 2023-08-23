@@ -128,6 +128,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('commitment', 'CommitmentController@index')->name('commitment');
 		Route::get('commitment/{pullriph}', 'CommitmentController@show')->name('commitment.show');
 		Route::get('commitment/{id}/edit', 'CommitmentController@edit')->name('commitment.edit');
+		Route::get('commitment/{id}/show', 'CommitmentController@show')->name('commitment.show');
 		Route::put('commitment/{id}/update', 'CommitmentController@update')->name('commitment.update');
 		Route::delete('commitment/{pullriph}', 'CommitmentController@destroy')->name('commitment.destroy');
 		Route::post('commitment/unggah', 'CommitmentController@store')->name('commitment.store');

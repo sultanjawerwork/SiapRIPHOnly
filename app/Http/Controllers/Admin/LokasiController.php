@@ -121,6 +121,14 @@ class LokasiController extends Controller
 			->with('success', 'Data Realisasi berhasil diperbarui');
 	}
 
+	public function storeTanam(Request $request, $anggotaId)
+	{
+	}
+
+	public function storeProduksi(Request $request, $anggotaId)
+	{
+	}
+
 
 	public function destroy($id)
 	{

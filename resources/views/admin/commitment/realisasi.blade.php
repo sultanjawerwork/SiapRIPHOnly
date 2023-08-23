@@ -296,20 +296,20 @@
 											<h6 class="fw-500 my-0">Mulsa:&nbsp;</h6>
 											<h6 class="fw-500 my-0">{{ number_format($commitment->mulsa,2,',', '.') }} kg</h6>
 										{{-- @endisset --}}
-										
-										
+
+
 									</div>
 								</div>
 							</li>
 							{{-- @isset($pullData['riph']['wajib_tanam']['bagi-hasil']) --}}
 							<li class="list-group-item d-flex justify-content-between">
 								<div>
-									
+
 									<span class="text-muted">Bagi Hasil (%)</span>
 									<h6 class="fw-500 my-0">
 										{{$commitment->poktan_share}} : {{$commitment->importir_share}}
 									</h6>
-									
+
 								</div>
 							</li>
 							{{-- @endisset --}}
@@ -337,7 +337,7 @@
 									<th>No. Perjanjian</th>
 									<th>Poktan Mitra</th>
 									<th>Anggota</th>
-									<th>Rencana Kerja</th>
+									<th>Luas/Target</th>
 									<th>Tindakan</th>
 								</tr>
 							</thead>
@@ -382,7 +382,7 @@
 							</tbody>
 						</table>
 					</div>
-					
+
 				</div>
 			</div>
 			<div class="panel" id="panel-6">
@@ -416,7 +416,7 @@
 									<td> {{$penangkar->masterpenangkar->nama_pimpinan}} </td>
 									<td> {{$penangkar->varietas}} </td>
 									<td> {{$penangkar->ketersediaan}} </td>
-									
+
 									{{-- Modal view Penangkar --}}
 									<div class="modal fade" id="editPenangkar{{$penangkar->id}}"
 										tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -424,7 +424,7 @@
 											<div class="modal-content">
 												<div class="modal-header">
 													<div>
-														<h5 class="modal-title" id="myModalLabel">Data Penangkar 
+														<h5 class="modal-title" id="myModalLabel">Data Penangkar
 															<span class="fw-500 text-info">
 																{{$penangkar->masterpenangkar->nama_lembaga}}
 															</span>
@@ -509,7 +509,7 @@
 		</div>
 	</div>
 
-	
+
 
 @endcan
 
