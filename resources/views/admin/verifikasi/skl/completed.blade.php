@@ -16,7 +16,7 @@
 											@if (Auth::user()->roleaccess === 1)
 												<th>Perusahaan</th>
 											@endif
-											<th>Periode</th>
+											<th>Periode </th>
 											<th>Nomor RIPH</th>
 											<th>No SKL</th>
 											<th>Tanggal Terbit</th>
