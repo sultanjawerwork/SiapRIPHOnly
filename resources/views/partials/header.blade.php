@@ -168,6 +168,7 @@
                     <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
                         <span class="mr-2">
                             @if (!empty(Auth::user()::find(Auth::user()->id)->data_user->avatar))
+				
                                 <img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->avatar) }}"
                                     class="profile-image rounded-circle">
                             @else
