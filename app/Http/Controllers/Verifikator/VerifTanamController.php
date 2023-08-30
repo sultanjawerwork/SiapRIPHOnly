@@ -17,21 +17,12 @@ use App\Models\Pengajuan;
 use App\Models\CommitmentCheck;
 use App\Models\PksCheck;
 use App\Models\Lokasi;
-use App\Models\PenangkarRiph;
 use App\Models\PullRiph;
-use App\Models\MasterAnggota;
-use App\Models\DataUser;
-use App\Models\MasterDesa;
+use App\Models\MasterPoktan;
 use App\Models\Pks;
-use App\Models\Poktans;
 
-class VerifOnlineController extends Controller
+class VerifTanamController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function index()
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -42,39 +33,12 @@ class VerifOnlineController extends Controller
 		$heading_class = 'fal fa-file-search';
 
 		//table pengajuan
-		$verifikasis = Pengajuan::where('status', '<=', '3')
+		$verifikasis = AjuVerifTanam::where('status', '<=', '4')
 			->orderBy('created_at', 'desc')
 			->get();
-		return view('admin.verifikasi.online.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
+		return view('admin.verifikasi.tanam.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function check($id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -86,17 +50,29 @@ class VerifOnlineController extends Controller
 		$heading_class = 'fa fa-file-search';
 
 		// Populate related data
-		$verifikasi = Pengajuan::findOrFail($id);
+		$verifikasi = AjuVerifTanam::findOrFail($id);
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->firstOrFail();
-		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
+		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
 		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
 		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
 
-		$pkss = Pks::withCount('lokasi')->where('no_ijin', $commitment->no_ijin)->get();
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
+			->with(['pkscheck' => function ($query) use ($id) {
+				$query->where('pengajuan_id', $id);
+			}])
+			->get();
+		$poktanIds = Pks::where('no_ijin', $verifikasi->no_ijin)
+			->pluck('poktan_id'); // Retrieve the poktan_id values
+
+		// Group poktan_id values and retrieve unique nama_kelompok values
+		$poktans = MasterPoktan::whereIn('id', $poktanIds)
+			->groupBy('poktan_id')
+			->pluck('nama_kelompok', 'poktan_id');
+		// dd($poktans);
 		$lokasis = collect();
 		foreach ($pkschecks as $pkscheck) {
 			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
-				->where('no_ijin', $commitmentcheck->no_ijin)
+				->where('no_ijin', $verifikasi->no_ijin)
 				->get();
 			$lokasis->push($lokasi);
 		}
@@ -104,56 +80,34 @@ class VerifOnlineController extends Controller
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
 
-		return view('admin.verifikasi.online.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'commitmentcheck', 'pkschecks', 'lokasichecks', 'pkss', 'lokasis', 'total_luastanam', 'total_volume'));
+		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
+		$countPoktan = $pkss->count();
+		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
+
+
+		return view('admin.verifikasi.tanam.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks'));
 	}
 
-	/**
-	 * berikut ini adalah detail-detail verifikasi.
-	 * 1. Verifikasi Kommitmen (Unggahan Berkas Kelengkapan RIPH)
-	 * 2. Verifikasi PKS/Perjanjian Kerjasama dengan Poktan
-	 * 3. Sekilas data Lokasi
-	 */
-
-	public function commitmentcheck($id)
+	public function checkBerkas(Request $request, $id)
 	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-		$module_name = 'Verifikasi';
-		$page_title = 'Verifikasi Data';
-		$page_heading = 'Pemeriksaan Berkas Komitmen';
-		$heading_class = 'fal fa-file-search';
+		$statusCheck = AjuVerifTanam::findOrFail($id);
+		$commitment = PullRiph::where('no_ijin', $statusCheck->no_ijin)->first();
+		$statusCheck->spvtcheck = $request->input('spvtcheck');
+		$statusCheck->sptjmcheck = $request->input('sptjmcheck');
+		$statusCheck->rtacheck = $request->input('rtacheck');
+		$statusCheck->sphtanamcheck = $request->input('sphtanamcheck');
+		$statusCheck->spdstcheck = $request->input('spdstcheck');
+		$statusCheck->logbookcheck = $request->input('logbookcheck');
 
-		$user = Auth::user();
-		$commitmentcheck = CommitmentCheck::findOrFail($id);
-		$commitment = PullRiph::findOrFail($commitmentcheck->pengajuan->commitment_id);
+		$statusCheck->status = '2'; //pemeriksaan berkas selesai
+		$commitment->status = '2'; //pemeriksaan berkas selesai
+		// dd($statusCheck);
 
-		// dd($commitmentcheck);
+		$statusCheck->save();
+		$commitment->save();
 
-		return view('admin.verifikasi.online.commitmentcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'user', 'commitmentcheck', 'commitment'));
-	}
-
-	public function commitmentstore(Request $request, $id)
-	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-		$user = Auth::user();
-		$commitmentcheck = CommitmentCheck::findOrFail($id);
-
-		$pengajuan = Pengajuan::find($commitmentcheck->pengajuan_id);
-		$commitmentcheck->verif_by = $user->id;
-		$commitmentcheck->verif_at = Carbon::now();
-		$commitmentcheck->formRiph = $request->input('formRiph');
-		$commitmentcheck->formSptjm = $request->input('formSptjm');
-		$commitmentcheck->logbook = $request->input('logbook');
-		$commitmentcheck->formRt = $request->input('formRt');
-		$commitmentcheck->formRta = $request->input('formRta');
-		$commitmentcheck->formRpo = $request->input('formRpo');
-		$commitmentcheck->formLa = $request->input('formLa');
-		$commitmentcheck->note = $request->input('note');
-
-		$commitmentcheck->save();
-		return redirect()->route('verification.data.show', $pengajuan->id)
-			->with('success', 'Data Pemeriksaan berhasil disimpan');
+		return redirect()->back()->with('success', 'Status updated successfully.');
 	}
 
 	public function pkscheck($poktan_id)
@@ -168,13 +122,12 @@ class VerifOnlineController extends Controller
 		$pks = Pks::where('poktan_id', $poktan_id)->latest()->first();
 		$commitment = PullRiph::where('no_ijin', $pks->no_ijin)
 			->first();
-		$verifikasi = Pengajuan::where('no_ijin', $commitment->no_ijin)
+		$verifikasi = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)
 			->latest()
 			->first();
-		$commitmentcheck = CommitmentCheck::where('no_pengajuan', $verifikasi->no_pengajuan)
-			->first();
-		$pkscheck = PksCheck::find($pks->id);
-		return view('admin.verifikasi.online.pkscheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck'));
+
+		$pkscheck = PksCheck::where('pks_id', $pks->id)->latest()->first();
+		return view('admin.verifikasi.tanam.pkscheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'pkscheck'));
 	}
 
 	public function pksstore(Request $request, $poktan_id)
@@ -184,20 +137,27 @@ class VerifOnlineController extends Controller
 		$pks = Pks::find($poktan_id);
 		$pkscheck = new PksCheck();
 		$pkscheck->pengajuan_id = $request->input('pengajuan_id');
-		$pkscheck->commitcheck_id = $request->input('commitmentcheck_id');
+		// $pkscheck->commitcheck_id = $request->input('commitmentcheck_id');
 		$pkscheck->pks_id = $request->input('pks_id');
 		$pkscheck->poktan_id = $request->input('poktan_id');
 		$pkscheck->npwp = $request->input('npwp');
 		$pkscheck->no_ijin = $request->input('no_ijin');
-		$pkscheck->note = $request->input('note');
+		// $pkscheck->note = $request->input('note');
 		$pkscheck->status = $request->input('status');
 		$pkscheck->verif_at = Carbon::now();
 		$pkscheck->verif_by = $user->id;
-
-
 		// dd($pkscheck);
 		$pkscheck->save();
-		return redirect()->route('verification.data.show', $pkscheck->pengajuan_id)
+
+		$verifikasi = AjuVerifTanam::where('id', $pkscheck->pengajuan_id)->first();
+		$commitment = PullRiph::where('no_ijin', $pkscheck->no_ijin)->first();
+		$status = '3';
+		$verifikasi->status = $status;
+		$commitment->status = $status;
+
+		$verifikasi->save();
+		$commitment->save();
+		return redirect()->route('verification.tanam.check', $pkscheck->pengajuan_id)
 			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
@@ -262,14 +222,13 @@ class VerifOnlineController extends Controller
 		$commitment = PullRiph::where('no_ijin', $no_ijin)->first();
 
 		//karena verifikasi dengan nomor ijin yang sama dapat muncul berulang
-		$verifikasi = Pengajuan::where('no_ijin', $no_ijin)
+		$verifikasi = AjuVerifTanam::where('no_ijin', $no_ijin)
 			->latest()
 			->first();
 		$commitmentcheck = CommitmentCheck::where('no_pengajuan', $verifikasi->no_pengajuan)->first();
 		$pkscheck = PksCheck::where('pengajuan_id', $verifikasi->id)->first();
 		$lokasicheck = LokasiCheck::where('anggota_id', $anggota_id)
 			->where('poktan_id', $pks->poktan_id)
-			->where('commitcheck_id', $commitmentcheck->id)
 			->where('pkscheck_id', $pkscheck->id)
 			->first();
 
@@ -279,7 +238,7 @@ class VerifOnlineController extends Controller
 		$verifpks = $pkscheck;
 		$veriflokasi = $lokasicheck;
 		// dd($anggotamitra);
-		return view('admin.verifikasi.online.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck', 'lokasicheck', 'pksmitra', 'anggotamitra', 'verifcommit', 'verifpks', 'veriflokasi'));
+		return view('admin.verifikasi.tanam.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck', 'lokasicheck', 'pksmitra', 'anggotamitra', 'verifcommit', 'verifpks', 'veriflokasi'));
 	}
 
 	public function lokasistore(Request $request)
@@ -303,35 +262,16 @@ class VerifOnlineController extends Controller
 			->with('success', 'Data berhasil disimpan');
 	}
 
-	public function show($id)
-	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-		$module_name = 'Permohonan';
-		$page_title = 'Verifikasi Data';
-		$page_heading = 'Data-data Verifikasi';
-		$heading_class = 'fal fa-ballot-check';
-
-		$verifikasi = Pengajuan::findOrFail($id);
-		$commitment = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
-			->latest()
-			->first();
-
-		$pksmitras = PksCheck::where('pengajuan_id', $verifikasi->id)
-			->get();
-
-		$onfarms = LokasiCheck::where('pengajuan_id', $verifikasi->id)
-			->get();
-		return view('admin.verifikasi.online.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pksmitras', 'onfarms'));
-	}
-
-	public function baonline(Request $request, $id)
+	public function store(Request $request, $id)
 	{
 		//verifikator
 		$user = Auth::user();
 
 		//pilih tabel pengajuans
-		$verifikasi = Pengajuan::findOrFail($id);
+		$verifikasi = AjuVerifTanam::findOrFail($id);
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$filenpwp = str_replace(['.', '-'], '', $commitment->npwp);
+		$filecommitment = str_replace(['/', '.'], '', $commitment->no_ijin);
 		abort_if(
 			Gate::denies('online_access') ||
 				($verifikasi->no_pengajuan != $request->input('no_pengajuan') &&
@@ -342,47 +282,84 @@ class VerifOnlineController extends Controller
 		);
 
 		//simpan data ke tabel pengajuans
-		$verifikasi->onlinecheck_by = $user->id;
-		$verifikasi->onlinedate = Carbon::now();
-		$verifikasi->onlinenote = $request->input('onlinenote');
-		$verifikasi->onlinestatus = $request->input('onlinestatus');
-		$verifikasi->status = $request->input('onlinestatus');
-
-		//ubah status di tabel pull_riphs
-		$commitment->status = $request->input('onlinestatus');
-
-		// dd($verifikasi);
+		$status = '4';
+		$verifikasi->metode = $request->input('metode');
+		$verifikasi->status = $status;
+		$verifikasi->note = $request->input('note');
+		$verifikasi->check_by = $user->id;
+		$verifikasi->verif_at = Carbon::now();
+		if ($request->hasFile('batanam')) {
+			$file = $request->file('batanam');
+			$filename = 'batanam_' . $filecommitment . '.' . $file->getClientOriginalExtension();
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$verifikasi->batanam = $filename;
+		}
+		if ($request->hasFile('ndhprt')) {
+			$file = $request->file('ndhprt');
+			$filename = 'notdin_' . $filecommitment . '.' . $file->getClientOriginalExtension();
+			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+			$verifikasi->ndhprt = $filename;
+		}
+		$commitment->status = $status;
+		// dd($verifikasi, $commitment);
 		$verifikasi->save();
 		$commitment->save();
-		return redirect()->route('verification.data.show', $id)
+		return redirect()->route('verification.tanam.show', $id)
 			->with('success', 'Data berhasil disimpan');
 	}
 
-	public function edit($id)
+	public function show($id)
 	{
-		//
+		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		$module_name = 'Verifikasi';
+		$page_title = 'Verifikasi Lapangan';
+		$page_heading = 'Daftar Lokasi Sampling';
+		$heading_class = 'fal fa-map-marked-alt';
+
+		$verifikasi = AjuVerifTanam::findOrFail($id);
+		$onfarms = LokasiCheck::where('pengajuan_id', $id)->get();
+		return view('admin.verifikasi.onfarm.farmlist', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'onfarms'));
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
+	//  public function commitmentcheck($id)
+	//  {
+	// 	 abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+	// 	 $module_name = 'Verifikasi';
+	// 	 $page_title = 'Verifikasi Data';
+	// 	 $page_heading = 'Pemeriksaan Berkas Komitmen';
+	// 	 $heading_class = 'fal fa-file-search';
+
+	// 	 $user = Auth::user();
+	// 	 $commitmentcheck = CommitmentCheck::findOrFail($id);
+	// 	 $commitment = PullRiph::findOrFail($commitmentcheck->pengajuan->commitment_id);
+
+	// 	 // dd($commitmentcheck);
+
+	// 	 return view('admin.verifikasi.online.commitmentcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'user', 'commitmentcheck', 'commitment'));
+	//  }
+
+	//  public function commitmentstore(Request $request, $id)
+	//  {
+	// 	 abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+	// 	 $user = Auth::user();
+	// 	 $commitmentcheck = CommitmentCheck::findOrFail($id);
+
+	// 	 $pengajuan = Pengajuan::find($commitmentcheck->pengajuan_id);
+	// 	 $commitmentcheck->verif_by = $user->id;
+	// 	 $commitmentcheck->verif_at = Carbon::now();
+	// 	 $commitmentcheck->formRiph = $request->input('formRiph');
+	// 	 $commitmentcheck->formSptjm = $request->input('formSptjm');
+	// 	 $commitmentcheck->logbook = $request->input('logbook');
+	// 	 $commitmentcheck->formRt = $request->input('formRt');
+	// 	 $commitmentcheck->formRta = $request->input('formRta');
+	// 	 $commitmentcheck->formRpo = $request->input('formRpo');
+	// 	 $commitmentcheck->formLa = $request->input('formLa');
+	// 	 $commitmentcheck->note = $request->input('note');
+
+	// 	 $commitmentcheck->save();
+	// 	 return redirect()->route('verification.data.show', $pengajuan->id)
+	// 		 ->with('success', 'Data Pemeriksaan berhasil disimpan');
+	//  }
 }

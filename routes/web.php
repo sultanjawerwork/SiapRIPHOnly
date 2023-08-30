@@ -170,13 +170,26 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		//realisasi lokasi tanam
 		Route::get('realisasi/lokasi/{anggota_id}', 'LokasiController@show')->name('lokasi.tanam');
 		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
+		Route::put('realisasi/lokasi/{id}/storeTanam', 'LokasiController@storeTanam')->name('lokasi.tanam.store');
+		Route::put('realisasi/lokasi/{id}/storeProduksi', 'LokasiController@storeProduksi')->name('lokasi.produksi.store');
 
 		// pengajuan
 		Route::get('commitment/{id}/submit', 'PengajuanController@create')->name('commitment.submit');
 		Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
 
+		//new pengajuan tanam
+		Route::get('pengajuan', 'PengajuanController@index')->name('pengajuan.index');
+
+		Route::get('commitment/{id}/formavt', 'AjuVerifTanamController@create')->name('commitment.avt');
+		Route::post('commitment/{id}/formavt/store', 'AjuVerifTanamController@store')->name('commitment.avt.store');
+
+		//new pengajuan produksi
+		Route::get('commitment/{id}/formavp', 'AjuVerifProduksiController@create')->name('commitment.avp');
+		Route::post('commitment/{id}/formavp/store', 'AjuVerifProduksiController@store')->name('commitment.avp.store');
+
+
 		// Route::resource('pengajuan', 'PengajuanController');
-		Route::get('submissions', 'PengajuanController@index')->name('submissions');
+
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
@@ -213,23 +226,41 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('template/create', 'FileManagementController@templatecreate')->name('template.create');
 		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 	});
+	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
+});
+
+Route::group(['prefix' => 'importir', 'as' => 'importir.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 });
 
 Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
 
+	//new verifikasi tanam
+	Route::get('tanam', 'VerifTanamController@index')->name('tanam');
+	Route::group(['prefix' => 'tanam', 'as' => 'tanam.'], function () {
+		Route::get('{id}/show', 'VerifTanamController@show')->name('show');
+		Route::get('{id}/check', 'VerifTanamController@check')->name('check');
+		Route::put('{id}/store', 'VerifTanamController@store')->name('store');
+		Route::post('{id}/checkBerkas', 'VerifTanamController@checkBerkas')->name('checkBerkas');
+		Route::get('pks/{poktan_id}/check', 'VerifTanamController@pkscheck')->name('check.pks');
+		Route::post('pks/{poktan_id}/store', 'VerifTanamController@pksstore')->name('check.pks.store');
+		Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
+	});
+
+
+
 	//verifikasi online/data
-	Route::get('data', 'VerifOnlineController@index')->name('data');
-	Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
-	Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
-	Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
-	Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
-	Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
-	Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
-	Route::get('data/pks/{id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
-	Route::put('data/pks/{id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
-	Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
-	Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
-	Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');
+	// Route::get('data', 'VerifOnlineController@index')->name('data');
+	// Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
+	// Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
+	// Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
+	// Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
+	// Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
+	// Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
+	// Route::get('data/pks/{id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
+	// Route::put('data/pks/{id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
+	// Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
+	// Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
+	// Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');
 
 	//verifikasi onfarm/lapangan
 	Route::get('onfarm', 'VerifOnfarmController@index')->name('onfarm');

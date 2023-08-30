@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\AjuVerifProduksi;
+use App\Models\AjuVerifTanam;
 use App\Models\CommitmentCheck;
 use App\Models\Pengajuan;
 use App\Models\PullRiph;
@@ -20,14 +21,17 @@ class PengajuanController extends Controller
 	public function index(Request $request)
 	{
 		$module_name = 'Proses RIPH';
-		$page_title = 'Daftar Pengajuan';
-		$page_heading = 'Daftar Pengajuan';
+		$page_title = 'Daftar Pengajuan Verifikasi';
+		$page_heading = 'Daftar Pengajuan Verifikasi';
 		$heading_class = 'fal fa-ballot-check';
-		$pengajuans = Pengajuan::where('npwp', Auth::user()->data_user->npwp_company)
-			// ->where('status', '!=', '7')
+
+		$verifTanams = AjuVerifTanam::where('npwp', Auth::user()->data_user->npwp_company)
 			->get();
 
-		return view('admin.pengajuan.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pengajuans'));
+		$verifProduksis = AjuVerifProduksi::where('npwp', Auth::user()->data_user->npwp_company)
+			->get();
+
+		return view('admin.pengajuan.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifTanams', 'verifProduksis'));
 	}
 
 	public function create($id)

@@ -176,9 +176,9 @@
 				@endcan
 				{{-- pengajuan verifikasi --}}
 				@can('pengajuan_access')
-					<li class="c-sidebar-nav-item {{request()->is('admin/task/submissions') ? 'active' : '' }}">
+					<li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan') ? 'active' : '' }}">
 						@if (Auth::user()->roles[0]->title == 'User')
-						<a href="{{ route('admin.task.submissions') }}" title="Pengajuan"
+						<a href="{{ route('admin.task.pengajuan.index') }}" title="Pengajuan verifikasi"
 							data-filter-tags="daftar pengajuan verifikasi data online onfarm">
 							<i class="fa-fw fal fa-upload c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">
@@ -246,10 +246,10 @@
 			@can('verificator_task_access')
 				<li class="nav-title" data-i18n="nav.administation">VERIFICATOR TASK</li>
 				@can('online_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/data')
-						|| request()->is('verification/data*') ? 'active' : '' }}">
-						<a href="{{ route('verification.data') }}"
-							data-filter-tags="verifikasi data online">
+					<li class="c-sidebar-nav-item {{ request()->is('verification/tanam')
+						|| request()->is('verification/tanam*') ? 'active' : '' }}">
+						<a href="{{ route('verification.tanam') }}"
+							data-filter-tags="verifikasi tanam">
 							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Verifikasi Data</span>
 							@php

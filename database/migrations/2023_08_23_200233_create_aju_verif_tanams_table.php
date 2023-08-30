@@ -13,11 +13,10 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('aju_verif_tanams', function (Blueprint $table) {
+		Schema::create('avtanams', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('npwp');
 			$table->unsignedBigInteger('commitment_id');
-			$table->string('no_pengajuan');
 			$table->string('no_ijin');
 			$table->string('status')->nullable(); //
 			$table->text('note')->nullable();
@@ -34,6 +33,7 @@ return new class extends Migration
 
 			$table->bigInteger('check_by')->nullable();
 			$table->date('verif_at')->nullable();
+			$table->string('metode')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

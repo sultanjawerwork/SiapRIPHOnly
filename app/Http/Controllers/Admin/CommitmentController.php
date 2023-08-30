@@ -38,6 +38,14 @@ class CommitmentController extends Controller
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$commitments = PullRiph::where('npwp', $npwp_company)->get();
+		foreach ($commitments as $commitment) {
+			$sumVolume = $commitment->lokasi->sum('volume');
+			$minThreshold = $commitment->volume_riph * 0.05 * 0.95;
+
+			$commitment->sumVolume = $sumVolume;
+			$commitment->minThreshold = $minThreshold;
+		}
+
 
 		// dd($commitments);
 		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments'));

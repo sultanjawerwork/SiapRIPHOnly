@@ -86,6 +86,11 @@ class PullRiph extends Model
 		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
 	}
 
+	public function ajutanam()
+	{
+		return $this->hasMany(AjuVerifTanam::class, 'no_ijin', 'no_ijin');
+	}
+
 	public function pengajuan()
 	{
 		return $this->hasMany(Pengajuan::class, 'no_ijin', 'no_ijin');

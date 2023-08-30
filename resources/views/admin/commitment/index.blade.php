@@ -58,67 +58,50 @@
 									</div>
 								</td>
 								<td class="text-center">
-									@if (empty($commitment->status))
-										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
-											class="btn btn-icon btn-xs btn-primary"
-											title="Laporan Realisasi Komitmen">
-											<i class="fal fa-edit"></i>
-										</a>
-										<a href="{{ route('admin.task.commitment.submit', $commitment->id) }}"
+									<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
+										class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip"
+										title data-original-title="Laporan Realisasi Tanam dan Produksi">
+										<i class="fal fa-edit"></i>
+									</a>
+									@if(empty($commitment->status) )
+										<a href="{{ route('admin.task.commitment.avt', $commitment->id) }}"
 											class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
 											title data-original-title="Ajukan Verifikasi Tanam">
 											<i class="fal fa-upload"></i>
 										</a>
-										{{-- <span class="badge btn-warning btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Belum Mengajukan Verifikasi">
-											<i class="fal fa-exclamation-circle"></i>
-										</span> --}}
-									@elseif ($commitment->status === '1')
-										<span class="badge btn-primary btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Verifikasi sudah diajukan">
-											<i class="fal fa-hourglass"></i>
+									@elseif(in_array($commitment->status, ['1']))
+										<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+										title data-original-title="Verifikasi tanam telah diajukan">
+											<i class="fal fa-inbox-out"></i>
 										</span>
-									@elseif ($commitment->status === '2')
-										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Verifikasi Data Selesai">
-											<i class="fal fa-file-check"></i>
+									@elseif(in_array($commitment->status, ['2']))
+										<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+										title data-original-title="Verifikasi berkas tahap 1 selesai">
+											<i class="fal fa-inbox-in"></i>
 										</span>
-									@elseif ($commitment->status === '3')
-										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
-											class="btn btn-icon btn-xs btn-primary"
-											title="Laporan Realisasi Komitmen">
-											<i class="fal fa-edit"></i>
-										</a>
-										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Maaf. Verifikasi Data tidak dapat dilanjutkan. Perbaiki Data Anda terlebih dahulu">
-											<i class="fa fa-exclamation-circle"></i>
+									@elseif(in_array($commitment->status, ['3']))
+										<span class="btn btn-xs btn-primary btn-icon" data-toggle="tooltip"
+										title data-original-title="Verifikasi berkas/data PKS selesai">
+											<i class="fal fa-inbox-in"></i>
 										</span>
-									@elseif ($commitment->status === '4')
-										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Verifikasi Lapangan Selesai">
-											<i class="fal fa-map-marker-check"></i>
+									@elseif($commitment->status === '4')
+										<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
+										title data-original-title="Verifikasi Tanam selesai.">
+											<i class="fal fa-check"></i>
 										</span>
-									@elseif ($commitment->status === '5')
-										<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
-											class="btn btn-icon btn-xs btn-primary"
-											title="Laporan Realisasi Komitmen">
-											<i class="fal fa-edit"></i>
-										</a>
-										<span class="badge btn-danger btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Maaf. Verifikasi Lapangan tidak dapat dilanjutkan. Perbaiki Data Anda terlebih dahulu">
-											<i class="fal fa-exclamation-circle"></i>
-										</span>
-									@elseif ($commitment->status === '6')
-										<span class="badge btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="Rekomendasi Penerbitan SKL">
-											<i class="fal fa-file-certificate"></i>
-										</span>
-									@elseif ($commitment->status === '7')
-										<a href="" class="btn btn-success btn-icon btn-xs" data-toggle="tooltip"
-											title data-original-title="HORAY! SKL Sudah Terbit">
-											<i class="fal fa-file-certificate"></i>
-										</a>
 									@endif
+									{{-- @if ($commitment->sumVolume >= $commitment->minThreshold) --}}
+										<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
+										class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
+										title data-original-title="Ajukan Verifikasi Produksi">
+											<i class="fal fa-upload"></i>
+										</a>
+										{{-- @elseif($commitment->status === '5') --}}
+										<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+										title data-original-title="Verifikasi produksi telah diajukan">
+											<i class="fal fa-inbox-out"></i>
+										</span>
+									{{-- @endif --}}
 								</td>
 							</tr>
 							@endforeach

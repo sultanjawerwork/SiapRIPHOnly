@@ -19,7 +19,7 @@
 									<div class="col-12 text-center mb-1">
 										<span class="icon-stack icon-stack-sm">
 											<i class="base-7 icon-stack-3x color-success-50"></i>
-											<i class="fal fa-hourglass icon-stack-1x text-white"></i>
+											<span class="icon-stack-1x text-white">1</span>
 										</span>
 									</div>
 									<div class="col-12 text-center">
@@ -33,16 +33,15 @@
 								<div class="row">
 									<div class="col-12 text-center mb-1">
 										<span class="icon-stack icon-stack-sm">
-											<i class="base-7 icon-stack-3x color-info-700"></i>
-											<i class="fal fa-file-check icon-stack-1x text-white"></i>
+											<i class="base-7 icon-stack-3x color-info-500"></i>
+											<span class="icon-stack-1x text-white">2</>
 										</span>
 									</div>
 									<div class="col-12 text-center">
-										<span class="fw-700">Verifikasi Data</span>
+										<span class="fw-700">Tahap Pmeriksaan Berkas</span>
 									</div>
 								</div><hr>
-								<p class="small help-block">Verifikasi Data SELESAI diproses.<br> Selama Masa Tunggu, Anda tidak dapat: menambah, mengubah, dan atau menghapus data terkait.
-								</p>
+								<p class="small help-block">Pemeriksaan berkas dan kelengkapan administratif telah selesai.</p>
 								{{-- <span class="btn btn-xs btn-warning d-block" data-toggle="tooltip"
 									data-original-title="Dalam Proses Verifikasi">
 									Ajukan SKL
@@ -51,37 +50,30 @@
 							@case(3)
 								<div class="row">
 									<div class="col-12 text-center mb-1">
-										<i class="fas fa-exclamation-circle fa-2x text-warning"></i>
+										<span class="icon-stack icon-stack-sm">
+											<i class="base-7 icon-stack-3x color-info-500"></i>
+											<span class="icon-stack-1x text-white">3</>
+										</span>
 									</div>
 									<div class="col-12 text-center">
-										<span class="fw-700">Perbaikan Data</span>
+										<span class="fw-700">Tahap Pemeriksaan PKS</span>
 									</div>
 								</div><hr>
-								<p class="small help-block">Verifikasi Data SELESAI diproses. System menyatakan Anda HARUS MEMPERBAIKI DATA terlebih dahulu, lalu Ajukan Pemeriksaan Ulang
-								</p><hr>
-								<a href="{{ route('admin.task.submission.create', $commitment->id) }}"
-									class="btn btn-xs btn-danger d-block">
-									Ajukan Review dan Verifikasi Ulang
-								</a>
-								{{-- <a href="#" class="btn btn-xs btn-danger d-block"
-									data-toggle="modal" data-target="#verifikasiModal">
-									Ajukan Pemeriksaan Ulang
-								</a> --}}
+								<p class="small help-block">Pemeriksaan berkas-berkas Perjanjian Kerjasama dengan Mitra Kelompok Tani.</p>
 							@break
 							@case(4)
 								<div class="row">
 									<div class="col-12 text-center mb-1">
 										<span class="icon-stack icon-stack-sm">
-											<i class="base-7 icon-stack-3x color-success-700"></i>
-											<i class="fal fa-map-marker-check icon-stack-1x text-white"></i>
+											<i class="base-7 icon-stack-3x color-success-500"></i>
+											<span class="icon-stack-1x text-white">4</span>
 										</span>
 									</div>
 									<div class="col-12 text-center">
-										<span class="fw-700">Verifikasi Lapangan</span>
+										<span class="fw-700">Verifikasi Tanam Selesai</span>
 									</div>
 								</div><hr>
-								<p class="small help-block">Verifikasi Lapangan SELESAI diproses.<br> Surat Keterangan Lunas segera diterbitkan.
-								</p>
+								<p class="small help-block">Verifikasi Tanam SELESAI diproses.<br> Anda sudah dapat mengajukan verifikasi produksi.</p>
 							@break
 							@case(5)
 								<div class="row">

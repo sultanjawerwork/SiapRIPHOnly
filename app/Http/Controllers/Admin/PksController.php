@@ -239,13 +239,17 @@ class PksController extends Controller
 			->where('poktan_id', $pks->poktan_id)
 			->get();
 
+		$sumLuas = $lokasis->sum('luas_tanam');
+		$sumProduksi = $lokasis->sum('volume');
+		// dd($sumLuas, $sumProduksi);
+
 		if (empty($commitment->status) || $commitment->status == 3 || $commitment->status == 5) {
 			$disabled = false; // input di-enable
 		} else {
 			$disabled = true; // input di-disable
 		}
 
-		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled'));
+		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled', 'sumLuas', 'sumProduksi'));
 	}
 
 	public function saprodi($id)

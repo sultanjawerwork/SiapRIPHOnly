@@ -161,7 +161,7 @@
 								style="text-transform:uppercase">Pengajuan Baru</span>
 						</h2>
 						<div class="panel-toolbar">
-							<a href="{{ route('verification.data') }}" data-toggle="tooltip" title
+							<a href="" data-toggle="tooltip" title
 								data-original-title="Lihat semua pengajuan" class="btn btn-xs btn-warning waves-effect waves-themed"
 								type="button" href="/">Lihat</a>
 						</div>
