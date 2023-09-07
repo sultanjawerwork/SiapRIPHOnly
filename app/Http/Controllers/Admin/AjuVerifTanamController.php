@@ -7,6 +7,7 @@ use App\Models\AjuVerifTanam;
 use App\Models\Lokasi;
 use App\Models\Pks;
 use App\Models\PullRiph;
+use App\Models\UserDocs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Gate;
@@ -158,6 +159,7 @@ class AjuVerifTanamController extends Controller
 		return view('admin.pengajuan.veriftanam.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'total_luastanam', 'total_volume', 'pks', 'disabled', 'countPoktan', 'countPks'));
 	}
 
+
 	public function store(Request $request, $id)
 	{
 		$commitment = PullRiph::findOrFail($id);
@@ -170,23 +172,13 @@ class AjuVerifTanamController extends Controller
 		$pengajuan->no_ijin = $commitment->no_ijin;
 		$pengajuan->status = '1';
 
-		$fileTypes = ['spvt', 'sptjm', 'rta', 'sphtanam', 'spdst', 'logbooktanam']; // List of file types
-
-		foreach ($fileTypes as $fileType) {
-			if ($request->hasFile($fileType)) {
-				$attch = $request->file($fileType);
-				$attchname = $fileType . '_' . $filecommitment . '.' . $attch->getClientOriginalExtension();
-				$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-				$pengajuan->$fileType = $attchname;
-			}
-		}
 
 		$commitment->status = '1';
 		$pengajuan->save();
 		$commitment->save();
 
 		return redirect()->route('admin.task.pengajuan.index', $id)
-			->with('success', 'Data berhasil disimpan');
+			->with('success', 'Pengajuan verifikasi tanam berhasil dibuat.');
 	}
 
 	/**

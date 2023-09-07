@@ -26,12 +26,6 @@ return new class extends Migration
 
 			//file upload
 			$table->string('baproduksi')->nullable();
-			$table->string('spvp')->nullable(); //surat pengajuan verifikasi produksi
-			$table->string('rpo')->nullable();
-			$table->string('formLa')->nullable();
-			$table->string('sphproduksi')->nullable();
-			$table->string('spdsp')->nullable(); //surat pengantar dinas telah selesai produksi
-			$table->string('logbookproduksi')->nullable();
 			$table->string('ndhprp')->nullable(); //nota dinas hasil pemeriksaan realisasi produksi
 
 			$table->bigInteger('check_by')->nullable();

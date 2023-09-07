@@ -92,13 +92,13 @@
 									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
 								</td>
 								<td class="text-right">
-									{{ number_format($commitment->volume_riph * 5 / 100, 2) }} ha
+									{{ number_format($commitment->luas_wajib_tanam, 2) }} ha
 								</td>
 								<td class="text-right">
 									{{ number_format($total_luastanam, 2) }} ha
 								</td>
 								<td>
-									@if ($total_luastanam >= $commitment->volume_riph * 5 / 100)
+									@if ($total_luastanam >= $commitment->luas_wajib_tanam)
 										<i class="fas fa-check text-success"></i>
 										<i>Terpenuhi</i>
 									@else
@@ -113,13 +113,13 @@
 									<span class="help-block">Komitmen wajib produksi yang telah dipenuhi hingga saat ini</span>
 								</td>
 								<td class="text-right">
-									{{ number_format($commitment->volume_riph * 5 / 100*6, 2) }} ton
+									{{ number_format($commitment->volume_produksi, 2) }} ton
 								</td>
 								<td class="text-right">
 									{{ number_format($total_volume, 2) }} ton
 								</td>
 								<td>
-									@if ($total_volume >= $commitment->volume_riph * 5 / 100*6)
+									@if ($total_volume >= $commitment->volume_produksi)
 										<i class="fas fa-check text-success"></i>
 										<i>Terpenuhi</i>
 									@else
@@ -140,7 +140,7 @@
 									{{ $countPks }} PKS
 								</td>
 								<td>
-									@if ($total_volume >= $commitment->volume_riph * 5 / 100*6)
+									@if ($countPoktan == $countPks)
 										<i class="fas fa-check text-success"></i>
 										<i>Sesuai</i>
 									@else
@@ -227,66 +227,6 @@
 		<div id="panel-5" class="panel">
 			<form action="{{route('admin.task.commitment.avp.store', $commitment->id)}}" method="post" enctype="multipart/form-data">
 				@csrf
-				<div class="panel-container show">
-					<div class="panel-content">
-						<div class="row d-flex align-items-center">
-							<div class="form-group col-md-6">
-								<label class="form-label">Surat Pengajuan<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="spvp" id="spvp" required>
-									<label class="custom-file-label" for="spvt">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Surat Pengajuan Verifikasi Produksi. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Form RPO<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="rpo" id="rpo" required>
-									<label class="custom-file-label" for="rpo">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Berkas Realisasi Produksi. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">SPH-SBS<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="sphproduksi" id="sphproduksi" required>
-									<label class="custom-file-label" for="sphproduksi">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Keterangan realisasi produksi telah tercatat di SPH-SBS. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Form La<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="formLa" id="formLa">
-									<label class="custom-file-label" for="formLa">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Berkas laporan akhir. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Logbook</label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="logbookproduksi" id="logbookproduksi">
-									<label class="custom-file-label" for="logbookproduksi">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Logbook realisasi produksi. <span class="text-info">(opsional)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Pengantar Dinas</label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="spdsp" id="spdsp">
-									<label class="custom-file-label" for="spdsp">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Surat Pengantar Dinas telah selesai realisasi produksi. <span class="text-info">(opsional)</span></span>
-							</div>
-							<div class="form-group col-12">
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input" id="checkForm" name="checkForm" required>
-									<label class="custom-control-label text-danger" for="checkForm">Dengan ini menyatakan bahwa kami telah menyelesaikan komitmen wajib produksi dan siap untuk dilakukan verifikasi produksi.</label>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 				<div class="card-footer text-right">
 					<a href="javascript:void(0);" class="btn btn-sm btn-default" onclick="cancelBtn();" >
 						<i class="fas fa-undo text-align-center mr-1"></i> Batalkan

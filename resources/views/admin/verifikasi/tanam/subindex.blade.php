@@ -55,343 +55,365 @@
 						</div>
 					</div>
 				</div>
-				<div id="panel-2" class="panel">
-					<div class="panel-hdr">
-						<h2>
-							Ringkasan Data Realisasi
-						</h2>
-						<div class="panel-toolbar">
-
-						</div>
-					</div>
-					<div class="panel-container show">
-						<div class="alert alert-info border-0 mb-0">
-							<div class="d-flex align-item-center">
-								<i class="fal fa-info-circle mr-1"></i>
-								<div class="flex-1">
-									<span>Berikut ini adalah data ringkasan realisasi komitmen wajib tanam-produksi yang telah dilaporkan oleh Pelaku Usaha.</span>
-								</div>
-							</div>
-						</div>
-						<div class="panel-content">
-							<table class="table table-striped table-bordered w-100" id="dataRiph">
-								<thead>
-									<th>Data</th>
-									<th>Kewajiban</th>
-									<th>Realisasi</th>
-									<th>Status</th>
-								</thead>
-								<tbody>
-									<tr>
-										<td>Tanam</td>
-										<td class="text-right">
-											{{ number_format($commitment->volume_riph * 0.05/6, 2, '.', ',') }} ha
-										</td>
-										<td class="text-right">
-											{{number_format($total_luastanam, 2,'.',',')}} ha
-										</td>
-										<td>
-											@if($commitment->volume_riph * 0.05/6 >= $total_luastanam)
-												<span class="text-warning"><i class="fas fa-exclamation-circle mr-1"></i>TIDAK TERPENUHI</span>
-											@else
-											<span class="text-success"><i class="fas fa-check mr-1"></i>TERPENUHI</span>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td>Kelompok Tani dan PKS</td>
-										<td class="text-right">
-											{{$countPoktan}} Poktan
-										</td>
-										<td class="text-right">
-											{{$countPks}} PKS
-										</td>
-										<td>
-											@if($countPks < $countPoktan)
-												<i class="fas fa-exclamation-circle mr-1 text-warning"></i><span class="text-warning fw-500">TIDAK SESUAI</span>
-											@else
-												<i class="fas fa-check mr-1 text-success"></i><span class="text-success fw-500">SESUAI</span>
-											@endif
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div id="panel-3" class="panel">
-					<div class="panel-hdr">
-						<h2>Kelengkapan Berkas</h2>
-						<div class="panel-toolbar">
-							<a href="" class="btn btn-xs btn-primary"><i class="fal fa-search mr-1"></i>Periksa Dokumen</a>
-						</div>
-					</div>
-					<form action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}" method="post">
-					@csrf
-						<div class="panel-container show">
-							<div class="alert alert-info border-0 mb-0">
-								<div class="d-flex align-item-center">
-									<i class="fal fa-info-circle mr-1"></i>
-									<div class="flex-1">
-										<span>Berikut ini adalah berkas-berkas kelengkapan yang diunggah oleh Pelaku Usaha.</span>
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#panel-2" role="tab" aria-selected="true">Ringkasan Data Realisasi</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-3" role="tab" aria-selected="true">Kelengkapan Berkas</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-4" role="tab" aria-selected="true">Perjanjian Kemitraan</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-5" role="tab" aria-selected="true">Data Lokasi Tanam</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade active show" id="panel-2" role="tabpanel" aria-labelledby="panel-2">
+						<div id="panel-2" class="panel">
+							{{-- <div class="panel-hdr">
+								<h2>
+									Ringkasan Data Realisasi
+								</h2>
+								<div class="panel-toolbar"></div>
+							</div> --}}
+							<div class="panel-container show">
+								<div class="alert alert-info border-0 mb-0">
+									<div class="d-flex align-item-center">
+										<i class="fal fa-info-circle mr-1"></i>
+										<div class="flex-1">
+											<span>Berikut ini adalah data ringkasan realisasi komitmen wajib tanam-produksi yang telah dilaporkan oleh Pelaku Usaha.</span>
+										</div>
 									</div>
 								</div>
+								<div class="panel-content">
+									<table class="table table-striped table-bordered w-100" id="dataRiph">
+										<thead>
+											<th>Data</th>
+											<th>Kewajiban</th>
+											<th>Realisasi</th>
+											<th>Status</th>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Tanam</td>
+												<td class="text-right">
+													{{ number_format($commitment->volume_riph * 0.05/6, 2, '.', ',') }} ha
+												</td>
+												<td class="text-right">
+													{{number_format($total_luastanam, 2,'.',',')}} ha
+												</td>
+												<td>
+													@if($commitment->volume_riph * 0.05/6 >= $total_luastanam)
+														<span class="text-warning"><i class="fas fa-exclamation-circle mr-1"></i>TIDAK TERPENUHI</span>
+													@else
+													<span class="text-success"><i class="fas fa-check mr-1"></i>TERPENUHI</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>Kelompok Tani dan PKS</td>
+												<td class="text-right">
+													{{$countPoktan}} Poktan
+												</td>
+												<td class="text-right">
+													{{$countPks}} PKS
+												</td>
+												<td>
+													@if($countPks < $countPoktan)
+														<i class="fas fa-exclamation-circle mr-1 text-warning"></i><span class="text-warning fw-500">TIDAK SESUAI</span>
+													@else
+														<i class="fas fa-check mr-1 text-success"></i><span class="text-success fw-500">SESUAI</span>
+													@endif
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<div class="panel-content">
-								<table class="table table-striped table-bordered table-sm w-100" id="attchCheck">
-									<thead class="thead-themed">
-										<tr>
-											<th class="text-uppercase text-muted">Form</th>
-											<th class="text-uppercase text-muted">Nama Berkas</th>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="panel-3" role="tabpanel" aria-labelledby="panel-3">
+						<div id="panel-3" class="panel">
+							{{-- <div class="panel-hdr">
+								<h2>Kelengkapan Berkas</h2>
+								<div class="panel-toolbar">
+									<a href="" class="btn btn-xs btn-primary"><i class="fal fa-search mr-1"></i>Periksa Dokumen</a>
+								</div>
+							</div> --}}
+							<form action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}" method="post">
+							@csrf
+								<div class="panel-container show">
+									<div class="alert alert-info border-0 mb-0">
+										<div class="d-flex align-item-center">
+											<i class="fal fa-info-circle mr-1"></i>
+											<div class="flex-1">
+												<span>Berikut ini adalah berkas-berkas kelengkapan yang diunggah oleh Pelaku Usaha.</span>
+											</div>
+										</div>
+									</div>
+									<div class="panel-content">
+										<table class="table table-striped table-bordered table-sm w-100" id="attchCheck">
+											<thead class="thead-themed">
+												<tr>
+													<th class="text-uppercase text-muted">Form</th>
+													<th class="text-uppercase text-muted">Nama Berkas</th>
+													<th class="text-uppercase text-muted">Tindakan</th>
+													<th class="text-uppercase text-muted">Hasil Periksa</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>Surat Pengajuan Verifikasi Tanam</td>
+													<td>{{$userDocs->spvt}}</td>
+													<td>
+														@if ($userDocs->spvt)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="spvtcheck" id="spvtcheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->spvtcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->spvtcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Surat Pertanggungjawaban Mutlak</td>
+													<td>{{$userDocs->sptjm}}</td>
+													<td>
+														@if ($userDocs->sptjm)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="sptjmcheck" id="sptjmcheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->sptjmcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->sptjmcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Form Realisasi Tanam</td>
+													<td>{{$userDocs->rta}}</td>
+													<td>
+														@if ($userDocs->rta)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rta) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="rtacheck" id="rtacheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Form SPH-SBS</td>
+													<td>{{$userDocs->sphtanam}}</td>
+													<td>
+														@if ($userDocs->sphtanam)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphtanam) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="sphtanamcheck" id="sphtanamcheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Pengantar Dinas telah selesai Tanam</td>
+													<td>{{$userDocs->spdst}}</td>
+													<td>
+														@if ($userDocs->spdst)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="spdstcheck" id="spdstcheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->spdstcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->spdstcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="" {{ $userDocs->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<td>Logbook (s.d tanam)</td>
+													<td>{{$userDocs->logbooktanam}}</td>
+													<td>
+														@if ($userDocs->logbooktanam)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbooktanam) }}">
+																<i class="fas fa-search mr-1"></i>
+																Lihat Dokumen
+															</a>
+														@endif
+													</td>
+													<td>
+														<select class="form-control form-control-sm" name="logbookcheck" id="logbookcheck">
+															<option value="">- Pilih status -</option>
+															<option value="sesuai" {{ $userDocs->logbookcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->logbookcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="" {{ $userDocs->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
+														</select>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="card-footer d-flex justify-content-between align-items-center">
+									<div class="help-block col-md-7">
+										<ul class="list-group">Keterangan
+											<li class="d-flex justify-content-start">
+												<span class="col-3 text-danger fw-500">Belum Diperiksa</span>
+												<span>Anda belum melakukan pemeriksaan terhadap berkas terkait.</span>
+											</li>
+											<li class="d-flex justify-content-start">
+												<span class="col-3 text-success fw-500">Sesuai</span>
+												<span>Jika salinan yang diunggah ADA dan SESUAI.</span>
+											</li>
+											<li class="d-flex justify-content-start">
+												<span class="col-3 text-warning fw-500">Tidak Sesuai:</span>
+												<span>Jika salinan yang diunggah TIDAK ADA atau ADA namun TIDAK SESUAI.</span>
+											</li>
+										</ul>
+									</div>
+									<div class="col-md text-right">
+										<button type="submit" class="btn btn-primary btn-sm">
+											simpan
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="panel-4" role="tabpanel" aria-labelledby="panel-4">
+						<div id="panel-4" class="panel">
+							{{-- <div class="panel-hdr">
+								<h2>Perjanjian Kemitraan</h2>
+							</div> --}}
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-striped table-bordered table-sm w-100" id="pksCheck">
+										<thead class="thead-themed">
+											<tr>
+												<th class="text-uppercase text-muted">Nomor Perjanjian</th>
+												<th class="text-uppercase text-muted">Kelompok Tani</th>
+												<th class="text-uppercase text-muted">Masa Berlaku</th>
+												<th class="text-uppercase text-muted">Status</th>
+												<th class="text-uppercase text-muted">Tindakan</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach ($pkss as $pks)
+												<tr>
+													<td>{{$pks->no_perjanjian}}</td>
+													<td>{{$pks->masterpoktan->nama_kelompok}}</td>
+													<td>
+														{{$pks->tgl_perjanjian_start}} s.d
+														{{$pks->tgl_perjanjian_end}}
+													</td>
+													<td>
+														@if ($pks->pkscheck->isNotEmpty())
+															{{ $pks->pkscheck->first()->status }}
+														@endif
+													</td>
+													<td>
+														<a href="{{route('verification.tanam.check.pks', $pks->poktan_id)}}">
+															lihat data
+														</a>
+													</td>
+												</tr>
+											@endforeach
+											{{-- @foreach ($pkschecks as $pkscheck)
+												<tr class="align-items-center">
+													<td>{{$pkscheck->pks->no_perjanjian}}</td>
+													<td>{{$pkscheck->pks->masterpoktan->nama_kelompok}}</td>
+													<td>
+														{{$pkscheck->pks->tgl_perjanjian_start}} s.d <br>
+														{{$pkscheck->pks->tgl_perjanjian_end}}
+													</td>
+													<td>{{$pkscheck->verif_at}}</td>
+													<td class="text-center">
+														@if ($pkscheck->status === '2')
+															<span class="badge btn-xs btn-icon btn-success"
+																data-toggle="tooltip" title
+																data-original-title="Pemeriksaan Selesai. Catatan: {{$pkscheck->note}}">
+																<i class="fa fa-check-circle"></i>
+															</span>
+														@elseif ($pkscheck->status === '3')
+															<span class="badge btn-xs btn-icon btn-danger" data-toggle="tooltip" title
+															data-original-title="Pemeriksaan Selesai, Pelaku usaha harus memperbaiki kekurangan. Catatan: {{$pkscheck->note}}">
+																<i class="fa fa-exclamation-circle"></i>
+															</span>
+														@else
+															<span class="badge btn-xs btn-icon btn-warning" data-toggle="tooltip" title
+															data-original-title="Pemeriksaan belum dilakukan">
+																<i class="fa fa-hourglass"></i>
+															</span>
+														@endif
+													</td>
+													<td>
+														@if($pkscheck->id)
+															<a href="{{route('verification.data.pkscheck.edit', $pkscheck->id)}}" data-toggle="tooltip"
+																data-original-title="Ubah Pemeriksaan"
+																class="btn btn-xs btn-icon btn-primary mr-1">
+																<i class="fal fa-edit"></i>
+															</a>
+														@else
+														@endif
+													</td>
+												</tr>
+											@endforeach --}}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="panel-5" role="tabpanel" aria-labelledby="panel-5">
+						<div id="panel-5" class="panel">
+							{{-- <div class="panel-hdr">
+								<h2>Data Lokasi Tanam</h2>
+							</div> --}}
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
+										<thead>
+											<th class="text-uppercase text-muted">Kelompoktani</th>
+											<th class="text-uppercase text-muted">Nama Lokasi</th>
+											<th class="text-uppercase text-muted">Pengelola</th>
+											<th class="text-uppercase text-muted">Luas</th>
 											<th class="text-uppercase text-muted">Tindakan</th>
-											<th class="text-uppercase text-muted">Hasil Periksa</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Surat Pengajuan Verifikasi Tanam</td>
-											<td>{{$verifikasi->spvt}}</td>
-											<td>
-												@if ($verifikasi->spvt)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->spvt) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="spvtcheck" id="spvtcheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->spvtcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->spvtcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td>Surat Pertanggungjawaban Mutlak</td>
-											<td>{{$verifikasi->sptjm}}</td>
-											<td>
-												@if ($verifikasi->sptjm)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->sptjm) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="sptjmcheck" id="sptjmcheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->sptjmcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->sptjmcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td>Form Realisasi Tanam</td>
-											<td>{{$verifikasi->rta}}</td>
-											<td>
-												@if ($verifikasi->rta)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->rta) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="rtacheck" id="rtacheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->rtacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->rtacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td>Form SPH-SBS</td>
-											<td>{{$verifikasi->sphtanam}}</td>
-											<td>
-												@if ($verifikasi->sphtanam)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->sphtanam) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="sphtanamcheck" id="sphtanamcheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td>Pengantar Dinas telah selesai Tanam</td>
-											<td>{{$verifikasi->spdst}}</td>
-											<td>
-												@if ($verifikasi->spdst)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->spdst) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="spdstcheck" id="spdstcheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->spdstcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->spdstcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-													<option value="" {{ $verifikasi->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
-											<td>Logbook (s.d tanam)</td>
-											<td>{{$verifikasi->logbooktanam}}</td>
-											<td>
-												@if ($verifikasi->logbooktanam)
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->logbooktanam) }}">
-														<i class="fas fa-search mr-1"></i>
-														Lihat Dokumen
-													</a>
-												@endif
-											</td>
-											<td>
-												<select class="form-control form-control-sm" name="logbookcheck" id="logbookcheck">
-													<option value="">- Pilih status -</option>
-													<option value="sesuai" {{ $verifikasi->logbookcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-													<option value="perbaiki" {{ $verifikasi->logbookcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-													<option value="" {{ $verifikasi->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
-												</select>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
 							</div>
-						</div>
-						<div class="card-footer d-flex justify-content-between align-items-center">
-							<div class="help-block col-md-7">
-								<ul class="list-group">Keterangan
-									<li class="d-flex justify-content-start">
-										<span class="col-3 text-danger fw-500">Belum Diperiksa</span>
-										<span>Anda belum melakukan pemeriksaan terhadap berkas terkait.</span>
-									</li>
-									<li class="d-flex justify-content-start">
-										<span class="col-3 text-success fw-500">Sesuai</span>
-										<span>Jika salinan yang diunggah ADA dan SESUAI.</span>
-									</li>
-									<li class="d-flex justify-content-start">
-										<span class="col-3 text-warning fw-500">Tidak Sesuai:</span>
-										<span>Jika salinan yang diunggah TIDAK ADA atau ADA namun TIDAK SESUAI.</span>
-									</li>
-								</ul>
-							</div>
-							<div class="col-md text-right">
-								<button type="submit" class="btn btn-primary btn-sm">
-									simpan
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div id="panel-4" class="panel">
-					<div class="panel-hdr">
-						<h2>Perjanjian Kemitraan</h2>
-					</div>
-					<div class="panel-container show">
-						<div class="panel-content">
-							<table class="table table-striped table-bordered table-sm w-100" id="pksCheck">
-								<thead class="thead-themed">
-									<tr>
-										<th class="text-uppercase text-muted">Nomor Perjanjian</th>
-										<th class="text-uppercase text-muted">Kelompok Tani</th>
-										<th class="text-uppercase text-muted">Masa Berlaku</th>
-										<th class="text-uppercase text-muted">Status</th>
-										<th class="text-uppercase text-muted">Tindakan</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach ($pkss as $pks)
-										<tr>
-											<td>{{$pks->no_perjanjian}}</td>
-											<td>{{$pks->masterpoktan->nama_kelompok}}</td>
-											<td>
-												{{$pks->tgl_perjanjian_start}} s.d
-												{{$pks->tgl_perjanjian_end}}
-											</td>
-											<td>
-												@if ($pks->pkscheck->isNotEmpty())
-													{{ $pks->pkscheck->first()->status }}
-												@endif
-											</td>
-											<td>
-												<a href="{{route('verification.tanam.check.pks', $pks->poktan_id)}}">
-													lihat data
-												</a>
-											</td>
-										</tr>
-									@endforeach
-									{{-- @foreach ($pkschecks as $pkscheck)
-										<tr class="align-items-center">
-											<td>{{$pkscheck->pks->no_perjanjian}}</td>
-											<td>{{$pkscheck->pks->masterpoktan->nama_kelompok}}</td>
-											<td>
-												{{$pkscheck->pks->tgl_perjanjian_start}} s.d <br>
-												{{$pkscheck->pks->tgl_perjanjian_end}}
-											</td>
-											<td>{{$pkscheck->verif_at}}</td>
-											<td class="text-center">
-												@if ($pkscheck->status === '2')
-													<span class="badge btn-xs btn-icon btn-success"
-														data-toggle="tooltip" title
-														data-original-title="Pemeriksaan Selesai. Catatan: {{$pkscheck->note}}">
-														<i class="fa fa-check-circle"></i>
-													</span>
-												@elseif ($pkscheck->status === '3')
-													<span class="badge btn-xs btn-icon btn-danger" data-toggle="tooltip" title
-													data-original-title="Pemeriksaan Selesai, Pelaku usaha harus memperbaiki kekurangan. Catatan: {{$pkscheck->note}}">
-														<i class="fa fa-exclamation-circle"></i>
-													</span>
-												@else
-													<span class="badge btn-xs btn-icon btn-warning" data-toggle="tooltip" title
-													data-original-title="Pemeriksaan belum dilakukan">
-														<i class="fa fa-hourglass"></i>
-													</span>
-												@endif
-											</td>
-											<td>
-												@if($pkscheck->id)
-													<a href="{{route('verification.data.pkscheck.edit', $pkscheck->id)}}" data-toggle="tooltip"
-														data-original-title="Ubah Pemeriksaan"
-														class="btn btn-xs btn-icon btn-primary mr-1">
-														<i class="fal fa-edit"></i>
-													</a>
-												@else
-												@endif
-											</td>
-										</tr>
-									@endforeach --}}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div id="panel-5" class="panel">
-					<div class="panel-hdr">
-						<h2>Data Lokasi Tanam</h2>
-					</div>
-					<div class="panel-container show">
-						<div class="panel-content">
-							<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
-								<thead>
-									<th class="text-uppercase text-muted">Kelompoktani</th>
-									<th class="text-uppercase text-muted">Nama Lokasi</th>
-									<th class="text-uppercase text-muted">Pengelola</th>
-									<th class="text-uppercase text-muted">Luas</th>
-									<th class="text-uppercase text-muted">Tindakan</th>
-								</thead>
-								<tbody>
-								</tbody>
-							</table>
 						</div>
 					</div>
 				</div>
@@ -549,7 +571,7 @@
 
 			function updateTableData() {
 				$.ajax({
-					// url: '{{ route("admin.lokasiTanamByCommitment", $verifikasi->commitment_id) }}',
+					url: '{{ route("admin.lokasiTanamByCommitment", $verifikasi->commitment_id) }}',
 					type: 'GET',
 					dataType: 'json',
 					success: function(response) {

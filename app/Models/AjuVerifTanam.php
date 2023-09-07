@@ -21,12 +21,6 @@ class AjuVerifTanam extends Model
 
 		//file upload
 		'batanam', //berita acara hasil pemeriksaan realisasi tanam
-		'spvt', //surat pengajuan verifikasi tanam
-		'sptjm', //surat pertanggungjawaban mutlak
-		'rta', //form realisasi tanam
-		'sphtanam', //
-		'spdst', //surat pengantar dinas telah selesai tanam
-		'logbooktanam',
 		'ndhprt', //nota dinas hasil pemeriksaan realisasi tanam
 
 		'check_by',

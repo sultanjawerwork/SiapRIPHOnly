@@ -92,13 +92,13 @@
 									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
 								</td>
 								<td class="text-right">
-									{{ number_format($commitment->volume_riph * 5 / 100, 2) }} ha
+									{{ number_format($commitment->luas_wajib_tanam, 2) }} ha
 								</td>
 								<td class="text-right">
 									{{ number_format($total_luastanam, 2) }} ha
 								</td>
 								<td>
-									@if ($total_luastanam >= $commitment->volume_riph * 5 / 100)
+									@if ($total_luastanam >= $commitment->luas_wajib_tanam)
 										<i class="fas fa-check text-success"></i>
 										<i>Terpenuhi</i>
 									@else
@@ -119,7 +119,7 @@
 									{{ $countPks }} PKS
 								</td>
 								<td>
-									@if ($total_volume >= $commitment->volume_riph * 5 / 100*6)
+									@if ($countPks == $countPoktan)
 										<i class="fas fa-check text-success"></i>
 										<i>Sesuai</i>
 									@else
@@ -190,9 +190,9 @@
 						<thead>
 							<tr>
 								<th>Kelompoktani</th>
-								<th>ID</th>
+								<th hidden>ID</th>
 								<th>Nama Lokasi</th>
-								<th>Anggota Id</th>
+								<th hidden>Anggota Id</th>
 								<th>Pengelola</th>
 								<th class="text-center">Luas Tanam</th>
 								<th class="text-center" hidden>Produksi</th>
@@ -206,66 +206,6 @@
 		<div id="panel-5" class="panel">
 			<form action="{{route('admin.task.commitment.avt.store', $commitment->id)}}" method="post" enctype="multipart/form-data">
 				@csrf
-				<div class="panel-container show">
-					<div class="panel-content">
-						<div class="row d-flex align-items-center">
-							<div class="form-group col-md-6">
-								<label class="form-label">Surat Pengajuan<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="spvt" id="spvt" required>
-									<label class="custom-file-label" for="spvt">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Surat Pengajuan Verifikasi Tanam. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Form SPTJM<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="sptjm" id="sptjm" required>
-									<label class="custom-file-label" for="sptjm">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Berkas Pertanggungjawaban Mutlak. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Form RTA<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="rta" id="rta" required>
-									<label class="custom-file-label" for="spvt">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Berkas Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">SPH-SBS<sup class="text-danger"> *</sup></label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="sphtanam" id="sphtanam" required>
-									<label class="custom-file-label" for="sphtanam">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Keterangan realisasi tanam telah tercatat di SPH-SBS. <span class="text-danger">(wajib)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Pengantar Dinas</label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="spdst" id="spdst">
-									<label class="custom-file-label" for="spdst">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Surat Pengantar Dinas telah selesai realisasi tanam. <span class="text-info">(opsional)</span></span>
-							</div>
-							<div class="form-group col-md-6">
-								<label class="form-label">Logbook</label>
-								<div class="custom-file input-group">
-									<input type="file" class="custom-file-input" name="logbooktanam" id="logbooktanam">
-									<label class="custom-file-label" for="sphtanam">Pilih berkas...</label>
-								</div>
-								<span class="help-block">Logbook realisasi tanam. <span class="text-info">(opsional)</span></span>
-							</div>
-							<div class="form-group col-12">
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" class="custom-control-input" id="checkForm" name="checkForm" required>
-									<label class="custom-control-label text-danger" for="checkForm">Dengan ini menyatakan bahwa kami telah menyelesaikan komitmen wajib tanam dan siap untuk dilakukan verifikasi tanam.</label>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 				<div class="card-footer text-right">
 					<a href="javascript:void(0);" class="btn btn-sm btn-default" onclick="cancelBtn();" >
 						<i class="fas fa-undo text-align-center mr-1"></i> Batalkan
@@ -467,9 +407,9 @@
 			},
 			columns: [
 				{ data: 'nama_kelompok', name: 'nama_kelompok' },
-				{ data: 'id', name: 'id' },
+				// { data: 'id', name: 'id' },
 				{ data: 'nama_lokasi', name: 'nama_lokasi' },
-				{ data: 'anggota_id', name: 'anggota_id' },
+				// { data: 'anggota_id', name: 'anggota_id' },
 				{ data: 'nama_petani', name: 'nama_petani' },
 				{ data: 'luas_tanam', name: 'luas_tanam', class: 'text-right',
 					render: function(data, type, row) {

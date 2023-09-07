@@ -13,6 +13,8 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('aju_verif_tanams');
+		Schema::dropIfExists('avtanams');
 		Schema::create('avtanams', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('npwp');
@@ -21,14 +23,8 @@ return new class extends Migration
 			$table->string('status')->nullable(); //
 			$table->text('note')->nullable();
 
-			//file upload
+			//file verifikasi
 			$table->string('batanam')->nullable();
-			$table->string('spvt')->nullable(); //surat pengajuan verifikasi tanam
-			$table->string('sptjm')->nullable();
-			$table->string('rta')->nullable();
-			$table->string('sphtanam')->nullable();
-			$table->string('spdst')->nullable(); //surat pengantar dinas telah selesai tanam
-			$table->string('logbooktanam')->nullable();
 			$table->string('ndhprt')->nullable(); //nota dinas hasil pemeriksaan realisasi tanam
 
 			$table->bigInteger('check_by')->nullable();

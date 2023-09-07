@@ -11,15 +11,13 @@ use App\Models\Pks;
 use Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\MassDestroyPullriphRequest;
-use App\Http\Controllers\Api\HelperController;
 use App\Http\Controllers\Traits\SimeviTrait;
+use App\Models\UserDocs;
+use App\Models\Varietas;
 use Symfony\Component\HttpFoundation\Response;
-use Yajra\DataTables\Facades\DataTables;
 
 class CommitmentController extends Controller
 {
@@ -38,17 +36,38 @@ class CommitmentController extends Controller
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$commitments = PullRiph::where('npwp', $npwp_company)->get();
-		foreach ($commitments as $commitment) {
-			$sumVolume = $commitment->lokasi->sum('volume');
-			$minThreshold = $commitment->volume_riph * 0.05 * 0.95;
 
-			$commitment->sumVolume = $sumVolume;
-			$commitment->minThreshold = $minThreshold;
+		$pksCount = 0; // Initialize with a default value
+		$pksFileCount = 0; // Initialize with a default value
+
+		if ($commitments) {
+			foreach ($commitments as $commitment) {
+				$sumLuas = $commitment->lokasi->sum('luas_tanam');
+				$sumVolume = $commitment->lokasi->sum('volume');
+				$minThresholdTanam = $commitment->luas_wajib_tanam;
+				$minThresholdProd = $commitment->volume_produksi;
+
+				$commitment->sumLuas = $sumLuas;
+				$commitment->sumVolume = $sumVolume;
+				$commitment->minThresholdTanam = $minThresholdTanam;
+				$commitment->minThresholdProd = $minThresholdProd;
+				$thesePks = Pks::where('no_ijin', $commitment->no_ijin)->get();
+				$pksCount = $thesePks->count();
+				$pksFileCount = $thesePks
+					->whereNotNull('berkas_pks')
+					->count();
+				$userDocs = UserDocs::where('npwp', $npwp_company)
+					->where('commitment_id', $commitment->id) // Assuming 'id' is the correct field to match commitments and userDocs
+					->where('no_ijin', $commitment->no_ijin)
+					->first();
+
+				// Add userDocs to the commitment
+				$commitment->userDocs = $userDocs;
+			}
 		}
 
-
-		// dd($commitments);
-		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments'));
+		// dd($commitment->userDocs);
+		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
 	}
 
 	public function create()
@@ -313,22 +332,96 @@ class CommitmentController extends Controller
 		$page_heading = 'Realisasi Komitmen';
 		$heading_class = 'fal fa-file-edit';
 
-		$npwp_company = Auth::user()->data_user->npwp_company;
-		$commitment = PullRiph::where('npwp', $npwp_company)
+		$npwp = Auth::user()->data_user->npwp_company;
+		$commitment = PullRiph::where('npwp', $npwp)
 			->findOrFail($id);
 		$pkss = Pks::withCount('lokasi')
-			->where('npwp', $npwp_company)
+			->where('npwp', $npwp)
 			->where('no_ijin', $commitment->no_ijin)
 			->get();
-		$penangkars = PenangkarRiph::where('npwp', $npwp_company)
+		foreach ($pkss as $pks) {
+			// Calculate the sum of luas_lahan for this Pks record
+			$luasLahanSum = $pks->masterpoktan->anggota->sum('luas_lahan');
+
+			// Assign the sum to the Pks object
+			$pks->sum_luaslahan = $luasLahanSum;
+		}
+
+		$docs = UserDocs::where('commitment_id', $id)->first();
+		// dd($docs);
+		$penangkars = PenangkarRiph::where('npwp', $npwp)
 			->when(isset($commitment->no_ijin), function ($query) use ($commitment) {
 				return $query->where('no_ijin', $commitment->no_ijin);
 			}, function ($query) use ($commitment) {
 				return $query->where('commitment_id', $commitment->id);
 			})
 			->get();
+		$varietass = Varietas::all();
+		$commitmentStatus = $commitment->status;
+		if (empty($commitmentStatus) || $commitmentStatus == 3 || $commitmentStatus == 5) {
+			$disabled = false; // input di-enable
+		} else {
+			$disabled = true; // input di-disable
+		}
 		// dd($pkss);
-		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'pkss', 'penangkars'));
+		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'pkss', 'penangkars', 'docs', 'npwp', 'varietass', 'disabled'));
+	}
+
+	public function storeUserDocs(Request $request, $id)
+	{
+		$commitment = PullRiph::find($id);
+		$realnpwp = $commitment->npwp;
+		$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+		$realNoIjin = $commitment->no_ijin;
+		$noIjin = str_replace(['/', '.'], '', $realNoIjin);
+		$userFiles = [];
+		try {
+			DB::beginTransaction();
+
+			$fileFields = [
+				'sptjm',
+				'spvt',
+				'rta',
+				'sphtanam',
+				'spdst',
+				'logbooktanam',
+				'spvp',
+				'rpo',
+				'formLa',
+				'sphproduksi',
+				'spdsp',
+				'logbookproduksi',
+				// Tambahkan field-file lainnya di sini
+			];
+
+			foreach ($fileFields as $field) {
+				if ($request->hasFile($field)) {
+					$file = $request->file($field);
+					$file_name = $field . '_' . $noIjin . '.' . $file->getClientOriginalExtension();
+					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $commitment->periodetahun, $file_name, 'public');
+					$userFiles[$field] = $file_name;
+				}
+			}
+
+			$data = UserDocs::updateOrCreate(
+				[
+					'npwp' => $realnpwp,
+					'commitment_id' => $id,
+					'no_ijin' => $realNoIjin
+				],
+				array_merge($request->all(), $userFiles) // Menggabungkan data form dan file dalam satu array
+			);
+			DB::commit();
+
+			// Flash message sukses
+			return redirect()->back()->with('success', 'Berkas berhasil diunggah.');
+		} catch (\Exception $e) {
+			// Rollback transaksi jika ada kesalahan
+			DB::rollBack();
+
+			// Flash message kesalahan
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunggh berkas: ' . $e->getMessage());
+		}
 	}
 
 	public function submission($id)
@@ -344,8 +437,6 @@ class CommitmentController extends Controller
 
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
-
-
 		// dd($total_volume);
 		return view('admin.commitment.realisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 	}

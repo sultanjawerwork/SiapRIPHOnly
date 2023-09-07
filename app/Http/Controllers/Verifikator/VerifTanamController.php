@@ -20,6 +20,7 @@ use App\Models\Lokasi;
 use App\Models\PullRiph;
 use App\Models\MasterPoktan;
 use App\Models\Pks;
+use App\Models\UserDocs;
 
 class VerifTanamController extends Controller
 {
@@ -29,7 +30,7 @@ class VerifTanamController extends Controller
 		//page level
 		$module_name = 'Permohonan';
 		$page_title = 'Pengajuan Verifikasi';
-		$page_heading = 'Daftar Pengajuan Verifikasi Data';
+		$page_heading = 'Daftar Pengajuan Verifikasi Tanam';
 		$heading_class = 'fal fa-file-search';
 
 		//table pengajuan
@@ -51,7 +52,8 @@ class VerifTanamController extends Controller
 
 		// Populate related data
 		$verifikasi = AjuVerifTanam::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->firstOrFail();
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
 		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
 		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
 		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
@@ -85,26 +87,30 @@ class VerifTanamController extends Controller
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 
 
-		return view('admin.verifikasi.tanam.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks'));
+		return view('admin.verifikasi.tanam.subindex', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs'));
 	}
 
 	public function checkBerkas(Request $request, $id)
 	{
+		$user = Auth::user();
+		$verifTanam = AjuVerifTanam::findOrFail($id);
+		$commitment = PullRiph::where('no_ijin', $verifTanam->no_ijin)->first();
+		$docsStatus = UserDocs::where('no_ijin', $commitment->no_ijin)->first();
+		$docsStatus->spvtcheck = $request->input('spvtcheck');
+		$docsStatus->sptjmcheck = $request->input('sptjmcheck');
+		$docsStatus->rtacheck = $request->input('rtacheck');
+		$docsStatus->sphtanamcheck = $request->input('sphtanamcheck');
+		$docsStatus->spdstcheck = $request->input('spdstcheck');
+		$docsStatus->logbooktanamcheck = $request->input('logbookcheck');
+		$docsStatus->tanamcheck_by = $user->id;
+		$docsStatus->tanamverif_at = Carbon::now();
 
-		$statusCheck = AjuVerifTanam::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $statusCheck->no_ijin)->first();
-		$statusCheck->spvtcheck = $request->input('spvtcheck');
-		$statusCheck->sptjmcheck = $request->input('sptjmcheck');
-		$statusCheck->rtacheck = $request->input('rtacheck');
-		$statusCheck->sphtanamcheck = $request->input('sphtanamcheck');
-		$statusCheck->spdstcheck = $request->input('spdstcheck');
-		$statusCheck->logbookcheck = $request->input('logbookcheck');
-
-		$statusCheck->status = '2'; //pemeriksaan berkas selesai
+		$verifTanam->status = '2'; //pemeriksaan berkas selesai
 		$commitment->status = '2'; //pemeriksaan berkas selesai
-		// dd($statusCheck);
+		// dd($verifTanam->status, $commitment->status, $docsStatus);
 
-		$statusCheck->save();
+		$verifTanam->save();
+		$docsStatus->save();
 		$commitment->save();
 
 		return redirect()->back()->with('success', 'Status updated successfully.');
@@ -157,7 +163,7 @@ class VerifTanamController extends Controller
 
 		$verifikasi->save();
 		$commitment->save();
-		return redirect()->route('verification.tanam.check', $pkscheck->pengajuan_id)
+		return redirect()->back()
 			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
@@ -170,15 +176,16 @@ class VerifTanamController extends Controller
 		$heading_class = 'fal fa-ballot-check';
 
 		$pkscheck = PksCheck::find($id);
+		// dd($pkscheck);
 		$pks = Pks::where('poktan_id', $pkscheck->poktan_id)->first();
 		$commitment = PullRiph::where('no_ijin', $pkscheck->no_ijin)
 			->first();
-		$verifikasi = Pengajuan::find($pkscheck->pengajuan_id);
-		$commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
-			->first();
+		$verifikasi = AjuVerifTanam::find($pkscheck->pengajuan_id);
+		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)
+		// 	->first();
 
 		// dd($pkscheck);
-		return view('admin.verifikasi.online.pksedit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck'));
+		return view('admin.verifikasi.online.pksedit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'commitment', 'verifikasi', 'pkscheck'));
 	}
 
 	public function pksupdate(Request $request, $id)
@@ -193,7 +200,7 @@ class VerifTanamController extends Controller
 		$pkscheck->verif_by = $user->id;
 
 		$pkscheck->save();
-		return redirect()->route('verification.data.show', $pkscheck->pengajuan_id)
+		return redirect()->back()
 			->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
@@ -229,7 +236,7 @@ class VerifTanamController extends Controller
 		$pkscheck = PksCheck::where('pengajuan_id', $verifikasi->id)->first();
 		$lokasicheck = LokasiCheck::where('anggota_id', $anggota_id)
 			->where('poktan_id', $pks->poktan_id)
-			->where('pkscheck_id', $pkscheck->id)
+			// ->where('pkscheck_id', $pkscheck->id)
 			->first();
 
 		$anggotamitra = $lokasi;
@@ -310,15 +317,51 @@ class VerifTanamController extends Controller
 
 	public function show($id)
 	{
-		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-		$module_name = 'Verifikasi';
-		$page_title = 'Verifikasi Lapangan';
-		$page_heading = 'Daftar Lokasi Sampling';
-		$heading_class = 'fal fa-map-marked-alt';
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+		// Page level
+		$module_name = 'Permohonan';
+		$page_title = 'Data Pengajuan';
+		$page_heading = 'Hasil Verifikasi Tanam';
+		$heading_class = 'fal fa-check-square';
+
+		// Populate related data
 		$verifikasi = AjuVerifTanam::findOrFail($id);
-		$onfarms = LokasiCheck::where('pengajuan_id', $id)->get();
-		return view('admin.verifikasi.onfarm.farmlist', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'onfarms'));
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->firstOrFail();
+		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
+		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
+		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
+
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
+			->with(['pkscheck' => function ($query) use ($id) {
+				$query->where('pengajuan_id', $id);
+			}])
+			->get();
+		$poktanIds = Pks::where('no_ijin', $verifikasi->no_ijin)
+			->pluck('poktan_id'); // Retrieve the poktan_id values
+
+		// Group poktan_id values and retrieve unique nama_kelompok values
+		$poktans = MasterPoktan::whereIn('id', $poktanIds)
+			->groupBy('poktan_id')
+			->pluck('nama_kelompok', 'poktan_id');
+		// dd($poktans);
+		$lokasis = collect();
+		foreach ($pkschecks as $pkscheck) {
+			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
+				->where('no_ijin', $verifikasi->no_ijin)
+				->get();
+			$lokasis->push($lokasi);
+		}
+
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
+
+		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
+		$countPoktan = $pkss->count();
+		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
+
+
+		return view('admin.verifikasi.tanam.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks'));
 	}
 
 	//  public function commitmentcheck($id)

@@ -161,8 +161,6 @@ class AjuVerifProduksiController extends Controller
 	public function store(Request $request, $id)
 	{
 		$commitment = PullRiph::findOrFail($id);
-		$filenpwp = str_replace(['.', '-'], '', $commitment->npwp);
-		$filecommitment = str_replace(['/', '.'], '', $commitment->no_ijin);
 
 		$pengajuan = new AjuVerifProduksi();;
 		$pengajuan->commitment_id = $commitment->id;
@@ -170,23 +168,12 @@ class AjuVerifProduksiController extends Controller
 		$pengajuan->no_ijin = $commitment->no_ijin;
 		$pengajuan->status = '5';
 
-		$fileTypes = ['spvp', 'rpo', 'formLa', 'sphproduksi', 'spdsp', 'logbookproduksi']; // List of file types
-
-		foreach ($fileTypes as $fileType) {
-			if ($request->hasFile($fileType)) {
-				$attch = $request->file($fileType);
-				$attchname = $fileType . '_' . $filecommitment . '.' . $attch->getClientOriginalExtension();
-				$attch->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $attchname, 'public');
-				$pengajuan->$fileType = $attchname;
-			}
-		}
-
 		$commitment->status = '5';
 		$pengajuan->save();
 		$commitment->save();
 
 		return redirect()->route('admin.task.pengajuan.index', $id)
-			->with('success', 'Data berhasil disimpan');
+			->with('success', 'Pengajuan verifikasi produksi berhasil dibuat.');
 	}
 
 	/**

@@ -165,7 +165,8 @@
 					@if (Auth::user()->roles[0]->title == 'user_v2')
 						{{-- for later use only --}}
 					@elseif (Auth::user()->roles[0]->title == 'User')
-						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ? 'active' : '' }}">
+						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ||
+						request()->is('admin/task/pks*') ? 'active' : '' }}">
 							<a href="{{ route('admin.task.commitment') }}"
 								data-filter-tags="daftar komitmen riph index">
 								<i class="fa-fw fal fa-ballot c-sidebar-nav-icon"></i>
@@ -176,7 +177,7 @@
 				@endcan
 				{{-- pengajuan verifikasi --}}
 				@can('pengajuan_access')
-					<li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan') ? 'active' : '' }}">
+					<li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan*') ? 'active' : '' }}">
 						@if (Auth::user()->roles[0]->title == 'User')
 						<a href="{{ route('admin.task.pengajuan.index') }}" title="Pengajuan verifikasi"
 							data-filter-tags="daftar pengajuan verifikasi data online onfarm">
@@ -208,9 +209,7 @@
 					<li class="{{ request()->is('admin/task/masterpenangkar')
 						|| request()->is('admin/task/kelompoktani')
 						|| request()->is('admin/task/masterpoktan')
-						|| request()->is('admin/task/kelompoktani/*')
-						|| request()->is('admin/task/pks')
-						|| request()->is('admin/task/pks/*') ? 'active open' : '' }}">
+						|| request()->is('admin/task/kelompoktani/*') ? 'active open' : '' }}">
 						<a href="#" title="Kelompok tani"
 							data-filter-tags="data master kelompoktani poktan penangkar pks">
 							<i class="fa-fw fal fa-users c-sidebar-nav-icon"></i>
@@ -251,7 +250,7 @@
 						<a href="{{ route('verification.tanam') }}"
 							data-filter-tags="verifikasi tanam">
 							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi Data</span>
+							<span class="nav-link-text">Verifikasi Tanam</span>
 							@php
 								$pengajuan = new \App\Models\Pengajuan();
 								$unverified = $pengajuan->NewOnlineRequest();
@@ -264,12 +263,12 @@
 					</li>
 				@endcan
 				@can('onfarm_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/onfarm')
-						|| request()->is('verification/onfarm*') ? 'active' : '' }}">
-						<a href="{{ route('verification.onfarm') }}"
+					<li class="c-sidebar-nav-item {{ request()->is('verification/produksi')
+						|| request()->is('verification/produksi*') ? 'active' : '' }}">
+						<a href="{{ route('verification.produksi') }}"
 							data-filter-tags="verifikasi onfarm lapangan">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi {{ trans('cruds.onfarm.title_lang') }}</span>
+							<span class="nav-link-text">Verifikasi Produksi</span>
 							@php
 								$pengajuan = new \App\Models\Pengajuan();
 								$unverified = $pengajuan->NewOnFarmRequest();

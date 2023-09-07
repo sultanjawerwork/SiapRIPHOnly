@@ -100,4 +100,9 @@ class PullRiph extends Model
 	{
 		return $this->hasOne(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
+
+	public function userDocs()
+	{
+		return $this->belongsTo(UserDocs::class, 'commitment_id');
+	}
 }

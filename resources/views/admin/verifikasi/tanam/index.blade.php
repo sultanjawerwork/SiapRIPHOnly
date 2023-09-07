@@ -47,14 +47,14 @@
 											<td>{{$verifikasi->created_at}}</td>
 											<td class="text-center">
 												@if ($verifikasi->status === '1')
-													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Verifikasi diajukan">
+													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
 														<i class="base-7 icon-stack-3x color-warning-400"></i>
 														<i class="base-7 icon-stack-2x color-warnig-600 opacity-70"></i>
 														<span class="icon-stack-1x text-white opacity-90">!</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
 												@elseif ($verifikasi->status === '2')
-													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pemeriksaan Berkas Komitmen">
+													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pemeriksaan Berkas Kelengkapan">
 														<i class="base-7 icon-stack-3x color-info-400"></i>
 														<i class="base-7 icon-stack-2x color-info-600 opacity-70"></i>
 														<span class="icon-stack-1x text-white fw-500">2</span>
@@ -76,15 +76,13 @@
 													<span hidden>{{$verifikasi->status}}</span>
 												@endif
 											</td>
-											<td>
+											<td class="text-center">
 												@if ($verifikasi->status === '4')
-													<a href="{{route('verification.tanam.show', $verifikasi->id)}}" {{-- route to show --}}
-														title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
+													<a href="{{route('verification.tanam.show', $verifikasi->id)}}" data-toggle="tooltip" title data-original-title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-search"></i>
 													</a>
 												@else
-													<a href="{{route('verification.tanam.check', $verifikasi->id)}}" class="btn btn-icon btn-xs btn-primary"
-														title="Mulai/Lanjutkan Pemeriksaan">
+													<a href="{{route('verification.tanam.check', $verifikasi->id)}}" class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip" data-original-title="Periksa/Verifikasi">
 														<i class="fal fa-file-search"></i>
 													</a>
 												@endif

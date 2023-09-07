@@ -1,616 +1,471 @@
 @extends('layouts.admin')
-@section('styles')
-<style>
-	a {
-		text-decoration: none !important;
-	}
-</style>
-@endsection
 @section('content')
-{{-- @include('partials.breadcrumb') --}}
-@include('partials.subheader')
+	{{-- @include('partials.breadcrumb') --}}
+	@include('partials.subheader')
+	{{-- @can('online_access') --}}
+		@include('partials.sysalert')
+		<div class="row" id="contentToPrint">
+			@php
+				$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+			@endphp
+			<div class="col-12">
+				<div class="text-center">
+					<i class="fal fa-badge-check fa-3x subheader-icon"></i>
+					<h2>Ringkasan Data</h2>
+					<div class="row justify-content-center">
+						<p class="lead">Anda melakukan permohonan pengajuan verifikasi tanam pada {{ date('D, d M Y', strtotime($verifikasi->created_at)) }}.</p>
+					</div>
+				</div>
+				<div id="panel-1" class="panel">
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="row d-flex justify-content-between">
+								<div class="form-group col-md-4">
+									<label class="form-label" for="no_pengajuan">Nomor Pengajuan</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fal fa-file-invoice"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control form-control-sm" id="no_pengajuan" name="no_pengajuan"
+											value="{{$verifikasi->no_pengajuan}}" disabled>
+									</div>
+									<span class="help-block">Nomor Pengajuan Verifikasi.</span>
+								</div>
+								<div class="form-group col-md-4">
+									<label class="form-label" for="no_ijin">Nomor RIPH</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fal fa-file-invoice"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control form-control-sm" id="no_ijin" value="{{$verifikasi->no_ijin}}" name="no_ijin" disabled>
+									</div>
+									<span class="help-block">Nomor Ijin RIPH.</span>
+								</div>
+								<div class="form-group col-md-4">
+									<label class="form-label" for="created_at">Tanggal Pengajuan</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fal fa-calendar-day"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control form-control-sm" id="created_at" name="created_at"
+											value="{{$verifikasi->created_at}}" disabled>
+									</div>
+									<span class="help-block">Tanggal Pengajuan</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#panel-2" role="tab" aria-selected="true">Ringkasan Data Tanam</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-3" role="tab" aria-selected="true">Kelengkapan Berkas</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-4" role="tab" aria-selected="true">Perjanjian Kemitraan (PKS)</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-5" role="tab" aria-selected="true">Data Lokasi Tanam</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade active show" id="panel-2" role="tabpanel" aria-labelledby="panel-2">
+						<div class="panel" id="panel-2">
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-bordered table-hover table-striped table-sm w-100" id="summaryData">
+										<thead class="thead-themed">
+											<th>Deskripsi</th>
+											<th>Ringkasan Data</th>
+											<th></th>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Kelompok Tani</td>
+												<td class="text-right">{{$countPoktan}}</td>
+												<td>Poktan</td>
+											</tr>
+											<tr>
+												<td>PKS diunggah</td>
+												<td class="text-right">{{$countPks}}</td>
+												<td>PKS</td>
+											</tr>
+											<tr>
+												<td>Jumlah Anggota</td>
+												<td class="text-right">{{$countAnggota}}</td>
+												<td>Anggota</td>
+											</tr>
+											<tr>
+												<td>Geolokasi</td>
+												<td class="text-right">{{$hasGeoloc}}</td>
+												<td>Titik</td>
+											</tr>
+											<tr>
+												<td>Luas Wajib Tanam</td>
+												<td class="text-right">{{ number_format($commitment->luas_wajib_tanam, 2, '.', ',') }} ha</td>
+												<td>hektar</td>
+											</tr>
 
-@can('pengajuan_show')
-<div class="row">
-	<div class="col-12">
-		<div class="text-center">
-			<i class="fal fa-badge-check fa-3x subheader-icon"></i>
-			<h2>Ringkasan Data</h2>
-			<div class="row justify-content-center">
-				<p class="lead">Anda melakukan permohonan pengajuan verifikasi pada {{ date('D, d M Y', strtotime($pengajuan->created_at)) }}.</p>
-			</div>
-		</div>
-		<div class="panel" id="panel-1">
-			<div class="panel-container card-header show">
-				<div class="row d-flex justify-content-between">
-					<div class="form-group col-md-4">
-						<label class="form-label" for="no_ijin">Nomor RIPH</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fal fa-file-invoice"></i>
-								</span>
+											<tr class="{{ ($total_luastanam < $commitment->luas_wajib_tanam) ? 'text-danger' : '' }}">
+												<td>Luas Realisasi Tanam</td>
+												<td class="text-right">{{ number_format($total_luastanam, 2, '.', ',') }} ha</td>
+												<td>hektar</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<input type="text" class="form-control form-control-sm bg-white" id="no_ijin" value="{{$commitment->no_ijin}}" disabled="">
 						</div>
-						<span class="help-block">Nomor Ijin RIPH.</span>
 					</div>
-					<div class="form-group col-md-4">
-						<label class="form-label" for="no_hs">Komoditas</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fal fa-file-invoice"></i>
-								</span>
+					<div class="tab-pane fade" id="panel-3" role="tabpanel" aria-labelledby="panel-3">
+						<div id="panel-3" class="panel">
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-striped table-bordered table-sm w-100" id="attchCheck">
+										<thead class="thead-themed">
+											<tr>
+												<th class="text-uppercase text-muted">Form</th>
+												<th class="text-uppercase text-muted">Berkas</th>
+												<th class="text-uppercase text-muted">Hasil Periksa</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													@if ($userDocs->spvt)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $userDocs->spvt ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) : '' }}">
+															Surat Pengajuan Verifikasi Tanam
+														</a>
+													@else
+														<span>Surat Pengajuan Verifikasi Produksi</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->spvt}}</span>
+												</td>
+												<td>
+													@if ($userDocs->spvtcheck)
+														<span>{{$userDocs->spvtcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->sptjm)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
+															Surat Pertanggungjawaban Mutlak
+														</a>
+													@else
+														<span>Surat Pertanggungjawaban Mutlak</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->sptjm}}</span>
+												</td>
+												<td>
+													@if ($userDocs->sptjmcheck)
+														<span>{{$userDocs->sptjmcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->rta)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rta) }}">
+															Form Realisasi Tanam
+														</a>
+													@else
+														<span>Form Realisasi Tanam</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->rta}}</span>
+												</td>
+												<td>
+													@if ($userDocs->rtacheck)
+														<span>{{$userDocs->rtacheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->sphtanam)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphtanam) }}">
+															Form SPH-SBS
+														</a>
+													@else
+														<span>Form SPH-SBS</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->sphtanam}}</span>
+												</td>
+												<td>
+													@if ($userDocs->sphtanamcheck)
+														<span>{{$userDocs->sphtanamcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->spdst)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
+															Pengantar Dinas telah selesai Tanam
+														</a>
+													@else
+														<span>Pengantar Dinas telah selesai Tanam</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->spdst}}</span>
+												</td>
+												<td>
+													@if ($userDocs->spdstcheck)
+														<span>{{$userDocs->spdstcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->logbooktanam)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbooktanam) }}">
+															Logbook (s.d tanam)
+														</a>
+													@else
+														<span>Logbook (s.d tanam)</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->logbooktanam}}</span>
+												</td>
+												<td>
+													@if ($userDocs->logbookcheck)
+														<span>{{$userDocs->logbookcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<input type="text" class="form-control form-control-sm bg-white" id="no_ijin" value="{{$commitment->no_hs}}" disabled="">
 						</div>
-						<span class="help-block">Kode dan nama Komoditas Produk import.</span>
 					</div>
-					<div class="form-group col-md-2 col-sm-6">
-						<label class="form-label" for="tgl_ijin">Tanggal Ijin</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fal fa-calendar-day"></i>
-								</span>
+					<div class="tab-pane fade" id="panel-4" role="tabpanel" aria-labelledby="panel-4">
+						<div id="panel-4" class="panel">
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-striped table-bordered table-sm w-100" id="pksCheck">
+										<thead class="thead-themed">
+											<tr>
+												<th class="text-uppercase text-muted">Nomor Perjanjian</th>
+												<th class="text-uppercase text-muted">Kelompok Tani</th>
+												<th class="text-uppercase text-muted">Masa Berlaku</th>
+												<th class="text-uppercase text-muted">Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach ($pkss as $pks)
+												<tr>
+													<td>
+														@if($pks->berkas_pks)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $pks->berkas_pks ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$pks->berkas_pks) : '' }}">
+																{{$pks->no_perjanjian}}
+															</a>
+														@endif
+													</td>
+													<td>{{$pks->masterpoktan->nama_kelompok}}</td>
+													<td>
+														{{$pks->tgl_perjanjian_start}} s.d
+														{{$pks->tgl_perjanjian_end}}
+													</td>
+													<td>
+														@if ($pks->pkscheck->isNotEmpty())
+															{{ $pks->pkscheck->first()->status }}
+														@endif
+													</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<input type="text" class="form-control form-control-sm bg-white" id="tgl_ijin" value="{{ date('d-m-Y', strtotime($commitment->tgl_ijin)) }}" disabled="">
 						</div>
-						<span class="help-block">Tanggal mulai berlaku.</span>
 					</div>
-					<div class="form-group col-md-2 col-sm-6">
-						<label class="form-label" for="tgl_akhir">Tanggal Berakhir</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fal fa-calendar-day"></i>
-								</span>
+					<div class="tab-pane fade" id="panel-5" role="tabpanel" aria-labelledby="panel-5">
+						<div id="panel-5" class="panel">
+							{{-- <div class="panel-hdr">
+								<h2>Data Lokasi Tanam</h2>
+							</div> --}}
+							<div class="panel-container show">
+								<div class="panel-content">
+									<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
+										<thead>
+											<th class="text-uppercase text-muted">Kelompoktani</th>
+											<th class="text-uppercase text-muted">Nama Lokasi</th>
+											<th class="text-uppercase text-muted">Pengelola</th>
+											<th class="text-uppercase text-muted">Luas</th>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
 							</div>
-							<input type="text" class="form-control form-control-sm bg-white" id="tgl_akhir" value="{{ date('d-m-Y', strtotime($commitment->tgl_akhir)) }}" disabled="">
 						</div>
-						<span class="help-block">Tanggal berakhir RIPH.</span>
 					</div>
 				</div>
 			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<table class="table table-striped table-bordered w-100" id="mainCheck">
-						<thead>
-							<th class="text-muted text-uppercase">Data</th>
-							<th class="text-muted text-uppercase">Kewajiban</th>
-							<th class="text-muted text-uppercase">Realisasi</th>
-							<th class="text-muted text-uppercase">Status</th>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="text-muted">
-									<span class="fw-700 h6">Wajib Tanam</span><br>
-									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
-								</td>
-								<td class="text-right">
-									{{ number_format($commitment->volume_riph * 5 / 100, 2) }} ha
-								</td>
-								<td class="text-right">
-									{{ number_format($total_luastanam, 2) }} ha
-								</td>
-								<td>
-									@if ($total_luastanam >= $commitment->volume_riph * 5 / 100)
-										<i class="fas fa-check text-success"></i>
-										<i>Terpenuhi</i>
-									@else
-										<i class="fas fa-times text-danger"></i>
-										<i>Tidak Terpenuhi</i>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td class="text-muted">
-									<span class="fw-700 h6">Wajib produksi</span><br>
-									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
-								</td>
-								<td class="text-right">
-									{{ number_format($commitment->volume_riph * 5 / 100*6, 2) }} ha
-								</td>
-								<td class="text-right">
-									{{ number_format($total_volume, 2) }} ha
-								</td>
-								<td>
-									@if ($total_volume >= $commitment->volume_riph * 5 / 100*6)
-										<i class="fas fa-check text-success"></i>
-										<i>Terpenuhi</i>
-									@else
-										<i class="fas fa-times text-danger"></i>
-										<i>Tidak Terpenuhi</i>
-									@endif
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			<div class="col-12">
 			</div>
 		</div>
-		<div id="panel-2" class="panel">
-			<div class="panel-hdr">
-				<h2>Berkas-berkas lampiran</h2>
-				<div class="panel-toolbar">
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<table class="table table-striped table-bordered w-100" id="attchCheck">
-						<thead class="card-header">
-							<tr>
-								<th class="text-uppercase text-muted">Form</th>
-								<th class="text-uppercase text-muted">Nama Berkas</th>
-								<th class="text-uppercase text-muted">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							@php
-								$npwp = str_replace(['.', '-'], '', $commitment->npwp);
-							@endphp
-							<tr>
-								<td>Penerbitan RIPH</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formRiph }}</span>
-								</td>
-								<td>
-									@if($commitment->formRiph)
-										<a href="#" data-toggle="modal" data-target="#viewDocs"
-											data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRiph) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Form SPTJM</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formSptjm }}</span>
-								</td>
-								<td>
-									@if($commitment->formSptjm)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'.$commitment->formSptjm) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Logbook</td>
-								<td>
-									<span class="text-primary">{{ $commitment->logbook }}</span>
-								</td>
-								<td>
-									@if($commitment->logbook)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->logbook) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Form RT</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formRt }}</span>
-								</td>
-								<td>
-									@if($commitment->formRt)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRt) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Form RTA</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formRta }}</span>
-								</td>
-								<td>
-									@if($commitment->formRta)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRta) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Form RPO</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formRpo }}</span>
-								</td>
-								<td>
-									@if($commitment->formRpo)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formRpo) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							<tr>
-								<td>Form LA</td>
-								<td>
-									<span class="text-primary">{{ $commitment->formLa }}</span>
-								</td>
-								<td>
-									@if($commitment->formLa)
-										<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $commitment->formLa) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="card-footer">
-				<div class="help-block">
-					Keterangan<br>
-					<span><i class="fas fa-check text-success mr-1"></i> Status berkas dilampirkan.</span><br>
-					<span><i class="fas fa-times text-danger mr-1"></i> Status berkas tidak dilampirkan</span><br>
-					<span>klik tanda <i class="fas fa-times text-danger mr-1"></i>untuk melengkapi berkas yang diperlukan.</span><br>
-				</div>
-			</div>
-		</div>
-		<div id="panel-3" class="panel">
-			<div class="panel-hdr">
-				<h2>Data Perjanjian Kerjasama</h2>
-				<div class="panel-toolbar">
-					<span class="help-block">Perjanjian Kerjasama Kemitraan antara Importir dengan Kelompoktani Mitra</span>
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<table id="pksCheck" class="table table-bordered table-striped w-100">
-						<thead class="card-header">
-							<tr>
-								<th class="text-uppercase text-muted">Perjanjian</th>
-								<th class="text-uppercase text-muted">Kelompoktani</th>
-								<th class="text-uppercase text-muted">Tanggal Mulai</th>
-								<th class="text-uppercase text-muted">Tanggal Akhir</th>
-								<th class="text-uppercase text-muted">Dokumen</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach ($commitment->pks as $pksmitra)
-							<tr>
-								<td>{{$pksmitra->no_perjanjian}}</td>
-								<td>{{$pksmitra->masterpoktan->nama_kelompok}}</td>
-								<td>{{$pksmitra->tgl_perjanjian_start}}</td>
-								<td>{{$pksmitra->tgl_perjanjian_end}}</td>
-								<td>
-									@if($pksmitra->berkas_pks)
-										<a href="#" data-toggle="modal" data-target="#viewDocs"
-											data-doc="{{ url('storage/uploads/'. $npwp . '/' . $commitment->periodetahun .'/'. $pksmitra->berkas_pks) }}">
-											<i class="fas fa-check text-success mr-1"></i>
-											Lihat Dokumen
-										</a>
-									@else
-										<span class="text-danger"><i class="fas fa-times-circle mr-1"></i>Tidak Ada</span>
-									@endif
-								</td>
-							</tr>
-							@endforeach
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div id="panel-4" class="panel">
-			<div class="panel-hdr">
-				<h2>Data Lokasi Tanam</h2>
-				<div class="panel-toolbar">
-					<span class="help-block">Lokasi Tanam dan Volume Produksi.</span>
-				</div>
-			</div>
-			<div class="panel-container show">
-				<div class="panel-content">
-					<table id="lokasi-table" class="table table-sm table-bordered table-striped w-100">
-						<thead>
-							<tr>
-								<th>Kelompoktani</th>
-								<th>ID</th>
-								<th>Nama Lokasi</th>
-								<th>Anggota Id</th>
-								<th>Pengelola</th>
-								<th class="text-center">Luas Tanam</th>
-								<th class="text-center">Produksi</th>
-								<th>Data Geolokasi</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
-{{-- modal view doc --}}
-<div class="modal fade" id="viewDocs" tabindex="-1" role="dialog" aria-labelledby="document" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-right" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">
-					Berkas <span class="fw-300"><i>lampiran </i></span>
-				</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body embed-responsive embed-responsive-16by9">
-				<iframe class="embed-responsive-item" src="" width="100%"  frameborder="0"></iframe>
+		{{-- modal view doc --}}
+		<div class="modal fade" id="viewDocs" tabindex="-1" role="dialog" aria-labelledby="document" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-right" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							Berkas <span class="fw-300"><i>lampiran </i></span>
+						</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body embed-responsive embed-responsive-16by9">
+						<iframe class="embed-responsive-item" src="" width="100%"  frameborder="0"></iframe>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-
-@endcan
+	{{-- @endcan --}}
 @endsection
 
 @section('scripts')
-@parent
-<script>
-	$(document).ready(function() {
-		$('#viewDocs').on('shown.bs.modal', function (e) {
-			var docUrl = $(e.relatedTarget).data('doc');
-			$('iframe').attr('src', docUrl);
-		});
-	});
-</script>
-  
-<script>
-	$(document).ready(function() {
-
-		$('#mainCheck').dataTable(
-			{
-			responsive: true,
-			lengthChange: false,
-			order:[],
-			dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-			
-		});
-
-		$('#attchCheck').dataTable(
-			{
-			responsive: true,
-			lengthChange: false,
-			order:[],
-			dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'>>",
-			buttons: [
-				/*{
-					extend:    'colvis',
-					text:      'Column Visibility',
-					titleAttr: 'Col visibility',
-					className: 'mr-sm-3'
-				},*/
-				{
-					extend: 'pdfHtml5',
-					text: '<i class="fa fa-file-pdf"></i>',
-					titleAttr: 'Generate PDF',
-					className: 'btn-outline-danger btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'excelHtml5',
-					text: '<i class="fa fa-file-excel"></i>',
-					titleAttr: 'Generate Excel',
-					className: 'btn-outline-success btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'print',
-					text: '<i class="fa fa-print"></i>',
-					titleAttr: 'Print Table',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				}
-			]
-		});
-
-		$('#pksCheck').dataTable(
-			{
-			responsive: true,
-			lengthChange: false,
-			order:[],
-			dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-			buttons: [
-				/*{
-					extend:    'colvis',
-					text:      'Column Visibility',
-					titleAttr: 'Col visibility',
-					className: 'mr-sm-3'
-				},*/
-				{
-					extend: 'pdfHtml5',
-					text: '<i class="fa fa-file-pdf"></i>',
-					titleAttr: 'Generate PDF',
-					className: 'btn-outline-danger btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'excelHtml5',
-					text: '<i class="fa fa-file-excel"></i>',
-					titleAttr: 'Generate Excel',
-					className: 'btn-outline-success btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'print',
-					text: '<i class="fa fa-print"></i>',
-					titleAttr: 'Print Table',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				}
-			]
-		});
-		function handleInitComplete() {
-			var dataTable = this.api();
-
-			// Get the unique values of the "nama_kelompok" column
-			var uniqueValues = dataTable.column(0, { search: 'applied' }).data().unique();
-
-			// Create the select element and add the options
-			var select = $('<select>')
-				.addClass('custom-select custom-select-sm col-3 mr-2')
-				.on('change', function () {
-					var kelompok = $.fn.dataTable.util.escapeRegex($(this).val());
-					dataTable.column(0).search(kelompok ? '^' + kelompok + '$' : '', true, false).draw();
-				});
-
-			// Add the default "Semua Kelompoktani" option
-			$('<option>').val('').text('Semua Kelompoktani').appendTo(select);
-
-			// Add options for each unique value
-			uniqueValues.each(function (value) {
-				$('<option>').val(value).text(value).appendTo(select);
+	@parent
+	<script>
+		$(document).ready(function() {
+			$('#viewDocs').on('shown.bs.modal', function (e) {
+				var docUrl = $(e.relatedTarget).data('doc');
+				$('iframe').attr('src', docUrl);
 			});
 
-			// Find the target DataTable's container element
-			var targetTableContainer = $('#lokasi-table_wrapper'); // Replace with the ID or class of the target DataTable's container
+			$(function() {
+				$("#pksMitra").select2({
+					placeholder: "--Pilih PKS/Poktan",
+					dropdownParent:'#selectPks'
+				});
 
-			// Remove any existing select element in the target table container
-			targetTableContainer.find('.custom-select.select-filter').remove();
+				$("#lokasiLahan").select2({
+					placeholder: "--Pilih lokasi",
+					dropdownParent:'#selectLokasi'
+				});
+			});
 
-			// Add the select element before the first datatable button in the target table container
-			targetTableContainer.find('.dt-buttons').before(select.addClass('select-filter'));
-		}
+			var tableData = $('#dataTable').DataTable({
+				responsive: true,
 
-		var lokasiTable = $('#lokasi-table').DataTable({
-			processing: true,
-			serverSide: true,
-			responsive: true,
-			ajax: {
-				url: "{{ route('admin.task.commitment.submit', $commitment->id) }}",
-				type: "GET",
-			},
-			columns: [
-				{ data: 'nama_kelompok', name: 'nama_kelompok' },
-				{ data: 'id', name: 'id' },
-				{ data: 'nama_lokasi', name: 'nama_lokasi' },
-				{ data: 'anggota_id', name: 'anggota_id' },
-				{ data: 'nama_petani', name: 'nama_petani' },
-				{ data: 'luas_tanam', name: 'luas_tanam', class: 'text-right',
-					render: function(data, type, row) {
-						return data + ' ha';
-					}
-				},
-				{ data: 'volume', name: 'volume', class: 'text-right',
-					render: function(data, type, row) {
-						return data + ' ton';
-					}
-				},
-				{ data: 'data_geolokasi', name: 'data_geolokasi' }
-			],
-			rowGroup: {
-				dataSrc: 'nama_kelompok'
-			},
-			dom:
-			"<'row'<'col-sm-12 col-md-6'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>" + // Move the select element to the left of the datatable buttons
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'fl><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-			buttons: [
-				{
-					extend: 'pdfHtml5',
-					text: '<i class="fa fa-file-pdf"></i>',
-					titleAttr: 'Generate PDF',
-					className: 'btn-outline-danger btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'excelHtml5',
-					text: '<i class="fa fa-file-excel"></i>',
-					titleAttr: 'Generate Excel',
-					className: 'btn-outline-success btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'print',
-					text: '<i class="fa fa-print"></i>',
-					titleAttr: 'Print Table',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				}
-			],
-			initComplete: handleInitComplete
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
+				],
+				columnDefs: [
+
+					// { className: 'text-right', targets: [3] },
+					// { className: 'text-center', targets: [4] },
+				]
+			});
+
+			function updateTableData() {
+				$.ajax({
+					url: '{{ route("admin.ajutanam.listlokasi", $verifikasi->commitment_id) }}',
+					type: 'GET',
+					dataType: 'json',
+					success: function(response) {
+
+						tableData.clear().draw();
+						if (response.lokasis.length > 0) {
+							$.each(response.lokasis, function(index, lokasi) { // Update response handling
+
+								var luasTanam = lokasi.luas_tanam;
+								var formatter = new Intl.NumberFormat('en-GB', {
+									style: 'decimal',
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2,
+								});
+								var LuasTanam = formatter.format(luasTanam);
+
+								var id = lokasi.id;
+								var npwp = lokasi.npwp;
+								var noIjin = lokasi.no_ijin;
+								var poktan = lokasi.poktan;
+								var anggota = lokasi.anggota;
+								var namaLokasi = lokasi.nama_lokasi;
+								var actionBtn = `
+									<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
+										<i class="fal fa-search"></i>
+									</a>
+								`;
+								tableData.row.add([poktan, namaLokasi, anggota,LuasTanam]).draw(false);
+							});
+						}
+						tableData.draw(); // Draw the table after adding the rows
+					},
+					error: function(xhr, status, error) {
+						console.error(xhr.responseText);
+					}
+				});
+			}
+			updateTableData();
 		});
-	});
-</script>
+	</script>
 
-<script>
-	function validateInput() {
-		// get the input value and the current username from the page
-		var inputVal = document.getElementById('validasi').value;
-		var currentUsername = '{{ Auth::user()->username }}';
-		
-		// check if the input is not empty and matches the current username
-		if (inputVal !== '' && inputVal === currentUsername) {
-			return true; // allow form submission
-		} else {
-			alert('Input validasi harus diisi dan bernilai sama dengan username Anda.');
-			return false; // prevent form submission
+	<script>
+		function validateInput() {
+			// get the input value and the current username from the page
+			var inputVal = document.getElementById('validasi').value;
+			var currentUsername = '{{ Auth::user()->username }}';
+
+			// check if the input is not empty and matches the current username
+			if (inputVal !== '' && inputVal === currentUsername) {
+				return true; // allow form submission
+			} else {
+				alert('Isi kolom Konfirmasi dengan username Anda!.');
+				return false; // prevent form submission
+			}
 		}
-	}
-</script>
-
+	</script>
 @endsection

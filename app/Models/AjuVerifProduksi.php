@@ -20,12 +20,6 @@ class AjuVerifProduksi extends Model
 
 		//file upload
 		'baproduksi', //berita acara hasil pemeriksaan realisasi produksi
-		'spvp', //surat pengajuan verifikasi produksi
-		'rpo', //realisasi produksi
-		'sphproduksi', //sph produksi
-		'spdsp', //surat pengantar dinas telah selesai produksi
-		'logbookproduksi',
-		'formLa',
 		'ndhprp', //nota dinas hasil pemeriksaan realisasi tanam
 
 		'check_by',

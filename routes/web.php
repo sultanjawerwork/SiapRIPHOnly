@@ -144,6 +144,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 		//pengisian data realisasi
 		Route::get('commitment/{id}/realisasi', 'CommitmentController@realisasi')->name('commitment.realisasi');
+		Route::post('commitment/{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('commitment.realisasi.storeUserDocs');
 		Route::get('commitment/{id}/penangkar', 'PenangkarRiphController@mitra')->name('commitment.penangkar');
 		Route::post('commitment/{id}/penangkar/store', 'PenangkarRiphController@store')->name('commitment.penangkar.store');
 		Route::delete('mitra/{id}/delete', 'PenangkarRiphController@destroy')->name('mitra.delete');
@@ -167,7 +168,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
 
 
-		//realisasi lokasi tanam
+		//realisasi lokasi tanam & produksi
 		Route::get('realisasi/lokasi/{anggota_id}', 'LokasiController@show')->name('lokasi.tanam');
 		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
 		Route::put('realisasi/lokasi/{id}/storeTanam', 'LokasiController@storeTanam')->name('lokasi.tanam.store');
@@ -179,16 +180,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 		//new pengajuan tanam
 		Route::get('pengajuan', 'PengajuanController@index')->name('pengajuan.index');
-
 		Route::get('commitment/{id}/formavt', 'AjuVerifTanamController@create')->name('commitment.avt');
 		Route::post('commitment/{id}/formavt/store', 'AjuVerifTanamController@store')->name('commitment.avt.store');
+		Route::get('pengajuan/tanam/{id}/show', 'PengajuanController@showAjuTanam')->name('pengajuan.tanam.show');
 
 		//new pengajuan produksi
 		Route::get('commitment/{id}/formavp', 'AjuVerifProduksiController@create')->name('commitment.avp');
 		Route::post('commitment/{id}/formavp/store', 'AjuVerifProduksiController@store')->name('commitment.avp.store');
 
-
-		// Route::resource('pengajuan', 'PengajuanController');
 
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
@@ -227,6 +226,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 	});
 	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
+	Route::get('listLokasi/{id}', 'DataLokasiTanamController@listLokasi')->name('ajutanam.listlokasi');
+	Route::get('produksi/listLokasi/{id}', 'DataLokasiTanamController@listLokasiTanamProduksi')->name('ajuproduksi.listlokasi');
 });
 
 Route::group(['prefix' => 'importir', 'as' => 'importir.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
@@ -243,9 +244,20 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::post('{id}/checkBerkas', 'VerifTanamController@checkBerkas')->name('checkBerkas');
 		Route::get('pks/{poktan_id}/check', 'VerifTanamController@pkscheck')->name('check.pks');
 		Route::post('pks/{poktan_id}/store', 'VerifTanamController@pksstore')->name('check.pks.store');
+		Route::get('pks/check/{id}/edit', 'VerifTanamController@pksedit')->name('check.pks.edit');
+		Route::put('pks/check/{id}/update', 'VerifTanamController@pksupdate')->name('check.pks.update');
 		Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 	});
 
+	Route::get('produksi', 'VerifProduksiController@index')->name('produksi');
+	Route::group(['prefix' => 'produksi', 'as' => 'produksi.'], function () {
+		Route::get('{id}/check', 'VerifProduksiController@check')->name('check');
+		Route::post('{id}/checkPksSelesai', 'VerifProduksiController@checkPksSelesai')->name('checkPksSelesai');
+		Route::post('{id}/checkBerkas', 'VerifProduksiController@checkBerkas')->name('checkBerkas');
+		Route::put('{id}/store', 'VerifProduksiController@store')->name('store');
+		Route::post('{id}/storeCheck', 'VerifProduksiController@storeCheck')->name('storeCheck');
+	});
+	Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 
 
 	//verifikasi online/data

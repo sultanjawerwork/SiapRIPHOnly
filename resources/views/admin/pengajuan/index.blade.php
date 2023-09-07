@@ -45,7 +45,7 @@
 									@endif
 								</td>
 								<td class="text-center">
-									<a href="{{route('admin.task.submission.show', $verifTanam->id)}}"
+									<a href="{{route('admin.task.pengajuan.tanam.show', $verifTanam->id)}}"
 										class="btn btn-xs btn-icon btn-primary"
 										data-toggle="tooltip" title data-original-title="Lihat data pengajuan">
 										<i class="fa fa-file-invoice"></i>
@@ -88,26 +88,51 @@
 								<td class="text-center">
 									@if($verifProduksi->status === '5')
 										<span class="badge btn-xs btn-info" data-toggle="tooltip" title data-original-title="Verifikasi Sudah diajukan">Diajukan</span>
-									@elseif($verifProduksi->status === '2')
-										<span class="badge btn-xs btn-info" data-toggle="tooltip" title data-original-title="Proses pemeriksaan berkas">Berkas</span>
-									@elseif($verifProduksi->status === '3')
-										<span class="badge btn-xs btn-info" data-toggle="tooltip" title data-original-title="Proses pemeriksaan PKS">PKS</span>
-									@elseif($verifProduksi->status === '4')
-										<span class="badge btn-xs btn-success" data-toggle="tooltip" title data-original-title="Verifikasi data tanam selesai">Selesai</span>
-									@elseif($verifProduksi->status === '5')
-										<span class="badge btn-xs btn-danger" title="Data laporan ditolak">Ditolak</span>
 									@elseif($verifProduksi->status === '6')
-										<span class="badge btn-xs btn-success" title="SKL telah terbit">SKL Terbit</span>
+										<span class="badge btn-xs btn-info" data-toggle="tooltip" title data-original-title="Proses pemeriksaan berkas">Berkas</span>
 									@elseif($verifProduksi->status === '7')
-										<span class="badge btn-xs btn-success" title="SKL telah diterbitkan">SKL Terbit</span>
+										<span class="badge btn-xs btn-info" data-toggle="tooltip" title data-original-title="Proses pemeriksaan PKS">PKS</span>
+									@elseif($verifProduksi->status === '8')
+										<span class="badge btn-xs btn-success" data-toggle="tooltip" title data-original-title="Verifikasi data tanam selesai">Selesai</span>
+									@elseif($verifProduksi->status === '9')
+										<span class="badge btn-xs btn-danger" title="Data laporan perlu diperbaiki">Perbaikan</span>
 									@endif
 								</td>
 								<td class="text-center">
-									<a href="{{route('admin.task.submission.show', $verifTanam->id)}}"
+									<a href="{{route('admin.task.submission.show', $verifProduksi->id)}}"
 										class="btn btn-xs btn-icon btn-primary"
 										data-toggle="tooltip" title data-original-title="Lihat data pengajuan">
 										<i class="fa fa-file-invoice"></i>
 									</a>
+									@if ($verifProduksi->status)
+
+									@endif
+									@if ($verifProduksi->status === '8')
+										<a href="javascript:void(0)" class="btn btn-icon btn-primary btn-xs" title="Ajukan penerbitan SKL" data-toggle="modal" data-target="#modelId">
+											<i class="fal fa-file-certificate"></i>
+										</a>
+									@endif
+
+									<!-- Modal -->
+									<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Modal title</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+												</div>
+												<div class="modal-body">
+													Body
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+													<button type="button" class="btn btn-primary">Save</button>
+												</div>
+											</div>
+										</div>
+									</div>
 								</td>
 							</tr>
 							@endforeach
