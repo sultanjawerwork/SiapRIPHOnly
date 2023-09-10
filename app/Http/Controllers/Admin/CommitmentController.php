@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\MassDestroyPullriphRequest;
 use App\Http\Controllers\Traits\SimeviTrait;
+use App\Models\AjuVerifProduksi;
+use App\Models\AjuVerifSkl;
+use App\Models\AjuVerifTanam;
 use App\Models\UserDocs;
 use App\Models\Varietas;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +38,8 @@ class CommitmentController extends Controller
 		$heading_class = 'fal fa-ballot-check';
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
-		$commitments = PullRiph::where('npwp', $npwp_company)->get();
+		$commitments = PullRiph::where('npwp', $npwp_company)
+			->get();
 
 		$pksCount = 0; // Initialize with a default value
 		$pksFileCount = 0; // Initialize with a default value
@@ -61,8 +65,22 @@ class CommitmentController extends Controller
 					->where('no_ijin', $commitment->no_ijin)
 					->first();
 
+				$ajuTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)
+					->first();
+
+				$ajuProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)
+					->first();
+
+				$ajuSkl = AjuVerifSkl::where('no_ijin', $commitment->no_ijin)
+					->first();
+
 				// Add userDocs to the commitment
 				$commitment->userDocs = $userDocs;
+				$commitment->ajuTanam = $ajuTanam;
+				$commitment->ajuProduksi = $ajuProduksi;
+				$commitment->ajuSkl = $ajuSkl;
+
+				// dd($commitment->ajuTanam);
 			}
 		}
 

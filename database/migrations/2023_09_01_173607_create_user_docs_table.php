@@ -13,6 +13,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('user_docs');
 		Schema::create('user_docs', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('npwp');
@@ -54,6 +55,11 @@ return new class extends Migration
 			$table->string('logbookproduksicheck')->nullable();
 			$table->bigInteger('prodcheck_by')->nullable();
 			$table->date('prodverif_at')->nullable();
+
+			// dokumen ajuan skl
+			$table->string('spskl')->nullable(); //surat pengajuan verifikasi produksi
+			$table->bigInteger('spsklcheck_by')->nullable();
+			$table->date('spsklverif_at')->nullable();
 
 			$table->timestamps();
 			$table->softDeletes();

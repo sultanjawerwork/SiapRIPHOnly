@@ -167,7 +167,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
 		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
 
-
 		//realisasi lokasi tanam & produksi
 		Route::get('realisasi/lokasi/{anggota_id}', 'LokasiController@show')->name('lokasi.tanam');
 		Route::post('realisasi/lokasi/{id}/update', 'LokasiController@update')->name('lokasi.tanam.update');
@@ -178,15 +177,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('commitment/{id}/submit', 'PengajuanController@create')->name('commitment.submit');
 		Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
 
-		//new pengajuan tanam
+
 		Route::get('pengajuan', 'PengajuanController@index')->name('pengajuan.index');
-		Route::get('commitment/{id}/formavt', 'AjuVerifTanamController@create')->name('commitment.avt');
-		Route::post('commitment/{id}/formavt/store', 'AjuVerifTanamController@store')->name('commitment.avt.store');
+
+		//new pengajuan tanam
+		Route::get('commitment/{id}/formavt', 'PengajuanController@ajuVerifTanam')->name('commitment.avt');
+		Route::post('commitment/{id}/formavt/store', 'PengajuanController@ajuVerifTanamStore')->name('commitment.avt.store');
 		Route::get('pengajuan/tanam/{id}/show', 'PengajuanController@showAjuTanam')->name('pengajuan.tanam.show');
 
 		//new pengajuan produksi
-		Route::get('commitment/{id}/formavp', 'AjuVerifProduksiController@create')->name('commitment.avp');
-		Route::post('commitment/{id}/formavp/store', 'AjuVerifProduksiController@store')->name('commitment.avp.store');
+		Route::get('commitment/{id}/formavp', 'PengajuanController@ajuVerifProduksi')->name('commitment.avp');
+		Route::post('commitment/{id}/formavp/store', 'PengajuanController@ajuVerifProduksiStore')->name('commitment.avp.store');
+		Route::get('pengajuan/produksi/{id}/show', 'PengajuanController@showAjuProduksi')->name('pengajuan.produksi.show');
 
 
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
@@ -242,10 +244,8 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('{id}/check', 'VerifTanamController@check')->name('check');
 		Route::put('{id}/store', 'VerifTanamController@store')->name('store');
 		Route::post('{id}/checkBerkas', 'VerifTanamController@checkBerkas')->name('checkBerkas');
-		Route::get('pks/{poktan_id}/check', 'VerifTanamController@pkscheck')->name('check.pks');
-		Route::post('pks/{poktan_id}/store', 'VerifTanamController@pksstore')->name('check.pks.store');
-		Route::get('pks/check/{id}/edit', 'VerifTanamController@pksedit')->name('check.pks.edit');
-		Route::put('pks/check/{id}/update', 'VerifTanamController@pksupdate')->name('check.pks.update');
+		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifTanamController@verifPks')->name('check.pks');
+		Route::put('pks/{id}/store', 'VerifTanamController@verifPksStore')->name('check.pks.store');
 		Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 	});
 

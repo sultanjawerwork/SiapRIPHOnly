@@ -45,6 +45,7 @@ class VerifProduksiController extends Controller
 			->orderBy('created_at', 'desc')
 			->get();
 
+
 		// dd($verifikasis);
 		return view('admin.verifikasi.produksi.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
 	}
@@ -111,7 +112,6 @@ class VerifProduksiController extends Controller
 		$commitmentId = $verifProduksi->commitment_id;
 
 		$commitment = PullRiph::where('no_ijin', $noIjin)->first();
-		$docsStatus = UserDocs::where('no_ijin', $noIjin)->first();
 
 		try {
 			DB::beginTransaction();
@@ -127,6 +127,7 @@ class VerifProduksiController extends Controller
 				'sphproduksicheck',
 				'spdspcheck',
 				'logbookproduksicheck',
+				'formLacheck',
 			];
 			// Create an empty data array to hold the updates
 			$data = [];
@@ -148,9 +149,7 @@ class VerifProduksiController extends Controller
 			// dd($data);
 
 			$verifProduksi->status = '6'; //pemeriksaan berkas selesai
-			$commitment->status = '6'; //pemeriksaan berkas selesai
 			$verifProduksi->save();
-			$commitment->save();
 			DB::commit();
 			// Flash message sukses
 			return redirect()->back()->with('success', 'Hasil pemeriksaan berkas dan status berhasil disimpan.');

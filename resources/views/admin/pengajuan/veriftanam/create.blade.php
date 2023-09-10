@@ -210,8 +210,7 @@
 					<a href="javascript:void(0);" class="btn btn-sm btn-default" onclick="cancelBtn();" >
 						<i class="fas fa-undo text-align-center mr-1"></i> Batalkan
 					</a>
-					<button class="btn btn-sm btn-primary" type="submit"
-						@if ($disabled) disabled @endif>
+					<button class="btn btn-sm btn-primary" type="submit">
 						<i class="fas fa-upload text-align-center mr-1"></i> Ajukan
 					</button>
 				</div>

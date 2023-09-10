@@ -140,27 +140,6 @@
 										<tbody>
 											<tr>
 												<td>
-													@if ($userDocs->spvt)
-														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $userDocs->spvt ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) : '' }}">
-															Surat Pengajuan Verifikasi Tanam
-														</a>
-													@else
-														<span>Surat Pengajuan Verifikasi Produksi</span>
-													@endif
-												</td>
-												<td>
-													<span>{{$userDocs->spvt}}</span>
-												</td>
-												<td>
-													@if ($userDocs->spvtcheck)
-														<span>{{$userDocs->spvtcheck}}</span>
-													@else
-														<span class="text-danger text-center">Tidak ada data</span>
-													@endif
-												</td>
-											</tr>
-											<tr>
-												<td>
 													@if ($userDocs->sptjm)
 														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
 															Surat Pertanggungjawaban Mutlak
@@ -175,6 +154,27 @@
 												<td>
 													@if ($userDocs->sptjmcheck)
 														<span>{{$userDocs->sptjmcheck}}</span>
+													@else
+														<span class="text-danger text-center">Tidak ada data</span>
+													@endif
+												</td>
+											</tr>
+											<tr>
+												<td>
+													@if ($userDocs->spvt)
+														<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $userDocs->spvt ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) : '' }}">
+															Surat Pengajuan Verifikasi Tanam
+														</a>
+													@else
+														<span>Surat Pengajuan Verifikasi Produksi</span>
+													@endif
+												</td>
+												<td>
+													<span>{{$userDocs->spvt}}</span>
+												</td>
+												<td>
+													@if ($userDocs->spvtcheck)
+														<span>{{$userDocs->spvtcheck}}</span>
 													@else
 														<span class="text-danger text-center">Tidak ada data</span>
 													@endif
@@ -257,8 +257,8 @@
 													<span>{{$userDocs->logbooktanam}}</span>
 												</td>
 												<td>
-													@if ($userDocs->logbookcheck)
-														<span>{{$userDocs->logbookcheck}}</span>
+													@if ($userDocs->logbooktanamcheck)
+														<span>{{$userDocs->logbooktanamcheck}}</span>
 													@else
 														<span class="text-danger text-center">Tidak ada data</span>
 													@endif
@@ -299,9 +299,7 @@
 														{{$pks->tgl_perjanjian_end}}
 													</td>
 													<td>
-														@if ($pks->pkscheck->isNotEmpty())
-															{{ $pks->pkscheck->first()->status }}
-														@endif
+														{{$pks->status}}
 													</td>
 												</tr>
 											@endforeach

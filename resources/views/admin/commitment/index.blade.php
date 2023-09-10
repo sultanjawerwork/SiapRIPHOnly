@@ -55,93 +55,90 @@
 										title data-original-title="Laporan Realisasi Tanam dan Produksi">
 										<i class="fal fa-edit"></i>
 									</a>
+									{{-- tanam --}}
 									@if ($pksFileCount == $pksCount)
-										@if (!empty($commitment->userDocs->sptjm) && !empty($commitment->userDocs->spvt) && !empty($commitment->userDocs->rta))
-											@if(empty($commitment->status) )
-												<a href="{{ route('admin.task.commitment.avt', $commitment->id) }}"
-													class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
-													title data-original-title="Ajukan Verifikasi Tanam">
-													<i class="fal fa-upload"></i>
-												</a>
-											@elseif(in_array($commitment->status, ['1']))
-												<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-												title data-original-title="Verifikasi tanam telah diajukan">
-													<i class="fal fa-inbox-out"></i>
-												</span>
-											@elseif(in_array($commitment->status, ['2']))
-												<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-												title data-original-title="Verifikasi berkas tahap 1 selesai">
-													<i class="fal fa-inbox-in"></i>
-												</span>
-											@elseif(in_array($commitment->status, ['3']))
-												<span class="btn btn-xs btn-primary btn-icon" data-toggle="tooltip"
-												title data-original-title="Verifikasi berkas/data PKS selesai">
-													<i class="fal fa-inbox-in"></i>
-												</span>
-											@elseif(in_array($commitment->status, ['4']))
-												<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-												title data-original-title="Verifikasi Tanam selesai.">
-													<i class="fal fa-check"></i>
-												</span>
-											@endif
-										@endif
-									@endif
-									@if ($pksFileCount == $pksCount)
-										@if (!empty($commitment->userDocs->sptjm) && !empty($commitment->userDocs->spvp) && !empty($commitment->userDocs->rpo))
-											@if ($commitment->sumVolume >= $commitment->minThresholdProd)
-												@if(empty($commitment->status) || $commitment->status <= 4)
-													<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
-													class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
-													title data-original-title="Ajukan Verifikasi Produksi">
+										@if (!empty($commitment->userDocs->sptjm))
+											{{-- Tanam --}}
+											@if (!empty($commitment->userDocs->spvt) && !empty($commitment->userDocs->rta))
+												@if(!$commitment->ajuTanam)
+													<a href="{{ route('admin.task.commitment.avt', $commitment->id) }}"
+														class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
+														title data-original-title="Ajukan Verifikasi Tanam">
 														<i class="fal fa-upload"></i>
 													</a>
-												@elseif($commitment->status === '5')
-													<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-													title data-original-title="Verifikasi produksi telah diajukan">
-														<i class="fal fa-inbox-out"></i>
-													</span>
-												@elseif($commitment->status === '6')
-													<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-													title data-original-title="Dalam proses pemeriksaan.">
-														<i class="fal fa-inbox-out"></i>
-													</span>
-												@elseif($commitment->status === '7')
+												@elseif($commitment->ajuTanam->status === '1')
+													<a href="{{route('admin.task.pengajuan.tanam.show', $commitment->ajuTanam->id)}}"
+														class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+														title data-original-title="Verifikasi tanam telah diajukan. Klik untuk Lihat data pengajuan.">
+														<i class="fal fa-upload"></i>
+													</a>
+												@elseif($commitment->ajuTanam->status === '2' || $commitment->ajuTanam->status === '3')
+													<a href="{{route('admin.task.pengajuan.tanam.show', $commitment->ajuTanam->id)}}"
+														class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
+														title data-original-title="Proses pemeriksaan berkas . Klik untuk Lihat data pengajuan.">
+														<i class="fal fa-clipboard-list-check"></i>
+													</a>
+												@elseif($commitment->ajuTanam->status === '4')
 													<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-													title data-original-title="Verifikasi Produksi telah selesai.">
+													title data-original-title="Verifikasi Tanam selesai. Klik untuk Lihat data pengajuan.">
 														<i class="fal fa-check"></i>
 													</span>
-												@else
 												@endif
 											@endif
-										@endif
-									@endif
-									@if (!empty($commitment->userDocs->formLa) && !empty($commitment->userDocs->sphproduksi) && !empty($commitment->userDocs->sphtanam))
-										@if ($commitment->status == '7')
-											<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
-												class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
-												title data-original-title="Ajukan Penerbitan SKL">
-												<i class="fal fa-badge"></i>
-											</a>
-										@elseif($commitment->status === '8')
-											<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-											title data-original-title="Proses verifikasi data selesai.">
-												<i class="fal fa-badge"></i>
-											</span>
-										@elseif($commitment->status === '9')
-											<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-											title data-original-title="Rekomendasi SKL.">
-												<i class="fal fa-badge"></i>
-											</span>
-										@elseif($commitment->status === '10')
-											<span class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
-											title data-original-title="Disetujui.">
-												<i class="fal fa-award"></i>
-											</span>
-										@elseif($commitment->status === '11')
-											<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-											title data-original-title="Diterbitkan.">
-												<i class="fal fa-award"></i>
-											</span>
+											{{-- produksi --}}
+											@if (!empty($commitment->userDocs->spvp) && !empty($commitment->userDocs->rpo))
+												@if ($commitment->sumVolume >= $commitment->minThresholdProd)
+													@if(!$commitment->ajuProduksi)
+														<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
+															class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
+															title data-original-title="Ajukan Verifikasi Produksi">
+															<i class="fal fa-upload"></i>
+														</a>
+													@elseif($commitment->ajuProduksi->status === '1')
+														<a href="{{route('admin.task.pengajuan.produksi.show', $commitment->ajuProduksi->id)}}"
+															class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+															title data-original-title="Verifikasi produksi telah diajukan. Klik untuk Lihat data pengajuan.">
+															<i class="fal fa-upload"></i>
+														</a>
+													@elseif($commitment->ajuProduksi->status === '2' || $commitment->ajuProduksi->status === '3')
+														<a href="{{route('admin.task.pengajuan.produksi.show', $commitment->ajuProduksi->id)}}"
+															class="btn btn-xs btn-info btn-icon" data-toggle="tooltip"
+															title data-original-title="Proses pemeriksaan berkas. Klik untuk Lihat data pengajuan.">
+															<i class="fal fa-upload"></i>
+														</a>
+													@elseif($commitment->ajuProduksi->status === '4')
+														<a href="{{route('admin.task.pengajuan.produksi.show', $commitment->ajuProduksi->id)}}"
+															class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
+															title data-original-title="Verifikasi Produksi selesai. Klik untuk Lihat data pengajuan.">
+															<i class="fal fa-check"></i>
+														</a>
+													@elseif($commitment->ajuProduksi->status === '5')
+														<a href=""
+															class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
+															title data-original-title="Perbaiki data dan laporan. Lalu ajukan verifikasi ulang.">
+															<i class="fa fa-exclamation"></i>
+														</a>
+													@endif
+												@endif
+											@endif
+											{{-- skl --}}
+											@if ($commitment->ajuProduksi && $commitment->ajuProduksi->status === '4')
+												@if(!$commitment->ajuSkl)
+													<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
+														class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
+														title data-original-title="Ajukan Penerbitan SKL">
+														<i class="fal fa-upload"></i>
+													</a>
+												@elseif($commitment->ajuSkl->status === 1)
+													B
+												@elseif($commitment->ajuSkl->status === 2)
+													C
+												@elseif($commitment->ajuSkl->status === 3)
+													D
+												@elseif($commitment->ajuSkl->status === 4)
+													E
+												@endif
+											@endif
 										@endif
 									@endif
 								</td>

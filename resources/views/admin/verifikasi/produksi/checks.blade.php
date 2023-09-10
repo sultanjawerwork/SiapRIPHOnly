@@ -985,7 +985,7 @@ td {
 							</div>
 						</div>
 					</div>
-					<div class="tab-pane fade" id="panel-6" role="tabpanel" aria-labelledby="panel-5">
+					<div class="tab-pane fade" id="panel-6" role="tabpanel" aria-labelledby="panel-6">
 						<div class="panel" id="panel-6">
 							<div class="panel-container show">
 								<div class="panel-tag fade show">

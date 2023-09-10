@@ -14,9 +14,7 @@
 									<tr>
 										<th>Periode</th>
 										<th>Pelaku Usaha</th>
-										<th>No. Pengajuan</th>
 										<th>No. RIPH</th>
-										<th>Pengajuan</th>
 										<th>Diajukan pada</th>
 										<th>Status</th>
 										<th>Tindakan</th>
@@ -31,25 +29,13 @@
 										<tr>
 											<td>{{$verifikasi->commitment->periodetahun}}</td>
 											<td>{{$verifikasi->datauser->company_name}}</td>
-											<td>{{$verifikasi->no_pengajuan}}</td>
 											<td>{{$verifikasi->no_ijin}}</td>
-											<td>
-												@if ($commitmentCount == 1)
-													<span class="badge badge-xs badge-primary ml-1">Pertama</span>
-												@elseif ($commitmentCount == 2)
-													<span class="badge badge-xs badge-info ml-1">ke: {{$urutan}}</span>
-												@elseif ($commitmentCount == 3)
-													<span class="badge badge-xs badge-warning ml-1">ke: {{$urutan}}</span>
-												@elseif ($commitmentCount >= 4)
-												<span class="badge badge-xs badge-danger ml-1">ke: {{$urutan}}</span>
-												@endif
-											</td>
 											<td>{{$verifikasi->created_at}}</td>
 											<td class="text-center">
 												@if ($verifikasi->status === '1')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
-														<i class="base-7 icon-stack-3x color-warning-400"></i>
-														<i class="base-7 icon-stack-2x color-warnig-600 opacity-70"></i>
+														<i class="base-7 icon-stack-3x color-warning-300"></i>
+														<i class="base-7 icon-stack-2x color-warning-800 opacity-70"></i>
 														<span class="icon-stack-1x text-white opacity-90">!</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>

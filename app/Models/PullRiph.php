@@ -88,7 +88,17 @@ class PullRiph extends Model
 
 	public function ajutanam()
 	{
-		return $this->hasMany(AjuVerifTanam::class, 'no_ijin', 'no_ijin');
+		return $this->hasOne(AjuVerifTanam::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function ajuproduksi()
+	{
+		return $this->hasOne(AjuVerifProduksi::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function ajuskl()
+	{
+		return $this->hasOne(AjuVerifSkl::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function pengajuan()

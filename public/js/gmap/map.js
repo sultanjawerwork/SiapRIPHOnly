@@ -90,10 +90,14 @@ function createMarkers() {
 function createPolygon() {
 	const polygonCoords = document.getElementById("polygon").value;
 	if (polygonCoords !== "") {
-		polygonCoords = JSON.parse(polygonCoords);
-		const polygon = new google.maps.Polygon({
-			paths: polygonCoords,
-			strokeColor: "#FF0000",
+		const parsedCoords = JSON.parse(polygonCoords);
+		if (polygon) {
+			// Hapus polygon yang ada jika sudah ada
+			polygon.setMap(null);
+		}
+		polygon = new google.maps.Polygon({
+			paths: parsedCoords,
+			strokeColor: "#0000FF",
 			strokeOpacity: 0.8,
 			strokeWeight: 2,
 			fillColor: "#FF0000",
@@ -101,9 +105,24 @@ function createPolygon() {
 			editable: true,
 			map: myMap,
 		});
-		polygons.push(polygon);
 		addPolygonListeners(polygon);
 	}
+	// const polygonCoords = document.getElementById("polygon").value;
+	// if (polygonCoords !== "") {
+	// 	polygonCoords = JSON.parse(polygonCoords);
+	// 	const polygon = new google.maps.Polygon({
+	// 		paths: polygonCoords,
+	// 		strokeColor: "#0000FF",
+	// 		strokeOpacity: 0.8,
+	// 		strokeWeight: 2,
+	// 		fillColor: "#FF0000",
+	// 		fillOpacity: 0.35,
+	// 		editable: true,
+	// 		map: myMap,
+	// 	});
+	// 	polygons.push(polygon);
+	// 	addPolygonListeners(polygon);
+	// }
 }
 
 function addPolygonListeners(polygon) {
