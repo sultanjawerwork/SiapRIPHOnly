@@ -42,4 +42,20 @@ class AjuVerifTanam extends Model
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
+
+	public static function newPengajuanCount(): int
+	{
+		return self::whereNull('verif_at')->count();
+	}
+
+	public function NewRequest(): int
+	{
+		return self::where('status', '1')
+			->whereNull('verif_at')->count();
+	}
+
+	public static function getNewPengajuan()
+	{
+		return self::where('status', '1')->whereNull('verif_at')->get();
+	}
 }

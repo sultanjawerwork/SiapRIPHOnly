@@ -19,7 +19,7 @@ class DataLokasiTanamController extends Controller
 		$currentRoute = Route::current()->getName();
 		$verifikasi = null; // Initialize the variable
 
-		if ($currentRoute === 'verification.tanam.check' || $currentRoute === 'verification.produksi.check') {
+		if ($currentRoute === 'verification.tanam.check' || $currentRoute === 'verification.produksi.check' || 'verification.skl.check') {
 			if ($currentRoute === 'verification.tanam.check') {
 				$verifikasi = AjuVerifTanam::findOrFail($id);
 			} elseif ($currentRoute === 'verification.produksi.check') {

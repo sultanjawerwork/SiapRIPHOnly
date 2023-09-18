@@ -31,4 +31,31 @@ class AjuVerifSkl extends Model
 	{
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
+
+	public function datauser()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
+
+	public static function newPengajuanCount(): int
+	{
+		return self::where('status', '1')
+			->whereNull('verif_at')->count();
+	}
+
+	public function NewRequest(): int
+	{
+		return self::where('status', '1')
+			->whereNull('verif_at')->count();
+	}
+
+	public static function getNewPengajuan()
+	{
+		return self::where('status', '1')->whereNull('verif_at')->get();
+	}
+
+	public function skl()
+	{
+		return $this->hasOne(Skl::class, 'pengajuan_id', 'id');
+	}
 }

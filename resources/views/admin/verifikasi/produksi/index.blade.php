@@ -12,11 +12,11 @@
 							<table id="dataPengajuan" class="table table-sm table-bordered table-striped w-100">
 								<thead>
 									<tr>
-										<th>No. Pengajuan</th>
-										<th>No. RIPH</th>
 										<th>Periode</th>
-										<th>Tanggal Pengajuan</th>
-										<th>Tanggal Verifikasi Data</th>
+										{{-- <th>No. Pengajuan</th> --}}
+										<th>Pelaku Usaha</th>
+										<th>No. RIPH</th>
+										<th>Diajukan pada</th>
 										<th>Status</th>
 										<th>Tindakan</th>
 									</tr>
@@ -24,34 +24,34 @@
 								<tbody>
 									@foreach ($verifikasis as $verifikasi)
 										<tr>
-											<td>{{$verifikasi->no_pengajuan}}</td>
-											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{$verifikasi->commitment->periodetahun}}</td>
-											<td class="text-center">{{ date('d-m-Y', strtotime($verifikasi->created_at)) }}</td>
-											<td class="text-center">{{ $verifikasi->verif_at ? date('d-m-Y', strtotime($verifikasi->verif_at)) : '' }}</td>
+											{{-- <td>{{$verifikasi->no_pengajuan}}</td> --}}
+											<td>{{$verifikasi->datauser->company_name}}</td>
+											<td>{{$verifikasi->commitment->no_ijin}}</td>
+											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
 											<td class="text-center">
-												@if ($verifikasi->status === '5')
+												@if ($verifikasi->status === '1')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
 														<i class="base-7 icon-stack-3x color-warning-300"></i>
 														<i class="base-7 icon-stack-2x color-warning-700 opacity-70"></i>
 														<span class="icon-stack-1x text-white opacity-90">!</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@elseif ($verifikasi->status === '6')
+												@elseif ($verifikasi->status === '2')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pemeriksaan Berkas Kelengkapan">
 														<i class="base-7 icon-stack-3x color-info-400"></i>
 														<i class="base-7 icon-stack-2x color-info-600 opacity-70"></i>
-														<span class="icon-stack-1x text-white fw-500">6</span>
+														<span class="icon-stack-1x text-white fw-500">2</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@elseif ($verifikasi->status === '7')
+												@elseif ($verifikasi->status === '3')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pemeriksaan PKS Selesai">
 														<i class="base-7 icon-stack-3x color-info-400"></i>
 														<i class="base-7 icon-stack-2x color-info-600 opacity-70"></i>
-														<span class="icon-stack-1x text-white fw-500">7</span>
+														<span class="icon-stack-1x text-white fw-500">3</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@elseif ($verifikasi->status === '8')
+												@elseif ($verifikasi->status === '4')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Verifikasi Produksi Selesai">
 														<i class="base-7 icon-stack-3x color-success-400"></i>
 														<i class="base-7 icon-stack-2x color-success-600 opacity-70"></i>
@@ -60,7 +60,7 @@
 														</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@elseif ($verifikasi->status === '9')
+												@elseif ($verifikasi->status === '5')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Perbaikan">
 														<i class="base-7 icon-stack-3x color-danger-300"></i>
 														<i class="base-7 icon-stack-2x color-danger-600 opacity-70"></i>
@@ -72,8 +72,8 @@
 												@endif
 											</td>
 											<td class="text-center">
-												@if($verifikasi->status >= 8)
-													<a href=""
+												@if($verifikasi->status >= 4)
+													<a href="{{route('verification.produksi.show', $verifikasi->id)}}"
 														title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-search"></i>
 													</a>
@@ -144,7 +144,7 @@
 
 				// Get the unique values of the "Year" column
 				var table = $('#dataPengajuan').DataTable();
-				var years = table.column(2).data().unique().sort();
+				var years = table.column(0).data().unique().sort();
 
 				// Create the "Year" select element and add the options
 				var selectYear = $('<select>')
@@ -152,7 +152,7 @@
 					.addClass('custom-select custom-select-sm col-3 mr-2')
 					.on('change', function() {
 					var year = $.fn.dataTable.util.escapeRegex($(this).val());
-					table.column(2).search(year ? '^' + year + '-|'+year+'$' : '', true, false).draw();
+					table.column(0).search(year ? '^' + year + '-|'+year+'$' : '', true, false).draw();
 					});
 
 				$('<option>').val('').text('Semua Tahun').appendTo(selectYear);
@@ -166,13 +166,15 @@
 					.addClass('custom-select custom-select-sm col-3 mr-2')
 					.on('change', function() {
 					var status = $(this).val();
-					table.column(5).search(status).draw();
+					table.column(4).search(status).draw();
 					});
 
-				$('<option>').val('').text('Semua Status').appendTo(selectStatus);
-				$('<option>').val('5').text('Baru').appendTo(selectStatus);
-				$('<option>').val('6').text('Berkas').appendTo(selectStatus);
-				$('<option>').val('7').text('Selesai').appendTo(selectStatus);
+				$('<option>').val('').text('Semua Tahap').appendTo(selectStatus);
+				$('<option>').val('1').text('Baru').appendTo(selectStatus);
+				$('<option>').val('2').text('Berkas').appendTo(selectStatus);
+				$('<option>').val('3').text('PKS').appendTo(selectStatus);
+				$('<option>').val('4').text('Selesai').appendTo(selectStatus);
+				$('<option>').val('5').text('Perbaikan').appendTo(selectStatus);
 
 				// Add the select elements before the first datatable button in the second table
 				$('#dataPengajuan_wrapper .dt-buttons').before(selectYear, selectStatus);

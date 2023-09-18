@@ -65,9 +65,6 @@ class Pengajuan extends Model
 		'deleted_at',
 	];
 
-
-
-
 	public static function newPengajuanCount(): int
 	{
 		return self::whereNull('onlinedate')->count();

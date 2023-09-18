@@ -34,6 +34,7 @@ class Pks extends Model
 		'kabupaten_id',
 		'kecamatan_id',
 		'kelurahan_id',
+		'status',
 		'berkas_pks',
 	];
 

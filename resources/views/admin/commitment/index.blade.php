@@ -1,4 +1,11 @@
 @extends('layouts.admin')
+@section ('styles')
+<style>
+td {
+	vertical-align: middle !important;
+}
+</style>
+@endsection
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
@@ -10,14 +17,16 @@
 			<div class="panel-container show">
 				<div class="panel-content">
 					<table id="datatable" class="table table-bordered table-hover table-striped table-sm w-100">
-						<thead>
+						<thead class="thead-themed">
 							<th>No. RIPH</th>
 							<th>Tahun</th>
 							<th>Tgl. Terbit</th>
-							<th>Tgl. Akhir</th>
-							<th>Vol. Import</th>
+							<th>Vol. RIPH</th>
 							<th>Kewajiban</th>
-							<th>Tindakan</th>
+							<th>Data</th>
+							<th>Tanam</th>
+							<th>Prod</th>
+							<th>SKL</th>
 						</thead>
 						<tbody>
 							@foreach ($commitments as $commitment)
@@ -27,35 +36,35 @@
 										{{$commitment->no_ijin}}
 									</a>
 								</td>
-								<td>{{$commitment->periodetahun}}</td>
+								<td class="text-center">{{$commitment->periodetahun}}</td>
 								<td>{{$commitment->tgl_ijin}}</td>
-								<td>{{$commitment->tgl_akhir}}</td>
-								<td>{{ number_format($commitment->volume_riph, 2, ',','.') }} ton</td>
+								<td class="text-right">{{ number_format($commitment->volume_riph, 0, ',','.') }} ton</td>
 								<td>
 									<div class="row">
 										<div class="col-3">
-											Luas
+											Tanam
 										</div>
-										<div class="col-9">
-											{{ number_format($commitment->volume_riph * 0.05/6, 2, ',','.') }} ha
+										<div class="col-9 text-right">
+											{{ number_format($commitment->luas_wajib_tanam, 2, ',','.') }} ha
 										</div>
 									</div>
 									<div class="row">
 										<div class="col-3">
-											Volume
+											Produksi
 										</div>
-										<div class="col-9">
-											{{ number_format($commitment->volume_riph * 0.05, 2, ',','.') }} ton
+										<div class="col-9 text-right">
+											{{ number_format($commitment->volume_produksi, 2, ',','.') }} ton
 										</div>
 									</div>
 								</td>
 								<td class="text-center">
 									<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}"
 										class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip"
-										title data-original-title="Laporan Realisasi Tanam dan Produksi">
+										title data-original-title="Isi Laporan Realisasi Tanam dan Produksi">
 										<i class="fal fa-edit"></i>
 									</a>
-									{{-- tanam --}}
+								</td>
+								<td class="text-center">
 									@if ($pksFileCount == $pksCount)
 										@if (!empty($commitment->userDocs->sptjm))
 											{{-- Tanam --}}
@@ -75,16 +84,22 @@
 												@elseif($commitment->ajuTanam->status === '2' || $commitment->ajuTanam->status === '3')
 													<a href="{{route('admin.task.pengajuan.tanam.show', $commitment->ajuTanam->id)}}"
 														class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
-														title data-original-title="Proses pemeriksaan berkas . Klik untuk Lihat data pengajuan.">
+														title data-original-title="Proses pemeriksaan berkas. Klik untuk Lihat data.">
 														<i class="fal fa-clipboard-list-check"></i>
 													</a>
 												@elseif($commitment->ajuTanam->status === '4')
 													<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-													title data-original-title="Verifikasi Tanam selesai. Klik untuk Lihat data pengajuan.">
+													title data-original-title="Verifikasi Tanam selesai.">
 														<i class="fal fa-check"></i>
 													</span>
 												@endif
 											@endif
+										@endif
+									@endif
+								</td>
+								<td class="text-center">
+									@if ($pksFileCount == $pksCount)
+										@if (!empty($commitment->userDocs->sptjm))
 											{{-- produksi --}}
 											@if (!empty($commitment->userDocs->spvp) && !empty($commitment->userDocs->rpo))
 												@if ($commitment->sumVolume >= $commitment->minThresholdProd)
@@ -113,30 +128,55 @@
 															<i class="fal fa-check"></i>
 														</a>
 													@elseif($commitment->ajuProduksi->status === '5')
-														<a href=""
-															class="btn btn-xs btn-danger btn-icon" data-toggle="tooltip"
-															title data-original-title="Perbaiki data dan laporan. Lalu ajukan verifikasi ulang.">
-															<i class="fa fa-exclamation"></i>
-														</a>
+														<div class="dropdown">
+															<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+																<i class="fa fa-exclamation"></i>
+															</a>
+															<div class="dropdown-menu">
+																<a class="dropdown-item" style="text-decoration: none !important;" href="{{route('admin.task.pengajuan.produksi.show', $commitment->ajuProduksi->id)}}" target="_blank">
+																	Lihat Hasil Verifikasi
+																</a >
+																<a class="dropdown-item" style="text-decoration: none !important;" href="{{ route('admin.task.commitment.avp', $commitment->id) }}" target="_blank" data-toggle="tooltip"
+																	title data-original-title="Perbaiki data dan laporan. Lalu ajukan verifikasi ulang.">
+																	Ajukan Ulang
+																</a>
+															</div>
+														</div>
 													@endif
 												@endif
 											@endif
+										@endif
+									@endif
+								</td>
+								<td class="text-center">
+									@if ($pksFileCount == $pksCount)
+										@if (!empty($commitment->userDocs->sptjm))
 											{{-- skl --}}
 											@if ($commitment->ajuProduksi && $commitment->ajuProduksi->status === '4')
 												@if(!$commitment->ajuSkl)
-													<a href="{{ route('admin.task.commitment.avp', $commitment->id) }}"
+													<a href="{{ route('admin.task.commitment.avskl', $commitment->id) }}"
 														class="btn btn-xs btn-warning btn-icon" data-toggle="tooltip"
 														title data-original-title="Ajukan Penerbitan SKL">
 														<i class="fal fa-upload"></i>
 													</a>
-												@elseif($commitment->ajuSkl->status === 1)
-													B
-												@elseif($commitment->ajuSkl->status === 2)
-													C
-												@elseif($commitment->ajuSkl->status === 3)
-													D
-												@elseif($commitment->ajuSkl->status === 4)
-													E
+												@elseif($commitment->ajuSkl->status === '1')
+													<a href="{{ route('admin.task.commitment.avskl', $commitment->id) }}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Penerbitan SKL sudah diajukan">
+														<i class="fal fa-upload"></i>
+													</a>
+												@elseif($commitment->ajuSkl->status === '2' || $commitment->ajuSkl->status === '2')
+													<a href="{{ route('admin.task.commitment.avskl', $commitment->id) }}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Pemeriksaan Berkas">
+														<i class="fal fa-upload"></i>
+													</a>
+												@elseif($commitment->ajuSkl->status === '4')
+													<a href="{{ route('admin.task.commitment.avskl', $commitment->id) }}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Pemeriksaan Selesai">
+														<i class="fal fa-file-check"></i>
+													</a>
+												@elseif($commitment->ajuSkl->status === '5')
+													@if ($commitment->skl->submit_by)
+														<a href="javascript:void(0)" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Rekomendasi Penerbitan">
+															<i class="fal fa-thumbs-up"></i>
+														</a>
+													@endif
 												@endif
 											@endif
 										@endif
@@ -146,7 +186,6 @@
 							@endforeach
 						</tbody>
 					</table>
-					{{-- Modal Create Commitment --}}
 				</div>
 			</div>
 		</div>

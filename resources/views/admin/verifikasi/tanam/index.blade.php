@@ -27,10 +27,10 @@
 											$urutan = $verifikasis->where('no_ijin', $verifikasi->no_ijin)->sortBy('created_at')->search($verifikasi) + 1;
 										@endphp
 										<tr>
-											<td>{{$verifikasi->commitment->periodetahun}}</td>
+											<td class="text-center">{{$verifikasi->commitment->periodetahun}}</td>
 											<td>{{$verifikasi->datauser->company_name}}</td>
 											<td>{{$verifikasi->no_ijin}}</td>
-											<td>{{$verifikasi->created_at}}</td>
+											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
 											<td class="text-center">
 												@if ($verifikasi->status === '1')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
@@ -155,14 +155,14 @@
 					.addClass('custom-select custom-select-sm col-3 mr-2')
 					.on('change', function() {
 					var status = $(this).val();
-					table.column(6).search(status).draw();
+					table.column(4).search(status).draw();
 					});
 
-				$('<option>').val('').text('Semua Status').appendTo(selectStatus);
+				$('<option>').val('').text('Semua Tahap').appendTo(selectStatus);
 				$('<option>').val('1').text('Diajukan').appendTo(selectStatus);
-				$('<option>').val('2').text('Selesai').appendTo(selectStatus);
-				$('<option>').val('3').text('Perbaikan').appendTo(selectStatus);
-				$('<option>').val('4').text('Belum Periksa').appendTo(selectStatus);
+				$('<option>').val('2').text('Berkas').appendTo(selectStatus);
+				$('<option>').val('3').text('PKS').appendTo(selectStatus);
+				$('<option>').val('4').text('Selesai').appendTo(selectStatus);
 
 				// Add the select elements before the first datatable button in the second table
 				$('#dataPengajuan_wrapper .dt-buttons').before(selectYear, selectStatus);

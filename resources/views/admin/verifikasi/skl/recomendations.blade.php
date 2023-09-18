@@ -24,23 +24,23 @@
 									<tbody>
 										@foreach ($recomends as $recomend)
 											<tr>
-												<td>{{$recomend->skl->no_skl}}</td>
+												<td>{{$recomend->no_skl}}</td>
 												<td>{{$recomend->no_ijin}}</td>
 												<td>{{$recomend->datauser->company_name}}</td>
 												<td class="text-center">
 													@php
-														$user = \App\Models\User::find($recomend->skl->submit_by);
+														$user = \App\Models\User::find($recomend->submit_by);
 													@endphp
 													{{ $user ? $user->name : 'User Not Found' }}
 												</td>
 												<td class="text-center">{{$recomend->created_at}}</td>
 												<td class="text-center">
-													@if($recomend->skl->published_date)
-														<a href="{{route('verification.skl.published', $recomend->skl->id)}}" class="btn btn-xs btn-success btn-icon">
+													@if($recomend->published_date)
+														<a href="{{route('verification.skl.published', $recomend->id)}}" class="btn btn-xs btn-success btn-icon">
 															<i class="fal fa-award"></i>
 														</a>
 													@else
-														<a href="{{route('verification.skl.recomendations.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
+														<a href="{{route('verification.skl.recomendation.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
 															<i class="fal fa-file-search">
 															</i>
 														</a>

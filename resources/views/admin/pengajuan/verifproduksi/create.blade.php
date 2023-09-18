@@ -424,7 +424,7 @@
 			serverSide: true,
 			responsive: true,
 			ajax: {
-				url: "{{ route('admin.task.commitment.submit', $commitment->id) }}",
+				url: "{{ route('admin.task.commitment.avp.lokasi', $commitment->id) }}",
 				type: "GET",
 			},
 			columns: [

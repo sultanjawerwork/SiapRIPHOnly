@@ -1,4 +1,11 @@
 @extends('layouts.admin')
+@section ('styles')
+<style>
+td {
+	vertical-align: middle !important;
+}
+</style>
+@endsection
 @section('content')
 	{{-- @include('partials.breadcrumb') --}}
 	@include('partials.subheader')
@@ -85,8 +92,8 @@
 									</div>
 								</div>
 								<div class="panel-content">
-									<table class="table table-striped table-bordered w-100" id="dataRiph">
-										<thead>
+									<table class="table table-striped table-bordered table-sm w-100" id="dataRiph">
+										<thead class="thead-themed text-muted text-uppercase">
 											<th>Data</th>
 											<th>Kewajiban</th>
 											<th>Realisasi</th>
@@ -133,8 +140,9 @@
 					</div>
 					<div class="tab-pane fade" id="panel-3" role="tabpanel" aria-labelledby="panel-3">
 						<div id="panel-3" class="panel">
-							<form action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}" method="post">
-							@csrf
+							<form method="post"
+								action="{{route('verification.tanam.checkBerkas', $verifikasi->id)}}">
+								@csrf
 								<div class="panel-container show">
 									<div class="panel-tag fade show">
 										<div class="d-flex align-items-center">
@@ -146,12 +154,12 @@
 									</div>
 									<div class="panel-content">
 										<table class="table table-striped table-bordered table-sm w-100" id="attchCheck">
-											<thead class="thead-themed">
+											<thead class="thead-themed text-uppercase text-muted">
 												<tr>
-													<th class="text-uppercase text-muted">Form</th>
-													<th class="text-uppercase text-muted">Nama Berkas</th>
-													<th class="text-uppercase text-muted">Tindakan</th>
-													<th class="text-uppercase text-muted">Hasil Periksa</th>
+													<th>Form</th>
+													<th>Nama Berkas</th>
+													<th>Tindakan</th>
+													<th>Hasil Periksa</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -277,24 +285,10 @@
 								</div>
 								<div class="card-footer d-flex justify-content-between align-items-center">
 									<div class="help-block col-md-7">
-										<ul class="list-group">Keterangan
-											<li class="d-flex justify-content-start">
-												<span class="col-3 text-danger fw-500">Belum Diperiksa</span>
-												<span>Anda belum melakukan pemeriksaan terhadap berkas terkait.</span>
-											</li>
-											<li class="d-flex justify-content-start">
-												<span class="col-3 text-success fw-500">Sesuai</span>
-												<span>Jika salinan yang diunggah ADA dan SESUAI.</span>
-											</li>
-											<li class="d-flex justify-content-start">
-												<span class="col-3 text-warning fw-500">Tidak Sesuai:</span>
-												<span>Jika salinan yang diunggah TIDAK ADA atau ADA namun TIDAK SESUAI.</span>
-											</li>
-										</ul>
 									</div>
 									<div class="col-md text-right">
 										<button type="submit" class="btn btn-primary btn-sm">
-											simpan
+											Selesai
 										</button>
 									</div>
 								</div>
@@ -328,16 +322,16 @@
 												<tr>
 													<td>{{$pks->no_perjanjian}}</td>
 													<td>{{$pks->masterpoktan->nama_kelompok}}</td>
-													<td>
+													<td class="text-center">
 														{{$pks->tgl_perjanjian_start}} s.d
 														{{$pks->tgl_perjanjian_end}}
 													</td>
-													<td>
+													<td class="text-center">
 														{{$pks->status}}
 													</td>
 													<td class="text-center">
-														<a href="{{route('verification.tanam.check.pks', ['noIjin' => $noIjin, 'poktan_id' => $pks->poktan_id]) }}">
-															lihat data
+														<a href="{{route('verification.tanam.check.pks', ['noIjin' => $noIjin, 'poktan_id' => $pks->poktan_id]) }}" class="btn btn-icon @if($pks->status) btn-success @else btn-warning @endif btn-xs" data-toggle="tooltip" data-original-title="Lihat/Periksa berkas dan data.">
+															<i class="fal fa-search"></i>
 														</a>
 													</td>
 												</tr>
@@ -346,6 +340,20 @@
 									</table>
 								</div>
 							</div>
+
+							<form action="{{route('verification.tanam.checkPksSelesai', $verifikasi->id)}}" method="post">
+								@csrf
+								@method('PUT')
+								<div class="card-footer d-flex alignt-items-center justify-content-between">
+									<div>
+									</div>
+									<div>
+										<button type="submit" class="btn btn-primary btn-sm">
+											simpan
+										</button>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="panel-5" role="tabpanel" aria-labelledby="panel-5">
@@ -361,12 +369,12 @@
 								</div>
 								<div class="panel-content">
 									<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
-										<thead>
-											<th class="text-uppercase text-muted">Kelompoktani</th>
-											<th class="text-uppercase text-muted">Nama Lokasi</th>
-											<th class="text-uppercase text-muted">Pengelola</th>
-											<th class="text-uppercase text-muted">Luas</th>
-											<th class="text-uppercase text-muted">Tindakan</th>
+										<thead class="thead-themed text-uppercase text-muted">
+											<th>Kelompoktani</th>
+											<th>Nama Lokasi</th>
+											<th>Pengelola</th>
+											<th>Luas</th>
+											<th>Tindakan</th>
 										</thead>
 										<tbody>
 										</tbody>
@@ -386,7 +394,7 @@
 										</div>
 									</div>
 								</div>
-								<form action="{{route('verification.tanam.store', $verifikasi->id)}}" method="POST" enctype="multipart/form-data">
+								<form action="{{route('verification.tanam.storeCheck', $verifikasi->id)}}" method="POST" enctype="multipart/form-data">
 									@csrf
 									@method('PUT')
 									<div class="panel-content">
@@ -405,9 +413,12 @@
 													<label class="custom-file-label" for="ndhprt">{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : 'pilih berkas') }}</label>
 												</div>
 												@if ($verifikasi->ndhprt)
-													<span class="help-block">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
+													<a href="#" class="help-block" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->ndhprt) }}">
+														<i class="fas fa-search mr-1"></i>
+														Lihat Nota Dinas.
+													</a>
 												@else
-													<span class="help-block">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
+													<span class="help-block fw-500">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
 												@endif
 											</div>
 											<div class="form-group col-md-6">
@@ -416,14 +427,21 @@
 													<input type="file" class="custom-file-input" name="batanam" id="batanam" value="{{ old('batanam', $verifikasi ? $verifikasi->batanam : '') }}">
 													<label class="custom-file-label" for="batanam">{{ old('batanam', $verifikasi ? $verifikasi->batanam : 'pilih berkas') }}</label>
 												</div>
-												<span class="help-block">Berita Acara Pemeriksaan Realisasi Tanam. <span class="text-danger"></span></span>
+												@if ($verifikasi->batanam)
+													<a href="#" class="help-block" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$verifikasi->batanam) }}">
+														<i class="fas fa-search mr-1"></i>
+														Lihat Berita Acara.
+													</a>
+												@else
+													<span class="help-block">Berita Acara Pemeriksaan Realisasi Tanam. <span class="text-danger"></span></span>
+												@endif
 											</div>
 											<div class="form-group col-md-3">
 												<label for="">Metode Pemeriksaan<sup class="text-danger"> *</sup></label>
 												<select name="metode" id="metode" class="form-control custom-select" required>
 													<option value="" hidden>-- pilih metode --</option>
 													<option value="Lapangan" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Lapangan' ? 'selected' : '' }}>Lapangan</option>
-													<option value="Wawancara"> {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}Wawancara</option>
+													<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih metode pemeriksaan</small>
 											</div>
@@ -501,7 +519,6 @@
 
 			var tableData = $('#dataTable').DataTable({
 				responsive: true,
-
 				lengthChange: true,
 				dom:
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +

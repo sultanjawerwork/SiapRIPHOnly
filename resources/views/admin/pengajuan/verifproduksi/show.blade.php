@@ -329,9 +329,7 @@
 														{{$pks->tgl_perjanjian_end}}
 													</td>
 													<td>
-														@if ($pks->pkscheck->isNotEmpty())
-															{{ $pks->pkscheck->first()->status }}
-														@endif
+														{{$pks->status}}
 													</td>
 												</tr>
 											@endforeach

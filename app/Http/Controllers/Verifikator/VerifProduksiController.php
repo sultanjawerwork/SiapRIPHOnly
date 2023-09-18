@@ -40,9 +40,8 @@ class VerifProduksiController extends Controller
 		$page_heading = 'Pengajuan Verifikasi Produksi';
 		$heading_class = 'fa fa-map-marked-alt';
 
-		//table pengajuan
-		$verifikasis = AjuVerifProduksi::where('status', '<=', '9')
-			->orderBy('created_at', 'desc')
+		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
+		$verifikasis = AjuVerifProduksi::orderBy('created_at', 'desc')
 			->get();
 
 
@@ -62,6 +61,7 @@ class VerifProduksiController extends Controller
 
 		// Populate related data
 		$verifikasi = AjuVerifProduksi::findOrFail($id);
+		$noIjin = str_replace(['/', '.'], '', $verifikasi->no_ijin);
 		$verifTanam = AjuVerifTanam::where('no_ijin', $verifikasi->no_ijin)->first();
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
 		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
@@ -100,7 +100,7 @@ class VerifProduksiController extends Controller
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 
-		return view('admin.verifikasi.produksi.checks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'verifTanam', 'userDocs'));
+		return view('admin.verifikasi.produksi.checks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'verifTanam', 'userDocs', 'noIjin'));
 	}
 
 	public function checkBerkas(Request $request, $id)
@@ -147,8 +147,9 @@ class VerifProduksiController extends Controller
 			);
 
 			// dd($data);
-
-			$verifProduksi->status = '6'; //pemeriksaan berkas selesai
+			if ($verifProduksi->status == '1') {
+				$verifProduksi->status = '2'; //pemeriksaan berkas selesai
+			}
 			$verifProduksi->save();
 			DB::commit();
 			// Flash message sukses
@@ -162,53 +163,107 @@ class VerifProduksiController extends Controller
 		}
 	}
 
+	public function verifPks($noIjin, $poktan_id)
+	{
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+		$module_name = 'Verifikasi';
+		$page_title = 'Verifikasi Data';
+		$page_heading = 'Data dan Berkas PKS';
+		$heading_class = 'fal fa-ballot-check';
+
+		$no_ijin = substr_replace($noIjin, '/', 4, 0);
+		$no_ijin = substr_replace($no_ijin, '.', 7, 0);
+		$no_ijin = substr_replace($no_ijin, '/', 11, 0);
+		$no_ijin = substr_replace($no_ijin, '/', 13, 0);
+		$no_ijin = substr_replace($no_ijin, '/', 16, 0);
+
+		$verifikasi = AjuVerifProduksi::where('no_ijin', $no_ijin)->first();
+		$npwp = $verifikasi->npwp;
+		$commitment = PullRiph::where('no_ijin', $no_ijin)->first();
+		$pks = Pks::where('npwp', $npwp)
+			->where('no_ijin', $no_ijin)
+			->where('poktan_id', $poktan_id)
+			->first();
+		$actionRoute = route('verification.produksi.check.pks.store', $pks->id);
+		$cancelRoute = route('verification.produksi.check', $verifikasi->id);
+		// dd($actionRoute);
+		return view('admin.verifikasi.tanam.verifPks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'pks', 'npwp', 'commitment', 'actionRoute', 'cancelRoute'));
+	}
+
+	public function verifPksStore(Request $request, $id)
+	{
+		$user = Auth::user();
+		$verifId = $request->input('verifId');
+		$pks = Pks::findOrFail($id);
+		$pks->status = $request->input('status');
+		$pks->note = $request->input('note');
+		$pks->verif_by = $user->id;
+		$pks->verif_at = Carbon::now();
+
+		$pks->save();
+		return redirect()->route('verification.produksi.check', ['id' => $verifId])->with('success', 'Data Pemeriksaan berhasil disimpan');
+	}
+
 	public function checkPksSelesai(Request $request, $id)
 	{
 		$user = Auth::user();
 		$verifProduksi = AjuVerifProduksi::find($id);
 		$npwp = $verifProduksi->npwp;
 		$noIjin = $verifProduksi->no_ijin;
-		$commitment = PullRiph::where('no_ijin', $noIjin)->first();
 
-		$verifProduksi->status = '7'; //pemeriksaan PKS selesai
+		if ($verifProduksi == '2') {
+			$verifProduksi->status = '3'; //pemeriksaan PKS selesai
+		}
 		$verifProduksi->check_by = $user->id;
 		$verifProduksi->verif_at = Carbon::now();
-		$commitment->status = '7'; //pemeriksaan PKS selesai
 
 		$verifProduksi->save();
-		$commitment->save();
 
 		return redirect()->back()->with('success', 'Hasil pemeriksaan berkas dan status berhasil disimpan.');
 	}
 
 	public function storeCheck(Request $request, $id)
 	{
+
+		//verifikator
 		$user = Auth::user();
-		$verifProduksi = AjuVerifProduksi::find($id);
-		$npwp = $verifProduksi->npwp;
-		$noIjin = $verifProduksi->no_ijin;
-		$commitmentId = $verifProduksi->commitment_id;
+
+		//tabel pengajuan
+		$verifikasi = AjuVerifProduksi::find($id);
+		abort_if(
+			Gate::denies('online_access') ||
+				($verifikasi->no_ijin != $request->input('no_ijin') &&
+					$verifikasi->npwp != $request->input('npwp')),
+			Response::HTTP_FORBIDDEN,
+			'403 Forbidden'
+		);
+		$npwp = $verifikasi->npwp;
+		$noIjin = $verifikasi->no_ijin;
+		$commitmentId = $verifikasi->commitment_id;
 		$commitment = PullRiph::where('no_ijin', $noIjin)->first();
 
 		$fileNpwp = str_replace(['.', '-'], '', $npwp);
 		$fileNoIjin = str_replace(['/', '.'], '', $noIjin);
 
-		// dd($request->all());
-
 		try {
 			DB::beginTransaction();
-			$filenameBaproduksi = null;
-			if ($request->hasFile('baproduksi')) {
-				$file = $request->file('baproduksi');
-				$filenameBaproduksi = 'baproduksi_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
-				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameBaproduksi, 'public');
-			}
 
-			$filenameNdhprp = null;
+			// Inisialisasi variabel untuk berkas ndhprp dan baproduksi
+			$ndhprpFile = $verifikasi->ndhprp;
+			$baproduksiFile = $verifikasi->baproduksi;
+
+			// Periksa apakah ada berkas ndhprp yang diunggah
 			if ($request->hasFile('ndhprp')) {
 				$file = $request->file('ndhprp');
-				$filenameNdhprp = 'notdinprod_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
-				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameNdhprp, 'public');
+				$ndhprpFile = 'notdinprod_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $ndhprpFile, 'public');
+			}
+
+			// Periksa apakah ada berkas baproduksi yang diunggah
+			if ($request->hasFile('baproduksi')) {
+				$file = $request->file('baproduksi');
+				$baproduksiFile = 'baproduksi_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $baproduksiFile, 'public');
 			}
 
 			// Use updateOrCreate to create or update the record based on the identifiers
@@ -224,18 +279,14 @@ class VerifProduksiController extends Controller
 					'status' => $request->input('status'),
 					'check_by' => $user->id,
 					'verif_at' => Carbon::now(),
-					'baproduksi' => $filenameBaproduksi, //the filename
-					'ndhprp' => $filenameNdhprp, //the file name
+					'baproduksi' => $baproduksiFile, // the filename
+					'ndhprp' => $ndhprpFile, // the file name
 				]
 			);
 
-			// Update commitment status
-			$commitment->status = $request->input('status');
-			$commitment->save();
-
 			DB::commit();
 
-			return redirect()->back()->with('success', 'Hasil pemeriksaan/verifikasi produksi berhasil disimpan.');
+			return redirect()->route('verification.produksi.show', $id)->with('success', 'Data berhasil disimpan');
 		} catch (\Exception $e) {
 			// Rollback the transaction if an exception occurs
 			DB::rollback();
@@ -243,6 +294,51 @@ class VerifProduksiController extends Controller
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
 		}
 	}
+
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		// Page level
+		$module_name = 'Permohonan';
+		$page_title = 'Ringkasan Hasil Verifikasi Produksi'; //muncul pada hasil print
+		$page_heading = 'Ringkasan Hasil Verifikasi Produksi';
+		$heading_class = 'fal fa-file-check';
+
+		// Populate related data
+		$verifikasi = AjuVerifProduksi::findOrFail($id);
+		$noIjin = str_replace(['/', '.'], '', $verifikasi->no_ijin);
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
+		$anggotas = Lokasi::where('no_ijin', $commitment->no_ijin);
+
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
+			->get();
+
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
+
+		$countPoktan = $pkss->count();
+		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
+		$countAnggota = $anggotas->count();
+		$hasGeoloc = $anggotas->count('polygon');
+
+		return view('admin.verifikasi.produksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
+	}
+
+	public function edit($id)
+	{
+		//
+	}
+
+
 
 	public function farmlist($id)
 	{
@@ -358,30 +454,6 @@ class VerifProduksiController extends Controller
 	public function store(Request $request)
 	{
 		dd($request->all());
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-		$module_name = 'Verifikasi';
-		$page_title = 'Verifikasi Lapangan';
-		$page_heading = 'Daftar Lokasi Sampling';
-		$heading_class = 'fal fa-map-marked-alt';
-
-		$verifikasi = Pengajuan::findOrFail($id);
-		$onfarms = LokasiCheck::where('pengajuan_id', $id)->get();
-		return view('admin.verifikasi.onfarm.farmlist', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'onfarms'));
-	}
-
-	public function edit($id)
-	{
-		//
 	}
 
 	/**

@@ -81,11 +81,6 @@ class PullRiph extends Model
 		return $this->hasMany(Lokasi::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function commitmentcheck()
-	{
-		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
-	}
-
 	public function ajutanam()
 	{
 		return $this->hasOne(AjuVerifTanam::class, 'no_ijin', 'no_ijin');
@@ -101,18 +96,25 @@ class PullRiph extends Model
 		return $this->hasOne(AjuVerifSkl::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function pengajuan()
-	{
-		return $this->hasMany(Pengajuan::class, 'no_ijin', 'no_ijin');
-	}
-
 	public function skl()
 	{
-		return $this->hasOne(PullRiph::class, 'no_ijin', 'no_ijin');
+		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function userDocs()
 	{
 		return $this->belongsTo(UserDocs::class, 'commitment_id');
+	}
+
+	//unused
+
+	public function pengajuan()
+	{
+		return $this->hasMany(Pengajuan::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function commitmentcheck()
+	{
+		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
 	}
 }

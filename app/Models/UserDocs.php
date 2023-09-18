@@ -52,6 +52,12 @@ class UserDocs extends Model
 
 		'prodcheck_by',
 		'prodverif_at',
+
+		//DOKUMEN PENGAJUAN SKL
+		'spskl', //surat pengajuan penerbitan skl
+		'spsklcheck',
+		'spsklcheck_by',
+		'spsklverif_at',
 	];
 
 	public function commitment()

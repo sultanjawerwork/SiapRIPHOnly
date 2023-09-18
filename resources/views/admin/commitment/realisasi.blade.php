@@ -263,11 +263,47 @@
 												Lihat Dokumen diunggah.
 											</a>
 										@else
-										<small><i class="fa fa-info-circle mr-1"></i>Surat Pertanggungjawaban Mutlak.</small>
+										<small><i class="fa fa-info-circle mr-1"></i>Surat Pertanggungjawaban Mutlak. Diperlukan sebagai syarat pengajuan verifikasi dan penerbitan SKL.</small>
 										@endif
 									</span>
 								</div>
 							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="formLa">Form LA<span class="text-danger">*</span></label>
+								<div class="col-sm-10">
+									<div class="custom-file input-group">
+										<input type="file" class="custom-file-input" name="formLa" id="formLa" value="{{ old('formLa', optional($docs)->formLa) }}">
+										<label class="custom-file-label" for="formLa">{{ $docs ? ($docs->formLa ? $docs->formLa : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
+									</div>
+									<span class="help-block">
+										@if($docs && $docs->formLa)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->formLa) }}" target="_blank">
+												Lihat Dokumen diunggah.
+											</a>
+										@else
+										<span><i class="fa fa-info-circle mr-1"></i>Form laporan Akhir. Diperlukan sebagai Syarat Penerbitan SKL.</small>
+										@endif
+									</span>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-2 col-form-label" for="spskl">Pengajuan SKL<span class="text-danger">*</span></label>
+								<div class="col-sm-10">
+									<div class="custom-file input-group">
+										<input type="file" class="custom-file-input" name="spskl" id="spskl" value="{{ old('spskl', optional($docs)->spskl) }}">
+										<label class="custom-file-label" for="spskl">{{ $docs ? ($docs->spskl ? $docs->spskl : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
+									</div>
+									<span class="help-block">
+										@if($docs && $docs->spskl)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->spskl) }}" target="_blank">
+												Lihat Dokumen diunggah.
+											</a>
+										@else
+										<span><i class="fa fa-info-circle mr-1"></i>Surat Pengajuan Penerbitan SKL. Diperlukan sebagai Syarat Penerbitan SKL.</small>
+										@endif
+									</span>
+								</div>
+							</div><hr>
 							<div class="card-deck">
 								<div class="card">
 									<div class="panel-hdr thead-themed">
@@ -408,7 +444,7 @@
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-sm-4 col-form-label" for="sphproduksi">SPH-SBS Produksi<span class="text-info">*</span></label>
+											<label class="col-sm-4 col-form-label" for="sphproduksi">SPH-SBS Produksi<span class="text-danger">*</span></label>
 											<div class="col-sm-8">
 												<div class="custom-file input-group">
 													<input type="file" class="custom-file-input" name="sphproduksi" id="sphproduksi" value="{{ old('sphproduksi', optional($docs)->sphproduksi) }}">
@@ -461,31 +497,19 @@
 												</span>
 											</div>
 										</div>
-										<div class="form-group row">
-											<label class="col-sm-4 col-form-label" for="formLa">Form LA<span class="text-danger">*</span></label>
-											<div class="col-sm-8">
-												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="formLa" id="formLa" value="{{ old('formLa', optional($docs)->formLa) }}">
-													<label class="custom-file-label" for="formLa">{{ $docs ? ($docs->formLa ? $docs->formLa : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
-												</div>
-												<span class="help-block">
-													@if($docs && $docs->formLa)
-														<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->formLa) }}" target="_blank">
-															Lihat Dokumen diunggah.
-														</a>
-													@else
-													<span><i class="fa fa-info-circle mr-1"></i>Form laporan Akhir. Diperlukan sebagai Syarat Penerbitan SKL.</small>
-													@endif
-												</span>
-											</div>
-										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="card-footer">
-						<div class="col-md-4 ml-auto text-right">
+					<div class="card-footer row d-flex justify-content-between align-items-center small">
+						<div class="col-md-6">
+							Keterangan: <br>
+							<span class="text-danger">**</span> : Berkas Utama (Wajib diunggah sebelum verifikasi.); <br>
+							<span class="text-danger">*</span> : Berkas Utama (Wajib. Dapat diunggah setelah verifikasi.); <br>
+							<span class="text-info">*</span> : Berkas Pendukung (Opsional).
+						</div>
+						<div class="col-md-6 text-right">
 							<button class="btn btn-primary btn-sm waves-effect waves-themed" type="submit">
 								<i class="fal fa-cloud-upload mr-1"></i>Unggah
 							</button>

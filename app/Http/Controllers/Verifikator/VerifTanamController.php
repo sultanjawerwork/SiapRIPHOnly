@@ -34,9 +34,8 @@ class VerifTanamController extends Controller
 		$page_heading = 'Daftar Pengajuan Verifikasi Tanam';
 		$heading_class = 'fal fa-file-search';
 
-		//table pengajuan
-		$verifikasis = AjuVerifTanam::where('status', '<=', '4')
-			->orderBy('created_at', 'desc')
+		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
+		$verifikasis = AjuVerifTanam::orderBy('created_at', 'desc')
 			->get();
 		return view('admin.verifikasi.tanam.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
 	}
@@ -57,7 +56,7 @@ class VerifTanamController extends Controller
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
 		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
 		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
-		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
+		// $pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
 		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
 
 		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
@@ -87,7 +86,7 @@ class VerifTanamController extends Controller
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 
 
-		return view('admin.verifikasi.tanam.check', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin'));
+		return view('admin.verifikasi.tanam.check', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'lokasichecks', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin'));
 	}
 
 	public function checkBerkas(Request $request, $id)
@@ -127,7 +126,9 @@ class VerifTanamController extends Controller
 				$data
 			);
 
-			$verifTanam->status = '2'; //pemeriksaan berkas selesai
+			if ($verifTanam->status == '1') {
+				$verifTanam->status = '2'; //pemeriksaan berkas selesai
+			}
 			$verifTanam->save();
 			DB::commit();
 			// Flash message sukses
@@ -182,6 +183,129 @@ class VerifTanamController extends Controller
 		return redirect()->route('verification.tanam.check', ['id' => $verifId])->with('success', 'Data Pemeriksaan berhasil disimpan');
 	}
 
+	public function checkPksSelesai(Request $request, $id)
+	{
+		$user = Auth::user();
+		$verifTanam = AjuVerifTanam::find($id);
+		$npwp = $verifTanam->npwp;
+		$noIjin = $verifTanam->no_ijin;
+
+		if ($verifTanam == '2') {
+			$verifTanam->status = '3'; //pemeriksaan PKS selesai
+		}
+		$verifTanam->check_by = $user->id;
+		$verifTanam->verif_at = Carbon::now();
+		// dd($verifTanam);
+		$verifTanam->save();
+
+		return redirect()->back()->with('success', 'Hasil pemeriksaan berkas dan status berhasil disimpan.');
+	}
+
+	public function storeCheck(Request $request, $id)
+	{
+		// Verifikator
+		$user = Auth::user();
+
+		// Pilih tabel pengajuan
+		$verifikasi = AjuVerifTanam::findOrFail($id);
+		abort_if(
+			Gate::denies('online_access') ||
+				($verifikasi->no_ijin != $request->input('no_ijin') &&
+					$verifikasi->npwp != $request->input('npwp')),
+			Response::HTTP_FORBIDDEN,
+			'403 Forbidden'
+		);
+
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$npwp = $verifikasi->npwp;
+		$noIjin = $verifikasi->no_ijin;
+		$commitmentId = $verifikasi->commitment_id;
+		$fileNpwp = str_replace(['.', '-'], '', $npwp);
+		$fileNoIjin = str_replace(['/', '.'], '', $noIjin);
+
+		try {
+			DB::beginTransaction();
+
+			// Inisialisasi variabel untuk berkas batanam dan ndhprt
+			$filenameBatanam = $verifikasi->batanam;
+			$filenameNdhprt = $verifikasi->ndhprt;
+
+			// Periksa apakah ada berkas batanam yang diunggah
+			if ($request->hasFile('batanam')) {
+				$file = $request->file('batanam');
+				$filenameBatanam = 'batanam_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameBatanam, 'public');
+			}
+
+			// Periksa apakah ada berkas ndhprt yang diunggah
+			if ($request->hasFile('ndhprt')) {
+				$file = $request->file('ndhprt');
+				$filenameNdhprt = 'notdintanam_' . $fileNoIjin . '.' . $file->getClientOriginalExtension();
+				$file->storeAs('uploads/' . $fileNpwp . '/' . $commitment->periodetahun, $filenameNdhprt, 'public');
+			}
+
+			// Use updateOrCreate to create or update the record based on the identifiers
+			AjuVerifTanam::updateOrCreate(
+				[
+					'npwp' => $npwp,
+					'commitment_id' => $commitmentId,
+					'no_ijin' => $noIjin,
+				],
+				[
+					'note' => $request->input('note'),
+					'metode' => $request->input('metode'),
+					'status' => $request->input('status'),
+					'check_by' => $user->id,
+					'verif_at' => Carbon::now(),
+					'batanam' => $filenameBatanam, // the filename
+					'ndhprt' => $filenameNdhprt, // the file name
+				]
+			);
+
+			DB::commit();
+			return redirect()->route('verification.tanam.show', $id)->with('success', 'Data berhasil disimpan');
+		} catch (\Exception $e) {
+			DB::rollback();
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
+		}
+	}
+
+
+	public function show($id)
+	{
+		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+		// Page level
+		$module_name = 'Permohonan';
+		$page_title = 'Ringkasan Hasil Verifikasi Tanam'; //muncul pada hasil print
+		$page_heading = 'Ringkasan Hasil Verifikasi Tanam';
+		$heading_class = 'fal fa-file-check';
+
+		// Populate related data
+		$verifikasi = AjuVerifTanam::findOrFail($id);
+		$noIjin = str_replace(['/', '.'], '', $verifikasi->no_ijin);
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
+		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
+		// $pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
+		$anggotas = Lokasi::where('no_ijin', $commitment->no_ijin);
+		// $lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
+
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
+			->get();
+
+		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
+		$total_volume = $commitment->lokasi->sum('volume');
+
+		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
+		$countPoktan = $pkss->count();
+		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
+		$countAnggota = $anggotas->count();
+		$hasGeoloc = $anggotas->count('polygon');
+
+		return view('admin.verifikasi.tanam.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
+	}
+
 	public function lokasicheck($noIjin, $anggota_id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -226,117 +350,26 @@ class VerifTanamController extends Controller
 		return view('admin.verifikasi.tanam.locationcheck', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'lokasi', 'pks', 'commitment', 'verifikasi', 'commitmentcheck', 'pkscheck', 'lokasicheck', 'pksmitra', 'anggotamitra', 'verifcommit', 'verifpks', 'veriflokasi'));
 	}
 
-	public function lokasistore(Request $request)
-	{
-		$user = Auth::user();
-		$locationcheck = new LokasiCheck();
-		$locationcheck->pengajuan_id = $request->input('pengajuan_id');
-		$locationcheck->commitcheck_id = $request->input('verifcommit_id');
-		$locationcheck->pkscheck_id = $request->input('verifpks_id');
-		$locationcheck->poktan_id = $request->input('poktan_id');
-		$locationcheck->anggota_id = $request->input('anggotamitra_id');
-		$locationcheck->npwp = $request->input('npwp');
-		$locationcheck->no_ijin = $request->input('no_ijin');
-		$locationcheck->onlineverif_at = Carbon::now();
-		$locationcheck->onlineverif_by = $user->id;
-		$locationcheck->onlinestatus = $request->input('onlinestatus');
-		$locationcheck->onlinenote = $request->input('onlinenote');
-		// dd($locationcheck);
-		$locationcheck->save();
-		return redirect()->route('verification.data.show', $locationcheck->pengajuan_id)
-			->with('success', 'Data berhasil disimpan');
-	}
-
-	public function store(Request $request, $id)
-	{
-		//verifikator
-		$user = Auth::user();
-
-		//pilih tabel pengajuans
-		$verifikasi = AjuVerifTanam::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
-		$filenpwp = str_replace(['.', '-'], '', $commitment->npwp);
-		$filecommitment = str_replace(['/', '.'], '', $commitment->no_ijin);
-		abort_if(
-			Gate::denies('online_access') ||
-				($verifikasi->no_pengajuan != $request->input('no_pengajuan') &&
-					$verifikasi->no_ijin != $request->input('no_ijin') &&
-					$verifikasi->npwp != $request->input('npwp')),
-			Response::HTTP_FORBIDDEN,
-			'403 Forbidden'
-		);
-
-		//simpan data ke tabel pengajuans
-		$verifikasi->metode = $request->input('metode');
-		$verifikasi->status = $request->input('status');
-		$verifikasi->note = $request->input('note');
-		$verifikasi->check_by = $user->id;
-		$verifikasi->verif_at = Carbon::now();
-		if ($request->hasFile('batanam')) {
-			$file = $request->file('batanam');
-			$filename = 'batanam_' . $filecommitment . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-			$verifikasi->batanam = $filename;
-		}
-		if ($request->hasFile('ndhprt')) {
-			$file = $request->file('ndhprt');
-			$filename = 'notdin_' . $filecommitment . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-			$verifikasi->ndhprt = $filename;
-		}
-		$verifikasi->save();
-		return redirect()->route('verification.tanam.show', $id)
-			->with('success', 'Data berhasil disimpan');
-	}
-
-	public function show($id)
-	{
-		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-		// Page level
-		$module_name = 'Permohonan';
-		$page_title = 'Data Pengajuan';
-		$page_heading = 'Hasil Verifikasi Tanam';
-		$heading_class = 'fal fa-check-square';
-
-		// Populate related data
-		$verifikasi = AjuVerifTanam::findOrFail($id);
-		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->firstOrFail();
-		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
-		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
-		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
-
-		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
-			->with(['pkscheck' => function ($query) use ($id) {
-				$query->where('pengajuan_id', $id);
-			}])
-			->get();
-		$poktanIds = Pks::where('no_ijin', $verifikasi->no_ijin)
-			->pluck('poktan_id'); // Retrieve the poktan_id values
-
-		// Group poktan_id values and retrieve unique nama_kelompok values
-		$poktans = MasterPoktan::whereIn('id', $poktanIds)
-			->groupBy('poktan_id')
-			->pluck('nama_kelompok', 'poktan_id');
-		// dd($poktans);
-		$lokasis = collect();
-		foreach ($pkschecks as $pkscheck) {
-			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
-				->where('no_ijin', $verifikasi->no_ijin)
-				->get();
-			$lokasis->push($lokasi);
-		}
-
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
-
-		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
-		$countPoktan = $pkss->count();
-		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
-
-
-		return view('admin.verifikasi.tanam.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks'));
-	}
+	// public function lokasistore(Request $request)
+	// {
+	// 	$user = Auth::user();
+	// 	$locationcheck = new LokasiCheck();
+	// 	$locationcheck->pengajuan_id = $request->input('pengajuan_id');
+	// 	$locationcheck->commitcheck_id = $request->input('verifcommit_id');
+	// 	$locationcheck->pkscheck_id = $request->input('verifpks_id');
+	// 	$locationcheck->poktan_id = $request->input('poktan_id');
+	// 	$locationcheck->anggota_id = $request->input('anggotamitra_id');
+	// 	$locationcheck->npwp = $request->input('npwp');
+	// 	$locationcheck->no_ijin = $request->input('no_ijin');
+	// 	$locationcheck->onlineverif_at = Carbon::now();
+	// 	$locationcheck->onlineverif_by = $user->id;
+	// 	$locationcheck->onlinestatus = $request->input('onlinestatus');
+	// 	$locationcheck->onlinenote = $request->input('onlinenote');
+	// 	// dd($locationcheck);
+	// 	$locationcheck->save();
+	// 	return redirect()->route('verification.data.show', $locationcheck->pengajuan_id)
+	// 		->with('success', 'Data berhasil disimpan');
+	// }
 
 	//  public function commitmentcheck($id)
 	//  {

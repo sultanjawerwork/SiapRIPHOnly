@@ -17,7 +17,9 @@ use App\Models\PksCheck;
 use App\Models\UserDocs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class PengajuanController extends Controller
 {
@@ -389,10 +391,6 @@ class PengajuanController extends Controller
 		$verifikasi = AjuVerifProduksi::findOrFail($id);
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
 		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
-		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
-		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
-		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
-		// dd($verifikasi);
 		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
 			->where('berkas_pks', '!=', null)
 			->with(['pkscheck' => function ($query) use ($id) {
@@ -408,7 +406,7 @@ class PengajuanController extends Controller
 			->pluck('nama_kelompok', 'poktan_id');
 		// dd($poktans);
 		$lokasis = collect();
-		foreach ($pkschecks as $pkscheck) {
+		foreach ($pkss as $pkscheck) {
 			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
 				->where('no_ijin', $verifikasi->no_ijin)
 				->get();
@@ -419,126 +417,138 @@ class PengajuanController extends Controller
 
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
-
-		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 		$countAnggota = $anggotas->count();
 		$hasGeoloc = $anggotas->count('polygon');
 		// dd($hasGeoloc);
 
-		return view('admin.pengajuan.verifproduksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'countAnggota', 'hasGeoloc', 'userDocs'));
+		return view('admin.pengajuan.verifproduksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'countAnggota', 'hasGeoloc', 'userDocs'));
 	}
 
 	//pengajuan verifikasi skl
 	public function ajuVerifSkl($id)
 	{
+		/**
+		 * syarat pengajuan SKL
+		 * 1. Status Verifikasi Produksi = 4
+		 * 2. Berkas SPH-SBS (Produksi) = ada
+		 * 3. total volume produksi >= komitment
+		 */
+		$user = Auth::user();
+
+		$module_name = 'Komitmen';
+		$page_title = 'Pengajuan Penerbitan SKL';
+		$page_heading = 'Pengajuan Penerbitan SKL';
+		$heading_class = 'fal fa-file-invoice';
+
+		$npwp_company = $user->data_user->npwp_company;
+		$commitment = PullRiph::where('npwp', $npwp_company)
+			->findOrFail($id);
+		$verifTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->first() ?? new AjuVerifTanam();
+		$verifProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->first() ?? new AjuVerifProduksi();
+		$userDocs = UserDocs::where('no_ijin', $commitment->no_ijin)->first() ?? new UserDocs();
+		$pks = Pks::where('no_ijin', $commitment->no_ijin)->get() ?? new Pks();
+		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get() ?? new Lokasi();
+
+		//ringkasan umum
+		$company = $user->data_user->company_name;
+		$noIjin = $commitment->no_ijin;
+		$periode = $commitment->periodetahun;
+
+		//ringkasan pengajuan verifikasi tanam
+		$avtDate = $verifTanam->created_at;
+		$avtVerifAt = $verifTanam->verif_at;
+		$avtStatus = $verifTanam->status;
+		$avtMetode = $verifTanam->metode;
+		$avtNote = $verifTanam->note;
+
+		//ringkasan pengajuan verifikasi produksi
+		$avpDate = $verifProduksi->created_at;
+		$avpVerifAt = $verifProduksi->verif_at;
+		$avpStatus = $verifProduksi->status;
+		$avpMetode = $verifProduksi->metode;
+		$avpNote = $verifProduksi->note;
+
+		//ringkasan kewajiban dan realisasi
+		$wajibTanam = $commitment->luas_wajib_tanam;
+		$wajibProduksi = $commitment->volume_produksi;
+		$realisasiTanam = $lokasis->sum('luas_tanam');
+		$realisasiProduksi = $lokasis->sum('volume');
+		$hasGeoloc = $lokasis->where('polygon', '!=', null)->count();
+
+		//ringkasan kemitraan
+		$countPoktan = $pks->count();
+		$countPks = $pks->where('berkas_pks', '!=', null)->count();
+		$countAnggota = $lokasis->count();
+
+		return view('admin.pengajuan.verifSkl.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'company', 'noIjin', 'periode', 'wajibTanam', 'wajibProduksi', 'realisasiTanam', 'realisasiProduksi', 'hasGeoloc', 'countPoktan', 'countPks', 'countAnggota', 'avtDate', 'avtVerifAt', 'avtStatus', 'avtMetode', 'avtNote', 'avpDate', 'avpVerifAt', 'avpStatus', 'avpMetode', 'avpNote', 'userDocs'));
+	}
+
+	public function ajuVerifSklStore($id)
+	{
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$commitment = PullRiph::where('npwp', $npwp_company)
 			->findOrFail($id);
 
-		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
-		$total_volume = $commitment->lokasi->sum('volume');
-
-		// aktifkan saat production
-		// abort_if($total_volume < $commitment->volume_riph * 0.05 / 100 * 6, Response::HTTP_FORBIDDEN, 'Total produksi dilaporkan tidak memenuhi syarat');
-
-		$module_name = 'Komitmen';
-		$page_title = 'Pengajuan Verifikasi Produksi';
-		$page_heading = 'Pengajuan Verifikasi Produksi';
-		$heading_class = 'fal fa-file-invoice';
-
+		$verifTanam = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->first();
+		$verifProduksi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->first();
+		$userDoc = UserDocs::where('no_ijin', $commitment->no_ijin)->first();
 		$pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
-		$countPoktan = $pks->count();
-		$countPks = $pks->where('berkas_pks', '!=', null)->count();
 
-		// $lokasi = AnggotaRiph::where('no_ijin', $commitment->no_ijin);
+		//data validasi
+		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
+		$wajibTanam = $commitment->luas_wajib_tanam;
+		$wajibProduksi = $commitment->volume_produksi;
+		$realisasiTanam = $lokasis->sum('luas_tanam');
+		$realisasiProduksi = $lokasis->sum('volume');
 
-		if (request()->ajax()) {
-			$lokasis = Lokasi::join('master_poktans', 'lokasis.poktan_id', '=', 'master_poktans.poktan_id')
-				->join('master_anggotas', 'lokasis.anggota_id', '=', 'master_anggotas.anggota_id')
-				->join('pks', 'lokasis.poktan_id', '=', 'pks.poktan_id')
-				->where('lokasis.npwp', $npwp_company)
-				->where('lokasis.no_ijin', $commitment->no_ijin)
-				// ->where(function ($query) {
-				// 	$query->whereNotNull('poktan_riphs.no_perjanjian')
-				// 		->whereNotNull('poktan_riphs.berkas_pks');
-				// })
-				->orderBy('lokasis.poktan_id', 'asc')
-				->select(
-					sprintf('%s.*', (new Lokasi())->getTable()),
-					'master_poktans.nama_kelompok as nama_kelompok',
-					'master_anggotas.nama_petani as nama_petani'
-				);
-
-			$table = DataTables::of($lokasis);
-
-			$table->addColumn('data_geolokasi', function ($row) {
-				$nullCount = 0;
-				$nulledColumns = [];
-
-				if (empty($row->latitude)) {
-					$nullCount++;
-					$nulledColumns[] = 'lat?';
-				}
-				if (empty($row->longitude)) {
-					$nullCount++;
-					$nulledColumns[] = 'long?';
-				}
-				if (empty($row->polygon)) {
-					$nullCount++;
-					$nulledColumns[] = 'poly?';
-				}
-				if (empty($row->altitude)) {
-					$nullCount++;
-					$nulledColumns[] = 'alt?';
-				}
-
-				if ($nullCount === 4) {
-					return '<span class="badge badge-xs badge-danger">Tidak Ada</span>';
-				} elseif ($nullCount > 0) {
-					$nulledColumnsHtml = '';
-					foreach ($nulledColumns as $column) {
-						$nulledColumnsHtml .= '<span class="badge badge-xs badge-warning">' . $column . '</span> ';
-					}
-					return $nulledColumnsHtml;
-				} else {
-					return '<span class="badge badge-xs badge-success">Lengkap</span>';
-				}
-			});
-
-			$table->editColumn('id', function ($row) {
-				return $row->id ? $row->id : '';
-			});
-			$table->editColumn('nama_kelompok', function ($row) {
-				return $row->nama_kelompok ? $row->nama_kelompok : '';
-			});
-			$table->editColumn('nama_lokasi', function ($row) {
-				return $row->nama_lokasi ? $row->nama_lokasi : '';
-			});
-			$table->editColumn('anggota_id', function ($row) {
-				return $row->anggota_id ? $row->anggota_id : '';
-			});
-			$table->editColumn('nama_petani', function ($row) {
-				return $row->nama_petani ? $row->nama_petani : '';
-			});
-			$table->editColumn('luas_tanam', function ($row) {
-				return $row->luas_tanam ? $row->luas_tanam : '';
-			});
-			$table->editColumn('volume', function ($row) {
-				return $row->volume ? $row->volume : '';
-			});
-
-			$table->rawColumns(['data_geolokasi']);
-
-			return $table->make(true);
+		// Validasi berkas
+		if ($userDoc === null) {
+			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
+		} elseif ($userDoc->sptjm === null) {
+			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
+		} elseif ($userDoc->spskl === null) {
+			$errorMessage = 'Surat Pengajuan Penerbitan SKL tidak ditemukan.';
+		} elseif ($userDoc->rta === null) {
+			$errorMessage = 'Form Realisasi Tanam tidak ditemukan.';
+		} elseif ($userDoc->rpo === null) {
+			$errorMessage = 'Form Realisasi Produksi tidak ditemukan.';
+		} elseif ($userDoc->sphproduksi === null) {
+			$errorMessage = 'Dokumen SPH-SBS (Tanam dan Produksi) tidak ditemukan.';
+		} elseif ($userDoc->formLa === null) {
+			$errorMessage = 'Dokumen Laporan Akhir tidak ditemukan.';
+			// } elseif ($realisasiTanam < $wajibTanam) {
+			// 	$errorMessage = 'Realisasi Luas Tanam yang dilaporkan tidak memenuhi syarat.';
+		} elseif ($verifTanam === null || $verifTanam->status !== '4') {
+			$errorMessage = 'Hasil Verifikasi tahap tanam tidak memenuhi syarat.';
+		} elseif ($realisasiProduksi < $wajibProduksi) {
+			$errorMessage = 'Realisasi Produksi yang dilaporkan tidak memenuhi syarat.';
+		} elseif ($verifProduksi === null || $verifProduksi->status !== '4') {
+			$errorMessage = 'Hasil Verifikasi tahap Produksi tidak memenuhi syarat.';
 		}
 
-		// dd($disabled);
+		$optionalMessage = 'Pengajuan Surat Keterangan Lunas untuk RIPH No ' . $commitment->no_ijin . ' tidak dapat dilakukan. Ajukan kembali setelah Anda melengkapi syarat-syarat yang diperlukan.';
 
-		// dd($row->data_geolokasi);
-		return view('admin.pengajuan.verifskl.create', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment', 'total_luastanam', 'total_volume', 'pks', 'countPoktan', 'countPks'));
+		if (isset($errorMessage)) {
+			return redirect()->route('admin.task.commitment')->withErrors($errorMessage . $optionalMessage);
+		}
+
+		AjuVerifSkl::updateOrCreate(
+			[
+				'npwp' => $commitment->npwp,
+				'commitment_id' => $commitment->id,
+				'no_ijin' => $commitment->no_ijin,
+			],
+			[
+				'status' => '1',
+			]
+		);
+		return redirect()->route('admin.task.commitment')
+			->with('success', 'Surat Keterangan Lunas berhasil diajukan.');
 	}
+
+
 
 	//ke bawah kemungkinan di hapus
 

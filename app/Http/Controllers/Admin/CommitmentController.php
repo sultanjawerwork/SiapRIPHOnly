@@ -18,6 +18,7 @@ use App\Http\Controllers\Traits\SimeviTrait;
 use App\Models\AjuVerifProduksi;
 use App\Models\AjuVerifSkl;
 use App\Models\AjuVerifTanam;
+use App\Models\Skl;
 use App\Models\UserDocs;
 use App\Models\Varietas;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,8 +40,8 @@ class CommitmentController extends Controller
 
 		$npwp_company = Auth::user()->data_user->npwp_company;
 		$commitments = PullRiph::where('npwp', $npwp_company)
+			->with('skl')
 			->get();
-
 		$pksCount = 0; // Initialize with a default value
 		$pksFileCount = 0; // Initialize with a default value
 
@@ -74,17 +75,16 @@ class CommitmentController extends Controller
 				$ajuSkl = AjuVerifSkl::where('no_ijin', $commitment->no_ijin)
 					->first();
 
+				$skl = Skl::where('no_ijin', $commitment->no_ijin)->first();
+
 				// Add userDocs to the commitment
 				$commitment->userDocs = $userDocs;
 				$commitment->ajuTanam = $ajuTanam;
 				$commitment->ajuProduksi = $ajuProduksi;
 				$commitment->ajuSkl = $ajuSkl;
-
-				// dd($commitment->ajuTanam);
+				$commitment->skl = $skl;
 			}
 		}
-
-		// dd($commitment->userDocs);
 		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
 	}
 
@@ -185,7 +185,6 @@ class CommitmentController extends Controller
 		DB::commit();
 		return back()->with('success', 'Sukses mengunggah file..');
 	}
-
 
 	// public function show($id)
 	// {
@@ -409,6 +408,7 @@ class CommitmentController extends Controller
 				'sphproduksi',
 				'spdsp',
 				'logbookproduksi',
+				'spskl'
 				// Tambahkan field-file lainnya di sini
 			];
 

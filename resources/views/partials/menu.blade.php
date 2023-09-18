@@ -243,17 +243,17 @@
 
 			{{-- verificator task --}}
 			@can('verificator_task_access')
-				<li class="nav-title" data-i18n="nav.administation">VERIFICATOR TASK</li>
+				<li class="nav-title" data-i18n="nav.administation">PENGAJUAN VERIFIKASI</li>
 				@can('online_access')
 					<li class="c-sidebar-nav-item {{ request()->is('verification/tanam')
 						|| request()->is('verification/tanam*') ? 'active' : '' }}">
 						<a href="{{ route('verification.tanam') }}"
 							data-filter-tags="verifikasi tanam">
 							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi Tanam</span>
+							<span class="nav-link-text">Tahap Tanam</span>
 							@php
-								$pengajuan = new \App\Models\Pengajuan();
-								$unverified = $pengajuan->NewOnlineRequest();
+								$pengajuan = new \App\Models\AjuVerifTanam();
+								$unverified = $pengajuan->NewRequest();
 							@endphp
 
 							@if ($unverified > 0)
@@ -268,10 +268,10 @@
 						<a href="{{ route('verification.produksi') }}"
 							data-filter-tags="verifikasi onfarm lapangan">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Verifikasi Produksi</span>
+							<span class="nav-link-text">Tahap Produksi</span>
 							@php
-								$pengajuan = new \App\Models\Pengajuan();
-								$unverified = $pengajuan->NewOnFarmRequest();
+								$pengajuan = new \App\Models\AjuVerifProduksi();
+								$unverified = $pengajuan->NewRequest();
 							@endphp
 
 							@if ($unverified > 0)
@@ -281,31 +281,35 @@
 					</li>
 				@endcan
 				@can('completed_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/skl') ||
-						request()->is('verification/skl*') ? 'active' : '' }}">
+					<li class="c-sidebar-nav-item {{ request()->is('verification/skl')
+						|| request()->is('verification/skl*') ? 'active' : '' }}">
 						<a href="{{ route('verification.skl') }}"
-							data-filter-tags="verifikasi selesai">
+							data-filter-tags="verifikasi onfarm lapangan">
+							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">Pengajuan SKL</span>
+							@php
+								$pengajuan = new \App\Models\AjuVerifSkl();
+								$unverified = $pengajuan->NewRequest();
+							@endphp
+
+							@if ($unverified > 0)
+								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+						</a>
+					</li>
+					<li class="c-sidebar-nav-item {{ request()->is('skl/recomended/list') ? 'active' : '' }}">
+						<a href="{{ route('skl.recomended.list') }}"
+							data-filter-tags="daftar rekomendasi skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 							<span class="nav-link-text text-wrap">Rekomendasi & SKL</span>
 						@php
-							$pengajuan = new \App\Models\Pengajuan();
-							$newRecomendation = $pengajuan->NewRecomendation();
+							$pengajuan = new \App\Models\Skl();
+							$newApproved = $pengajuan->newApprovedCount();
 						@endphp
 
-						@if ($newRecomendation > 0)
-							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newRecomendation }}</span>
+						@if ($newApproved > 0)
+							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newApproved }}</span>
 						@endif
-						</a>
-					</li>
-				@endcan
-
-				@can('old_skl_access')
-					<li
-						class="{{ request()->is('verification/oldskl/index') || request()->is('verification/oldskl/*') ? 'active' : '' }}">
-						<a href="{{route('verification.oldskl.index')}}" title="Data SKL Lama yang pernah diterbitkan"
-							data-filter-tags="surat keterangan lunas lama dulu old">
-							<i class="fal fa-briefcase c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">SKL Terdahulu</span>
 						</a>
 					</li>
 				@endcan
@@ -315,7 +319,7 @@
 					<a href="{{ route('verification.arsip.completed') }}"
 						data-filter-tags="verifikasi selesai">
 						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-						<span class="nav-link-text text-wrap">Completeds</span>
+						<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
 					</a>
 				</li>
 				@endcan
@@ -323,8 +327,7 @@
 			{{-- direktur task --}}
 			@if (Auth::user()->roles[0]->title == 'Pejabat')
 				<li class="nav-title" data-i18n="nav.administation">Direktur Menu</li>
-				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendations')
-					|| request()->is('verification/skl/recomendations/*') ? 'active' : '' }}">
+				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendation*') ? 'active' : '' }}">
 					<a href="{{ route('verification.skl.recomendations') }}"
 						data-filter-tags="daftar rekomendasi penerbitan skl"
 						title="Daftar Rekomendasi Penerbitan SKL">
@@ -594,13 +597,13 @@
 
 
 				@can('varietas_access')
-					{{-- <li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
+					<li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
 						<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
 							data-filter-tags="setting permission user">
 							<i class="fal fa-user-tie"></i>
 							<span class="nav-link-text">Daftar Pejabat</span>
 						</a>
-					</li> --}}
+					</li>
 					<li class="{{ request()->is('admin/varietas*') ? 'active open' : '' }} ">
 						<a href="{{route('admin.varietas')}}" title="Daftar Varietas Hortikultura"
 							data-filter-tags="setting permission user">
