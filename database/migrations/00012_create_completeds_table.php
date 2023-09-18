@@ -13,21 +13,19 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('skls', function (Blueprint $table) {
-			$table->id();
-			$table->unsignedBigInteger('pengajuan_id');
-			$table->string('no_pengajuan')->nullable();
+		Schema::dropIfExists('completeds');
+		Schema::create('completeds', function (Blueprint $table) {
+			$table->bigIncrements('id');
 			$table->string('no_skl')->nullable();
-			$table->string('npwp')->nullable();
+			$table->string('periodetahun')->nullable();
 			$table->string('no_ijin')->nullable();
-			$table->unsignedBigInteger('submit_by')->nullable();
+			$table->string('npwp')->nullable();
 			$table->date('published_date')->nullable();
-			$table->string('qrcode')->nullable();
-			$table->text('nota_attch')->nullable();
-			$table->string('approved_by')->nullable();
-			$table->string('approved_at')->nullable();
+			$table->decimal('luas_tanam')->nullable();
+			$table->decimal('volume')->nullable();
+			$table->string('status')->nullable();
 			$table->string('skl_upload')->nullable();
-			$table->string('skl_auto')->nullable();
+			$table->text('url')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
@@ -40,6 +38,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('skls');
+		Schema::dropIfExists('completeds');
 	}
 };

@@ -13,6 +13,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('master_penangkars');
 		Schema::create('master_penangkars', function (Blueprint $table) {
 			$table->id();
 			$table->string('npwp')->nullable();

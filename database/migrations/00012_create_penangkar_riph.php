@@ -13,6 +13,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('penangkar_riph');
 		Schema::create('penangkar_riph', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->BigInteger('penangkar_id')->nullable();
@@ -33,6 +34,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('penangkar_mitras');
+		Schema::dropIfExists('penangkar_riph');
 	}
 };

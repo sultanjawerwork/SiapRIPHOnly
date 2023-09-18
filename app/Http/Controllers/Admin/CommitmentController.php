@@ -88,161 +88,6 @@ class CommitmentController extends Controller
 		return view('admin.commitment.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitments', 'pksCount', 'pksFileCount'));
 	}
 
-	public function create()
-	{
-		//
-	}
-
-	public function store(Request $request)
-	{
-		$realnpwp = Auth::user()::find(Auth::user()->id)->data_user->npwp_company;
-
-		$pullRiph = PullRiph::where('npwp', $realnpwp)->first();
-
-		DB::beginTransaction();
-		try {
-			if ($pullRiph) {
-				$npwp = str_replace('.', '', $realnpwp);
-				$npwp = str_replace('-', '', $npwp);
-				$userFiles = [];
-				$userFiles += array('status' => 1);
-				if ($request->hasFile('formRiph')) {
-					if ($request->formRiph != null) {
-						$file = $request->file('formRiph');
-						$file_name = 'formRiph.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formRiph' => $file_path);
-					};
-				}
-				if ($request->hasFile('formSptjm')) {
-					if ($request->formSptjm != null) {
-						$file = $request->file('formSptjm');
-						$file_name = 'formSptjm.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formSptjm' => $file_path);
-					};
-				}
-				if ($request->hasFile('logBook')) {
-					if ($request->logBook != null) {
-						$file = $request->file('logBook');
-						$file_name = 'logBook.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('logBook' => $file_path);
-					};
-				}
-				if ($request->hasFile('formRt')) {
-					if ($request->formRt != null) {
-						$file = $request->file('formRt');
-						$file_name = 'formRt.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formRt' => $file_path);
-					};
-				}
-				if ($request->hasFile('formRta')) {
-					if ($request->formRta != null) {
-						$file = $request->file('formRta');
-						$file_name = 'formRta.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formRta' => $file_path);
-					};
-				}
-				if ($request->hasFile('formRpo')) {
-					if ($request->formRpo != null) {
-						$file = $request->file('formRpo');
-						$file_name = 'formRpo.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formRpo' => $file_path);
-					};
-				}
-				if ($request->hasFile('formLa')) {
-					if ($request->formLa != null) {
-						$file = $request->file('formLa');
-						$file_name = 'formLa.' . $file->getClientOriginalExtension();
-						$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
-						$userFiles += array('formLa' => $file_path);
-					};
-				}
-				$pengajuan = Pengajuan::updateOrCreate(
-					['detail' => $pullRiph->no_ijin],
-					['jenis' => 1, 'status' => 1]
-				);
-				// dd($pengajuan);
-				$userFiles += array('no_doc' => $pengajuan->no_doc);
-				PullRiph::updateOrCreate(
-					['npwp' => $realnpwp, 'no_ijin' => $request->get('no_ijin')],
-					$userFiles
-				);
-			}
-		} catch (ValidationException $e) {
-			DB::rollback();
-			return  back()->withErrors('Terjadi kesalahan saat unggah file');
-		} catch (\Exception $e) {
-			DB::rollback();
-			//throw $e;
-			return back()->withErrors('Terjadi kesalahan saat unggah file');
-		}
-
-		DB::commit();
-		return back()->with('success', 'Sukses mengunggah file..');
-	}
-
-	// public function show($id)
-	// {
-	// 	$pullRiph = PullRiph::findOrFail($id);
-	// 	$pengajuan = Pengajuan::where('no_doc', $pullRiph->no_doc)->get();
-	// 	$npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
-	// 	$nomor = '';
-	// 	if (!empty($npwp)) {
-	// 		$npwp = str_replace('.', '', $npwp);
-	// 		$npwp = str_replace('-', '', $npwp);
-	// 		$nomor = str_replace('.', '', $pullRiph->no_ijin);
-	// 		$nomor = str_replace('/', '', $nomor);
-	// 		$pullData = $this->pull($npwp, $nomor);
-	// 	} else
-	// 		$pullData = null;
-
-
-	// 	$access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
-
-
-	// 	$data_poktan = [];
-	// 	$poktans = null;
-	// 	if ($pullData) {
-
-	// 		$query = 'select g.no_riph, g.id_kecamatan, g.nama_kelompok, g.nama_pimpinan, g.hp_pimpinan, count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas
-	//         from poktans p, group_tanis g
-	//         where p.no_riph = "' . $pullRiph->no_ijin . '"' . ' and p.id_poktan=g.id_poktan
-	//         GROUP BY g.nama_kelompok';
-
-
-	// 		$poktans = DB::select(DB::raw($query));
-
-	// 		foreach ($poktans as $poktan) {
-	// 			$datakecamatan = $this->getAPIKecamatan($access_token, $poktan->id_kecamatan);
-	// 			$kec = $datakecamatan['data'][0]['nm_kec'];
-	// 			$poktan->kecamatan = $kec;
-	// 		}
-	// 	}
-	// 	$module_name = 'Proses RIPH';
-	// 	$page_title = 'Data RIPH';
-	// 	$page_heading = 'Data RIPH';
-	// 	$heading_class = 'fal fa-file-invoice';
-	// 	return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pullRiph', 'pullData', 'pengajuan', 'poktans', 'nomor'));
-	// }
-
-	public function edit($id)
-	{
-		$npwp_company = Auth::user()->data_user->npwp_company;
-		$commitment = PullRiph::where('npwp', $npwp_company)->findOrFail($id);
-
-		$module_name = 'Komitmen';
-		$page_title = 'Data Komitmen';
-		$page_heading = 'Data Komitmen: ' . $commitment->no_ijin;
-		$heading_class = 'fal fa-file-edit';
-
-		return view('admin.commitment.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
-	}
-
 	public function show($id)
 	{
 		$npwp_company = Auth::user()->data_user->npwp_company;
@@ -252,8 +97,6 @@ class CommitmentController extends Controller
 		$page_title = 'Data Komitmen';
 		$page_heading = 'Data Komitmen: ' . $commitment->no_ijin;
 		$heading_class = 'fal fa-file-edit';
-
-		// dd($commitment);
 
 		return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
 	}
@@ -475,4 +318,155 @@ class CommitmentController extends Controller
 		PullRiph::whereIn('id', request('ids'))->delete();
 		return response(null, Response::HTTP_NO_CONTENT);
 	}
+
+	//dihapus
+	// public function store(Request $request)
+	// {
+	// 	$realnpwp = Auth::user()::find(Auth::user()->id)->data_user->npwp_company;
+
+	// 	$pullRiph = PullRiph::where('npwp', $realnpwp)->first();
+
+	// 	DB::beginTransaction();
+	// 	try {
+	// 		if ($pullRiph) {
+	// 			$npwp = str_replace('.', '', $realnpwp);
+	// 			$npwp = str_replace('-', '', $npwp);
+	// 			$userFiles = [];
+	// 			$userFiles += array('status' => 1);
+	// 			if ($request->hasFile('formRiph')) {
+	// 				if ($request->formRiph != null) {
+	// 					$file = $request->file('formRiph');
+	// 					$file_name = 'formRiph.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formRiph' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('formSptjm')) {
+	// 				if ($request->formSptjm != null) {
+	// 					$file = $request->file('formSptjm');
+	// 					$file_name = 'formSptjm.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formSptjm' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('logBook')) {
+	// 				if ($request->logBook != null) {
+	// 					$file = $request->file('logBook');
+	// 					$file_name = 'logBook.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('logBook' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('formRt')) {
+	// 				if ($request->formRt != null) {
+	// 					$file = $request->file('formRt');
+	// 					$file_name = 'formRt.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formRt' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('formRta')) {
+	// 				if ($request->formRta != null) {
+	// 					$file = $request->file('formRta');
+	// 					$file_name = 'formRta.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formRta' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('formRpo')) {
+	// 				if ($request->formRpo != null) {
+	// 					$file = $request->file('formRpo');
+	// 					$file_name = 'formRpo.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formRpo' => $file_path);
+	// 				};
+	// 			}
+	// 			if ($request->hasFile('formLa')) {
+	// 				if ($request->formLa != null) {
+	// 					$file = $request->file('formLa');
+	// 					$file_name = 'formLa.' . $file->getClientOriginalExtension();
+	// 					$file_path = $file->storeAs('uploads/' . $npwp . '/' . $pullRiph->periodetahun, $file_name, 'public');
+	// 					$userFiles += array('formLa' => $file_path);
+	// 				};
+	// 			}
+	// 			$pengajuan = Pengajuan::updateOrCreate(
+	// 				['detail' => $pullRiph->no_ijin],
+	// 				['jenis' => 1, 'status' => 1]
+	// 			);
+	// 			// dd($pengajuan);
+	// 			$userFiles += array('no_doc' => $pengajuan->no_doc);
+	// 			PullRiph::updateOrCreate(
+	// 				['npwp' => $realnpwp, 'no_ijin' => $request->get('no_ijin')],
+	// 				$userFiles
+	// 			);
+	// 		}
+	// 	} catch (ValidationException $e) {
+	// 		DB::rollback();
+	// 		return  back()->withErrors('Terjadi kesalahan saat unggah file');
+	// 	} catch (\Exception $e) {
+	// 		DB::rollback();
+	// 		//throw $e;
+	// 		return back()->withErrors('Terjadi kesalahan saat unggah file');
+	// 	}
+
+	// 	DB::commit();
+	// 	return back()->with('success', 'Sukses mengunggah file..');
+	// }
+
+	// public function show($id)
+	// {
+	// 	$pullRiph = PullRiph::findOrFail($id);
+	// 	$pengajuan = Pengajuan::where('no_doc', $pullRiph->no_doc)->get();
+	// 	$npwp = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
+	// 	$nomor = '';
+	// 	if (!empty($npwp)) {
+	// 		$npwp = str_replace('.', '', $npwp);
+	// 		$npwp = str_replace('-', '', $npwp);
+	// 		$nomor = str_replace('.', '', $pullRiph->no_ijin);
+	// 		$nomor = str_replace('/', '', $nomor);
+	// 		$pullData = $this->pull($npwp, $nomor);
+	// 	} else
+	// 		$pullData = null;
+
+
+	// 	$access_token = $this->getAPIAccessToken(config('app.simevi_user'), config('app.simevi_pwd'));
+
+
+	// 	$data_poktan = [];
+	// 	$poktans = null;
+	// 	if ($pullData) {
+
+	// 		$query = 'select g.no_riph, g.id_kecamatan, g.nama_kelompok, g.nama_pimpinan, g.hp_pimpinan, count(p.nama_petani) as jum_petani, round(SUM(p.luas_lahan),2) as luas
+	//         from poktans p, group_tanis g
+	//         where p.no_riph = "' . $pullRiph->no_ijin . '"' . ' and p.id_poktan=g.id_poktan
+	//         GROUP BY g.nama_kelompok';
+
+
+	// 		$poktans = DB::select(DB::raw($query));
+
+	// 		foreach ($poktans as $poktan) {
+	// 			$datakecamatan = $this->getAPIKecamatan($access_token, $poktan->id_kecamatan);
+	// 			$kec = $datakecamatan['data'][0]['nm_kec'];
+	// 			$poktan->kecamatan = $kec;
+	// 		}
+	// 	}
+	// 	$module_name = 'Proses RIPH';
+	// 	$page_title = 'Data RIPH';
+	// 	$page_heading = 'Data RIPH';
+	// 	$heading_class = 'fal fa-file-invoice';
+	// 	return view('admin.commitment.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pullRiph', 'pullData', 'pengajuan', 'poktans', 'nomor'));
+	// }
+
+	// public function edit($id)
+	// {
+	// 	$npwp_company = Auth::user()->data_user->npwp_company;
+	// 	$commitment = PullRiph::where('npwp', $npwp_company)->findOrFail($id);
+
+	// 	$module_name = 'Komitmen';
+	// 	$page_title = 'Data Komitmen';
+	// 	$page_heading = 'Data Komitmen: ' . $commitment->no_ijin;
+	// 	$heading_class = 'fal fa-file-edit';
+
+	// 	return view('admin.commitment.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'commitment'));
+	// }
 }

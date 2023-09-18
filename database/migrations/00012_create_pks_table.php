@@ -13,6 +13,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('pks');
 		Schema::create('pks', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('npwp')->nullable();

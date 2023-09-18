@@ -38,7 +38,7 @@ class Lokasi extends Model
 		'panen_doc',
 		'panen_pict',
 		'status',
-		'varietas',
+		'varietas', //unused
 	];
 
 	public function masteranggota()

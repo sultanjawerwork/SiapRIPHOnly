@@ -13,18 +13,19 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('completeds', function (Blueprint $table) {
+		Schema::dropIfExists('saprodis');
+		Schema::create('saprodis', function (Blueprint $table) {
 			$table->bigIncrements('id');
-			$table->string('no_skl')->nullable();
-			$table->string('periodetahun')->nullable();
-			$table->string('no_ijin')->nullable();
+			$table->unsignedBigInteger('pks_id')->nullable();
 			$table->string('npwp')->nullable();
-			$table->date('published_date')->nullable();
-			$table->decimal('luas_tanam')->nullable();
+			$table->string('no_ijin')->nullable();
+			$table->date('tanggal_saprodi')->nullable();
+			$table->string('kategori')->nullable();
+			$table->string('jenis')->nullable();
 			$table->decimal('volume')->nullable();
-			$table->string('status')->nullable();
-			$table->string('skl_upload')->nullable();
-			$table->text('url')->nullable();
+			$table->string('satuan')->nullable();
+			$table->integer('harga')->nullable();
+			$table->string('file')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
@@ -37,6 +38,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('completeds');
+		Schema::dropIfExists('saprodis');
 	}
 };

@@ -15,6 +15,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('pull_riphs');
 		Schema::create('pull_riphs', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('user_id');

@@ -14,6 +14,7 @@ return new class extends Migration
 	 */
 	public function up()
 	{
+		Schema::dropIfExists('lokasi_checks');
 		Schema::create('lokasi_checks', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->unsignedBigInteger('pengajuan_id');
@@ -61,6 +62,6 @@ return new class extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('anggota_checks');
+		Schema::dropIfExists('lokasi_checks');
 	}
 };

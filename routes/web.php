@@ -125,12 +125,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::post('pull', 'PullRiphController@store')->name('pull.store');
 
 		Route::get('commitment', 'CommitmentController@index')->name('commitment');
-		// Route::get('commitment/{pullriph}', 'CommitmentController@show')->name('commitment.show');
-		Route::get('commitment/{id}/edit', 'CommitmentController@edit')->name('commitment.edit');
 		Route::get('commitment/{id}/show', 'CommitmentController@show')->name('commitment.show');
 		Route::put('commitment/{id}/update', 'CommitmentController@update')->name('commitment.update');
 		Route::delete('commitment/{pullriph}', 'CommitmentController@destroy')->name('commitment.destroy');
-		Route::post('commitment/unggah', 'CommitmentController@store')->name('commitment.store');
 		Route::delete('commitmentmd', 'CommitmentController@massDestroy')->name('commitment.massDestroy');
 
 		//master penangkar
@@ -172,10 +169,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::put('realisasi/lokasi/{id}/storeTanam', 'LokasiController@storeTanam')->name('lokasi.tanam.store');
 		Route::put('realisasi/lokasi/{id}/storeProduksi', 'LokasiController@storeProduksi')->name('lokasi.produksi.store');
 
-		// pengajuan
-		// Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
-
-
 		Route::get('pengajuan', 'PengajuanController@index')->name('pengajuan.index');
 
 		//new pengajuan tanam
@@ -199,11 +192,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
-		//Daftar SKL untuk user
-		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');
-		// Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
-		// Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
-
 		//daftar seluruh skl yang telah terbit (lama & baru)
 		Route::get('skl/index', function () {
 			return redirect()->route('verification.arsip.completed');
@@ -223,14 +211,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::delete('template/{id}', 'BerkasController@destroytemplate')->name('template.destroy');
 		Route::get('template/{berkas}/edit', 'BerkasController@edittemplate')->name('template.edit');
 		Route::put('template/{berkas}', 'BerkasController@updatetemplate')->name('template.update');
+		Route::get('template', 'FileManagementController@templateindex')->name('template');
+		Route::get('template/create', 'FileManagementController@templatecreate')->name('template.create');
+		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
+
+		//dihapus
+		// Route::post('commitment/unggah', 'CommitmentController@store')->name('commitment.store');
+		// Route::get('commitment/{pullriph}', 'CommitmentController@show')->name('commitment.show');
+		// Route::get('commitment/{id}/edit', 'CommitmentController@edit')->name('commitment.edit');
+		// pengajuan
+		// Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
+
+		//Daftar SKL untuk user
+		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');
+		// Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
+		// Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
+
 		// Route::get('template', 'BerkasController@indextemplate')->name('template');
 		//Route::get('template/{berkas}', 'BerkasController@showtemplate')->name('template.show');
 		// Route::get('template/create', 'BerkasController@createtemplate')->name('template.create');
 		// Route::post('template', 'BerkasController@storetemplate')->name('template.store');
 
-		Route::get('template', 'FileManagementController@templateindex')->name('template');
-		Route::get('template/create', 'FileManagementController@templatecreate')->name('template.create');
-		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 	});
 	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
 	Route::get('listLokasi/{id}', 'DataLokasiTanamController@listLokasi')->name('ajutanam.listlokasi');

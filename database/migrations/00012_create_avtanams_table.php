@@ -13,7 +13,6 @@ return new class extends Migration
 	 */
 	public function up()
 	{
-		Schema::dropIfExists('aju_verif_tanams');
 		Schema::dropIfExists('avtanams');
 		Schema::create('avtanams', function (Blueprint $table) {
 			$table->bigIncrements('id');
