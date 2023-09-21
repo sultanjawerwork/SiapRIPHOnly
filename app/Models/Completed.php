@@ -36,4 +36,9 @@ class Completed extends Model
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
+
+	public function commitment()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
 }

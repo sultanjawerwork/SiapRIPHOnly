@@ -28,6 +28,27 @@ class AjuVerifTanam extends Model
 		'metode',
 	];
 
+	public static function newPengajuanCount(): int
+	{
+		return self::where('status', '1')->count();
+	}
+
+	public function NewRequest(): int
+	{
+		return self::where('status', '1')->count();
+	}
+
+	public function proceedVerif(): int
+	{
+		return self::whereIn('status', ['2', '3'])
+			->whereNull('batanam')->count();
+	}
+
+	public static function getNewPengajuan()
+	{
+		return self::where('status', '1')->get();
+	}
+
 	public function pks()
 	{
 		return $this->hasMany(Pks::class, 'no_ijin', 'no_ijin');
@@ -41,21 +62,5 @@ class AjuVerifTanam extends Model
 	public function datauser()
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
-	}
-
-	public static function newPengajuanCount(): int
-	{
-		return self::whereNull('verif_at')->count();
-	}
-
-	public function NewRequest(): int
-	{
-		return self::where('status', '1')
-			->whereNull('verif_at')->count();
-	}
-
-	public static function getNewPengajuan()
-	{
-		return self::where('status', '1')->whereNull('verif_at')->get();
 	}
 }

@@ -369,15 +369,6 @@
 						text: '<i class="fa fa-print"></i>',
 						titleAttr: 'Cetak halaman data.',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					},
-					{
-						text: '<i class="fal fa-external-link"></i>',
-						titleAttr: 'Lihat Detail',
-						className: 'btn btn-icon btn-outline-info btn-xs',
-						action: function () {
-							// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
-							window.location.href = '{{ route('verification.skl.check', $verifikasi->id) }}';
-						}
 					}
 				],
 			});
@@ -455,8 +446,6 @@
 					} else if (data.avsklStatus === '4') {
 						$("#avsklStatus").text('Memenuhi Syarat').addClass("text-success text-uppercase fw-500").append('<i class="fas fa-check ml-1"></i>');
 						$("#btnSubmit").prop("disabled", false).removeClass("btn-default").addClass("btn-primary").append('<i class="fas fa-check ml-1"></i>');
-					} else if (data.avsklStatus === '5') {
-						$("#avsklStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
 					} else {
 						// Handle case when avsklStatus doesn't match any of the above conditions
 						$("#avsklStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');

@@ -255,28 +255,7 @@ class SklController extends Controller
 	}
 
 	//fungsi untuk melihat daftar skl yang telah terbit. sesuaikan dengan user role.
-	public function completedindex()
-	{
-		$module_name = 'SKL';
-		$page_title = 'Surat Keterangan Lunas';
-		$page_heading = 'SKL Diterbitkan';
-		$heading_class = 'fa fa-award';
 
-		$roleaccess = Auth::user()->roleaccess;
-		if ($roleaccess == 1) {
-			$completeds = Completed::all();
-		}
-
-		if ($roleaccess == 2) {
-			$user = Auth::user();
-			$npwp = $user->data_user->npwp_company;
-			$completeds = Completed::where('npwp', $npwp)->get();
-		}
-
-		// dd($completeds);
-
-		return view('admin.verifikasi.skl.completed', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'completeds'));
-	}
 
 	//daftar ini digunakan oleh semua user role. mungkin di hapus
 	public function publishes()

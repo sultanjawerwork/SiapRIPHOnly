@@ -66,8 +66,9 @@ class DataLokasiTanamController extends Controller
 
 	public function listLokasi($id)
 	{
-		$verifikasi = AjuVerifTanam::find($id);
-		$query = Lokasi::where('no_ijin', $verifikasi->no_ijin)
+		$commitment = PullRiph::find($id);
+		$verifikasi = AjuVerifTanam::where('no_ijin', $commitment->no_ijin)->first();
+		$query = Lokasi::where('no_ijin', $commitment->no_ijin)
 			->where('polygon', '!=', null)
 			->with('masterkelompok', 'masteranggota')
 			->select('id', 'npwp', 'no_ijin', 'poktan_id', 'anggota_id', 'nama_lokasi', 'luas_tanam', 'volume');
@@ -76,7 +77,7 @@ class DataLokasiTanamController extends Controller
 			$poktan = MasterPoktan::where('id', $lokasi->poktan_id)->value('nama_kelompok');
 			$anggota = MasterAnggota::where('id', $lokasi->anggota_id)->value('nama_petani');
 			$noIjin = str_replace(['/', '.', '-'], '', $lokasi->no_ijin);
-			$showRoute = route('verification.tanam.lokasicheck', [
+			$showRoute = route('verification.lokasitanam.show', [
 				'noIjin' => $noIjin,
 				'anggota_id' => $lokasi->anggota_id
 			]);
@@ -101,9 +102,10 @@ class DataLokasiTanamController extends Controller
 
 	public function listLokasiTanamProduksi($id)
 	{
+
 		$commitment = PullRiph::find($id);
 		$verifikasi = AjuVerifProduksi::where('no_ijin', $commitment->no_ijin)->first();
-		$query = Lokasi::where('no_ijin', $verifikasi->no_ijin)
+		$query = Lokasi::where('no_ijin', $commitment->no_ijin)
 			// ->where('polygon', '!=', null)
 			->with('masterkelompok', 'masteranggota')
 			->select('id', 'npwp', 'no_ijin', 'poktan_id', 'anggota_id', 'nama_lokasi', 'luas_tanam', 'volume');

@@ -66,6 +66,11 @@ class PullRiph extends Model
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
 
+	public function userDocs()
+	{
+		return $this->belongsTo(UserDocs::class, 'commitment_id');
+	}
+
 	public function penangkar_riph()
 	{
 		return $this->hasMany(PenangkarRiph::class, 'no_ijin', 'no_ijin');
@@ -98,12 +103,12 @@ class PullRiph extends Model
 
 	public function skl()
 	{
-		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+		return $this->hasOne(Skl::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function userDocs()
+	public function completed()
 	{
-		return $this->belongsTo(UserDocs::class, 'commitment_id');
+		return $this->hasOne(Completed::class, 'no_ijin', 'no_ijin');
 	}
 
 	//unused

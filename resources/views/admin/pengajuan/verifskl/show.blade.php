@@ -29,7 +29,7 @@
 @section('content')
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
-
+@include('partials.sysalert')
 @can('pengajuan_create')
 @php
 	$npwp = str_replace(['.', '-'], '', $commitment->npwp);
@@ -180,6 +180,7 @@
 								<td></td>
 								<td></td>
 							</tr>
+							{{-- utama --}}
 							<tr>
 								<td class="text-muted pl-4">Surat Pertanggungjawaban Mutlak</td>
 								<td>:</td>
@@ -249,7 +250,8 @@
 								</td>
 								<td></td>
 							</tr>
-
+							{{-- utama --}}
+							{{-- berkas tanam --}}
 							<tr>
 								<td class="text-uppercase fw-500">A. TAHAP TANAM</td>
 								<td></td>
@@ -371,6 +373,8 @@
 										</td>
 								<td></td>
 							</tr>
+
+							{{-- berkas produksi --}}
 							<tr>
 								<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
 								<td></td>
@@ -493,6 +497,38 @@
 								<td></td>
 							</tr>
 
+							{{-- berkas pengajuan skl --}}
+							<tr>
+								<td class="text-uppercase fw-500">C. TAHAP AKHIR</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="text-muted pl-4">Surat Pengajuan Keterangan Lunas</td>
+								<td>:</td>
+								<td class="fw-500">
+									@if ($userDocs->spskl)
+										@if ($userDocs->spsklcheck === 'sesuai')
+											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spsklcheck) }}">
+												Ada
+											</a>
+											<i class="fa fa-check text-success ml-1"></i>
+										@else
+											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spsklcheck) }}">
+												Ada
+											</a>
+											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+										@endif
+									@else
+										<span class="text-danger">Tidak ada berkas</span>
+										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+									@endif
+								</td>
+								<td></td>
+							</tr>
+
+							{{-- hasil pemeriksaan --}}
 							<tr class="bg-primary-50" style="height: 25px; opacity: 0.2">
 								<td></td>
 								<td></td>
@@ -500,7 +536,7 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td class="text-uppercase fw-500 h6">RINGKASAN VERIFIKASI SEBELUMNYA</td>
+								<td class="text-uppercase fw-500 h6">RINGKASAN VERIFIKASI</td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -549,6 +585,9 @@
 										@elseif($avtStatus === '4')
 											<span class="text-success">Pemeriksaan/Verifikasi telah Selesai</span>
 											<i class="fas fa-check text-success ml-1"></i>
+										@elseif($avtStatus === '5')
+											<span class="text-danger">Perbaiki Laporan</span>
+											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
 									@else
 										Tidak ada pengajuan
@@ -557,71 +596,165 @@
 								</td>
 								<td></td>
 							</tr>
-							<tr>
-								<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Tanggal Pengajuan</td>
-								<td>:</td>
-								<td class="fw-500">{{ $avpDate ? \Carbon\Carbon::parse($avpDate)->format('d F Y') : '-'}}</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Tanggal Verifikasi</td>
-								<td>:</td>
-								<td class="fw-500">{{ $avpVerifAt ? \Carbon\Carbon::parse($avpVerifAt)->format('d F Y') : '-'}}</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Metode Verifikasi</td>
-								<td>:</td>
-								<td class="fw-500">{{ $avpMetode ? $avpMetode : '-'}}</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Catatan Verifikasi</td>
-								<td>:</td>
-								<td class="fw-500">{{ $avpNote ? $avpNote : '-'}}</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Hasil Verifikasi</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($avpStatus)
-										@if ($avpStatus === '1')
-											<span class="text-danger">Verifikasi sedang diajukan</span>
-											<i class="fas fa-exclamation-circle text-warning ml-1"></i>
-										@elseif($avpStatus === '2' || $avpStatus === '3')
-											<span class="text-danger">Dalam proses pemeriksaan/verifikasi oleh Petugas</span>
-											<i class="fas fa-exclamation-circle text-warning ml-1"></i>
-										@elseif($avpStatus === '4')
-											<span class="text-success">Pemeriksaan/Verifikasi telah Selesai</span>
-											<i class="fas fa-check text-success ml-1"></i>
+							@if(!(request()->is('admin/task/commitment/*/pengajuan/tanam/show') || request()->is('admin/task/commitment/*/formavt')))
+								<tr>
+									<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Tanggal Pengajuan</td>
+									<td>:</td>
+									<td class="fw-500">{{ $avpDate ? \Carbon\Carbon::parse($avpDate)->format('d F Y') : '-'}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Tanggal Verifikasi</td>
+									<td>:</td>
+									<td class="fw-500">{{ $avpVerifAt ? \Carbon\Carbon::parse($avpVerifAt)->format('d F Y') : '-'}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Metode Verifikasi</td>
+									<td>:</td>
+									<td class="fw-500">{{ $avpMetode ? $avpMetode : '-'}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Catatan Verifikasi</td>
+									<td>:</td>
+									<td class="fw-500">{{ $avpNote ? $avpNote : '-'}}</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Hasil Verifikasi</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($avpStatus)
+											@if ($avpStatus === '1')
+												<span class="text-danger">Verifikasi sedang diajukan</span>
+												<i class="fas fa-exclamation-circle text-warning ml-1"></i>
+											@elseif($avpStatus === '2' || $avpStatus === '3')
+												<span class="text-danger">Dalam proses pemeriksaan/verifikasi oleh Petugas</span>
+												<i class="fas fa-exclamation-circle text-warning ml-1"></i>
+											@elseif($avpStatus === '4')
+												<span class="text-success">Pemeriksaan/Verifikasi telah Selesai</span>
+												<i class="fas fa-check text-success ml-1"></i>
+											@elseif($avpStatus === '5')
+												<span class="text-danger">Perbaiki Laporan</span>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
+										@else
+											<span class="text-danger">Tidak ada pengajuan</span>
+											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada pengajuan</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								@if(request()->is('admin/task/commitment/*/pengajuan/skl/show'))
+									@if ($commitment->ajuskl)
+										<tr>
+											<td class="text-uppercase fw-500">C. TAHAP AKHIR</td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-muted pl-4">Tanggal Pengajuan</td>
+											<td>:</td>
+											<td class="fw-500">{{ $avsklDate ? \Carbon\Carbon::parse($avsklDate)->format('d F Y') : '-'}}</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-muted pl-4">Tanggal Verifikasi</td>
+											<td>:</td>
+											<td class="fw-500">{{ $avsklVerifAt ? \Carbon\Carbon::parse($avsklVerifAt)->format('d F Y') : '-'}}</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-muted pl-4">Metode Verifikasi</td>
+											<td>:</td>
+											<td class="fw-500">{{ $avsklMetode ? $avsklMetode : '-'}}</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-muted pl-4">Catatan Verifikasi</td>
+											<td>:</td>
+											<td class="fw-500">{{ $avsklNote ? $avsklNote : '-'}}</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="text-muted pl-4">Hasil Verifikasi</td>
+											<td>:</td>
+											<td class="fw-500">
+												@if ($avsklStatus)
+													@if ($avsklStatus === '1')
+														<span class="text-danger">Verifikasi sedang diajukan</span>
+														<i class="fas fa-exclamation-circle text-warning ml-1"></i>
+													@elseif($avsklStatus === '2' || $avsklStatus === '3')
+														<span class="text-danger">Dalam proses pemeriksaan/verifikasi oleh Petugas</span>
+														<i class="fas fa-exclamation-circle text-warning ml-1"></i>
+													@elseif($avsklStatus === '4')
+														<span class="text-success">Pemeriksaan/Verifikasi telah Selesai</span>
+														<i class="fas fa-check text-success ml-1"></i>
+														@elseif($avsklStatus === '5')
+														<span class="text-danger">Perbaiki Laporan</span>
+														<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+													@endif
+												@else
+													<span class="text-danger">Tidak ada pengajuan</span>
+													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+												@endif
+											</td>
+											<td></td>
+										</tr>
 									@endif
-								</td>
-								<td></td>
-							</tr>
+								@endif
+							@endif
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<form action="{{route('admin.task.commitment.avskl.store', $commitment->id)}}" method="post">
-				@csrf
-				<div class="card-footer text-right">
-						<a href="{{ route('admin.task.commitment') }}"
-							class="btn btn-xs btn-info" data-toggle="tooltip"
-							title data-original-title="Kembali">
-							<i class="fal fa-undo mr-1"></i>
-							Kembali
-						</a>
+
+			<div class="card-footer d-flex justify-content-end">
+				<a href="{{ route('admin.task.commitment') }}"
+					class="btn btn-xs btn-info mr-1" data-toggle="tooltip"
+					title data-original-title="Kembali">
+					<i class="fal fa-undo mr-1"></i>
+					Kembali
+				</a>
+				{{-- Form pengajuan --}}
+				{{-- pengajuan tanam --}}
+				@if(request()->is('admin/task/commitment/*/formavt') || request()->is('admin/task/commitment/*/pengajuan/tanam/show'))
+					<form action="{{route('admin.task.commitment.avt.store', $commitment->id)}}" method="post">
+						@csrf
+						@if(!$commitment->ajuTanam || !in_array($commitment->ajuTanam->status, ['1', '2', '3', '4']))
+							<button type="submit" class="btn btn-xs btn-warning" data-toggle="tooltip"
+							title data-original-title="Ajukan Verifikasi Tanam">
+								<i class="fal fa-upload mr-1"></i>
+								Ajukan
+							</button>
+						@endif
+					</form>
+				@endif
+				{{-- pengajuan produksi --}}
+				@if(request()->is('admin/task/commitment/*/formavp') || request()->is('admin/task/commitment/*/pengajuan/produksi/show'))
+					<form action="{{route('admin.task.commitment.avp.store', $commitment->id)}}" method="post">
+						@csrf
+						@if(!$commitment->ajuProduksi || !in_array($commitment->ajuProduksi->status, ['1', '2', '3', '4']))
+							<button type="submit" class="btn btn-xs btn-warning" data-toggle="tooltip"
+							title data-original-title="Ajukan Verifikasi Produksi">
+								<i class="fal fa-upload mr-1"></i>
+								Ajukan
+							</button>
+						@endif
+					</form>
+				@endif
+				{{-- pengajuan skl --}}
+				@if(request()->is('admin/task/commitment/*/formavskl') || request()->is('admin/task/commitment/*/pengajuan/skl/show'))
+					<form action="{{route('admin.task.commitment.avskl.store', $commitment->id)}}" method="post">
+						@csrf
 						@if(!$commitment->ajuSkl || !in_array($commitment->ajuSkl->status, ['1', '2', '3', '4']))
 							<button type="submit" class="btn btn-xs btn-warning" data-toggle="tooltip"
 							title data-original-title="Ajukan penerbitan SKL dan status Lunas">
@@ -629,8 +762,9 @@
 								Ajukan
 							</button>
 						@endif
-				</div>
-			</form>
+					</form>
+				@endif
+			</div>
 		</div>
 	</div>
 </div>

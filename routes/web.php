@@ -175,27 +175,28 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('commitment/{id}/formavt', 'PengajuanController@ajuVerifTanam')->name('commitment.avt');
 		Route::get('commitment/{id}/formavt/lokasi', 'PengajuanController@ajuVerifTanam')->name('commitment.avt.lokasi');
 		Route::post('commitment/{id}/formavt/store', 'PengajuanController@ajuVerifTanamStore')->name('commitment.avt.store');
-		Route::get('pengajuan/tanam/{id}/show', 'PengajuanController@showAjuTanam')->name('pengajuan.tanam.show');
+		Route::get('commitment/{id}/pengajuan/tanam/show', 'PengajuanController@showAjuTanam')->name('pengajuan.tanam.show');
 
 		//new pengajuan produksi
 		Route::get('commitment/{id}/formavp', 'PengajuanController@ajuVerifProduksi')->name('commitment.avp');
 		Route::get('commitment/{id}/formavp/lokasi', 'PengajuanController@ajuVerifProduksi')->name('commitment.avp.lokasi');
 		Route::post('commitment/{id}/formavp/store', 'PengajuanController@ajuVerifProduksiStore')->name('commitment.avp.store');
-		Route::get('pengajuan/produksi/{id}/show', 'PengajuanController@showAjuProduksi')->name('pengajuan.produksi.show');
+		Route::get('commitment/{id}/pengajuan/produksi/show', 'PengajuanController@showAjuProduksi')->name('pengajuan.produksi.show');
 
 		//new pengajuan skl
 		Route::get('commitment/{id}/formavskl', 'PengajuanController@ajuVerifSkl')->name('commitment.avskl');
 		Route::post('commitment/{id}/formavskl/store', 'PengajuanController@ajuVerifSklStore')->name('commitment.avskl.store');
 		Route::get('commitment/{id}/formavskl/lokasi', 'PengajuanController@ajuVerifSkl')->name('commitment.avskl.lokasi');
+		Route::get('commitment/{id}/pengajuan/skl/show', 'PengajuanController@showAjuSkl')->name('pengajuan.skl.show');
 
 
 		Route::get('submission/{id}/show', 'PengajuanController@show')->name('submission.show');
 		Route::delete('pengajuan/destroy', 'PengajuanController@massDestroy')->name('pengajuan.massDestroy');
 
 		//daftar seluruh skl yang telah terbit (lama & baru)
-		Route::get('skl/index', function () {
-			return redirect()->route('verification.arsip.completed');
-		})->name('skl.index');
+		Route::get('skl/arsip', function () {
+			return redirect()->route('skl.arsip');
+		})->name('skl.arsip');
 
 		Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
 		Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
@@ -258,7 +259,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifTanamController@verifPks')->name('check.pks');
 		Route::put('pks/{id}/store', 'VerifTanamController@verifPksStore')->name('check.pks.store');
 		Route::put('{id}/checkPksSelesai', 'VerifTanamController@checkPksSelesai')->name('checkPksSelesai');
-		Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
+		// Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 	});
 
 	//new verifikasi produksi
@@ -301,6 +302,9 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 			//fungsi untuk pejabat menyetujui penerbitan.
 			Route::put('{id}/approve', 'VerifSklController@approve')->name('approve');
 		});
+
+		//daftar skl diterbitkan
+		Route::get('recomendations', 'VerifSklController@recomendations')->name('recomendations');
 	});
 
 	Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
@@ -331,21 +335,11 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	// Route::get('skl', 'SklController@index')->name('skl'); //daftar siap rekomendasi
 
 	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show'); //summary skl
-	Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed'); //daftar seluruh skl yang telah terbit (lama & baru)
+	// Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed'); //daftar seluruh skl yang telah terbit (lama & baru)
 
 	//ke bawah ini mungkin di hapus
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
 	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
-	Route::get('arsip/skl/{id}', 'SklController@arsipskl')->name('arsip.skl');
-
-	//SKL Old/Manual
-	Route::get('oldskl/index', 'SklOlderController@index')->name('oldskl.index');
-	Route::get('oldskl/create', 'SklOlderController@create')->name('oldskl.create');
-	Route::post('oldskl/store', 'SklOlderController@store')->name('oldskl.store');
-	Route::get('oldskl/{id}/show', 'SklOlderController@show')->name('oldskl.show');
-	Route::get('oldskl/{id}/edit', 'SklOlderController@edit')->name('oldskl.edit');
-	Route::put('oldskl/{id}/update', 'SklOlderController@update')->name('oldskl.update');
-	Route::delete('oldskl/{id}/delete', 'SklOlderController@destroy')->name('oldskl.delete');
 });
 
 Route::group(['prefix' => 'skl', 'as' => 'skl.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
@@ -353,9 +347,7 @@ Route::group(['prefix' => 'skl', 'as' => 'skl.', 'namespace' => 'Verifikator', '
 	Route::get('recomended/list', 'VerifSklController@recomended')->name('recomended.list');
 	Route::get('{id}/print', 'VerifSklController@printReadySkl')->name('print'); //form view skl untuk admin
 	Route::put('{id}/upload', 'VerifSklController@Upload')->name('upload'); //fungsi upload untuk admin
-});
-
-Route::group(['prefix' => 'backdate', 'as' => 'backdate.', 'namespace' => 'Backdate', 'middleware' => ['auth']], function () {
+	Route::get('arsip', 'VerifSklController@arsip')->name('arsip');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

@@ -14,6 +14,7 @@ td {
 		<div class="row" id="contentToPrint">
 			@php
 				$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+
 			@endphp
 			<div class="col-12">
 				<div id="panel-1" class="panel">
@@ -588,7 +589,7 @@ td {
 												<tr>
 													<td>{{$pks->no_perjanjian}}</td>
 													<td>{{$pks->masterpoktan->nama_kelompok}}</td>
-													<td>
+													<td class="text-center">
 														{{$pks->tgl_perjanjian_start}} s.d
 														{{$pks->tgl_perjanjian_end}}
 													</td>
@@ -724,7 +725,7 @@ td {
 												<div class="input-group">
 													<input type="text" class="form-control" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
 													<div class="input-group-append">
-														<button class="btn btn-danger" type="submit" onclick="return validateInput()">
+														<button class="btn btn-danger" type="submit" onclick="return validateInput()" id="btnSubmit">
 															<i class="fas fa-save text-align-center mr-1"></i>Simpan
 														</button>
 													</div>
@@ -806,14 +807,14 @@ td {
 				],
 				columnDefs: [
 
-					{ className: 'text-right', targets: [3] },
-					{ className: 'text-center', targets: [4] },
+					{ className: 'text-right', targets: [3, 4] },
+					{ className: 'text-center', targets: [5] },
 				]
 			});
 
 			function updateTableData() {
 				$.ajax({
-					url: '{{ route("admin.ajuproduksi.listlokasi", $verifikasi->commitment_id) }}',
+					url: '{{ route("verification.lokasitanam", $noIjin) }}',
 					type: 'GET',
 					dataType: 'json',
 					success: function(response) {
@@ -858,14 +859,24 @@ td {
 	</script>
 
 	<script>
-		function validateInput1() {
+		function validateInput() {
 			// get the input value and the current username from the page
-			var inputVal = document.getElementById('validasi1').value;
+			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
+			var status = document.getElementById("status").value;
+			var ndhprtInput = document.getElementById("ndhprp");
+			var batanamInput = document.getElementById("baproduksi");
 
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
-				return true; // allow form submission
+				// Jika status = 4, lakukan validasi tambahan
+				if (status === "4") {
+					if (ndhprtInput.files.length === 0 || batanamInput.files.length === 0) {
+						alert("Nota Dinas dan Berita Acara harus diunggah jika Anda menetapkan status 'Sesuai'.");
+						return false; // Menghentikan pengiriman formulir
+					}
+				}
+				return true; // Lanjutkan pengiriman formulir jika status adalah 'Tidak Sesuai' (5) atau kondisi lainnya
 			} else {
 				alert('Isi kolom Konfirmasi dengan username Anda!.');
 				return false; // prevent form submission

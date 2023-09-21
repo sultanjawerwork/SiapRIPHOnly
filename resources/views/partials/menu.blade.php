@@ -177,7 +177,7 @@
 				@endcan
 				{{-- pengajuan verifikasi --}}
 				@can('pengajuan_access')
-					<li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan*') ? 'active' : '' }}">
+					{{-- <li class="c-sidebar-nav-item {{request()->is('admin/task/pengajuan*') ? 'active' : '' }}">
 						@if (Auth::user()->roles[0]->title == 'User')
 						<a href="{{ route('admin.task.pengajuan.index') }}" title="Pengajuan verifikasi"
 							data-filter-tags="daftar pengajuan verifikasi data online onfarm">
@@ -187,17 +187,16 @@
 							</span>
 						</a>
 						@else
-							{{-- for later use --}}
+
 						@endif
-					</li>
+					</li> --}}
 				@endcan
 				{{-- Skl terbit --}}
 
 				@can('permohonan_access')
-					<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
-						request()->is('admin/task/skl/index') ? 'active' : '' }}">
-						<a href="{{ route('admin.task.skl.index') }}"
-							data-filter-tags="verifikasi selesai">
+					<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+						<a href="{{route('admin.task.skl.arsip')}}"
+							data-filter-tags="daftar skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 							<span class="nav-link-text text-wrap">
 								Daftar SKL Terbit
@@ -205,7 +204,7 @@
 						</a>
 					</li>
 				@endcan
-				@can('kelompoktani_access')
+				@can('draft')
 					<li class="{{ request()->is('admin/task/masterpenangkar')
 						|| request()->is('admin/task/kelompoktani')
 						|| request()->is('admin/task/masterpoktan')
@@ -254,10 +253,13 @@
 							@php
 								$pengajuan = new \App\Models\AjuVerifTanam();
 								$unverified = $pengajuan->NewRequest();
+								$proceed = $pengajuan->proceedVerif();
 							@endphp
-
 							@if ($unverified > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+							@if ($proceed > 0)
+								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
 							@endif
 						</a>
 					</li>
@@ -266,16 +268,19 @@
 					<li class="c-sidebar-nav-item {{ request()->is('verification/produksi')
 						|| request()->is('verification/produksi*') ? 'active' : '' }}">
 						<a href="{{ route('verification.produksi') }}"
-							data-filter-tags="verifikasi onfarm lapangan">
+							data-filter-tags="verifikasi produksi">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Tahap Produksi</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifProduksi();
 								$unverified = $pengajuan->NewRequest();
+								$proceed = $pengajuan->proceedVerif();
 							@endphp
-
 							@if ($unverified > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+							@if ($proceed > 0)
+								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
 							@endif
 						</a>
 					</li>
@@ -284,16 +289,20 @@
 					<li class="c-sidebar-nav-item {{ request()->is('verification/skl')
 						|| request()->is('verification/skl*') ? 'active' : '' }}">
 						<a href="{{ route('verification.skl') }}"
-							data-filter-tags="verifikasi onfarm lapangan">
+							data-filter-tags="verifikasi produksi">
 							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Pengajuan SKL</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifSkl();
 								$unverified = $pengajuan->NewRequest();
+								$proceed = $pengajuan->proceedVerif();
 							@endphp
 
 							@if ($unverified > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $unverified }}</span>
+							@endif
+							@if ($proceed > 0)
+								<span class="dl-ref bg-warning-500 hidden-nav-function-minify hidden-nav-function-top">{{ $proceed }}</span>
 							@endif
 						</a>
 					</li>
@@ -314,10 +323,9 @@
 					</li>
 				@endcan
 				@can('completed_access')
-				<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
-					request()->is('verification/arsip/completed*') ? 'active' : '' }}">
-					<a href="{{ route('verification.arsip.completed') }}"
-						data-filter-tags="verifikasi selesai">
+				<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+					<a href="{{ route('skl.arsip') }}"
+						data-filter-tags="daftar skl terbit">
 						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 						<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
 					</a>
@@ -345,9 +353,8 @@
 						@endif
 					</a>
 				</li>
-				<li class="c-sidebar-nav-item {{ request()->is('verification/arsip/completed') ||
-					request()->is('verification/arsip/completed*') ? 'active' : '' }}">
-					<a href="{{ route('verification.arsip.completed') }}"
+				<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+					<a href="{{ route('skl.arsip') }}"
 						data-filter-tags="verifikasi selesai">
 						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 						<span class="nav-link-text text-wrap">

@@ -6,7 +6,7 @@
 <!-- Page Content -->
 <div class="subheader">
 	<h1 class="subheader-title">
-		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Realisasi & Verifikasi</span>
+		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Realisasi & Verifikasi Admin</span>
 	</h1>
 	<div class="subheader-block d-lg-flex align-items-center  d-print-none">
 		<div class="d-inline-flex flex-column justify-content-center ">
@@ -27,7 +27,7 @@
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="jumlah_importir">{{$jumlah_importir}}</span>
-						<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1">{{$company}}</span>Terdaftar</small> 
+						<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1">{{$company}}</span>Terdaftar</small>
 					</h3>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-success-500">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Luas wajib tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="v_beban_tanam">{{ number_format($v_beban_tanam, 2, ',', '.') }}</span>
 						<small class="m-0 l-h-n">Kewajiban Tanam (ha)</small>
@@ -66,7 +66,7 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-warning-500">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah wajib tanam pada periode ini.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Volume wajib produksi pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="v_beban_produksi">{{ number_format($v_beban_produksi, 2, ',', '.') }}</span>
 						<small class="m-0 l-h-n">Kewajiban Produksi (ton)</small>
@@ -91,7 +91,7 @@
 					<div class="row mb-3 align-items-center">
 						<div class="col-lg-5 col-sm-6 align-self-center text-center">
 							<div class="c-chart-wrapper">
-								<div 
+								<div
 									id = "naschartTanam"
 									class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center"
 									data-percent="{{ number_format($prosenTanam, 2, ',', '.') }}"
@@ -116,10 +116,10 @@
 						<div class="col-lg-7 col-sm-6">
 							<div class="shadow-1 p-2 bg-success-600 rounded overflow-hidden position-relative text-white mb-2">
 								<div class="card-body">
-									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
+									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Luas Realisasi Tanam dilaporkan Pelaku Usaha.">
 										<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 										<span id="total_luastanam">{{ number_format($total_luastanam, 2, ',', '.') }}</span> ha
-										<small class="m-0 l-h-n">Total realisasi luas tanam.</small> 
+										<small class="m-0 l-h-n">Total realisasi luas tanam.</small>
 									</h4>
 								</div>
 								<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -168,9 +168,9 @@
 						<div class="col-lg-7 col-sm-6">
 							<div class="shadow-1 p-2 bg-warning-600 rounded overflow-hidden position-relative text-white mb-2">
 								<div class="card-body">
-									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
+									<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Volume Realisasi Produksi dilaporkan Pelaku Usaha.">
 										<span id="total_volume">{{ number_format($total_volume, 2, ',', '.') }}</span> ha
-										<small class="m-0 l-h-n">Total realisasi produksi.</small> 
+										<small class="m-0 l-h-n">Total realisasi produksi.</small>
 									</h4>
 								</div>
 								<i class="fal fa-dolly position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -196,10 +196,9 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-					<div class="row d-flex">
+					{{-- <div class="row d-flex">
 						<div class="col-md-3">
 							<div class="shadow-1 p-2 bg-primary-100 rounded overflow-hidden position-relative text-white mb-2">
-								{{-- where status != empty, seluruh data pengajuan yang memiliki status (1 s.d 7) --}}
 								<div data-toggle="tooltip" title data-original-title="Jumlah Pengajuan Verifikasi Wajib Tanam-Produksi">
 									<div class="d-flex">
 										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="ajucount">{{$ajucount ? $ajucount : 0}}</h5>
@@ -211,7 +210,6 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							{{-- where onlinestatus = 1 and onfarmstatus = empty, seluruh pengajuan yang memiliki onlinestatus dengan nilai 1 (sesuai) namun tidak memiliki tidak memiliki onfarmstatus (belum diperiksa) --}}
 							<div class="shadow-1 p-2 bg-primary-200 rounded overflow-hidden position-relative text-white mb-2">
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH yang sedang diverifikasi">
 									<div class="d-flex">
@@ -224,7 +222,6 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							{{-- where onfarmstatus != empty, ini berarti data telah diperiksa dan survey lokasi telah dilakukan. di tabel ini, status sesuai atau tidak diabaikan. --}}
 							<div class="shadow-1 p-2 bg-primary-300 rounded overflow-hidden position-relative text-white mb-2">
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH yang telah diverifikasi">
 									<div class="d-flex">
@@ -238,7 +235,6 @@
 						</div>
 						<div class="col-md-3">
 							<div class="shadow-1 p-2 bg-primary-500 rounded overflow-hidden position-relative text-white mb-2">
-								{{-- where status = '7' --}}
 								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH Lunas Wajib Tanam-Produksi">
 									<div class="d-flex justify-content-between">
 										<div class="d-flex">
@@ -262,49 +258,53 @@
 								<i class="fal fa-award position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:3rem"></i>
 							</div>
 						</div>
-					</div><hr>
+					</div><hr> --}}
 					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
 							<th>Nama Perusahaan</th>
 							<th>Nomor Pengajuan</th>
 							<th>Nomor RIPH</th>
-							<th>Pengajuan</th>
 							<th>Tahap 1</th>
 							<th>Tahap 2</th>
 							<th>Tahap 3</th>
+							<th>Lunas</th>
 						</thead>
 						<tbody>
 							@foreach ($allPengajuan as $pengajuan)
 								<tr>
-									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
+									@php
+										$statusAjutanam = $pengajuan->ajutanam->status ?? null;
+										$statusAjuproduksi = $pengajuan->ajuproduksi->status ?? null;
+										$statusAjuskl = $pengajuan->ajuskl->status ?? null;
+										$statusCompleted = $pengajuan->completed->url ?? null;
+									@endphp
+									<td>{{$pengajuan->datauser->company_name}}</td>
 									<td>{{$pengajuan->no_pengajuan}}</td>
 									<td>{{$pengajuan->no_ijin}}</td>
 									<td class="text-center">
-										@if ($pengajuan->status)
-											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
-										@endif
-									</td>
-									<td class="text-center">
-										@if ($pengajuan->onlinestatus === '2')
+										@if ($statusAjutanam === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onlinestatus === '3')
+										@elseif ($statusAjutanam === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->onfarmstatus === '4')
+										@if ($statusAjuproduksi === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onfarmstatus === '5')
+										@elseif ($statusAjuproduksi === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->status === '6')
-											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
-										@elseif ($pengajuan->status === '7')
+										@if ($statusAjuskl === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($statusAjuskl === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($statusCompleted)
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
-										@elseif ($pengajuan->status === '8')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 								</tr>
@@ -317,31 +317,23 @@
 						<div class="row d-flex align-items-top">
 							<div class="col-md-4 col-sm-6">
 								<ul>
-									<li>Tahap 1: Pemeriksaan Data</li>
-									<li>Tahap 2: Pemeriksaan Lapangan</li>
-									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
+									<li>Tahap 1: Verifikasi Realisasi Tanam</li>
+									<li>Tahap 2: Verifikasi Realisasi Produksi</li>
+									<li>Tahap 3: Pengajuan Ket. Lunas </li>
+									<li>Lunas: Penerbitan Surat Keterangan Lunas</li>
 								</ul>
 							</div>
-							<div class="col-md-4 col-sm-6">
+							<div class="col-md-8 col-sm-6">
 								<ul>
 									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-success mr-1">
 											<i class="fa fa-check-circle"></i>
-										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
+										</span> : Pemeriksaan SELESAI dan dinyatakan SESUAI.
 									</li>
-									<li>
+									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-danger mr-1">
 											<i class="fa fa-ban"></i>
-										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-4 col-sm-6">
-								<ul>
-									<li class="mb-1">
-										<span class="btn btn-icon btn-xs btn-info mr-1">
-											<i class="fa fa-file-signature"></i>
-										</span> : Rekomendasi penerbitan SKL.</span>.
+										</span> : Pemeriksaan SELESAI, data dinyatakan <span class="text-danger">TIDAK SESUAI/PERBAIKAN</span>.
 									</li>
 									<li>
 										<span class="btn btn-icon btn-xs btn-success mr-1">
@@ -409,20 +401,20 @@
 			});
 
 			// Create the "Status" select element and add the options
-			var selectStatus = $('<select>')
-				.attr('id', 'selectverifprogressStatus')
-				.addClass('custom-select custom-select-sm col-3 mr-2')
-				.on('change', function() {
-				var status = $(this).val();
-				table.column(6).search(status).draw();
-				});
+			// var selectStatus = $('<select>')
+			// 	.attr('id', 'selectverifprogressStatus')
+			// 	.addClass('custom-select custom-select-sm col-3 mr-2')
+			// 	.on('change', function() {
+			// 	var status = $(this).val();
+			// 	table.column(6).search(status).draw();
+			// 	});
 
-			$('<option>').val('').text('Semua Status').appendTo(selectStatus);
-			$('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
-			$('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
+			// $('<option>').val('').text('Semua Status').appendTo(selectStatus);
+			// $('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
+			// $('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
 
 			// Add the select elements before the first datatable button in the second table
-			$('#verifprogress_wrapper .dt-buttons').before(selectStatus);
+			// $('#verifprogress_wrapper .dt-buttons').before(selectStatus);
 		});
 	</script>
 	<script>
@@ -456,7 +448,7 @@
 					$('#lunascount').text(data.lunascount);
 					$('#lunasLuas').text(formatdecimals(data.lunasLuas));
 					$('#lunasVolume').text(formatdecimals(data.lunasVolume));
-					
+
 					var prosentanam = (data.prosenTanam);
 					$('#naschartTanam').attr('data-percent', prosentanam);
 					$('#naschartTanam').attr('data-original-title', prosentanam  + '% dari kewajiban');
@@ -479,7 +471,7 @@
 						var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
 						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
 						var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
-						
+
 						var ajuCell = $('<td class="text-center"></td>').html(function() {
 							if (verifikasi.status) {
 								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';

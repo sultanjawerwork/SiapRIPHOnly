@@ -34,7 +34,7 @@ class LokasiTanamController extends Controller
 		$commitment = PullRiph::where('no_ijin', $no_ijin)->first();
 
 		$query = Lokasi::where('no_ijin', $no_ijin)
-			->where('polygon', '!=', null) //comment this line to exclude the condition
+			// ->where('polygon', '!=', null) //uncomment this line to include the condition
 			->with('masterkelompok', 'masteranggota')
 			->select('id', 'npwp', 'no_ijin', 'poktan_id', 'anggota_id', 'nama_lokasi', 'luas_tanam', 'volume');
 

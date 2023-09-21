@@ -622,7 +622,7 @@
 							<i class="fal fa-undo mr-1"></i>
 							Kembali
 						</a>
-						@if(!$commitment->ajuSkl || !in_array($commitment->ajuSkl->status, ['1', '2', '3', '4']))
+						@if(!$commitment->ajuSkl)
 							<button type="submit" class="btn btn-xs btn-warning" data-toggle="tooltip"
 							title data-original-title="Ajukan penerbitan SKL dan status Lunas">
 								<i class="fal fa-upload mr-1"></i>
@@ -687,40 +687,10 @@
 						text: '<i class="fa fa-print"></i>',
 						titleAttr: 'Cetak halaman data.',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					},
-					// {
-					// 	text: 'Ajukan',
-					// 	titleAttr: 'Lihat Detail',
-					// 	className: 'btn btn-outline-info btn-xs',
-					// 	action: function () {
-					// 		// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
-
-					// 	}
-					// }
+					}
 				],
 			});
 	});
-</script>
-
-<script>
-	function validateInput() {
-		// get the input value and the current username from the page
-		var inputVal = document.getElementById('validasi').value;
-		var currentUsername = '{{ Auth::user()->username }}';
-
-		// check if the input is not empty and matches the current username
-		if (inputVal !== '' && inputVal === currentUsername) {
-			return true; // allow form submission
-		} else {
-			alert('Input validasi harus diisi dan bernilai sama dengan username Anda.');
-			return false; // prevent form submission
-		}
-	}
-
-	//back button
-	function cancelBtn() {
-		history.go(-1);
-	}
 </script>
 
 @endsection

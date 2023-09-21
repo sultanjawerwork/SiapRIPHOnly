@@ -39,18 +39,22 @@ class AjuVerifProduksi extends Model
 
 	public static function newPengajuanCount(): int
 	{
-		return self::where('status', '1')
-			->whereNull('verif_at')->count();
+		return self::where('status', '1')->count();
 	}
 
 	public function NewRequest(): int
 	{
-		return self::where('status', '1')
-			->whereNull('verif_at')->count();
+		return self::where('status', '1')->count();
+	}
+
+	public function proceedVerif(): int
+	{
+		return self::whereIn('status', ['2', '3'])
+			->whereNull('baproduksi')->count();
 	}
 
 	public static function getNewPengajuan()
 	{
-		return self::where('status', '1')->whereNull('verif_at')->get();
+		return self::where('status', '1')->get();
 	}
 }

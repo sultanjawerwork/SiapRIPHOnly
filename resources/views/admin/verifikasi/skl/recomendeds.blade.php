@@ -48,11 +48,11 @@
 														<a href="{{route('verification.skl.published', $recomend->id)}}" class="btn btn-xs btn-success btn-icon">
 															<i class="fal fa-award"></i>
 														</a>
-													@else
+													{{-- @else
 														<a href="{{route('verification.skl.recomendation.show', $recomend->id)}}" class="btn btn-xs btn-warning btn-icon">
 															<i class="fal fa-file-search">
 															</i>
-														</a>
+														</a> --}}
 													@endif
 												</td>
 												{{-- modal upload skl --}}

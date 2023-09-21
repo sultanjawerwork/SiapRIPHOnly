@@ -365,6 +365,8 @@
 													Dalam proses pemeriksaan/verifikasi oleh petugas
 												@elseif($verifikasi->status === '4')
 													Pemeriksaan/Verifikasi telah Selesai
+												@elseif($verifikasi->status === '5')
+													Perbaikan Laporan
 												@endif
 											@else
 												Tidak ada pengajuan

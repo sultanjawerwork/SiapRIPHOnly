@@ -309,6 +309,8 @@ class VerifSklController extends Controller
 			->where('status', null)
 			->get();
 
+		// dd($pkss);
+
 		//set value for status field of populated $pkss to 'sesuai'
 		foreach ($pkss as $pks) {
 			$pks->update(['status' => 'sesuai']);
@@ -524,12 +526,8 @@ class VerifSklController extends Controller
 				$skl = Skl::find($id);
 				$skl->approved_by = Auth::user()->id;
 				$skl->approved_at = Carbon::now();
-				$verifikasi = AjuVerifSkl::find($skl->pengajuan_id);
-				$verifikasi->status = '6';
-				// dd($verifikasi);
 
 				$skl->save();
-				$verifikasi->save();
 				return redirect()->route('verification.skl.recomendations')->with(['success' => 'Penerbitan SKL telah Anda setujui dan siap diterbitkan.']);
 			});
 		} catch (\Exception $e) {
@@ -647,5 +645,26 @@ class VerifSklController extends Controller
 
 		return redirect()->route('skl.recomended.list')
 			->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
+	}
+
+	public function arsip()
+	{
+		$module_name = 'SKL';
+		$page_title = 'Surat Keterangan Lunas';
+		$page_heading = 'Daftar SKL Diterbitkan';
+		$heading_class = 'fa fa-award';
+
+		$roleaccess = Auth::user()->roleaccess;
+		if ($roleaccess == 1) {
+			$completeds = Completed::where('url', '!=', null)->get();
+		}
+
+		if ($roleaccess == 2) {
+			$user = Auth::user();
+			$npwp = $user->data_user->npwp_company;
+			$completeds = Completed::where('npwp', $npwp)->get();
+		}
+
+		return view('admin.verifikasi.skl.completed', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'completeds'));
 	}
 }

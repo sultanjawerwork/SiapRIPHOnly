@@ -448,7 +448,7 @@
 																Surat Pengajuan Verifikasi Tanam
 															</a>
 														@else
-															<span>Surat Pengajuan Verifikasi Produksi</span>
+															<span>Surat Pengajuan Verifikasi Tanam</span>
 														@endif
 													</td>
 													<td class="text-center">
@@ -1062,8 +1062,8 @@
 				],
 				columnDefs: [
 
-					{ className: 'text-right', targets: [3] },
-					{ className: 'text-center', targets: [4] },
+					{ className: 'text-right', targets: [3,4] },
+					{ className: 'text-center', targets: [5] },
 				]
 			});
 
@@ -1112,13 +1112,22 @@
 					$("#countPoktan").text(data.countPoktan + ' Kelompok');
 					$("#countPks").text(data.countPks + ' berkas');
 					$("#countAnggota").text(data.countAnggota + ' anggota');
-					$("#avtDate").text(data.avtDate);
-					$("#avtVerifAt").text(data.avtVerifAt);
 					$("#avtMetode").text(data.avtMetode);
 					$("#avtNote").text(data.avtNote);
 
-					$("#avpDate").text(data.avpDate);
-					$("#avpVerifAt").text(data.avpVerifAt);
+					var avtDate = data.avtDate ? new Date(data.avtDate) : null;
+					var avtVerifAt = data.avtVerifAt ? new Date(data.avtVerifAt) : null;
+					var avpDate = data.avpDate ? new Date(data.avpDate) : null;
+					var avpVerifAt = data.avpVerifAt ? new Date(data.avpVerifAt) : null;
+
+					// Menetapkan teks sesuai dengan kondisi
+					var options = { day: 'numeric', month: 'long', year: 'numeric' };
+					$("#avtDate").text(avtDate ? avtDate.toLocaleDateString(undefined, options) : '');
+					$("#avtVerifAt").text(avtVerifAt ? avtVerifAt.toLocaleDateString(undefined, options) : '');
+					$("#avpDate").text(avpDate ? avpDate.toLocaleDateString(undefined, options) : '');
+					$("#avpVerifAt").text(avpVerifAt ? avpVerifAt.toLocaleDateString(undefined, options) : '');
+
+
 					$("#avpMetode").text(data.avpMetode);
 					$("#avpNote").text(data.avpNote);
 
@@ -1131,8 +1140,10 @@
 					var formattedRealisasiProduksi = parseFloat(data.realisasiProduksi).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ton';
 					var formattedHasGeoLoc = parseFloat(data.hasGeoloc).toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' titik';
 
-					$("#ndhprt").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprtLink + '">' + data.ndhprt + '</a>');
-					$("#batanam").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.batanamLink + '">' + data.batanam + '</a>');
+					$("#ndhprt").html(data.ndhprt ? '<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprtLink + '">' + data.ndhprt + '</a>' : '');
+
+					$("#batanam").html(data.batanam ? '<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.batanamLink + '">' + data.batanam + '</a>' : '');
+
 					$("#ndhprp").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprpLink + '">' + data.ndhprp + '</a>');
 					$("#baproduksi").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.baproduksiLink + '">' + data.baproduksi + '</a>');
 
@@ -1142,7 +1153,10 @@
 					$("#realisasiProduksi").text(formattedRealisasiProduksi);
 					$("#hasGeoloc").text(formattedHasGeoLoc);
 
-					if (data.avtStatus === '1' || data.avtStatus === '2' || data.avtStatus === '3') {
+					if (typeof data.avtStatus === 'undefined' || data.avtStatus === null){
+						$("#avtStatus").text('Tidak ada status').addClass("text-warning text-uppercase fw-500").append('<i class="fas fa-exclamation-circle ml-1"></i>');
+					}
+					else if (data.avtStatus === '1' || data.avtStatus === '2' || data.avtStatus === '3') {
 						$("#avtStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
 					} else if (data.avtStatus === '4') {
 						$("#avtStatus").text('Memenuhi Syarat').addClass("text-success text-uppercase fw-500").append('<i class="fas fa-check ml-1"></i>');
@@ -1226,7 +1240,7 @@
 
 	<script>
 		document.getElementById('submitWarning').addEventListener('click', function () {
-			if (confirm('Setiap PKS yang belum Anda periksa akan dinyatakan sebagai "SESUAI". Apakah Anda yakin ingin menyimpan data ini?')) {
+			if (confirm('Setiap PKS (yang memiliki berkas lampiran) yang belum Anda periksa akan dinyatakan sebagai "SESUAI". Apakah Anda yakin ingin menyimpan data ini?')) {
 				// Lanjutkan dengan submit form jika konfirmasi OK
 				document.getElementById('myForm').submit();
 			} else {

@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\AjuVerifProduksi;
+use App\Models\AjuVerifSkl;
+use App\Models\AjuVerifTanam;
 use App\Models\CommitmentBackdate;
 use App\Models\AnggotaMitra;
+use App\Models\Completed;
 use App\Models\PullRiph;
 use App\Models\PKS;
 use App\Models\Lokasi;
@@ -15,6 +19,7 @@ use App\Models\RiphAdmin;
 use App\Models\Saprodi;
 use App\Models\Pengajuan;
 use App\Models\User;
+use Illuminate\Console\Command;
 
 class DashboardController extends Controller
 {
@@ -48,15 +53,44 @@ class DashboardController extends Controller
 					return $commitment->lokasi->pluck('volume');
 				})->sum();
 
-				$allPengajuan = Pengajuan::whereNotNull('status')
-					->whereYear('created_at', $currentYear)
+				$allPengajuan = PullRiph::whereYear('created_at', $currentYear)
+					->where(function ($query) {
+						$query->has('ajutanam')
+							->orWhereHas('ajuproduksi')
+							->orWhereHas('ajuskl')
+							->orWhereHas('completed');
+					})
+					->with('ajutanam', 'ajuproduksi', 'ajuskl', 'completed')
 					->get();
 
-				$ajucount = $allPengajuan->where('status', '1')->count() > 0;
-				$proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count() > 0;
-				$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count() > 0;
+				$ajuTanam = AjuVerifTanam::whereYear('created_at', $currentYear)->get();
+				$ajuProduksi = AjuVerifProduksi::whereYear('created_at', $currentYear)->get();
+				$ajuSkl = AjuVerifSkl::whereYear('created_at', $currentYear)->get();
+				$completed = Completed::whereYear('created_at', $currentYear)->get();
+				// Menghitung jumlah masing-masing aju
+				$ajuTanamCount = $ajuTanam->where('status', '1')->count();
+				$ajuProduksiCount = $ajuProduksi->where('status', '1')->count();
+				$ajuSklCount = $ajuSkl->where('status', '1')->count();
+
+				// Menjumlahkan hasilnya sebagai ajucount
+				$prosesValues = [2, 3]; // Nilai status yang ingin Anda cari
+
+				$prosesVerifTanam = $ajuTanam->whereIn('status', $prosesValues)->count();
+				$prosesVerifProduksi = $ajuProduksi->whereIn('status', $prosesValues)->count();
+				$prosesVerifSkl = $ajuSkl->whereIn('status', $prosesValues)->count();
+
+				$verifiedTanam = $ajuTanam->where('status', '4')->count();
+				$verifiedProduksi = $ajuProduksi->where('status', '4')->count();
+				$verifiedSkl = $ajuSkl->where('status', '4')->count();
+
+				$proccesscount = $prosesVerifTanam + $prosesVerifProduksi + $prosesVerifSkl;
+				$verifiedcount = $verifiedTanam + $verifiedProduksi + $verifiedSkl;
 				$recomendationcount = $allPengajuan->where('status', '6')->count() > 0;
-				$lunascount = $allPengajuan->where('status', '7')->count() > 0;
+				$lunascount = $completed->count() > 0;
+
+				$ajucount = $ajuTanamCount + $ajuProduksiCount + $ajuSklCount;
+
+				// dd($allPengajuan);
 
 				// $prosenTanam = $total_luastanam / $v_beban_tanam * 100;
 				$prosenTanam = 0; // Initialize the variable with a default value
@@ -135,9 +169,19 @@ class DashboardController extends Controller
 				$prosenproduksi = $realisasi_produksi / $wajib_produksi;
 			}
 
-			$allPengajuan = Pengajuan::whereNotNull('status')
-				->whereYear('created_at', $currentYear)
-				->get(['no_pengajuan', 'no_ijin', 'status', 'onlinestatus', 'onfarmstatus']);
+			// $allPengajuan = Pengajuan::whereNotNull('status')
+			// 	->whereYear('created_at', $currentYear)
+			// 	->get(['no_pengajuan', 'no_ijin', 'status', 'onlinestatus', 'onfarmstatus']);
+
+			$allPengajuan = PullRiph::whereYear('created_at', $currentYear)
+				->where(function ($query) {
+					$query->has('ajutanam')
+						->orWhereHas('ajuproduksi')
+						->orWhereHas('ajuskl')
+						->orWhereHas('completed');
+				})
+				->with('ajutanam', 'ajuproduksi', 'ajuskl', 'completed')
+				->get();
 
 
 			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'prosentanam', 'prosenproduksi', 'currentYear', 'allPengajuan'));
@@ -150,7 +194,7 @@ class DashboardController extends Controller
 			$heading_class = 'fal fa-tachometer';
 
 
-			$periodeTahuns = CommitmentBackdate::all()->groupBy('periodetahun');
+			// $periodeTahuns = CommitmentBackdate::all()->groupBy('periodetahun');
 
 
 			return view('v2.dashboard.data', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns'));
