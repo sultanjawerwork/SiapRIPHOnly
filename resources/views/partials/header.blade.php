@@ -113,138 +113,91 @@
 				</ul>
 				<div class="tab-content tab-notification">
 
-					<div class="tab-pane" id="tab-messages" role="tabpanel">
-						<div class="custom-scroll h-100">
-							<ul class="notification">
-								@foreach ($msgs as $item)
-									<li class="unread">
-										<a href="{{ route('admin.messenger.showMessages', $item['id']) }}"
-											class="d-flex align-items-center">
-											<span class="mr-2">
-												@php($user = \App\Models\User::getUserById($item['sender']))
-												@if (!empty($user[0]->data_user->logo))
-													<img src="{{ Storage::disk('public')->url($user[0]->data_user->logo) }}"
-														class="profile-image rounded-circle" alt="">
-												@else
-													<img src="{{ asset('/img/favicon.png') }}"
-														class="profile-image rounded-circle" alt="">
-												@endif
-											</span>
-											<span class="d-flex flex-column flex-1 ml-1">
-												<span class="name">{{ $user[0]->name }}<span
-														class="badge badge-primary fw-n position-absolute pos-top pos-right mt-1">INBOX</span></span>
-												<span class="msg-a fs-sm">{{ $item['subject'] }}</span>
-												<span class="msg-b fs-xs">{{ $item['content'] }}</span>
-												<span
-													class="fs-nano text-muted mt-1">{{ $item['create_at']->diffForHumans() }}</span>
-											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
-						</div>
-					</div>
-					<div class="tab-pane" id="tab-feeds" role="tabpanel">
-						<div class="custom-scroll h-100">
-							<ul class="notification">
-								@foreach ($getAjuVerifTanam as $item)
-									<li>
-										<a href="{{ route('verification.tanam.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-											<span class="mr-2">
-												@if (!empty($item->data_user->logo))
-													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
-														class="profile-image rounded-circle" alt="">
-												@else
-													<img src="{{ asset('/img/avatars/farmer.png') }}"
-														class="profile-image rounded-circle" alt="">
-												@endif
-											</span>
-											<span class="d-flex flex-column flex-1">
-												<span class="name">{{ $item->datauser->company_name }} <span
-													class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-												<span class="msg-a fs-sm">
-													<span class="badge badge-success">Verifikasi Tanam</span>
-												</span>
-												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-											</span>
-										</a>
-									</li>
-								@endforeach
-								@foreach ($getAjuVerifProduksi as $item)
-									<li>
-										<a href="{{ route('verification.produksi.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-											<span class="mr-2">
-												@if (!empty($item->data_user->logo))
-													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
-														class="profile-image rounded-circle" alt="">
-												@else
-													<img src="{{ asset('/img/avatars/farmer.png') }}"
-														class="profile-image rounded-circle" alt="">
-												@endif
-											</span>
-											<span class="d-flex flex-column flex-1">
-												<span class="name">{{ $item->datauser->company_name }} <span
-													class="badge badge-warning fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-												<span class="msg-a fs-sm ">
-													<span class="badge badge-warning">Verifikasi Produksi</span>
-												</span>
-												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-											</span>
-										</a>
-									</li>
-								@endforeach
-								@foreach ($getAjuVerifSkl as $item)
-									<li>
-										<a href="{{ route('verification.skl.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-											<span class="mr-2">
-												@if (!empty($item->data_user->logo))
-													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
-														class="profile-image rounded-circle" alt="">
-												@else
-													<img src="{{ asset('/img/avatars/farmer.png') }}"
-														class="profile-image rounded-circle" alt="">
-												@endif
-											</span>
-											<span class="d-flex flex-column flex-1">
-												<span class="name">{{ $item->datauser->company_name }} <span
-													class="badge badge-danger fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-												<span class="msg-a fs-sm">
-													<span class="badge badge-danger">Penerbitan SKL</span>
-												</span>
-												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- app user menu -->
-		<div>
-			<a href="#" data-toggle="dropdown" title="{{ Auth::user()->name }}"
-				class="header-icon d-flex align-items-center justify-content-center ml-2">
-				@if (!empty(Auth::user()::find(Auth::user()->id)->data_user->logo))
-					<img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->logo) }}"
-						class="profile-image rounded-circle">
-				@else
-					<img src="{{ asset('/img/favicon.png') }}" class="profile-image rounded-circle"
-						alt="{{ Auth::user()->name }}">
-				@endif
-			</a>
-			<div class="dropdown-menu dropdown-menu-animated dropdown-lg">
-				<div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
-					<div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
-						<span class="mr-2">
-							@if (!empty(Auth::user()::find(Auth::user()->id)->data_user->avatar))
-								<img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->avatar) }}"
-									class="profile-image rounded-circle">
-							@else
-								<img src="{{ asset('/img/avatars/farmer.png') }}"
-									class="profile-image rounded-circle" alt="{{ Auth::user()->name }}">
-							@endif
+                    <div class="tab-pane" id="tab-messages" role="tabpanel">
+                        <div class="custom-scroll h-100">
+                            <ul class="notification">
+                                @foreach ($msgs as $item)
+                                    <li class="unread">
+                                        <a href="{{ route('admin.messenger.showMessages', $item['id']) }}"
+                                            class="d-flex align-items-center">
+                                            <span class="mr-2">
+                                                @php($user = \App\Models\User::getUserById($item['sender']))
+                                                @if (!empty($user[0]->data_user->logo))
+                                                    <img src="{{ Storage::disk('public')->url($user[0]->data_user->logo) }}"
+                                                        class="profile-image rounded-circle" alt="">
+                                                @else
+                                                    <img src="{{ asset('/img/favicon.png') }}"
+                                                        class="profile-image rounded-circle" alt="">
+                                                @endif
+                                            </span>
+                                            <span class="d-flex flex-column flex-1 ml-1">
+                                                <span class="name">{{ $user[0]->name }}<span
+                                                        class="badge badge-primary fw-n position-absolute pos-top pos-right mt-1">INBOX</span></span>
+                                                <span class="msg-a fs-sm">{{ $item['subject'] }}</span>
+                                                <span class="msg-b fs-xs">{{ $item['content'] }}</span>
+                                                <span
+                                                    class="fs-nano text-muted mt-1">{{ $item['create_at']->diffForHumans() }}</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-feeds" role="tabpanel">
+                        <div class="custom-scroll h-100">
+                            <ul class="notification">
+                                @if ($newpengajuan)
+                                    @foreach ($newpengajuan as $pengajuan)
+                                    <li class="unread">
+                                        <a href="{{ route('verification.data.check', [$pengajuan->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+                                            <span class="d-flex flex-column flex-1">
+                                                <span class="name d-flex align-items-center">{{ $pengajuan->datauser->company_name }} <span
+                                                        class="badge badge-success fw-n ml-1">New</span></span>
+                                                <span class="msg-a fs-sm">
+                                                    {{ $pengajuan->no_pengajuan }}
+                                                </span>
+                                                <span class="fs-nano text-muted mt-1">{{ $pengajuan->created_at->diffForHumans() }}</span>
+                                            </span>
+
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div
+                    class="py-2 px-3 bg-faded d-block rounded-bottom text-right border-faded border-bottom-0 border-right-0 border-left-0">
+                    <a href="{{ route('admin.home') }}" class="fs-xs fw-500 ml-auto">Lihat semua</a>
+                </div>
+            </div>
+        </div>
+        <!-- app user menu -->
+        <div>
+            <a href="#" data-toggle="dropdown" title="{{ Auth::user()->name }}"
+                class="header-icon d-flex align-items-center justify-content-center ml-2">
+                @if (!empty(Auth::user()::find(Auth::user()->id)->data_user->logo))
+                    <img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->logo) }}"
+                        class="profile-image rounded-circle">
+                @else
+                    <img src="{{ asset('/img/favicon.png') }}" class="profile-image rounded-circle"
+                        alt="{{ Auth::user()->name }}">
+                @endif
+            </a>
+            <div class="dropdown-menu dropdown-menu-animated dropdown-lg">
+                <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
+                    <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
+                        <span class="mr-2">
+                            @if (!empty(Auth::user()::find(Auth::user()->id)->data_user->avatar))
+                                <img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->avatar) }}"
+                                    class="profile-image rounded-circle">
+                            @else
+                                <img src="{{ asset('/img/avatars/farmer.png') }}"
+                                    class="profile-image rounded-circle" alt="{{ Auth::user()->name }}">
+                            @endif
 
 						</span>
 						<div class="info-card-text">

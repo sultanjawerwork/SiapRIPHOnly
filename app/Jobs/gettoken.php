@@ -37,7 +37,8 @@ class gettoken implements ShouldQueue
             'username' => config('app.simevi_user'),
             'password' => config('app.simevi_pwd')
         ]);
-        Log::debug($response->json());
+        //Log::debug($response->json());
+
         $filepath = 'master/token.json';
         if (Storage::disk('local')->exists($filepath)) 
             Storage::disk('local')->delete($filepath); 
