@@ -107,7 +107,7 @@
 
 					<li class="nav-item">
 						<a class="nav-link px-4 fs-md js-waves-on fw-500" data-toggle="tab" href="#tab-feeds"
-							data-i18n="drpdwn.feeds">Pengajuan</a>
+							data-i18n="drpdwn.feeds">Pengajuan Verifikasi</a>
 					</li>
 					@endif
 				</ul>
