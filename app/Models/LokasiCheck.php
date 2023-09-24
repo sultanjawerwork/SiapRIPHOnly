@@ -33,6 +33,7 @@ class LokasiCheck extends Model
 		'onlinenote',
 		'onlineverif_at',
 		'onlineverif_by',
+		'metode',
 
 		//diisi oleh onfarm verifikator, data geolokasi
 		'latitude',
@@ -48,7 +49,6 @@ class LokasiCheck extends Model
 		'volume_verif',
 		'tgl_timbang',
 
-		'metode',
 		'onfarmstatus',
 		'onfarmnote',
 		'onfarmverif_at',

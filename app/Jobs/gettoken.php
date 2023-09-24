@@ -9,8 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class gettoken implements ShouldQueue
 {
@@ -38,6 +38,7 @@ class gettoken implements ShouldQueue
             'password' => config('app.simevi_pwd')
         ]);
         //Log::debug($response->json());
+
         $filepath = 'master/token.json';
         if (Storage::disk('local')->exists($filepath)) 
             Storage::disk('local')->delete($filepath); 

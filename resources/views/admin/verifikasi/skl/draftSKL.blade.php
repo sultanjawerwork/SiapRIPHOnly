@@ -9,8 +9,8 @@
 	{{-- <button onclick="printPage()" class="btn btn-sm btn-primary btn-sm">
 		<i class="fal fa-print mr-1"></i> Cetak SKL
 	</button> --}}
-	<form action="{{route('verification.skl.recomendations.store', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH terkait?')">
-		<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendations')}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
+	<form action="{{route('verification.skl.recomendation.approve', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH terkait?')">
+		<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendation.show', $verifikasi->id)}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
 		@csrf
 		@method('PUT')
 		<button class="btn btn-sm btn-danger" type="submit">
@@ -111,22 +111,22 @@
 					<dt class="col-sm-9">
 						<dl class="row">
 							<dd class="col-sm-3">Beban</dd>
-							<dt class="col-sm-9">: {{ number_format($commitment->volume_riph * 0.05 / 6, 2, '.', ',') }} ha;</dt>
+							<dt class="col-sm-9">: {{ number_format($commitment->luas_wajib_tanam, 2, '.', ',') }} ha;</dt>
 							<dd class="col-sm-3">Realisasi</dd>
 							<dt class="col-sm-9">: {{ number_format($total_luas, 2, '.', ',') }} ha.</dt>
 							<dd class="col-sm-3">Verifikasi</dd>
-							<dt class="col-sm-9">: {{number_format($pengajuan->luas_verif,2,'.',',')}} ha.</dt>
+							<dt class="col-sm-9">: </dt>
 						</dl>
 					</dt>
 					<dd class="col-sm-3">Wajib Produksi</dd>
 					<dt class="col-sm-9">
 						<dl class="row">
 							<dd class="col-sm-3">Beban</dd>
-							<dt class="col-sm-9">: {{ number_format($commitment->volume_riph * 0.05, 2, '.', ',') }} ton;</dt>
+							<dt class="col-sm-9">: {{ number_format($commitment->volume_produksi, 2, '.', ',') }} ton;</dt>
 							<dd class="col-sm-3">Realisasi</dd>
 							<dt class="col-sm-9">: {{ number_format($total_volume, 2, '.', ',') }} ton.</dt>
 							<dd class="col-sm-3">Verifikasi</dd>
-							<dt class="col-sm-9">: {{number_format($pengajuan->volume_verif,2,'.',',')}} ton.</dt>
+							<dt class="col-sm-9">: </dt>
 						</dl>
 					</dt>
 				</dl>
@@ -179,7 +179,11 @@
 					<dd class="col-sm-5">
 							<span class="mb-5" style="height: 7em">Direktur,</span>
 							<br><br><br>
-								{{-- <img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}" alt="ttd"> --}}
+								@if ($pejabat->dataadmin)
+									@if ($pejabat->dataadmin->sign_img)
+										<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}" alt="ttd">
+									@endif
+								@endif
 							<br>
 							<u><strong>{{$pejabat->dataadmin->nama ?? ''}}</strong></u><br>
 							<span class="mr-1">NIP.</span>{{$pejabat->dataadmin->nip ??''}}

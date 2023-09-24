@@ -22,13 +22,13 @@ class MasterPenangkar extends Model
 	public $fillable = [
 		'npwp',
 		'nama_lembaga',
+		'nama_pimpinan',
+		'hp_pimpinan',
 		'alamat',
 		'provinsi_id',
 		'kabupaten_id',
 		'kecamatan_id',
 		'desa_id',
-		'nama_pimpinan',
-		'hp_pimpinan',
 	];
 
 	protected function serializeDate(DateTimeInterface $date)

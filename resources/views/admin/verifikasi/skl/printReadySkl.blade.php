@@ -36,33 +36,25 @@
 				<img src="{{asset('/img/border.png')}}" width="100%" height="7px">
 			</div>
 		</div>
-		<div class="row mb-5">
+		<div class="row mb-5 fs-xl">
 			<div class="col-sm-6 d-flex">
 				<div class="table-responsive">
 					<table class="table table-clean table-sm align-self-end">
 						<tbody>
 							<tr>
-								<td>
-									<strong>Nomor</strong>
-								</td>
-								<td>
-									<span class="mr-1">: {{$skl->no_skl}}</span>
-								</td>
+								<td>Nomor</td>
+								<td class="text-center" width="1%">:</td>
+								<td class="fw-500">{{$skl->no_skl}}</td>
 							</tr>
 							<tr>
-								<td>
-									<strong>Lampiran</strong>
-								</td>
-								<td>
-									: -
-								</td>
+								<td>Lampiran</td>
+								<td class="text-center" width="1%">:</td>
+								<td> - </td>
 							</tr>
 							<tr>
-								<td>
-									<strong>Hal</strong>
-								</td>
-								<td>
-									: Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
+								<td>Hal</td>
+								<td class="text-center" width="1%">:</td>
+								<td class="fw-500">Keterangan Telah Melaksanakan Wajib Tanam dan Wajib Produksi
 								</td>
 							</tr>
 						</tbody>
@@ -97,7 +89,7 @@
 				</p>
 			</div>
 			<div class="col-12">
-				<dl class="row">
+				{{-- <dl class="row">
 					<dd class="col-sm-3">Nama Perusahaan</dd>
 					<dt class="col-sm-9">: {{$commitment->user->data_user->company_name}}</dt>
 					<dd class="col-sm-3">Nomor RIPH</dd>
@@ -124,39 +116,39 @@
 							<dt class="col-sm-9">: {{number_format($pengajuan->volume_verif,2,'.',',')}} ton.</dt>
 						</dl>
 					</dt>
-				</dl>
-				{{-- <div class="row">
-					<table class="table w-100 table-sm table-bordered table-striped">
+				</dl> --}}
+				<div class="row pl-2">
+					<table class="table table table-sm table-clean w-100">
 						<tbody>
 							<tr>
 								<td width="25%">Nama Perusahaan</td>
-								<th colspan="3">{{$commitment->datauser->company_name}}</th>
+								<td class="text-center" width="1%">:</td>
+								<th>{{$commitment->datauser->company_name}}</th>
 							</tr>
 							<tr>
 								<td>Nomor RIPH</td>
-								<th colspan="3">{{$commitment->no_ijin}}</th>
+								<td class="text-center" width="1%">:</td>
+								<th>{{$commitment->no_ijin}}</th>
 							</tr>
 							<tr>
-								<td></td>
-								<td width="25%" class="text-center">Beban</td>
-								<td width="25%" class="text-center">Realisasi</td>
-								<td width="25%" class="text-center">Terverifikasi</td>
+								<td>Wajib Tanam</td>
+								<td class="text-center" width="1%">:</td>
+								<th>
+									<span class="mr-1">{{ number_format($wajib_tanam, 2, '.', ',') }} hektar,</span>
+									Realisasi: {{ number_format($total_luas, 2, '.', ',') }} hektar.
+								</th>
 							</tr>
 							<tr>
-								<td>Wajib Tanam (ha)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_tanam, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_luas, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($luas_verif, 2,'.',',')}}</th>
-							</tr>
-							<tr>
-								<td>Wajib Produksi (ton)</td>
-								<th class="text-right pr-5">{{ number_format($wajib_produksi, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{ number_format($total_volume, 2, '.', ',') }}</th>
-								<th class="text-right pr-5">{{number_format($volume_verif,2,'.',',')}}</th>
+								<td>Wajib Produksi</td>
+								<td class="text-center" width="1%">:</td>
+								<th>
+									<span class="mr-1">{{ number_format($wajib_produksi, 2, '.', ',') }} ton,</span>
+									Realisasi: {{ number_format($total_volume, 2, '.', ',') }} ton.
+								</th>
 							</tr>
 						</tbody>
 					</table>
-				</div> --}}
+				</div>
 			</div>
 			<div class="col-12">
 				<p class="justify-align-stretch">
@@ -172,12 +164,16 @@
 						{{$QrCode}}
 					</dd>
 					<dd class="col-sm-5">
-							<span class="mb-5" style="height: 7em">Direktur,</span>
+							<span class="mb-5" style="height: 7em">{{$pejabat->jabatan ?? ''}},</span>
 							<br><br><br>
-								{{-- <img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->dataadmin->sign_img) }}" alt="ttd"> --}}
+							@if($pejabat || $pejabat->sign_img)
+								<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->sign_img) }}" alt="ttd">
+							@else
+								ttd.
+							@endif
 							<br>
-							<u><strong>{{$pejabat->dataadmin->nama ?? ''}}</strong></u><br>
-							<span class="mr-1">NIP.</span>{{$pejabat->dataadmin->nip ??''}}
+							<u><strong>{{$pejabat->nama ?? ''}}</strong></u><br>
+							<span class="mr-1">NIP.</span>{{$pejabat->nip ??''}}
 						</div>
 					</dd>
 				</dl>

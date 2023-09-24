@@ -190,7 +190,8 @@ class PksController extends Controller
 		} else {
 			$disabled = true; // input di-disable
 		}
-		return view('admin.pks.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'disabled', 'commitmentId', 'npwpCompany', 'commitment', 'varietass'));
+		return redirect()->back()->with('success', 'Berkas berhasil diunggah.');
+		// return view('admin.pks.edit', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'pks', 'disabled', 'commitmentId', 'npwpCompany', 'commitment', 'varietass'));
 	}
 
 	public function update(Request $request, $id)
@@ -209,7 +210,7 @@ class PksController extends Controller
 		$pks->periode_tanam = $request->input('periode_tanam');
 		if ($request->hasFile('berkas_pks')) {
 			$file = $request->file('berkas_pks');
-			$filename = 'pks_' . $file->getClientOriginalExtension();
+			$filename = 'pks_' . $pks->poktan_id . '.' . $file->getClientOriginalExtension();
 			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
 			$pks->berkas_pks = $filename;
 		}
@@ -239,13 +240,17 @@ class PksController extends Controller
 			->where('poktan_id', $pks->poktan_id)
 			->get();
 
+		$sumLuas = $lokasis->sum('luas_tanam');
+		$sumProduksi = $lokasis->sum('volume');
+		// dd($sumLuas, $sumProduksi);
+
 		if (empty($commitment->status) || $commitment->status == 3 || $commitment->status == 5) {
 			$disabled = false; // input di-enable
 		} else {
 			$disabled = true; // input di-disable
 		}
 
-		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled'));
+		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled', 'sumLuas', 'sumProduksi'));
 	}
 
 	public function saprodi($id)

@@ -12,7 +12,7 @@
 						Informasi<span class="fw-300"><i>Dasar</i></span>
 					</h2>
 					<div class="panel-toolbar">
-						
+
 					</div>
 				</div>
 				<div class="panel-container show">
@@ -84,7 +84,7 @@
 						Data Perjanjian<span class="fw-300"><i>Kerjasama</i></span>
 					</h2>
 					<div class="panel-toolbar">
-						
+
 					</div>
 				</div>
 				<form action=" {{route('admin.task.pks.update', $pks->id)}} " method="POST" enctype="multipart/form-data">
@@ -179,8 +179,8 @@
 											<div class="input-group-prepend">
 												<span class="input-group-text" id="inputGroupPrepend3"><i class="fal fa-ruler"></i></span>
 											</div>
-											<input type="number" class="form-control " name="luas_rencana" id="luas_rencana" 
-												value="{{old('luas_rencana', $pks->luas_rencana)}}" step="0.01" required>
+											<input type="number" class="form-control " name="luas_rencana" id="luas_rencana"
+												value="{{old('luas_rencana', $pks->sum_luaslahan)}}" step="0.01" readonly>
 										</div>
 										<div class="help-block">
 											Jumlah Luas total sesuai dokumen perjanjian.
@@ -199,7 +199,7 @@
 													</option>
 												@endforeach
 											</select>
-											
+
 										</div>
 										<div class="help-block">
 											Varietas ditanam sesuai dokumen perjanjian.

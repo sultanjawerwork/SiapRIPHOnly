@@ -131,8 +131,13 @@
 											<span class="text-muted">Varietas</span>
 											<span class="fw-500">
 												@php
-													$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
-													$nama_varietas = $varietas->nama_varietas;
+													try {
+														$varietas = \App\Models\Varietas::findOrFail($pks->varietas_tanam);
+														$nama_varietas = $varietas->nama_varietas;
+													} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+														// Handle the case where no record is found
+														$nama_varietas = 'tidak ada data';
+													}
 												@endphp
 												{{$nama_varietas}}
 											</span>
@@ -176,15 +181,14 @@
 									@include('partials.globaltoolbar')
 								</div>
 							</div>
-							<form action="{{route('verification.data.pkscheck.update', $pkscheck->id)}}" method="POST" enctype="multipart/form-data">
+							<form action="{{route('verification.tanam.check.pks.update', $pkscheck->id)}}" method="POST" enctype="multipart/form-data">
 								@csrf
 								@method('put')
 								<div class="panel-container show">
 									<div class="panel-content">
-										{{$pkscheck->id}}
+										{{-- {{$pkscheck->id}} --}}
 										<input type="text" name="pks_id" value="{{$pks->id}}" hidden>
 										<input type="text" name="poktan_id" value="{{$pks->poktan_id}}" hidden>
-										<input type="text" name="commitmentcheck_id" value="{{$commitmentcheck->id}}" hidden>
 										<input type="text" name="pengajuan_id" value="{{$verifikasi->id}}" hidden>
 										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
@@ -197,8 +201,8 @@
 											<label for="">Status Pemeriksaan</label>
 											<select type="text" id="status" name="status" class="form-control form-control-sm" required>
 												{{-- <option hidden value="">- pilih status periksa</option> --}}
-												<option value="2" {{ old('status', $pkscheck->status) == '2' ? 'selected' : '' }}>Selesai</option>
-												<option value="3" {{ old('status', $pkscheck->status) == '3' ? 'selected' : '' }}>Perbaikan</option>
+												<option value="Sesuai" {{ old('status', $pkscheck->status) == 'Sesuai' ? 'selected' : '' }}>Sesuai</option>
+												<option value="Tidak Sesuai" {{ old('status', $pkscheck->status) == 'Tidak Sesuai' ? 'selected' : '' }}>Tidak Sesuai</option>
 											</select>
 											<small id="helpId" class="text-muted">Berikan status hasil pemeriksaan.</small>
 										</div>
@@ -210,7 +214,7 @@
 										<div class="input-group">
 											<input type="text" class="form-control form-control-sm" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
 											<div class="input-group-append">
-												<a class="btn btn-sm btn-warning" href="" role="button"><i class="fal fa-times text-align-center mr-1"></i> Batalkan</a>
+												<a class="btn btn-sm btn-warning" href="javascript:void(0);" onclick="navigateBack();"  role="button"><i class="fal fa-times text-align-center mr-1"></i> Batalkan</a>
 											</div>
 											<div class="input-group-append">
 												<button class="btn btn-sm btn-primary" type="submit" onclick="return validateInput()">
@@ -247,4 +251,9 @@
 			}
 		}
 	</script>
+	<script>
+		function navigateBack() {
+			history.go(-1);
+		}
+		</script>
 @endsection

@@ -1,8 +1,4 @@
 // map.js
-
-// 1. create a new map 'myMap' with initial
-// - center: { lat: -2.5489, lng: 118.0149 },
-// - zoom: 5,
 let myMap;
 
 function initMap() {
@@ -57,13 +53,21 @@ function initMap() {
 			//  add a listener for when the marker is clicked, center the map on the marker, and update the input fields
 			google.maps.event.addListener(marker, "click", function () {
 				myMap.setCenter(marker.getPosition());
-				document.getElementById("latitude").value = marker.getPosition().lat();
-				document.getElementById("longitude").value = marker.getPosition().lng();
+				document.getElementById("latitude").value = marker
+					.getPosition()
+					.lat();
+				document.getElementById("longitude").value = marker
+					.getPosition()
+					.lng();
 			});
 			//  add a listener for when the marker is dragged, update the input fields
 			google.maps.event.addListener(marker, "drag", function () {
-				document.getElementById("latitude").value = marker.getPosition().lat();
-				document.getElementById("longitude").value = marker.getPosition().lng();
+				document.getElementById("latitude").value = marker
+					.getPosition()
+					.lat();
+				document.getElementById("longitude").value = marker
+					.getPosition()
+					.lng();
 			});
 		}
 	);
@@ -91,8 +95,12 @@ function initMap() {
 			myMap.setCenter(marker.getPosition());
 		});
 		google.maps.event.addListener(marker, "drag", function () {
-			document.getElementById("latitude").value = marker.getPosition().lat();
-			document.getElementById("longitude").value = marker.getPosition().lng();
+			document.getElementById("latitude").value = marker
+				.getPosition()
+				.lat();
+			document.getElementById("longitude").value = marker
+				.getPosition()
+				.lng();
 		});
 	}
 
@@ -122,17 +130,29 @@ function initMap() {
 				polygon.getPath().getArray()
 			);
 			// calculate and display the area of the polygon
-			var luas = google.maps.geometry.spherical.computeArea(polygon.getPath());
-			document.getElementById("luas_kira").value = (luas / 10000).toFixed(2);
-		});
-		google.maps.event.addListener(polygon.getPath(), "insert_at", function () {
-			document.getElementById("polygon").value = JSON.stringify(
-				polygon.getPath().getArray()
+			var luas = google.maps.geometry.spherical.computeArea(
+				polygon.getPath()
 			);
-			// calculate and display the area of the polygon
-			var luas = google.maps.geometry.spherical.computeArea(polygon.getPath());
-			document.getElementById("luas_kira").value = (luas / 10000).toFixed(2);
+			document.getElementById("luas_kira").value = (luas / 10000).toFixed(
+				2
+			);
 		});
+		google.maps.event.addListener(
+			polygon.getPath(),
+			"insert_at",
+			function () {
+				document.getElementById("polygon").value = JSON.stringify(
+					polygon.getPath().getArray()
+				);
+				// calculate and display the area of the polygon
+				var luas = google.maps.geometry.spherical.computeArea(
+					polygon.getPath()
+				);
+				document.getElementById("luas_kira").value = (
+					luas / 10000
+				).toFixed(2);
+			}
+		);
 	}
 
 	// Part 9 add a listener for when a polygon is completed
@@ -153,21 +173,29 @@ function initMap() {
 				var luas = google.maps.geometry.spherical.computeArea(
 					polygon.getPath()
 				);
-				document.getElementById("luas_kira").value = (luas / 10000).toFixed(2);
+				document.getElementById("luas_kira").value = (
+					luas / 10000
+				).toFixed(2);
 			});
 
 			// add a listener for when the polygon is edited, and update the input field
-			google.maps.event.addListener(polygon.getPath(), "set_at", function () {
-				document.getElementById("polygon").value = JSON.stringify(
-					polygon.getPath().getArray()
-				);
+			google.maps.event.addListener(
+				polygon.getPath(),
+				"set_at",
+				function () {
+					document.getElementById("polygon").value = JSON.stringify(
+						polygon.getPath().getArray()
+					);
 
-				// calculate and display the area of the polygon
-				var luas = google.maps.geometry.spherical.computeArea(
-					polygon.getPath()
-				);
-				document.getElementById("luas_kira").value = (luas / 10000).toFixed(2);
-			});
+					// calculate and display the area of the polygon
+					var luas = google.maps.geometry.spherical.computeArea(
+						polygon.getPath()
+					);
+					document.getElementById("luas_kira").value = (
+						luas / 10000
+					).toFixed(2);
+				}
+			);
 
 			google.maps.event.addListener(
 				polygon.getPath(),
@@ -181,9 +209,9 @@ function initMap() {
 					var luas = google.maps.geometry.spherical.computeArea(
 						polygon.getPath()
 					);
-					document.getElementById("luas_kira").value = (luas / 10000).toFixed(
-						2
-					);
+					document.getElementById("luas_kira").value = (
+						luas / 10000
+					).toFixed(2);
 				}
 			);
 		}

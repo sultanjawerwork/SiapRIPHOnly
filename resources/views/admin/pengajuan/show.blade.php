@@ -10,7 +10,7 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 
-@can('pengajuan_show')
+{{-- @can('pengajuan_show') --}}
 <div class="row">
 	<div class="col-12">
 		<div class="text-center">
@@ -368,7 +368,7 @@
 	</div>
 </div>
 
-@endcan
+{{-- @endcan --}}
 @endsection
 
 @section('scripts')
@@ -381,7 +381,7 @@
 		});
 	});
 </script>
-  
+
 <script>
 	$(document).ready(function() {
 
@@ -394,7 +394,7 @@
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-			
+
 		});
 
 		$('#attchCheck').dataTable(
@@ -602,7 +602,7 @@
 		// get the input value and the current username from the page
 		var inputVal = document.getElementById('validasi').value;
 		var currentUsername = '{{ Auth::user()->username }}';
-		
+
 		// check if the input is not empty and matches the current username
 		if (inputVal !== '' && inputVal === currentUsername) {
 			return true; // allow form submission

@@ -223,6 +223,7 @@ class PullRiphController extends Controller
 			}
 		}
 
-		return back()->with('message', "Sukses menyimpan data RIPH, lihat daftarnya di menu Komitmen ");
+		// return back()->with('message', "Sukses menyimpan data RIPH, lihat daftarnya di menu Komitmen ");
+		return redirect()->route('admin.task.commitment')->with('success', 'Sukses menyimpan data dan dapat Anda lihat pada daftar di bawah ini.');
 	}
 }

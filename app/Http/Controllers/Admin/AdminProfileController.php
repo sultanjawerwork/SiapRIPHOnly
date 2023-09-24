@@ -24,7 +24,7 @@ class AdminProfileController extends Controller
 		$heading_class = 'fa fa-user-tie';
 
 		$user = Auth::user();
-		$data_admin = DataAdministrator::where('user_id', $user->id)->firstorFail();
+		$data_admin = DataAdministrator::where('user_id', $user->id)->first() ?? new DataAdministrator();
 		return view('admin.adminprofile.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'data_admin', 'user'));
 	}
 
@@ -61,56 +61,12 @@ class AdminProfileController extends Controller
 
 		if ($request->hasFile('sign_img')) {
 			$file = $request->file('sign_img');
-			$filename = 'ttd_' . $user->id . $file->getClientOriginalName();
+			$filename = 'ttd_' . $user->id . '.' . $file->getClientOriginalExtension();
 			$file->storeAs('uploads/dataadmin/', $filename, 'public');
 			$dataadmin->sign_img = $filename;
 		}
 		// dd($dataadmin);
 		$dataadmin->save();
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
+		return redirect()->back()->with('success', 'Berhasil menyimpan data Profile Anda.');
 	}
 }
