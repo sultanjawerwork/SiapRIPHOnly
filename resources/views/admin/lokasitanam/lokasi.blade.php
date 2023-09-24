@@ -87,7 +87,7 @@
 										</div>
 										<input id="mapId" name="mapId" placeholder="contoh: 1cwFsptUJ7EdW1IoHxFB_VRHsD10TEJ0" class="form-control" disabled>
 										<div class="input-group-append">
-											
+
 											<button class="btn btn-default waves-effect waves-themed" disabled
 												onclick="link_parser()">Open</button>
 										</div>
@@ -123,7 +123,7 @@
 										</div>
 										<input type="text" value="{{ old('latitude', $anggota->latitude) }}"
 											name="latitude" id="latitude" readonly
-											class="font-weight-bold form-control form-control-sm bg-white" />
+											class="font-weight-bold form-control form-control-sm" />
 									</div>
 									<span class="help-block">Koordinat Lintang lokasi</span>
 								</div>
@@ -134,8 +134,8 @@
 											<span class="input-group-text"><i class="fal fa-map-marker-alt"></i></span>
 										</div>
 										<input type="text" value="{{ old('longitude', $anggota->longitude) }}"
-											name="longitude" id="longitude"
-											class="font-weight-bold form-control form-control-sm bg-white" />
+											name="longitude" id="longitude" readonly
+											class="font-weight-bold form-control form-control-sm" />
 									</div>
 									<span class="help-block">Koordinat Bujur lokasi</span>
 								</div>
@@ -147,7 +147,7 @@
 										</div>
 										<input type="text" value="{{ old('altitude', $anggota->altitude) }}"
 											name="altitude" id="altitude"
-											class="font-weight-bold form-control form-control-sm bg-white" />
+											class="font-weight-bold form-control form-control-sm" />
 									</div>
 									<span class="help-block">Ketinggian lokasi lahan (rerata ketinggain dpl)</span>
 								</div>
@@ -159,7 +159,7 @@
 										</div>
 										<input type="text" value="{{ old('polygon', $anggota->polygon) }}"
 										name="polygon" id="polygon" readonly
-										class="font-weight-bold form-control form-control-sm bg-white" />
+										class="font-weight-bold form-control form-control-sm" />
 									</div>
 									<span class="help-block">Kurva bidang lahan yang ditanami.</span>
 								</div>
@@ -171,140 +171,9 @@
 										</div>
 										<input type="text" value="{{ old('luas_kira', $anggota->luas_kira) }}"
 											name="luas_kira" id="luas_kira" readonly
-											class="font-weight-bold form-control form-control-sm bg-white" />
+											class="font-weight-bold form-control form-control-sm" />
 									</div>
 									<span class="help-block">Luas bidang diukur oleh sistem.</span>
-								</div>
-							</div>
-						</div><hr>
-						<div class="row card-group">
-							<div class="col-md-6">
-								<div class="card" style="width:100%">
-									<div class="card-header fw-500">Realisasi Wajib Tanam</div>
-									@if($anggota->tanam_pict)
-										<img src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggota->tanam_pict) }}" class="card-img-top" alt="Foto Tanam">
-									@else
-										<img src="{{ url('img/posts_img/1619.svg') }}" class="card-img-top" alt="Foto Tanam">
-									@endif
-									<div class="card-body">
-										<div class="row">
-											<div class="form-group col-md-12">
-												<label class="form-label" for="tgl_tanam">Tanggal Tanam<sup class="text-danger"> *</sup></label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="fal fa-calendar-day"></i></span>
-													</div>
-													<input type="date" value="{{ old('tgl_tanam', $anggota->tgl_tanam) }}"
-														name="tgl_tanam" id="tgl_tanam"
-														class="font-weight-bold form-control form-control-sm bg-white" />
-												</div>
-												<span class="help-block">Tanggal mulai penanaman.</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label" for="luas_tanam">Luas Bidang (ha)<sup class="text-danger"> *</sup></label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="fal fa-ruler-combined"></i></span>
-													</div>
-													<input type="number" value="{{ old('luas_tanam', $anggota->luas_tanam) }}"
-														name="luas_tanam" id="luas_tanam" step="0.01"
-														class="font-weight-bold form-control form-control-sm bg-white" />
-												</div>
-												<span class="help-block">Luas area lahan diukur mandiri.</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label">Dokumen Pendukung<span class="text-danger">*</span></label>
-												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="tanam_doc" id="tanam_doc" value="{{ old('tanam_doc', $anggota->tanam_doc) }}">
-													<label class="custom-file-label" for="tanam_doc">{{ $anggota->tanam_doc ? $anggota->tanam_doc : 'Pilih berkas...' }}</label>
-												</div>
-												<span class="help-block">
-													@if($anggota->tanam_doc)
-														<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggota->tanam_doc) }}" target="_blank">
-															Lihat Dokumen Pendukung diunggah.
-														</a>
-													@else
-														Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.
-													@endif
-												</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label">Dokumentasi Tanam<sup class="text-danger"> *</sup></label>
-												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" id="customControlValidation7"
-														name="tanam_pict" id="tanam_pict">
-													<label class="custom-file-label" for="tanam_pict">{{ $anggota->tanam_pict ? $anggota->tanam_pict : 'Pilih berkas...' }}</label>
-												</div>
-												<span class="help-block">Unggah Dokumentasi Tanam. Ekstensi jpg ukuran maks 4mb.</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="card" style="width:100%">
-									<div class="card-header fw-500">Realisasi Wajib Produksi</div>
-									@if($anggota->tanam_pict)
-										<img src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggota->panen_pict) }}" class="card-img-top" alt="Foto Tanam">
-									@else
-										<img src="{{ url('img/posts_img/1619.svg') }}" class="card-img-top" alt="Foto Tanam">
-									@endif
-									<div class="card-body">
-										<div class="row">
-											<div class="form-group col-md-12">
-												<label class="form-label" for="tgl_panen">Tanggal Panen<sup class="text-danger"> *</sup></label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="fal fa-calendar-day"></i></span>
-													</div>
-													<input type="date" value="{{ old('tgl_panen', $anggota->tgl_panen) }}"
-														name="tgl_panen" id="tgl_panen"
-														class="font-weight-bold form-control form-control-sm bg-white" />
-												</div>
-												<span class="help-block">Tanggal awal dilakukan panen.</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label" for="luas_tanam">Volume Produksi (ton)<sup class="text-danger"> *</sup></label>
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text"><i class="fal fa-ruler-combined"></i></span>
-													</div>
-													<input type="number" value="{{ old('volume', $anggota->volume) }}"
-														name="volume" id="volume" step="0.01"
-														class="font-weight-bold form-control form-control-sm bg-white" />
-												</div>
-												<span class="help-block">Luas area lahan diukur mandiri.</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label">Dokumen Pendukung<sup class="text-danger"> *</sup></label>
-												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" id="customControlValidation7"
-														value="{{ old('panen_doc', $anggota->panen_doc) }}"
-														name="panen_doc" id="panen_doc">
-													<label class="custom-file-label" for="panen_doc">{{ $anggota->panen_doc ? $anggota->panen_doc : 'Pilih berkas...' }}</label>
-												</div>
-												<span class="help-block">
-													@if($anggota->panen_doc)
-														<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggota->panen_doc) }}" target="_blank">
-															Lihat Dokumen Pendukung diunggah.
-														</a>
-													@else
-														Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.
-													@endif
-												</span>
-											</div>
-											<div class="form-group col-md-12">
-												<label class="form-label">Dokumentasi Produksi<sup class="text-danger"> *</sup></label>
-												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" id="customControlValidation7"
-														value="{{ old('panen_pict', $anggota->panen_pict) }}"
-														name="panen_pict" id="panen_pict">
-														<label class="custom-file-label" for="panen_pict">{{ $anggota->panen_pict ? $anggota->panen_pict : 'Pilih berkas...' }}</label>
-												</div>
-												<span class="help-block">Unggah Dokumentasi Panen. Ekstensi jpg ukuran maks 4mb.</span>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -319,7 +188,7 @@
 										class="btn btn-sm btn-info" role="button">
 										<i class="fa fa-door-open mr-1"></i>Kembali
 									</a>
-									
+
 									<button class="btn btn-sm btn-primary" role="button" type="submit"
 										@if ($disabled) disabled @endif>
 										<i class="fa fa-save mr-1"></i>Simpan

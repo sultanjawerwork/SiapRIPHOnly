@@ -34,6 +34,7 @@ class Pks extends Model
 		'kabupaten_id',
 		'kecamatan_id',
 		'kelurahan_id',
+		'status',
 		'berkas_pks',
 	];
 
@@ -50,5 +51,10 @@ class Pks extends Model
 	public function commitment()
 	{
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function pkscheck()
+	{
+		return $this->hasMany(PksCheck::class, 'pks_id');
 	}
 }

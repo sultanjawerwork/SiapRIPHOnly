@@ -16,7 +16,8 @@ function initMap() {
 		var url =
 			periodetahun === "all"
 				? "http://127.0.0.1:8000/api/getAPIAnggotaMitraAll/"
-				: "http://127.0.0.1:8000/api/getAPIAnggotaMitraByYear/" + periodetahun;
+				: "http://127.0.0.1:8000/api/getAPIAnggotaMitraByYear/" +
+				  periodetahun;
 
 		// Make an AJAX request to retrieve marker data and polygons
 		$.ajax({
@@ -157,35 +158,76 @@ function showMarkerDetails(marker) {
 			$("#markerModal #company").text(company);
 
 			//set the <a> element for panen
-			$("#markerModal #panenPictName").html(
-				`<a href="/storage/uploads/${npwp}/${periodetahun}/${panenPict}" target="_blank">${panenPictName}</a>`
-			);
-			$("#markerModal #panenPict").attr(
-				"src",
-				"/storage/uploads/" + npwp + "/" + periodetahun + "/" + panenPict
-			);
-			$("#markerModal #panenPict")
-				.parent("a")
-				.attr(
-					"href",
-					"/storage/uploads/" + npwp + "/" + periodetahun + "/" + panenPict
+			if (panenPict) {
+				$("#markerModal #panenPictName").html(
+					`<a href="/storage/uploads/${npwp}/${periodetahun}/${panenPict}" target="_blank">${panenPictName}</a>`
 				);
+				$("#markerModal #panenPict").attr(
+					"src",
+					"/storage/uploads/" +
+						npwp +
+						"/" +
+						periodetahun +
+						"/" +
+						panenPict
+				);
+
+				$("#markerModal #panenPict")
+					.parent("a")
+					.attr(
+						"href",
+						"/storage/uploads/" +
+							npwp +
+							"/" +
+							periodetahun +
+							"/" +
+							panenPict
+					);
+			} else {
+				// Jika panenPict tidak ada, sembunyikan elemen gambar dan tautannya
+				$("#markerModal #panenPictName").html("");
+				$("#markerModal #panenPict").attr("src", "").hide();
+				$("#markerModal #panenPict")
+					.parent("a")
+					.attr("href", "")
+					.hide();
+			}
 
 			//set the <a> element for tanam
-			$("#markerModal #tanamPictName").html(
-				`<a href="/storage/uploads/${npwp}/${periodetahun}/${tanamPict}" target="_blank">${tanamPictName}</a>`
-			);
-			$("#markerModal #tanamPict").attr(
-				"src",
-				"/storage/uploads/" + npwp + "/" + periodetahun + "/" + tanamPict
-			);
-
-			$("#markerModal #tanamPict")
-				.parent("a")
-				.attr(
-					"href",
-					"/storage/uploads/" + npwp + "/" + periodetahun + "/" + tanamPict
+			if (tanamPict) {
+				$("#markerModal #tanamPictName").html(
+					`<a href="/storage/uploads/${npwp}/${periodetahun}/${tanamPict}" target="_blank">${tanamPictName}</a>`
 				);
+				$("#markerModal #tanamPict").attr(
+					"src",
+					"/storage/uploads/" +
+						npwp +
+						"/" +
+						periodetahun +
+						"/" +
+						tanamPict
+				);
+
+				$("#markerModal #tanamPict")
+					.parent("a")
+					.attr(
+						"href",
+						"/storage/uploads/" +
+							npwp +
+							"/" +
+							periodetahun +
+							"/" +
+							tanamPict
+					);
+			} else {
+				// Jika tanamPict tidak ada, sembunyikan elemen gambar dan tautannya
+				$("#markerModal #tanamPictName").html("");
+				$("#markerModal #tanamPict").attr("src", "").hide();
+				$("#markerModal #tanamPict")
+					.parent("a")
+					.attr("href", "")
+					.hide();
+			}
 
 			$("#markerModal #nama_petani").text(nama_petani);
 			$("#markerModal #nama_kelompok").text(nama_kelompok);

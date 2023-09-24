@@ -1,16 +1,36 @@
 @extends('layouts.admin')
 @section('content')
-
 	@can('landing_access')
 		@php($unreadmsg = \App\Models\QaTopic::unreadCount())
 		@php($msgs = \App\Models\QaTopic::unreadMsg())
+
 		@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
-			@php($cntpengajuan = \App\Models\Pengajuan::newPengajuanCount())
-			@php($newpengajuan = \App\Models\Pengajuan::getNewPengajuan())
+			{{-- tanam --}}
+			@php($cntAjuVerifTanam = \App\Models\AjuVerifTanam::newPengajuanCount())
+			@php($getAjuVerifTanam = \App\Models\AjuVerifTanam::getNewPengajuan())
+			{{-- produksi --}}
+			@php($cntAjuVerifProduksi = \App\Models\AjuVerifProduksi::newPengajuanCount())
+			@php($getAjuVerifProduksi = \App\Models\AjuVerifProduksi::getNewPengajuan())
+			{{-- skl --}}
+			@php($cntAjuVerifSkl = \App\Models\AjuVerifSkl::newPengajuanCount())
+			@php($getAjuVerifSkl = \App\Models\AjuVerifSkl::getNewPengajuan())
+
+			{{-- rekomendasi --}}
+			@php($cntRecomendations = \App\Models\Skl::newPengajuanCount())
+			@php($getRecomendations = \App\Models\Skl::getNewPengajuan())
+
 		@else
-			@php($cntpengajuan = 0)
-			@php($newpengajuan = null)
+			@php($cntAjuVerifTanam = 0)
+			@php($cntAjuVerifTanam = null)
+			@php($cntAjuVerifProduksi = 0)
+			@php($getAjuVerifProduksi = null)
+			@php($cntAjuVerifSkl = 0)
+			@php($getAjuVerifSkl = null)
+			@php($cntRecomendations = 0)
+			@php($getRecomendations = null)
 		@endif
+
+
 		<div class="row mb-5">
 			<div class="col text-center">
 				<h1 class="hidden-md-down">Selamat Datang di Simethris,</h1><br>
@@ -21,7 +41,34 @@
 				</h4>
 			</div>
 		</div>
+		@if (Auth::user()->roles[0]->title == 'Pejabat')
+			@if (!$profile || (!$profile->jabatan || !$profile->nip || !$profile->sign_img))
+				<div class="row mb-5">
+					<div class="col-md">
+					<div class="alert alert-danger">
+						<div class="d-flex flex-start w-100">
+							<div class="mr-2 hidden-md-down">
+								<span class="icon-stack icon-stack-lg">
+									<i class="base base-7 icon-stack-3x opacity-100 color-error-500"></i>
+									<i class="base base-7 icon-stack-2x opacity-100 color-error-300 fa-flip-vertical"></i>
+									<i class="fas fa-exclamation icon-stack-1x opacity-100 color-white"></i>
+								</span>
+							</div>
+							<div class="d-flex flex-fill">
+								<div class="flex-fill">
+									<span class="h5">Perhatian</span>
+									<p>
+										Anda belum melengkapi data Profile Pejabat. Silahkan lengkapi <a href="{{ route('admin.profile.pejabat') }}" class="fw-500 text-uppercase">di sini</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
 
+					</div>
+				</div>
+			@endif
+		@endif
 		<!-- Page Content -->
 		<div class="row">
 			<div class="col-lg-7">
@@ -153,49 +200,191 @@
 						</div>
 					</div>
 				</div>
-				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
-				<div id="panel-2" class="panel">
-					<div class="panel-hdr">
-						<h2>
-							<i class="subheader-icon fal fa-ballot-check mr-1"></i><span class="color-info-700 fw-700"
-								style="text-transform:uppercase">Pengajuan Baru</span>
-						</h2>
-						<div class="panel-toolbar">
-							<a href="{{ route('verification.data') }}" data-toggle="tooltip" title
-								data-original-title="Lihat semua pengajuan" class="btn btn-xs btn-warning waves-effect waves-themed"
-								type="button" href="/">Lihat</a>
+				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
+					<div id="panel-2" class="panel">
+						<div class="panel-hdr">
+							<h2>
+								<i class="subheader-icon fal fa-ballot-check mr-1"></i>
+								<span class="text-info fw-700 text-uppercase">
+									Pengajuan Verifikasi
+								</span>
+							</h2>
+							<div class="panel-toolbar">
+								@if ($cntAjuVerifTanam > 0 || $cntAjuVerifProduksi > 0 || $cntAjuVerifSkl > 0)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Anda memiliki {{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}} Pengajuan Verifikasi">
+										{{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}}
+									</a>
+								@else
+								@endif
+							</div>
 						</div>
-					</div>
-					<div class="panel-container show">
-						<div class="panel-content p-0">
-							<ul class="notification">
-								@foreach ($newpengajuan as $item)
-									<li>
-										<a href="{{ route('verification.data.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-											<span class="mr-2">
-												@if (!empty($item->data_user->logo))
-													<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
-														class="profile-image rounded-circle" alt="">
-												@else
-													<img src="{{ asset('/img/avatars/farmer.png') }}"
-														class="profile-image rounded-circle" alt="">
-												@endif
-											</span>
-											<span class="d-flex flex-column flex-1">
-												<span class="name">{{ $item->datauser->company_name }} <span
-													class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-												<span class="msg-a fs-sm">
-													{{ $item->no_pengajuan }}
+						<div class="panel-container collapse">
+							<div class="panel-content p-0">
+								<ul class="notification">
+									@foreach ($getAjuVerifTanam as $item)
+										<li>
+											<a href="{{ route('verification.tanam.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													@if (!empty($item->data_user->logo))
+														<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+															class="profile-image rounded-circle" alt="">
+													@else
+														<img src="{{ asset('/img/avatars/farmer.png') }}"
+															class="profile-image rounded-circle" alt="">
+													@endif
 												</span>
-												<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-											</span>
-										</a>
-									</li>
-								@endforeach
-							</ul>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->datauser->company_name }} <span
+														class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm">
+														<span class="badge badge-success">Verifikasi Tanam</span>
+													</span>
+													<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+												</span>
+											</a>
+										</li>
+									@endforeach
+									@foreach ($getAjuVerifProduksi as $item)
+										<li>
+											<a href="{{ route('verification.produksi.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													@if (!empty($item->data_user->logo))
+														<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+															class="profile-image rounded-circle" alt="">
+													@else
+														<img src="{{ asset('/img/avatars/farmer.png') }}"
+															class="profile-image rounded-circle" alt="">
+													@endif
+												</span>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->datauser->company_name }} <span
+														class="badge badge-warning fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm ">
+														<span class="badge badge-warning">Verifikasi Produksi</span>
+													</span>
+													<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+												</span>
+											</a>
+										</li>
+									@endforeach
+									@foreach ($getAjuVerifSkl as $item)
+										<li>
+											<a href="{{ route('verification.skl.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													@if (!empty($item->data_user->logo))
+														<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+															class="profile-image rounded-circle" alt="">
+													@else
+														<img src="{{ asset('/img/avatars/farmer.png') }}"
+															class="profile-image rounded-circle" alt="">
+													@endif
+												</span>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->datauser->company_name }} <span
+														class="badge badge-danger fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm">
+														<span class="badge badge-danger">Penerbitan SKL</span>
+													</span>
+													<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+												</span>
+											</a>
+										</li>
+									@endforeach
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
+				@endif
+				@if (Auth::user()->roles[0]->title == 'Pejabat')
+					<div id="panel-3" class="panel">
+						<div class="panel-hdr">
+							<h2>
+								<i class="subheader-icon fal fa-file-certificate mr-1"></i>
+								<span class="text-primary fw-700 text-uppercase">
+									Rekomendasi Penerbitan SKL
+								</span>
+							</h2>
+							<div class="panel-toolbar">
+								@if ($cntRecomendations > 0)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntRecomendations}} Rekomendasi Penerbitan yang perlu Anda tindaklanjuti.">
+										{{$cntRecomendations}}
+									</a>
+								@else
+								@endif
+							</div>
+						</div>
+						<div class="panel-container collapse">
+							<div class="panel-content p-0">
+								<ul class="notification">
+									@foreach ($getRecomendations as $item)
+										<li>
+											<a href="{{ route('verification.skl.recomendation.show', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													@if (!empty($item->data_user->logo))
+														<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+															class="profile-image rounded-circle" alt="">
+													@else
+														<img src="{{ asset('/img/avatars/farmer.png') }}"
+															class="profile-image rounded-circle" alt="">
+													@endif
+												</span>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->datauser->company_name }} <span
+														class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm">
+														<span class="badge badge-success">Direkomendasikan</span>
+													</span>
+													<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+												</span>
+											</a>
+										</li>
+									@endforeach
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="panel-4" class="panel">
+						<div class="panel-hdr">
+							<h2>
+								<i class="subheader-icon fal fa-ballot-check mr-1"></i>
+								<span class="text-info fw-700 text-uppercase">
+									Pengajuan Verifikasi
+								</span>
+							</h2>
+							<div class="panel-toolbar">
+								@if ($cntAjuVerifTanam > 0 || $cntAjuVerifProduksi > 0 || $cntAjuVerifSkl > 0)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}} Pengajuan Verifikasi yang perlu ditindaklanjut oleh para Verifikator.">
+										{{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}}
+									</a>
+								@else
+								@endif
+							</div>
+						</div>
+						<div class="panel-container collapse">
+							<div class="panel-content p-0">
+								<ul class="notification">
+									<li>
+										<span class="d-flex align-items-center justify-content-between show-child-on-hover">
+											<span>Tanam</span>
+											<span>{{$cntAjuVerifTanam}} ajuan</span>
+										</span>
+									</li>
+									<li>
+										<span class="d-flex align-items-center justify-content-between show-child-on-hover">
+											<span>Produksi</span>
+											<span>{{$cntAjuVerifProduksi}} ajuan</span>
+										</span>
+									</li>
+									<li>
+										<span class="d-flex align-items-center justify-content-between show-child-on-hover">
+											<span>Penerbitan SKL</span>
+											<span>{{$cntAjuVerifSkl}} ajuan</span>
+										</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				@endif
 			</div>
 		</div>

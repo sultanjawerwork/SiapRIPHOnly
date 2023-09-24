@@ -38,12 +38,17 @@ class Lokasi extends Model
 		'panen_doc',
 		'panen_pict',
 		'status',
-		'varietas',
+		'varietas', //unused
 	];
 
 	public function masteranggota()
 	{
 		return $this->belongsTo(MasterAnggota::class, 'anggota_id', 'anggota_id');
+	}
+
+	public function masterkelompok()
+	{
+		return $this->belongsTo(MasterPoktan::class, 'poktan_id');
 	}
 
 	public function pullriph()

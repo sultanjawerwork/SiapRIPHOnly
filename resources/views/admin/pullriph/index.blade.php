@@ -8,7 +8,7 @@
 	<div class="col-12">
 		<form  id="dataForm" action="{{ route('admin.task.pull.store') }}" method="POST" enctype="multipart/form-data">
 		@csrf
-		
+
 			<div class="text-center">
 				<i class="fa fa-sync-alt fa-3x text-primary"></i>
 				<h2>Penyelarasan Data SiapRIPH</h2>
@@ -41,7 +41,7 @@
 								</footer>
 							</div>
 						</div>
-						
+
 						<a class="btn btn-sm btn-primary btn-block text-white"  id="btnexec" >
 							<i class="fas fa-sync"></i> Tarik Sekarang
 						</a>
@@ -51,7 +51,7 @@
 
 			<div class="row justify-content-center collapse" id="collapseData">
 				<div class="col-md-8 order-md-2 mb-4">
-					<p class="lead">Berikut adalah data yang diperoleh dari aplikasi RIPH ONLINE berdasarkan informasi yang Anda berikan.</p>
+					<p class="lead">Berikut adalah data yang diperoleh dari aplikasi SIAP RIPH berdasarkan informasi yang Anda berikan.</p>
 						<h5 class="d-flex justify-content-between align-items-center mb-3">
 							<span class="text-muted">RESULT</span>
 							<span>
@@ -98,7 +98,7 @@
 											<h6>Nomor RIPH </h6>
 											<span id="no_ijin"  class="fw-500 position-absolute pos-top pos-right mt-1">
 											</span>
-											<input type="hidden" id="h-no_ijin" name="no_ijin" >	
+											<input type="hidden" id="h-no_ijin" name="no_ijin" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -113,9 +113,9 @@
 										<span class="name">
 											<h6>Periode/Tahun Anggaran </h6>
 											<span id="periodetahun"  class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-periodetahun"name="periodetahun" >	
+											<input type="hidden" id="h-periodetahun"name="periodetahun" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -130,9 +130,9 @@
 										<span class="name">
 											<h6>Tanggal Terbit </h6>
 											<span id="tgl_ijin" class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-tgl_ijin" name="tgl_ijin" >	
+											<input type="hidden" id="h-tgl_ijin" name="tgl_ijin" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -147,9 +147,9 @@
 										<span class="name">
 											<h6>Tanggal berakhir </h6>
 											<span id="tgl_akhir" class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-tgl_akhir" name="tgl_akhir" >	
+											<input type="hidden" id="h-tgl_akhir" name="tgl_akhir" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -164,9 +164,9 @@
 										<span class="name">
 											<h6>Komoditas </h6>
 											<span id="no_hs" class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-no_hs" name="no_hs" >	
+											<input type="hidden" id="h-no_hs" name="no_hs" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -181,9 +181,9 @@
 										<span class="name">
 											<h6>Volume Import (ton)</h6>
 											<span id="volume_riph"  class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-volume_riph" name="volume_riph" >	
+											<input type="hidden" id="h-volume_riph" name="volume_riph" >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -198,9 +198,9 @@
 										<span class="name">
 											<h6>Volume Wajib Produksi (ton)</h6>
 											<span id="volume_produksi" class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-volume_produksi" name="volume_produksi"  >	
+											<input type="hidden" id="h-volume_produksi" name="volume_produksi"  >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -215,9 +215,9 @@
 										<span class="name">
 											<h6>Luas Wajib Tanam (ha)</h6>
 											<span id="luas_wajib_tanam"  class="fw-500 position-absolute pos-top pos-right mt-1">
-												
+
 											</span>
-											<input type="hidden" id="h-luas_wajib_tanam" name="luas_wajib_tanam"  >	
+											<input type="hidden" id="h-luas_wajib_tanam" name="luas_wajib_tanam"  >
 
 										</span>
 										<footer class="blockquote-footer text-left">
@@ -247,12 +247,12 @@
 								<label class="custom-control-label text-danger" for="responsible">Bertanggungjawab sepenuhnya atas informasi dan data yang kami sampaikan.</label>
 							</div>
 						</div>
-						
+
 						<a id="submitbtn" class="btn btn-sm btn-primary text-white" role="button" type="submit">
 							<i class="fal fa-upload text-align-center  mr-1"></i> Simpan untuk pelaporan
 						</a>
 						<hr class="mb-4">
-					
+
 				</div>
 			</div>
 		</form>
@@ -397,7 +397,7 @@
 				return false;
 			}
 			$("#dataForm").submit();
-			
+
 		});
 	});
 </script>
