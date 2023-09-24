@@ -21,8 +21,8 @@ class DataAdministrator extends Model
 	protected $fillable = [
 		'user_id',
 		'nama',
-		'nip',
 		'jabatan',
+		'nip',
 		'sign_img',
 		'digital_sign',
 		'status',

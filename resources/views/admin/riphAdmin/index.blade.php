@@ -18,12 +18,12 @@
 					<div class="row">
 						<div class="form-group col-md-4">
 							<label for="">Jumlah RIPH/Perusahaan</label>
-							<input type="text" name="importir" id="jumlahPT" class="form-control" placeholder="" aria-describedby="helpId">
+							<input type="text" name="importir" id="jumlahPT" class="form-control" placeholder="" aria-describedby="helpId" readonly>
 							<small id="helpId" class="text-muted">Help text</small>
 						</div>
 						<div class="form-group col-md-4">
 							<label for="">Total Import</label>
-							<input type="text" name="volumeRIPH" id="volumeRIPH" class="form-control" placeholder="" aria-describedby="helpId">
+							<input type="text" name="volumeRIPH" id="volumeRIPH" class="form-control" placeholder="" aria-describedby="helpId" readonly>
 							<small id="helpId" class="text-muted">Help text</small>
 						</div>
 						<div class="form-group col-md-4">
@@ -73,10 +73,10 @@
 										<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" href="/admin/riphAdmin/{{ $riph->id }}/edit" data-toggle="tooltip" data-offset="0,10" data-original-title="Ubah Data"><i class="fal fa-edit"></i></a>
 										<a class="btn btn-xs btn-danger btn-icon waves-effect waves-themed" href="" data-toggle="tooltip" data-offset="0,10" data-original-title="Hapus Data"><i class="fal fa-trash"></i></a>
 									</td>
-								</tr>    
+								</tr>
 							@endforeach
-							
-							
+
+
 						</tbody>
 					</table>
 				</div>
@@ -155,7 +155,7 @@
 			minViewMode: 'years',
 			autoclose: true
 		});
-	
+
 	  // Handle the button click event
 		$('#fetchDataButton').click(function() {
 			var tahun = $('#periodetahun').val();
@@ -170,7 +170,7 @@
 			fetchData(tahun);
 		});
 
-	
+
 	  // Fetch data from Laravel controller using AJAX
 	  function fetchData(tahun) {
 		$.ajax({

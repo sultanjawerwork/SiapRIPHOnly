@@ -7,7 +7,7 @@
 	<h1 class="subheader-title">
 		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Realisasi & Verifikasi</span>
 	</h1>
-	
+
 	<div class="subheader-block d-lg-flex align-items-center  d-print-none d-block">
 		<div class="d-inline-flex flex-column justify-content-center ">
 			<div class="form-group row">
@@ -57,7 +57,7 @@
 		<div id="totalProduksi" class="p-3 bg-danger-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah Realisasi Produksi yang telah dilaporkan oleh pelaku usaha hingga saat ini.">
-					<span id="total_saprodi"></span>
+					<span id="total_saprodi">0</span>
 					<small class="m-0 l-h-n">Total bantuan sarana produksi.</small>
 				</h3>
 			</div>
@@ -80,7 +80,7 @@
 					<div class="row align-items-center mb-3">
 						<div class="col-lg-5 col-sm-6 align-self-center text-center">
 							<div class="c-chart-wrapper">
-								<div 
+								<div
 									id = "naschartTanam"
 									class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center"
 									data-percent="{{ number_format($prosentanam, 2, ',', '.') }}"
@@ -199,17 +199,22 @@
 				<div class="panel-content">
 					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
-							<th>Nomor Pengajuan</th>
 							<th>Nomor RIPH</th>
 							<th>Pengajuan</th>
 							<th>Tahap 1</th>
 							<th>Tahap 2</th>
 							<th>Tahap 3</th>
+							<th>Lunas</th>
 						</thead>
 						<tbody>
 							@foreach ($allPengajuan as $pengajuan)
 								<tr>
-									<td>{{$pengajuan->no_pengajuan}}</td>
+									@php
+										$statusAjutanam = $pengajuan->ajutanam->status ?? null;
+										$statusAjuproduksi = $pengajuan->ajuproduksi->status ?? null;
+										$statusAjuskl = $pengajuan->ajuskl->status ?? null;
+										$statusCompleted = $pengajuan->completed->url ?? null;
+									@endphp
 									<td>{{$pengajuan->no_ijin}}</td>
 									<td class="text-center">
 										@if ($pengajuan->status)
@@ -217,26 +222,29 @@
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->onlinestatus === '2')
+										@if ($statusAjutanam === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onlinestatus === '3')
+										@elseif ($statusAjutanam === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->onfarmstatus === '4')
+										@if ($statusAjuproduksi === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
-										@elseif ($pengajuan->onfarmstatus === '5')
+										@elseif ($statusAjuproduksi === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($pengajuan->status === '6')
-											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
-										@elseif ($pengajuan->status === '7')
+										@if ($statusAjuskl === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($statusAjuskl === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($statusCompleted)
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
-										@elseif ($pengajuan->status === '8')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 								</tr>
@@ -250,29 +258,21 @@
 								<ul>
 									<li>Tahap 1: Pemeriksaan Data</li>
 									<li>Tahap 2: Pemeriksaan Lapangan</li>
-									<li>Tahap 3: Rekomendasi dan Penerbitan SKL</li>
+									<li>Tahap 3: Pengajuan Ket. Lunas</li>
+									<li>Lunas: Penerbitan SKL</li>
 								</ul>
 							</div>
-							<div class="col-md-4 col-sm-6">
+							<div class="col-md-8 col-sm-6">
 								<ul>
 									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-success mr-1">
 											<i class="fa fa-check-circle"></i>
 										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
 									</li>
-									<li>
+									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-danger mr-1">
 											<i class="fa fa-ban"></i>
 										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
-									</li>
-								</ul>
-							</div>
-							<div class="col-md-4 col-sm-6">
-								<ul>
-									<li class="mb-1">
-										<span class="btn btn-icon btn-xs btn-info mr-1">
-											<i class="fa fa-file-signature"></i>
-										</span> : Rekomendasi penerbitan SKL.</span>.
 									</li>
 									<li>
 										<span class="btn btn-icon btn-xs btn-success mr-1">
@@ -339,20 +339,20 @@
 		});
 
 		// Create the "Status" select element and add the options
-		var selectStatus = $('<select>')
-			.attr('id', 'selectverifprogressStatus')
-			.addClass('custom-select custom-select-sm col-3 mr-2')
-			.on('change', function() {
-			var status = $(this).val();
-			table.column(6).search(status).draw();
-			});
+		// var selectStatus = $('<select>')
+		// 	.attr('id', 'selectverifprogressStatus')
+		// 	.addClass('custom-select custom-select-sm col-3 mr-2')
+		// 	.on('change', function() {
+		// 	var status = $(this).val();
+		// 	table.column(6).search(status).draw();
+		// 	});
 
-		$('<option>').val('').text('Semua Status').appendTo(selectStatus);
-		$('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
-		$('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
+		// $('<option>').val('').text('Semua Status').appendTo(selectStatus);
+		// $('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
+		// $('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
 
-		// Add the select elements before the first datatable button in the second table
-		$('#verifprogress_wrapper .dt-buttons').before(selectStatus);
+		// // Add the select elements before the first datatable button in the second table
+		// $('#verifprogress_wrapper .dt-buttons').before(selectStatus);
 	});
 </script>
 <script>
@@ -374,7 +374,7 @@
 				$('#volumeImport').text(formatNumber(data.volumeImport));
 				$('#count_poktan').text(formatNumber(data.count_poktan));
 				$('#count_anggota').text(formatNumber(data.count_anggota));
-				
+
 				$('#wajib_tanam').text(formatdecimals(data.wajib_tanam));
 				$('#wajib_produksi').text(formatdecimals(data.wajib_produksi));
 				$('#total_luastanam').text(formatdecimals(data.total_luastanam));
@@ -422,7 +422,7 @@
 								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
 							}
 						});
-					
+
 					var dataCell = $('<td class="text-center"></td>').html(function() {
 						if (!verifikasi.status) {
 							return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
@@ -458,7 +458,7 @@
 					row.append(nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
 					tableBody.append(row);
 				});
-				
+
 			});
 
 			function formatNumber(number) {

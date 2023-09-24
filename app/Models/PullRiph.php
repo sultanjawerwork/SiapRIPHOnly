@@ -66,6 +66,11 @@ class PullRiph extends Model
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
 
+	public function userDocs()
+	{
+		return $this->belongsTo(UserDocs::class, 'commitment_id');
+	}
+
 	public function penangkar_riph()
 	{
 		return $this->hasMany(PenangkarRiph::class, 'no_ijin', 'no_ijin');
@@ -81,18 +86,40 @@ class PullRiph extends Model
 		return $this->hasMany(Lokasi::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function commitmentcheck()
+	public function ajutanam()
 	{
-		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
+		return $this->hasOne(AjuVerifTanam::class, 'no_ijin', 'no_ijin');
 	}
+
+	public function ajuproduksi()
+	{
+		return $this->hasOne(AjuVerifProduksi::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function ajuskl()
+	{
+		return $this->hasOne(AjuVerifSkl::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function skl()
+	{
+		return $this->hasOne(Skl::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function completed()
+	{
+		return $this->hasOne(Completed::class, 'no_ijin', 'no_ijin');
+	}
+
+	//unused
 
 	public function pengajuan()
 	{
 		return $this->hasMany(Pengajuan::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function skl()
+	public function commitmentcheck()
 	{
-		return $this->hasOne(PullRiph::class, 'no_ijin', 'no_ijin');
+		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
 	}
 }

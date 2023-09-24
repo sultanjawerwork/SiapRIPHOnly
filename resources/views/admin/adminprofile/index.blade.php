@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 @include('partials.subheader')
+@include('partials.sysalert')
 <div class="row">
 	<div class="col-12">
 		<div id="panel-1" class="panel panel-lock show" data-panel-sortable data-panel-close data-panel-collapsed>
@@ -50,26 +51,21 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-4 col-md-5">
+
 								<div class="form-group">
-									<label class="form-label" for="sign_img">Scan Tandatangan</label>
-									<div class="input-group">
-										<div class="custom-file">
-											<input type="file" class="custom-file-input {{ $errors->has('sign_img') ? 'is-invalid' : '' }}" id="sign_img" name="sign_img" aria-describedby="sign_img" value="{{ old('sign_img', $data_admin->sign_img ?? '') }}" required>
-											<label class="custom-file-label" for="sign_img">
-												@if($data_admin->sign_img)
-													{{$data_admin->sign_img}}
-												@else
-												Pilih ttd...
-												@endif
-											</label>
-										</div>
+									<label class="">Scan Tandatangan<sup class="text-danger"> *</sup></label>
+									<div class="custom-file input-group">
+										<input type="file" class="custom-file-input" name="sign_img" id="sign_img" value="{{ old('sign_img', optional($data_admin)->sign_img) }}">
+										<label class="custom-file-label" for="sign_img">{{ old('sign_img', $data_admin ? $data_admin->sign_img : 'Pilih berkas') }}</label>
 									</div>
-									@if($errors->has('sign_img'))
-										<div class="invalid-feedback">
-											{{ $errors->first('sign_img') }}
-										</div>
+									@if ($data_admin->sign_img)
+										<a href="#" class="help-block" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/dataadmin/'.$data_admin->sign_img) }}">
+											<i class="fas fa-search mr-1"></i>
+											Lihat Nota Dinas.
+										</a>
+									@else
+										<span class="help-block">Unggah hasil pindah tandatangan Anda<span class="text-danger">(wajib)</span></span>
 									@endif
-									<span class="help-block">Unggah hasil pindah tandatangan Anda</span>
 								</div>
 							</div>
 							<div class="col-lg-8 col-md-7">
@@ -102,7 +98,35 @@
 		</div>
 	</div>
 </div>
+{{-- modal view doc --}}
+<div class="modal fade" id="viewDocs" tabindex="-1" role="dialog" aria-labelledby="document" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					Berkas <span class="fw-300"><i>Tandatangan </i></span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<img src="" width="100%"  frameborder="0">
+			</div>
+		</div>
+	</div>
+</div>
 
 
-
+@endsection
+@section('scripts')
+	@parent
+	<script>
+		$(document).ready(function() {
+			$('#viewDocs').on('shown.bs.modal', function (e) {
+				var docUrl = $(e.relatedTarget).data('doc');
+				$('img').attr('src', docUrl);
+			});
+		});
+	</script>
 @endsection

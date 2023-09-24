@@ -366,8 +366,7 @@
 									<form action="{{ route('admin.task.commitment.review.submit', $commitment->id) }}" method="POST" enctype="multipart/form-data">
 										@csrf
 										<div class="input-group-append">
-											<button class="btn btn-sm btn-primary" type="submit" onclick="return validateInput()"
-												@if ($disabled) disabled @endif>
+											<button class="btn btn-sm btn-primary" type="submit" onclick="return validateInput()">
 												<i class="fas fa-upload text-align-center mr-1"></i> Ajukan
 											</button>
 										</div>
@@ -414,7 +413,7 @@
 		});
 	});
 </script>
-  
+
 <script>
 	$(document).ready(function() {
 
@@ -427,7 +426,7 @@
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-			
+
 		});
 
 		$('#attchCheck').dataTable(
@@ -635,7 +634,7 @@
 		// get the input value and the current username from the page
 		var inputVal = document.getElementById('validasi').value;
 		var currentUsername = '{{ Auth::user()->username }}';
-		
+
 		// check if the input is not empty and matches the current username
 		if (inputVal !== '' && inputVal === currentUsername) {
 			return true; // allow form submission

@@ -17,9 +17,9 @@
 							Jalan AUP No. 3 Pasar Minggu - Jakarta Selatan 12520
 						</h6>
 						<h6 class="keep-print-font l-h-n m-0 text-center fs-sm">
-								<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
-								<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
-								<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
+							<span class="keep-print-font mr-2">TELP/FAX (021) 780665 - 7817611 |</span>
+							<span class="keep-print-font mr-2">EMAIL: ditsayurobat@pertanian.go.id |</span>
+							<span class="keep-print-font">WEBSITE http://ditsayur.hortikultura.pertanian.go.id</span>
 						</h6>
 					</div>
 				</div>
