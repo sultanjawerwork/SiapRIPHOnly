@@ -9,29 +9,36 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Completed extends Model
 {
-    use HasFactory, SoftDeletes, Auditable;
+	use HasFactory, SoftDeletes, Auditable;
 
-    public $table = 'completeds';
+	public $table = 'completeds';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
+	protected $dates = [
+		'created_at',
+		'updated_at',
+		'deleted_at',
+	];
 
-    protected $fillable = [
-        'periode',
-        'no_ijin',
-        'npwp',
-        'tgl_terbit',
-        'luas_tanam',
-        'volume',
-        'status',
-        'url',
-    ];
+	protected $fillable = [
+		'no_skl',
+		'periodetahun',
+		'no_ijin',
+		'npwp',
+		'published_date',
+		'luas_tanam',
+		'volume',
+		'status',
+		'skl_upload',
+		'url',
+	];
 
-    public function datauser()
-    {
-        return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
-    }
+	public function datauser()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
+
+	public function commitment()
+	{
+		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
+	}
 }

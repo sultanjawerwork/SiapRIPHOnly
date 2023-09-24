@@ -24,6 +24,7 @@ class Skl extends Model
 		'no_skl',
 		'npwp',
 		'no_ijin',
+		'submit_by',
 		'published_date',
 		'qrcode',
 		'nota_attch',
@@ -33,12 +34,42 @@ class Skl extends Model
 
 	public function NewRecomendation(): int
 	{
-		return self::whereNull('published_date')->count();
+		return self::whereNull('approved_by')->count();
 	}
 
+	public static function newPengajuanCount(): int
+	{
+		return self::whereNull('approved_by')->count();
+	}
+
+	public function NewRequest(): int
+	{
+		return self::whereNull('approved_by')->count();
+	}
+
+	public static function getNewPengajuan()
+	{
+		return self::whereNull('approved_by')->get();
+	}
+
+	//baru disetujui
+	public static function newApprovedCount(): int
+	{
+		return self::whereNotNull('approved_by')
+			->whereNull('published_date')->count();
+	}
+
+	public static function getNewApproved()
+	{
+		return self::whereNotNull('approved_by')
+			->whereNull('published_date')->get();
+	}
+
+
+	//relationship
 	public function pengajuan()
 	{
-		return $this->belongsTo(Pengajuan::class, 'pengajuan_id', 'id');
+		return $this->belongsTo(AjuVerifSkl::class, 'pengajuan_id', 'id');
 	}
 
 	public function datauser()

@@ -15,11 +15,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class UserSklController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
 	public function index()
 	{
 		$module_name = 'SKL';
@@ -33,11 +28,6 @@ class UserSklController extends Controller
 
 		return view('admin.skluser.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skls'));
 	}
-
-	/**
-	 * Display SKL print untuk user.
-	 *
-	 */
 
 	public function show($id)
 	{
@@ -79,8 +69,6 @@ class UserSklController extends Controller
 
 		return view('admin.verifikasi.skl.skl', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'luas_verif', 'volume_verif', 'total_luas', 'total_volume'));
 	}
-
-
 
 	public function oldindex()
 	{

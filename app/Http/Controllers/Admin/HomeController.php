@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\DataAdministrator;
 use Illuminate\Foundation\Inspiring;
 use App\Models\Post;
 use App\Models\User;
@@ -23,7 +24,7 @@ class HomeController extends Controller
 		//     $heading_class = 'fal fa-ballot-check';
 		//     return view('admin.landing.indexdirjen', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 
-		// } 
+		// }
 		// if (($roleaccess==2)||($roleaccess==3))
 		// {
 		$posts = Post::all();
@@ -41,7 +42,12 @@ class HomeController extends Controller
 				->get();
 		else
 			$posts = Post::orderBy('created_at', 'desc')->limit(5)->get();
-		return view('admin.landing.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'quote', 'posts', 'user', 'users'));
+
+		// if (Auth::user()->roles[0]->title == 'Pejabat') {
+		$me = Auth::user();
+		$profile = DataAdministrator::where('user_id', $me->id)->first() ?? new DataAdministrator();
+		// }
+		return view('admin.landing.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'quote', 'posts', 'user', 'users', 'profile'));
 		// }
 	}
 }

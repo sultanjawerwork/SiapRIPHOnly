@@ -87,7 +87,7 @@
 									<small id="helpId" class="text-muted">Volume wajib produksi yang wajib direalisasikan</small>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
@@ -364,7 +364,7 @@
 										Form Laporan Akhir. (.jpg / .pdf).
 										@endif
 									</span>
-								</div> 
+								</div>
 							</div>
 						</div>
 					</div>

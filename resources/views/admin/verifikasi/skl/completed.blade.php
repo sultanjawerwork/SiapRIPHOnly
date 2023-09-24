@@ -13,12 +13,12 @@
 								<table id="completeds" class="table table-sm table-bordered table-hover table-striped w-100">
 									<thead>
 										<tr>
+											<th>No SKL</th>
 											@if (Auth::user()->roleaccess === 1)
 												<th>Perusahaan</th>
 											@endif
 											<th>Periode </th>
 											<th>Nomor RIPH</th>
-											<th>No SKL</th>
 											<th>Tanggal Terbit</th>
 											<th>Tanggal diunggah</th>
 											<th>Tindakan</th>
@@ -27,18 +27,18 @@
 									<tbody>
 										@foreach ($completeds as $completed)
 											<tr>
+												<td>{{$completed->no_skl}}</td>
 												@if (Auth::user()->roleaccess === 1)
 													<td>{{$completed->datauser->company_name}}</td>
 												@endif
 												<td>{{$completed->periodetahun}}</td>
 												<td>{{$completed->no_ijin}}</td>
-												<td>{{$completed->no_skl}}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->published_date)) }}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->created_at)) }}</td>
 												<td class="text-center d-flex justify-content-center">
 													{{-- @can('old_skl_show') --}}
 														{{-- @if (Auth::user()->roles[0]->title === 'User') --}}
-															<a href="{{$completed->skl_upload}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL">
+															<a href="{{$completed->url}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL">
 																<i class="fal fa-file-certificate"></i>
 															</a>
 														{{-- @endif --}}
