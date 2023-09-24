@@ -14,8 +14,8 @@ return [
     */
 
     'name' => env('APP_NAME', 'Smartadmin'),
-    'simevi_url' => 'https://simevi.rebrandz.xyz/api/',
-    // 'simevi_url' => 'http://simevi.test/api/',
+    // 'simevi_url' => 'https://simevi.rebrandz.xyz/api/',
+    'simevi_url' => 'http://simevi.test/api/',
     'simevi_user' => 'admin',
     'simevi_pwd' => 'password',
     /*
