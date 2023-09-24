@@ -76,8 +76,6 @@
 		</div> --}}
 
 		<div>
-
-
 			<a href="#" class="header-icon" data-toggle="dropdown"
 				title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin')
 				, {{ $cntpengajuan }} pengajuan baru @elseif (Auth::user()->roles[0]->title == 'Pejabat'), {{$cntRecomendations}} @endif">
@@ -144,6 +142,7 @@
 							</ul>
 						</div>
 					</div>
+					@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Pejabat' || Auth::user()->roles[0]->title == 'Verifikator')
 					<div class="tab-pane" id="tab-feeds" role="tabpanel">
 						<div class="custom-scroll h-100">
 							<ul class="notification">
@@ -219,6 +218,7 @@
 							</ul>
 						</div>
 					</div>
+					@endif
 				</div>
 			</div>
 		</div>
