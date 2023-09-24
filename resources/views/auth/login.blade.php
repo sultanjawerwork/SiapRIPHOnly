@@ -46,13 +46,13 @@
 	</head>
 
 	<body class="mod-bg-1 mod-nav-link footer-function-fixed nav-function-minify nav-function-fixed">
-		
+
 		<!-- BEGIN Page Wrapper -->
 		<div class="page-wrapper">
 			<div class="page-inner">
-			
+
 				<div class="page-content-wrapper">
-					
+
 					<!-- BEGIN Page Content -->
 					<!-- the #js-page-content id is needed for some plugins to initialize -->
 					<main id="js-page-content" role="main" class="page-content">
@@ -80,7 +80,8 @@
 							<div class="col-md-12 order-md-2 mb-4">
 								<div class="row justify-content-center text-center">
 									<div class="card border m-auto m-lg-2" style="max-width: 18rem;">
-										<img src="img/card-backgrounds/cover-kementan.jpg" class="card-img-top" alt="...">
+										{{-- <img src="img/card-backgrounds/cover-kementan.jpg" class="card-img-top" alt="..."> --}}
+										<i class="fal fa-user-crown fa-8x mt-5"></i>
 										<div class="card-body">
 											<h5 class="card-title fw-500">Administrator & Verifikator</h5>
 											<p class="card-text text-left">Klik tombol di bawah jika Role Anda adalah Administrator atau Verifikator.</p>
@@ -102,9 +103,10 @@
 										</div>
 									</div> --}}
 									<div class="card border m-auto m-lg-2" style="max-width: 18rem;">
-										<img src="img/card-backgrounds/cover-v3.jpg" class="card-img-top" alt="...">
+										<i class="fal fa-user-tie fa-8x mt-5"></i>
+										{{-- <img src="img/card-backgrounds/cover-v3.jpg" class="card-img-top" alt="..."> --}}
 										<div class="card-body">
-											<h5 class="card-title fw-500">Simethris versi 3.0</h5>
+											<h5 class="card-title fw-500">Pelaku Usaha</h5>
 											<p class="card-text text-left">Jika Anda ingin melaporkan Realisasi Wajib Tanam-Produksi untuk RIPH periode Tahun 2022 dan setelahnya.</p>
 
 										</div>
@@ -117,7 +119,7 @@
 							</div>
 						</div>
 						{{-- login1 --}}
-						
+
 						<div class="modal fade" id="login1" tabindex="-1" role="dialog" style="display: none;" aria-modal="true">
 							<div class="modal-dialog modal-dialog-centered" role="document">
 								<div class="modal-content">
@@ -127,10 +129,10 @@
 										</button>
 									</div>
 									<div class="modal-body">
-										
+
 										<form id="js-login" novalidate="" method="POST" action="{{ route('login') }}">
 											@csrf
-											<input id="roleaccess" name="roleaccess" type="hidden" value=""/> 
+											<input id="roleaccess" name="roleaccess" type="hidden" value=""/>
 											<div class="form-group">
 												<label class="form-label" for="username">Username</label>
 												<div class="input-group" data-toggle="tooltip" title data-original-title="Your Username" data-title="Nama Pengguna (username)" data-intro="Type your username here" data-step="3">
@@ -139,7 +141,7 @@
 															<span class="fal fa-user"></span>
 														</div>
 													</div>
-													
+
 													<input id="username" name="username" type="text" class="form-control form-control-md {{ $errors->has('username') ? ' is-invalid' : '' }}" required autocomplete="{{ trans('global.login_username') }}" autofocus placeholder="{{ trans('global.login_username') }}" value="{{ old('username', null) }}" />
 													@if($errors->has('username'))
 													<div class="invalid-feedback">
@@ -180,7 +182,7 @@
 													<button id="js-login-btn" type="submit" class="btn btn-block btn-info btn-xm">{{ trans('global.login') }}</button>
 												</div>
 											</div>
-											
+
 											<div class="row no-gutters">
 												{{-- <div class="text-center">Belum memiliki akun?</div> --}}
 												<div class="col-lg-12 pl-lg-1 my-2">
@@ -209,7 +211,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 
 		<!-- BEGIN Page Settings -->
 		@include('partials.pagesettings')
@@ -217,7 +219,7 @@
 		<!-- end page wrapper -->
 
 		<!-- base vendor bundle:
-				DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations 
+				DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations
 					+ pace.js (recommended)
 					+ jquery.js (core)
 					+ jquery-ui-cust.js (core)
@@ -259,21 +261,21 @@
 		{{-- <script type="text/javascript">
 				/* Activate smart panels */
 				$('#js-page-content').smartPanel();
-				
+
 			</script> --}}
 		<script>
 			$(document).ready(function () {
 				@if ($errors->any())
-					
+
 					$('#login1').modal('show');
-					document.querySelector('#roleaccess').value = {{ $errors->first('roleaccess') }}; 
+					document.querySelector('#roleaccess').value = {{ $errors->first('roleaccess') }};
 				@endif
-					
+
 			})
-				
+
 			const togglePassword = document.querySelector('#togglePassword');
 			const password = document.querySelector('#password');
-			
+
 			togglePassword.addEventListener('click', function (e) {
 				// toggle the type attribute
 				const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -286,24 +288,24 @@
 					this.classList.remove('fa-eye-slash');
 					this.classList.add('fa-eye');
 				}
-			
+
 			});
 
 
 			function loginClick(role_access) {
-				const roleaccess = document.querySelector('#roleaccess'); 
-				const regbut = document.querySelector('#regbutton'); 
-				roleaccess.value = role_access;  
+				const roleaccess = document.querySelector('#roleaccess');
+				const regbut = document.querySelector('#regbutton');
+				roleaccess.value = role_access;
 				if (role_access==1){
 					$("#regbutton").hide();
 				} else if (role_access==2){
 					$("#regbutton").show();
-					regbut.href = 'http://riph.pertanian.go.id/';    
+					regbut.href = 'http://riph.pertanian.go.id/';
 				} else {
 					$("#regbutton").show();
-					regbut.href = "{{ route('register') }}"; 
+					regbut.href = "{{ route('register') }}";
 				}
-				
+
 			}
 		</script>
 	</body>
