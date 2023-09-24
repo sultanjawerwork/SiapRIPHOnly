@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-
 	@can('landing_access')
 		@php($unreadmsg = \App\Models\QaTopic::unreadCount())
 		@php($msgs = \App\Models\QaTopic::unreadMsg())
