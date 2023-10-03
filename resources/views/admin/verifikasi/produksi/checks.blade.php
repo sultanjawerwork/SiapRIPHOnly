@@ -222,7 +222,7 @@ td {
 																Surat Pengajuan Verifikasi Tanam
 															</a>
 														@else
-															<span>Surat Pengajuan Verifikasi Produksi</span>
+															<span>Surat Pengajuan Verifikasi Tanam</span>
 														@endif
 													</td>
 													<td class="text-center">
