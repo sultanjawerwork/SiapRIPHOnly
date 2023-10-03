@@ -86,7 +86,7 @@ class VerifProduksiController extends Controller
 			->pluck('nama_kelompok', 'poktan_id');
 		// dd($poktans);
 		$lokasis = collect();
-		foreach ($pkschecks as $pkscheck) {
+		foreach ($pkss as $pkscheck) {
 			$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
 				->where('no_ijin', $verifikasi->no_ijin)
 				->get();
@@ -100,7 +100,7 @@ class VerifProduksiController extends Controller
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 
-		return view('admin.verifikasi.produksi.checks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkschecks', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'verifTanam', 'userDocs', 'noIjin'));
+		return view('admin.verifikasi.produksi.checks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'lokasichecks', 'pkss', 'poktans', 'lokasis', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'verifTanam', 'userDocs', 'noIjin'));
 	}
 
 	public function checkBerkas(Request $request, $id)
