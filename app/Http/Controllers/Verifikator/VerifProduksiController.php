@@ -65,18 +65,18 @@ class VerifProduksiController extends Controller
 		$verifTanam = AjuVerifTanam::where('no_ijin', $verifikasi->no_ijin)->first();
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
 		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
-		$pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
+		// $pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
 		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
 
 		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
-			->with(['pkscheck' => function ($query) use ($id) {
-				$query->where('pengajuan_id', $id);
-			}])
+			// ->with(['pkscheck' => function ($query) use ($id) {
+			// 	$query->where('pengajuan_id', $id);
+			// }])
 			->get();
 
-		$pkss->each(function ($pks) {
-			$pks->pksCheck = $pks->pkscheck->isNotEmpty() ? $pks->pkscheck->first() : null;
-		});
+		// $pkss->each(function ($pks) {
+		// 	$pks->pksCheck = $pks->pkscheck->isNotEmpty() ? $pks->pkscheck->first() : null;
+		// });
 
 		$poktanIds = Pks::where('no_ijin', $verifikasi->no_ijin)->pluck('poktan_id'); // Retrieve the poktan_id values
 
