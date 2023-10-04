@@ -53,8 +53,8 @@ class Pks extends Model
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
 
-	public function pkscheck()
-	{
-		return $this->hasMany(PksCheck::class, 'pks_id');
-	}
+	// public function pkscheck()
+	// {
+	// 	return $this->hasMany(PksCheck::class, 'pks_id');
+	// }
 }

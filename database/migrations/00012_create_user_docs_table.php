@@ -58,6 +58,7 @@ return new class extends Migration
 
 			// dokumen ajuan skl
 			$table->string('spskl')->nullable(); //surat pengajuan verifikasi produksi
+			$table->string('spsklcheck')->nullable(); //hasil periksa
 			$table->bigInteger('spsklcheck_by')->nullable();
 			$table->date('spsklverif_at')->nullable();
 
