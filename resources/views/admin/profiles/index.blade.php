@@ -11,7 +11,7 @@
 <div class="panel" >
     <div class="panel-hdr">
         <h2>
-            
+
         </h2>
         <div class="panel-toolbar">
             @include('partials.globaltoolbar')
@@ -23,7 +23,7 @@
             <div class="panel-content">
                 <div class="row">
                     <div class="col-md-12">
-                    
+
                         {{-- <input type="hidden" id="token" name="token" value="{{ $access_token }}"> --}}
                         <div class="row">
                             <div class="col-md-12">
@@ -32,7 +32,7 @@
                                         <h2>
                                             Informasi Biodata <span class="fw-300"></span>
                                         </h2>
-                                        
+
                                     </div>
                                     <div class="panel-container show">
                                         <div class="panel-content">
@@ -66,7 +66,7 @@
                                         <h2>
                                             Informasi Perusahaan <span class="fw-300"></span>
                                         </h2>
-                                        
+
                                     </div>
                                     <div class="panel-container show row">
                                         <div class="col-md-3">
@@ -74,8 +74,8 @@
                                                 <div class="panel-content">
                                                     <div class="d-flex flex-column align-items-center justify-content-center">
                                                         <div class="d-flex flex-column align-items-center justify-content-center">
-							
-                                                            <img id="imgavatar" src="{{ asset(($data_user->avatar ? 'storage/'.$data_user->avatar : 'img/avatars/user.png')) }}" class="img-thumbnail rounded-circle shadow-2" alt="" style="width: 90px; height: 90px">
+
+                                                            <img id="imgavatar" src="{{ asset(optional($data_user)->avatar ? 'storage/'.$data_user->avatar : 'img/avatars/user.png') }}" class="img-thumbnail rounded-circle shadow-2" alt="" style="width: 90px; height: 90px">
                                                             <h5 class="mb-0 fw-700 text-center mt-3 mb-3">
                                                                 Foto Anda
                                                             </h5>
@@ -90,11 +90,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="panel-content">
                                                     <div class="d-flex flex-column align-items-center justify-content-center">
                                                         <div class="d-flex flex-column align-items-center justify-content-center">
-                                                            <img id="imglogo" src="{{ asset(($data_user->logo ? 'storage/'.$data_user->logo : 'img/avatars/farmer.png')) }}" class="img-thumbnail rounded-circle shadow-2" alt="" style="width: 90px; height: 90px">
+                                                            <img id="imglogo" src="{{ asset(optional($data_user)->logo ? 'storage/'.$data_user->logo : 'img/avatars/farmer.png') }}" class="img-thumbnail rounded-circle shadow-2" alt="" style="width: 90px; height: 90px">
                                                             <h5 class="mb-0 fw-700 text-center mt-3 mb-3">
                                                                 Logo Perusahaan
                                                             </h5>
@@ -163,12 +163,12 @@
                                                                 <optgroup label="Provinsi">
                                                                     @if (!empty($provinsi['data'] ))
                                                                     @foreach ($provinsi['data'] as $data )
-                                                                        <option value="{{ $data['kd_prop'] }}" 
+                                                                        <option value="{{ $data['kd_prop'] }}"
                                                                         @if ( ($data_user) &&
                                                                             ($data_user->provinsi == $data['kd_prop'])
-                                                                            ) selected 
+                                                                            ) selected
                                                                         @endif>
-                                                                        {{ $data['nm_prop'] }}</option>    
+                                                                        {{ $data['nm_prop'] }}</option>
                                                                     @endforeach
                                                                     @endif
                                                                 </optgroup>
@@ -182,9 +182,9 @@
                                                                     <option value="{{ $data['kd_kab'] }}"
                                                                     @if (
                                                                         $data_user->kabupaten == $data['kd_kab']
-                                                                        ) selected 
+                                                                        ) selected
                                                                     @endif>
-                                                                    {{ $data['nama_kab'] }}</option>    
+                                                                    {{ $data['nama_kab'] }}</option>
                                                                 @endforeach
                                                                 @endif
                                                             </select>
@@ -199,9 +199,9 @@
                                                                     <option value="{{ $data['kd_kec'] }}"
                                                                     @if (
                                                                         $data_user->kecamatan == $data['kd_kec']
-                                                                        ) selected 
+                                                                        ) selected
                                                                     @endif>
-                                                                    {{ $data['nm_kec'] }}</option>    
+                                                                    {{ $data['nm_kec'] }}</option>
                                                                 @endforeach
                                                                 @endif
                                                             </select>
@@ -214,9 +214,9 @@
                                                                     <option value="{{ $data['kd_desa'] }}"
                                                                     @if (
                                                                         $data_user->desa == $data['kd_desa']
-                                                                        ) selected 
+                                                                        ) selected
                                                                     @endif>
-                                                                    {{ $data['nm_desa'] }}</option>    
+                                                                    {{ $data['nm_desa'] }}</option>
                                                                 @endforeach
                                                                 @endif
                                                             </select>
@@ -244,7 +244,7 @@
                                         <h2>
                                             Berkas-berkas <span class="fw-300"></span>
                                         </h2>
-                                        
+
                                     </div>
                                     <div class="panel-container show">
                                         <div class="panel-content">
@@ -266,7 +266,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -281,7 +281,7 @@
         </form>
     </div>
 </div>
-        
+
 
 @endsection
 
@@ -313,7 +313,7 @@
                     },
                     ktp: {
                         required: true,
-                        minlength: 16 
+                        minlength: 16
                     },
                     company_name: {
                         required: true
@@ -362,14 +362,14 @@
                         required: true,
                         minlength: 6
                     },
-                    
+
                     dataok: {
                         required: true
-                        
+
                     },
                     terms: {
                         required: true
-                        
+
                     }
                 },
                 messages:{
@@ -395,7 +395,7 @@
                     company_name:
                     {
                         required:"Nama perusahaan harus diisi"
-                        
+
                     },
                     pic_name:
                     {
@@ -443,17 +443,17 @@
                         required: "Password belum dikonfirmmasi",
                         minlength: "minimal {0} karakter"
                     },
-                    
+
                     dataok: {
                         required: "!"
                     },
                     terms: {
                         required: "!"
-                        
+
                     }
                 }
             });
-            
+
             $('#province').on('change', function() {
                 var province_id =$(this).val();
                 $.ajax({
@@ -464,9 +464,9 @@
                         $('#kabupaten').find('option').remove().end();
                         $('#kecamatan').find('option').remove().end();
                         $('#desa').find('option').remove().end();
-                        
+
                         for (var i = 0; i < data.data.length; i++){
-                            
+
                             $('#kabupaten')
                             .find('option')
                             .end()
@@ -521,8 +521,8 @@
                     },
                 });
             });
-            
-            
+
+
             $(".select2-prov").select2({
                 placeholder: "Select Province"
             });
@@ -537,12 +537,12 @@
             });
 
 
-            
+
         });
-           
+
     </script>
 
-    
+
     <script>
             function readURL(input, id) {
                 if (input.files && input.files[0]) {
@@ -561,12 +561,12 @@
                                 .width(90)
                                 .height(90);
                         }
-                        
+
                     };
 
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-        
+
     </script>
 @endsection

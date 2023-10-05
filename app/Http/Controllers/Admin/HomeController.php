@@ -47,6 +47,7 @@ class HomeController extends Controller
 		$me = Auth::user();
 		$profile = DataAdministrator::where('user_id', $me->id)->first() ?? new DataAdministrator();
 		// }
+
 		return view('admin.landing.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'quote', 'posts', 'user', 'users', 'profile'));
 		// }
 	}
