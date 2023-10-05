@@ -71,8 +71,8 @@
 		@endif
 		<!-- Page Content -->
 		<div class="row">
-			<div class="col-lg-7">
-				<div id="panel-1" class="panel">
+			<div class="col-lg-6">
+				{{-- <div id="panel-1" class="panel">
 					<div class="panel-hdr">
 						<h2>
 							<i class="subheader-icon fal fa-rss mr-1 text-muted"></i>
@@ -132,9 +132,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="col-lg-5">
+				</div> --}}
 				<div id="panel-2" class="panel">
 					<div class="panel-hdr">
 						<h2>
@@ -200,6 +198,8 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="col-lg-6">
 				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
 					<div id="panel-2" class="panel">
 						<div class="panel-hdr">

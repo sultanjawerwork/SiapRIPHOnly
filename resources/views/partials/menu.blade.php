@@ -422,7 +422,7 @@
 			@can('feedmsg_access')
 				<li class="nav-title">BERITA & PESAN</li>
 				@can('feeds_access')
-					<li class="{{ request()->is('admin/posts*')
+					{{-- <li class="{{ request()->is('admin/posts*')
 						|| request()->is('admin/categories*') ? 'active open' : '' }}">
 						<a href="#" title="Artikel/Berita"
 							data-filter-tags="artikel berita informasi">
@@ -449,7 +449,7 @@
 							</li>
 							@endcan
 						</ul>
-					</li>
+					</li> --}}
 				@endcan
 				@can('messenger_access')
 					@php($unread = \App\Models\QaTopic::unreadCount())
