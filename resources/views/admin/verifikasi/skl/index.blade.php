@@ -25,7 +25,6 @@
 									@foreach ($verifikasis as $verifikasi)
 										<tr>
 											<td class="text-center">{{$verifikasi->commitment->periodetahun}}</td>
-											{{-- <td>{{$verifikasi->no_pengajuan}}</td> --}}
 											<td>{{$verifikasi->datauser->company_name}}</td>
 											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
@@ -70,8 +69,7 @@
 												@endif
 											</td>
 											<td class="text-center">
-												{{-- periksa dulu apakah SKL sudah direkomendasikan atau belum --}}
-												@if(!$verifikasi->skl)
+												{{-- @if(!$verifikasi->skl)
 													@if($verifikasi->status >= 4)
 														<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
 															title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
@@ -88,7 +86,7 @@
 														data-toggle="tooltip" data-original-title="Sudah direkomendasikan. Klik untuk melihat progress rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
-												@endif
+												@endif --}}
 											</td>
 										</tr>
 									@endforeach
