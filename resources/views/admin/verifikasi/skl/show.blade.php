@@ -313,17 +313,22 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title fw-500">Nomor SKL</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 					</div>
 					<form action="{{route('verification.skl.recomend', $verifikasi->id)}}" method="post">
 						@csrf
 						<div class="modal-body">
 							<div class="form-group">
-							<label for=""></label>
-							<input type="text" name="no_skl" id="no_skl" class="form-control" placeholder="nomor SKL" aria-describedby="helpId" required>
-							<small id="helpId" class="help-block text-muted">Isi dengan Nomor SKL yang akan diterbitkan. <span class="text-danger">(wajib)</span></small>
+								<label for=""></label>
+								<input type="text" name="no_skl" id="no_skl" class="form-control" placeholder="nomor SKL" aria-describedby="helpId" required>
+								<small id="helpId" class="help-block text-muted">Isi dengan Nomor SKL yang akan diterbitkan. <span class="text-danger">(wajib)</span></small>
+							</div>
+							<div class="form-group">
+								<label for="">ini adalah draf input tanggal terbit</label>
+								<input type="date" name="published_date" id="published_date" class="form-control" placeholder="Tanggal terbit" aria-describedby="helpId" value="{{ old('published_date', \Carbon\Carbon::now()->toDateString()) }}" required>
+								<small id="helpId" class="help-block text-muted">pilih tanggal terbit. <span class="text-danger">(wajib)</span></small>
 							</div>
 						</div>
 						<div class="modal-footer">
