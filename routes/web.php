@@ -361,6 +361,13 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 
 	}
 });
 
+Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah', 'middleware' => ['auth']], function () {
+	Route::get('getAllProvinsi', 'GetWilayahController@getAllProvinsi');
+	Route::get('getKabupatenByProvinsi/{provinsiId}', 'GetWilayahController@getKabupatenByProvinsi');
+	Route::get('getKecamatanByKabupaten/{id}', 'GetWilayahController@getKecamatanByKabupaten');
+	Route::get('getDesaByKec/{kecamatanId}', 'GetWilayahController@getDesaByKecamatan');
+});
+
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
 });
