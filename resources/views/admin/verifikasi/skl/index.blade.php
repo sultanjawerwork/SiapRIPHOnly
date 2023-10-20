@@ -69,7 +69,7 @@
 												@endif
 											</td>
 											<td class="text-center">
-												{{-- @if(!$verifikasi->skl)
+												@if(!$verifikasi->skl)
 													@if($verifikasi->status >= 4)
 														<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
 															title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
@@ -86,7 +86,7 @@
 														data-toggle="tooltip" data-original-title="Sudah direkomendasikan. Klik untuk melihat progress rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
-												@endif --}}
+												@endif
 											</td>
 										</tr>
 									@endforeach
