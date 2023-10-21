@@ -430,11 +430,12 @@ class VerifSklController extends Controller
 			],
 			[
 				'no_skl' => $request->input('no_skl'),
+				'published_date' => $request->input('published_date'),
 				'submit_by' => $user->id,
 			]
 		);
 		$avskl->save();
-		return redirect()->route('verification.skl.verifSklShow', $id)->with('success', 'Data berhasil disimpan');
+		return redirect()->route('verification.skl.verifSklShow', $id)->with('success', 'Rekomendasi berhasil diajukan.');
 	}
 
 	//daftar rekomendasi skl untuk pejabat
@@ -445,8 +446,8 @@ class VerifSklController extends Controller
 		}
 
 		$module_name = 'SKL';
-		$page_title = 'Daftar Rekomendasi';
-		$page_heading = 'Daftar Rekomendasi Penerbitan SKL';
+		$page_title = 'Daftar Permohonan';
+		$page_heading = 'Daftar Permohonan Penerbitan SKL';
 		$heading_class = 'fa fa-file-signature';
 
 		// if (Auth::user()->roles[0]->title == 'Pejabat') {
@@ -465,8 +466,8 @@ class VerifSklController extends Controller
 		}
 
 		$module_name = 'SKL';
-		$page_title = 'Rekomendasi Penerbitan';
-		$page_heading = 'Rekomendasi Penerbitan SKL';
+		$page_title = 'Permohonan Penerbitan';
+		$page_heading = 'Permohonan Penerbitan SKL';
 		$heading_class = 'fa fa-file-signature';
 
 		$skl = Skl::findOrfail($id);
@@ -615,7 +616,7 @@ class VerifSklController extends Controller
 			'npwp' => $skl->npwp,
 			'no_ijin' => $skl->no_ijin,
 			'periodetahun' => $thn,
-			'published_date' => Carbon::now(),
+			'published_date' => $skl->published_date,
 			'luas_tanam' => $total_luastanam,
 			'volume' => $total_volume,
 			'status' => 'Lunas',
@@ -626,7 +627,7 @@ class VerifSklController extends Controller
 			$filename = 'skl_' . $noIjin . '.' . $file->getClientOriginalExtension();
 			$filePath = $this->uploadFile($file, $filenpwp, $thn, $filename);
 			$skl->skl_upload = $filename;
-			$skl->published_date = Carbon::now();
+			// $skl->published_date = Carbon::now();
 			$commitment->skl = $filename;
 			$completedData['skl_upload'] = $filename;
 			$completedData['url'] = $filePath;

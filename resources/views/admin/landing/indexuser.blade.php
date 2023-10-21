@@ -301,7 +301,7 @@
 							<h2>
 								<i class="subheader-icon fal fa-file-certificate mr-1"></i>
 								<span class="text-primary fw-700 text-uppercase">
-									Rekomendasi Penerbitan SKL
+									Permohonan Penerbitan SKL
 								</span>
 							</h2>
 							<div class="panel-toolbar">
@@ -343,7 +343,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="panel-4" class="panel">
+					<div id="panel-4" class="panel" hidden>
 						<div class="panel-hdr">
 							<h2>
 								<i class="subheader-icon fal fa-ballot-check mr-1"></i>

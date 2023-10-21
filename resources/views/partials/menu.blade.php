@@ -334,7 +334,7 @@
 			@endcan
 			{{-- direktur task --}}
 			@if (Auth::user()->roles[0]->title == 'Pejabat')
-				<li class="nav-title" data-i18n="nav.administation">Direktur Menu</li>
+				<li class="nav-title" data-i18n="nav.administation">Menu</li>
 				<li class="c-sidebar-nav-item {{ request()->is('verification/skl/recomendation*') ? 'active' : '' }}">
 					<a href="{{ route('verification.skl.recomendations') }}"
 						data-filter-tags="daftar rekomendasi penerbitan skl"

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DigitalSign extends Controller
 {
@@ -19,18 +21,28 @@ class DigitalSign extends Controller
 		$page_title = 'Digital Sign';
 		$page_heading = 'Tandatangan Digital ';
 		$heading_class = 'fal fa-qrcode';
+
 		return view('admin.digitalsign.index', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
+	public function saveQrImage(Request $request)
 	{
-		//
+		$imageData = $request->input('imageData');
+		$imgPath = 'uploads/qrcode/';
+		$filename = 'qr_code.png';
+
+		// Hapus header data gambar (misalnya, "data:image/png;base64,")
+		$base64Data = substr($imageData, strpos($imageData, ',') + 1);
+
+		// Konversi base64 ke binary
+		$imageBinary = base64_decode($base64Data);
+
+		// Simpan gambar ke direktori publik
+		Storage::disk('public')->putFileAs($imgPath, $imageBinary, $filename);
+
+		return response()->json(['filePath' => $imgPath . $filename]);
 	}
+
 
 	/**
 	 * Store a newly created resource in storage.

@@ -22,7 +22,7 @@ class RiphAdminController extends Controller
 		abort_if(Gate::denies('master_riph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 		$module_name = 'Master RIPH';
-		$page_title = '';
+		$page_title = 'Master Data RIPH';
 		$page_heading = 'Master RIPH';
 		$heading_class = 'fal fa-ballot';
 		$riph_admin = RiphAdmin::all();
@@ -138,12 +138,19 @@ class RiphAdminController extends Controller
 	 * @param  \App\Models\RiphAdmin  $riphAdmin
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $riphAdmin)
+	public function update(Request $request, $id)
 	{
-		$riphAdmin->update($request->all());
+		// dd($request->all());
+
+		$riphAdmin = RiphAdmin::updateOrCreate(
+			['id' => $id],
+			$request->all()
+		);
+
 
 		return redirect()->route('admin.riphAdmin.index')->with('message', 'Berhasil update data riph-admin');
 	}
+
 
 	/**
 	 * Remove the specified resource from storage.

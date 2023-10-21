@@ -95,8 +95,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('dir_check_c', 'MessengerController@showReply')->name('verifikasi.dir_check_c');
 
 
-	Route::resource('riphAdmin', 'RiphAdminController');
-	Route::post('riphadmin/storefetched', 'RiphAdminController@storefetched')->name('riphadmin.storefetched');
+	Route::get('riphAdmin', 'RiphAdminController@index')->name('riphAdmin.index');
+	Route::get('riphAdmin/create', 'RiphAdminController@create')->name('riphAdmin.create');
+	Route::post('riphAdmin/storefetched', 'RiphAdminController@storefetched')->name('riphAdmin.storefetched');
+	Route::post('riphAdmin', 'RiphAdminController@store')->name('riphAdmin.store');
+	Route::get('riphAdmin/{riphAdmin}/edit', 'RiphAdminController@edit')->name('riphAdmin.edit');
+	Route::put('riphAdmin/{riphAdmin}', 'RiphAdminController@update')->name('riphAdmin.update');
+	Route::delete('riphAdmin/{riphAdmin}', 'RiphAdminController@destroy')->name('riphAdmin.destroy');
 
 	//daftar pejabat penandatangan SKL
 	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');
@@ -370,4 +375,5 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
+	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
 });

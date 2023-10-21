@@ -16,7 +16,7 @@
 											<th>No. SKL</th>
 											<th>No. RIPH</th>
 											<th>Pelaku Usaha</th>
-											<th>Rekomendasi</th>
+											<th>Pemohon</th>
 											<th>Tanggal</th>
 											<th>Tindakan</th>
 										</tr>

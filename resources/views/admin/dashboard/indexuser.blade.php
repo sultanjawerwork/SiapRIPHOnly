@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-3">
+	<div class="col-md-4">
 		<div id="totalRiph" class="p-3 bg-primary-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Volume import produk hortikultura yang tercantum di dalam Surat Rekomendasi Import Produk Hortikultura">
@@ -31,7 +31,7 @@
 			<i class="fal fa-globe-asia position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
 		</div>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-4">
 		<div id="totalTanam" class="p-3 bg-success-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah Realisasi Tanam yang telah dilaporkan oleh pelaku usaha hingga saat ini.">
@@ -42,18 +42,18 @@
 			<i class="fal fa-users position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:6rem"></i>
 		</div>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-4">
 		<div id="totalProduksi" class="p-3 bg-warning-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah Realisasi Produksi yang telah dilaporkan oleh pelaku usaha hingga saat ini.">
 					<span id="count_anggota">{{ number_format($jumlah_anggota, 0, ',', '.') }}</span>
-					<small class="m-0 l-h-n">Jumlah Partisipasi (anggota)</small>
+					<small class="m-0 l-h-n">Jumlah Petani (anggota)</small>
 				</h3>
 			</div>
 			<i class="fal fa-hat-cowboy position-absolute pos-right pos-bottom opacity-30 mb-n1 mr-n1" style="font-size:6rem"></i>
 		</div>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-4" hidden>
 		<div id="totalProduksi" class="p-3 bg-danger-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
 				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Jumlah Realisasi Produksi yang telah dilaporkan oleh pelaku usaha hingga saat ini.">
