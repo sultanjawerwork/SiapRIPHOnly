@@ -645,7 +645,7 @@ class VerifSklController extends Controller
 		$commitment->save();
 
 		return redirect()->route('skl.recomended.list')
-			->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
+			->with('success', 'Surat Keterangan Lunas (SKL) berhasil diunggah dan Status Komitmen Wajib Tanam-Produksi telah dinyatakan sebagai LUNAS');
 	}
 
 	public function arsip()

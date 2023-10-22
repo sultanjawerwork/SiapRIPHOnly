@@ -71,7 +71,7 @@
 								</small>
 							</div>
 							<div class="form-group col-md-2">
-								<label for="wajib_tanam">Wajib Tanam (ha)</label>
+								<label for="wajib_tanam">Komitmen Wajib Tanam (ha)</label>
 								<input type="number" id="wajib_tanam" class="form-control"
 								placeholder="autocalculate" readonly>
 								<small id="helpId" class="text-muted">Luas tanam yang wajib direalisasikan</small>
@@ -135,7 +135,7 @@
 				<div class="card" id="panel-3">
 					<div class="panel-hdr">
 						<h2>
-							Data <span class="fw-300"><i>Pengendalian</i></span>
+							Data <span class="fw-300"><i>Saprodi</i></span>
 						</h2>
 						<div class="panel-toolbar">
 							{{-- @include('partials.globaltoolbar') --}}
@@ -191,7 +191,7 @@
 				<div class="card" id="panel-4">
 					<div class="panel-hdr">
 						<h2>
-							Data <span class="fw-300"><i>Lainnya</i></span>
+							Data <span class="fw-300"><i>Saprodi Lainnya</i></span>
 						</h2>
 						<div class="panel-toolbar">
 							{{-- @include('partials.globaltoolbar') --}}

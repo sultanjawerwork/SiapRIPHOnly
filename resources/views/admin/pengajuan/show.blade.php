@@ -85,7 +85,7 @@
 						<tbody>
 							<tr>
 								<td class="text-muted">
-									<span class="fw-700 h6">Wajib Tanam</span><br>
+									<span class="fw-700 h6">Komitmen Wajib Tanam</span><br>
 									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
 								</td>
 								<td class="text-right">

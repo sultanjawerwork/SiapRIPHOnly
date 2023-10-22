@@ -78,7 +78,7 @@
 								</div>
 								<div class="col-md-4 mb-3">
 									<div class="form-group">
-										<label class="form-label" for="v_beban_tanam">Total Wajib Tanam (ha)</label>
+										<label class="form-label" for="v_beban_tanam">Total Komitmen Wajib Tanam (ha)</label>
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<span class="input-group-text" id="">

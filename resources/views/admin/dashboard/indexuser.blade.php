@@ -13,7 +13,7 @@
 			<div class="form-group row">
 				<label for="periodetahun" class="col-sm-4 col-form-label text-right">Tahun</label>
 				<div class="col-sm-8">
-					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$currentYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
+					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{ date('Y') }}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
 				</div>
 			</div>
 		</div>
@@ -71,7 +71,7 @@
 		<div class="panel" id="panel-1">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-seedling mr-1"></i>Realisasi <span class="fw-300"><i>Wajib Tanam</i></span>
+					<i class="subheader-icon fal fa-seedling mr-1"></i>Realisasi <span class="fw-300"><i>Komitmen Wajib Tanam</i></span>
 				</h2>
 			</div>
 			<div class="panel-container show">
@@ -129,7 +129,7 @@
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-balance-scale-left mr-1"></i>Realisasi <span class="fw-300"><i>Wajib Produksi</i></span>
+					<i class="subheader-icon fal fa-balance-scale-left mr-1"></i>Realisasi <span class="fw-300"><i>Komitmen Wajib Produksi</i></span>
 				</h2>
 			</div>
 			<div class="panel-container show">
@@ -200,11 +200,11 @@
 					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
 							<th>Nomor RIPH</th>
-							<th>Pengajuan</th>
-							<th>Tahap 1</th>
-							<th>Tahap 2</th>
-							<th>Tahap 3</th>
-							<th>Lunas</th>
+							{{-- <th>Pengajuan</th> --}}
+							<th>Tanam</th>
+							<th>Produksi</th>
+							<th>SKL</th>
+							<th>Status Lunas</th>
 						</thead>
 						<tbody>
 							@foreach ($allPengajuan as $pengajuan)
@@ -216,11 +216,11 @@
 										$statusCompleted = $pengajuan->completed->url ?? null;
 									@endphp
 									<td>{{$pengajuan->no_ijin}}</td>
-									<td class="text-center">
+									{{-- <td class="text-center">
 										@if ($pengajuan->status)
 											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
 										@endif
-									</td>
+									</td> --}}
 									<td class="text-center">
 										@if ($statusAjutanam === '4')
 											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
@@ -254,7 +254,7 @@
 					<span class="help-block mt-2">
 						<label for="" class="form-label">Keterangan:</label>
 						<div class="row d-flex align-items-top">
-							<div class="col-md-4 col-sm-6">
+							<div class="col-md-4 col-sm-6" hidden>
 								<ul>
 									<li>Tahap 1: Pemeriksaan Data</li>
 									<li>Tahap 2: Pemeriksaan Lapangan</li>
@@ -272,7 +272,7 @@
 									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-danger mr-1">
 											<i class="fa fa-ban"></i>
-										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">TIDAK SESUAI</span>.
+										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">PERBAIKAN</span>.
 									</li>
 									<li>
 										<span class="btn btn-icon btn-xs btn-success mr-1">
@@ -413,35 +413,54 @@
 				$.each(data.verifikasis, function (index, verifikasi) {
 					console.log('Verifikasi:', verifikasi);
 					var row = $("<tr></tr>");
-					var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
-					var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
 					var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
 
-					var ajuCell = $('<td class="text-center"></td>').html(function() {
-							if (verifikasi.status) {
-								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
+
+					var tanamCell = $('<td class="text-center"></td>').html(function() {
+							if (!verifikasi.statusTanam) {
+								return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
+							}else if (verifikasi.statusTanam === '1'){
+								return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-check-upload"></i></span>';
+							}else if (verifikasi.statusTanam === '2'){
+								return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+							}else if (verifikasi.statusTanam === '3'){
+								return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+							}else if (verifikasi.statusTanam === '4'){
+								return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
+							}else if (verifikasi.statusTanam === '5'){
+								return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-exclamation-circle"></i></span>';
 							}
 						});
 
-					var dataCell = $('<td class="text-center"></td>').html(function() {
-						if (!verifikasi.status) {
+					var produksiCell = $('<td class="text-center"></td>').html(function() {
+						if (!verifikasi.statusProduksi) {
 							return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
-						} else if (verifikasi.status === '1' && !verifikasi.onlinestatus) {
+						}else if (verifikasi.statusProduksi === '1'){
 							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-check-upload"></i></span>';
-						} else if (verifikasi.onlinestatus === '2') {
+						}else if (verifikasi.statusProduksi === '2'){
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+						}else if (verifikasi.statusProduksi === '3'){
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+						}else if (verifikasi.statusProduksi === '4'){
 							return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
-						} else if (verifikasi.onlinestatus === '3') {
-							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>';
+						}else if (verifikasi.statusProduksi === '5'){
+							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-exclamation-circle"></i></span>';
 						}
 					});
 
-					var lapanganCell = $('<td class="text-center"></td>').html(function() {
-						if (verifikasi.status === '2' && !verifikasi.onfarmstatus) {
+					var sklCell = $('<td class="text-center"></td>').html(function() {
+						if (!verifikasi.statusSkl) {
 							return '<span class="btn btn-xs btn-icon btn-warning"><i class="fa fa-exclamation-circle"></i></span>';
-						} else if (verifikasi.onfarmstatus === '4') {
+						}else if (verifikasi.statusSkl === '1'){
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-check-upload"></i></span>';
+						}else if (verifikasi.statusSkl === '2'){
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+						}else if (verifikasi.statusSkl === '3'){
+							return '<span class="btn btn-xs btn-icon btn-primary"><i class="fa fa-hourglass"></i></span>';
+						}else if (verifikasi.statusSkl === '4'){
 							return '<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>';
-						} else if (verifikasi.onfarmstatus === '5') {
-							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>';
+						}else if (verifikasi.statusSkl === '5'){
+							return '<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-exclamation-circle"></i></span>';
 						}
 					});
 
@@ -455,7 +474,7 @@
 						}
 					});
 
-					row.append(nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
+					row.append(nomorRIPH, tanamCell, produksiCell, sklCell, lunasCell);
 					tableBody.append(row);
 				});
 

@@ -38,10 +38,10 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-danger-300">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah volume import pada periode ini.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah volume RIPH pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="v_pengajuan_import">{{ number_format($v_pengajuan_import, 0, ',', '.') }}</span>
-						<small class="m-0 l-h-n">Volume Import (ton)</small>
+						<small class="m-0 l-h-n">Volume RIPH (ton)</small>
 					</h3>
 				</div>
 			</div>
@@ -52,10 +52,10 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-success-500">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Luas wajib tanam pada periode ini.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Total Luas Komitmen Wajib Tanam pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="v_beban_tanam">{{ number_format($v_beban_tanam, 2, ',', '.') }}</span>
-						<small class="m-0 l-h-n">Kewajiban Tanam (ha)</small>
+						<small class="m-0 l-h-n">Komitmen Wajib Tanam (ha)</small>
 					</h3>
 				</div>
 			</div>
@@ -69,7 +69,7 @@
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Volume wajib produksi pada periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="v_beban_produksi">{{ number_format($v_beban_produksi, 2, ',', '.') }}</span>
-						<small class="m-0 l-h-n">Kewajiban Produksi (ton)</small>
+						<small class="m-0 l-h-n">Komitmen Wajib Produksi (ton)</small>
 					</h3>
 				</div>
 			</div>
@@ -82,7 +82,7 @@
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-seedling mr-1"></i>Wajib Tanam
+					<i class="subheader-icon fal fa-seedling mr-1"></i>Komitmen Wajib Tanam
 				</h2>
 			</div>
 			<div class="panel-container show">
@@ -134,7 +134,7 @@
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-dolly mr-1"></i>Wajib Produksi
+					<i class="subheader-icon fal fa-dolly mr-1"></i>Komitmen Wajib Produksi
 				</h2>
 			</div>
 			<div class="panel-container show">
@@ -199,7 +199,7 @@
 					{{-- <div class="row d-flex">
 						<div class="col-md-3">
 							<div class="shadow-1 p-2 bg-primary-100 rounded overflow-hidden position-relative text-white mb-2">
-								<div data-toggle="tooltip" title data-original-title="Jumlah Pengajuan Verifikasi Wajib Tanam-Produksi">
+								<div data-toggle="tooltip" title data-original-title="Jumlah Pengajuan Verifikasi Komitmen Wajib Tanam-Produksi">
 									<div class="d-flex">
 										<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="ajucount">{{$ajucount ? $ajucount : 0}}</h5>
 										<span>RIPH</span>
@@ -235,7 +235,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="shadow-1 p-2 bg-primary-500 rounded overflow-hidden position-relative text-white mb-2">
-								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH Lunas Wajib Tanam-Produksi">
+								<div data-toggle="tooltip" title data-original-title="Jumlah RIPH Lunas Komitmen Wajib Tanam-Produksi">
 									<div class="d-flex justify-content-between">
 										<div class="d-flex">
 											<h5 class="d-block l-h-n m-0 fw-500 mr-1" id="lunascount">{{$lunascount ? $lunascount : 0}}</h5>
@@ -262,11 +262,11 @@
 					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
 							<th>Nama Perusahaan</th>
-							<th>Nomor Pengajuan</th>
+							{{-- <th>Nomor Pengajuan</th> --}}
 							<th>Nomor RIPH</th>
-							<th>Tahap 1</th>
-							<th>Tahap 2</th>
-							<th>Tahap 3</th>
+							<th>Tanam</th>
+							<th>Produksi</th>
+							<th>SKL</th>
 							<th>Lunas</th>
 						</thead>
 						<tbody>
@@ -279,7 +279,7 @@
 										$statusCompleted = $pengajuan->completed->url ?? null;
 									@endphp
 									<td>{{$pengajuan->datauser->company_name}}</td>
-									<td>{{$pengajuan->no_pengajuan}}</td>
+									{{-- <td>{{$pengajuan->no_pengajuan}}</td> --}}
 									<td>{{$pengajuan->no_ijin}}</td>
 									<td class="text-center">
 										@if ($statusAjutanam === '4')
@@ -315,14 +315,14 @@
 					<span class="help-block mt-2">
 						<label for="" class="form-label">Keterangan:</label>
 						<div class="row d-flex align-items-top">
-							<div class="col-md-4 col-sm-6">
+							{{-- <div class="col-md-4 col-sm-6">
 								<ul>
 									<li>Tahap 1: Verifikasi Realisasi Tanam</li>
 									<li>Tahap 2: Verifikasi Realisasi Produksi</li>
 									<li>Tahap 3: Pengajuan Ket. Lunas </li>
 									<li>Lunas: Penerbitan Surat Keterangan Lunas</li>
 								</ul>
-							</div>
+							</div> --}}
 							<div class="col-md-8 col-sm-6">
 								<ul>
 									<li class="mb-1">
@@ -333,7 +333,7 @@
 									<li class="mb-1">
 										<span class="btn btn-icon btn-xs btn-danger mr-1">
 											<i class="fa fa-ban"></i>
-										</span> : Pemeriksaan SELESAI, data dinyatakan <span class="text-danger">TIDAK SESUAI/PERBAIKAN</span>.
+										</span> : Pemeriksaan SELESAI, data dinyatakan <span class="text-danger">PERBAIKAN</span>.
 									</li>
 									<li>
 										<span class="btn btn-icon btn-xs btn-success mr-1">

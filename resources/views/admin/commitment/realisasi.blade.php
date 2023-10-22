@@ -24,7 +24,7 @@
 									<th>No. Perjanjian</th>
 									<th>Poktan Mitra</th>
 									<th>Anggota</th>
-									<th>Luas/Target</th>
+									<th>Luas/Produksi</th>
 									<th>Tindakan</th>
 								</tr>
 							</thead>
@@ -53,7 +53,7 @@
 												} else {
 													echo '
 													<button type="button" class="btn btn-icon btn-xs btn-success" data-toggle="modal" data-target="#modalId' . $pks->id . '"><i class="fal fa-file-check" data-toggle="tooltip" data-original-title="Data PKS lengkap. Klik jika ingin mengubah data"></i></button>
-													<a href="'.route('admin.task.pks.anggotas', $pks->id).'" class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip" data-original-title="Lengkapi data realisasi wajib tanam-produksi">
+													<a href="'.route('admin.task.pks.anggotas', $pks->id).'" class="btn btn-icon btn-xs btn-primary" data-toggle="tooltip" data-original-title="Lengkapi data realisasi Komitmen Wajib Tanam-produksi">
 														<i class="fal fa-seedling"></i>
 													</a>
 													<a href="'.route('admin.task.pks.saprodi', $pks->id).'" class="btn btn-icon btn-xs btn-info" data-toggle="tooltip" data-original-title="Data Bantuan Sarana Produksi Tani">

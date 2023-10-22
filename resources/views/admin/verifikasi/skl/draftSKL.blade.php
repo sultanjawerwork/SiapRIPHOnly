@@ -107,7 +107,7 @@
 					<dt class="col-sm-9">: {{$commitment->user->data_user->company_name}}</dt>
 					<dd class="col-sm-3">Nomor RIPH</dd>
 					<dt class="col-sm-9">: {{$commitment->no_ijin}}</dt>
-					<dd class="col-sm-3">Wajib Tanam</dd>
+					<dd class="col-sm-3">Komitmen Wajib Tanam</dd>
 					<dt class="col-sm-9">
 						<dl class="row">
 							<dd class="col-sm-3">Komitmen</dd>

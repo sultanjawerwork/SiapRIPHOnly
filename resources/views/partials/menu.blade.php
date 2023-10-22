@@ -150,7 +150,7 @@
 
 			{{-- user task --}}
 			@can('user_task_access')
-				<li class="nav-title">{{ __('PROSES RIPH')}}</li>
+				<li class="nav-title">Pelaporan Realisasi</li>
 				@can('pull_access')
 					<li class="c-sidebar-nav-item {{ request()->is('admin/task/pull') ? 'active' : '' }}">
 						<a href="{{ route('admin.task.pull') }}"

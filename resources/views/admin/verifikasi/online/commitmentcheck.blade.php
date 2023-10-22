@@ -85,7 +85,7 @@
 										<span>{{$commitment->no_hs}}</span>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
-										<span class="text-muted">Volume Import</span>
+										<span class="text-muted">Volume RIPH</span>
 										<span>{{ number_format($commitment->volume_riph, 2, '.', ',') }} ton</span>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
@@ -197,7 +197,7 @@
 															<option hidden>- pilih status periksa</option>
 															<option value="Sesuai" {{ $commitmentcheck && $commitmentcheck->formRiph == 'Sesuai' ? 'selected' : '' }}>Sesuai</option>
 															<option value="Tidak Sesuai" {{ $commitmentcheck && $commitmentcheck->formRiph == 'Tidak Sesuai' ? 'selected' : '' }}>Tidak Sesuai</option>
-		
+
 														</select>
 													</td>
 												</tr>

@@ -26,8 +26,8 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian pengajuan verifikasi">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="ajucount">{{$ajucount ? $ajucount:0}}</span>
-						<small class="m-0 l-h-n">Pengajuan</small> 
+						<span id="ajucount"></span>
+						<small class="m-0 l-h-n">Pengajuan</small>
 					</h3>
 				</div>
 			</div>
@@ -40,7 +40,7 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="proccesscount">{{$proccesscount ? $proccesscount : 0}}</span>
+						<span id="proccesscount"></span>
 						<small class="m-0 l-h-n">Diproses</small>
 					</h3>
 				</div>
@@ -54,7 +54,7 @@
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah selesai RIPH periode ini.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-						<span id="verifiedcount">{{$verifiedcount ? $verifiedcount : 0}}</span>
+						<span id="verifiedcount"></span>
 						<small class="m-0 l-h-n">Selesai</small>
 					</h3>
 				</div>
@@ -67,7 +67,7 @@
 			<div class="card-body bg-success-500">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah SKL diterbitkan untuk RIPH periode ini.">
-						<span id="lunascount">{{$lunascount ? $lunascount : 0}}</span>
+						<span id="lunascount"></span>
 						<small class="m-0 l-h-n">Lunas</small>
 					</h3>
 				</div>
@@ -76,7 +76,7 @@
 		</div>
 	</div>
 </div>
-					
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel" id="panel-2">
@@ -101,7 +101,7 @@
 							<th>Tahap 3</th>
 						</thead>
 						<tbody>
-							@foreach ($allPengajuan as $pengajuan)
+							{{-- @foreach ($allPengajuan as $pengajuan)
 								<tr>
 									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
 									<td>{{$pengajuan->no_pengajuan}}</td>
@@ -135,7 +135,7 @@
 										@endif
 									</td>
 								</tr>
-							@endforeach
+							@endforeach --}}
 						</tbody>
 					</table><hr>
 					<span class="help-block mt-2">
@@ -277,7 +277,7 @@
 						var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
 						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
 						var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
-						
+
 						var ajuCell = $('<td class="text-center"></td>').html(function() {
 							if (verifikasi.status) {
 								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
@@ -313,7 +313,7 @@
 						row.append(namaPerusahaan, nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
 						tableBody.append(row);
 					});
-				
+
 					function formatNumber(number) {
 						return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 					}

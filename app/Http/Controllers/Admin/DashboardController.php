@@ -113,17 +113,17 @@ class DashboardController extends Controller
 				$page_heading = 'Monitoring';
 				$heading_class = 'fal fa-list-ul';
 				$currentYear = date('Y');
-				$allPengajuan = Pengajuan::whereNotNull('status')
-					->whereYear('created_at', $currentYear)
-					->get();
+				// $allPengajuan = Pengajuan::whereNotNull('status')
+				// 	->whereYear('created_at', $currentYear)
+				// 	->get();
 
-				$ajucount = $allPengajuan->where('status', '1')->count() > 0;
-				$proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count() > 0;
-				$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count() > 0;
-				$recomendationcount = $allPengajuan->where('status', '6')->count() > 0;
-				$lunascount = $allPengajuan->where('status', '7')->count() > 0;
+				// $ajucount = $allPengajuan->where('status', '1')->count() > 0;
+				// $proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count() > 0;
+				// $verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count() > 0;
+				// $recomendationcount = $allPengajuan->where('status', '6')->count() > 0;
+				// $lunascount = $allPengajuan->where('status', '7')->count() > 0;
 
-				return view('admin.dashboard.indexverifikator', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'allPengajuan', 'ajucount', 'proccesscount', 'verifiedcount', 'lunascount', 'currentYear'));
+				return view('admin.dashboard.indexverifikator', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'currentYear'));
 			}
 		}
 		if (($roleaccess == 2)) {
@@ -183,7 +183,6 @@ class DashboardController extends Controller
 				->with('ajutanam', 'ajuproduksi', 'ajuskl', 'completed')
 				->get();
 
-
 			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'prosentanam', 'prosenproduksi', 'currentYear', 'allPengajuan'));
 		}
 		if (($roleaccess == 3)) {
@@ -206,7 +205,7 @@ class DashboardController extends Controller
 		$module_name = 'Dashboard';
 		$page_title = 'Pemetaan';
 		$page_heading = 'Pemetaan';
-		$page_desc = 'Peta Lahan Realisasi Wajib Tanam-Produksi';
+		$page_desc = 'Peta Lahan Realisasi Komitmen Wajib Tanam-Produksi';
 		$heading_class = 'fal fa-map-marked-alt';
 
 		$anggotaMitras = Lokasi::with([

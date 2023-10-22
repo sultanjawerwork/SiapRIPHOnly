@@ -37,17 +37,17 @@ class UpdateRiphAdminRequest extends FormRequest
             'v_beban_tanam' => [
                 'integer',
                 'required',
-                
+
             ],
             'v_beban_produksi' => [
                 'integer',
                 'required',
-                
+
             ],
             'jumlah_importir' => [
                 'integer',
                 'required',
-                
+
             ],
         ];
     }
@@ -57,12 +57,12 @@ class UpdateRiphAdminRequest extends FormRequest
         return [
             'periode.required' => 'Periode harus diisi',
             'v_pengajuan_import.required'  => 'Total Volume RIPH harus diisi',
-            'v_beban_tanam.required'  => 'Total Wajib Tanam harus diisi',
+            'v_beban_tanam.required'  => 'Total Komitmen Wajib Tanam harus diisi',
             'v_beban_produksi.required'  => 'Total Wajib Produksi harus diisi',
             'jumlah_importir.required'  => 'Jumlah produksi harus diisi',
             'periode.integer' => 'Periode harus numerik',
             'v_pengajuan_import.integer'  => 'Total Volume RIPH harus numerik',
-            'v_beban_tanam.integer'  => 'Total Wajib Tanam harus numerik',
+            'v_beban_tanam.integer'  => 'Total Komitmen Wajib Tanam harus numerik',
             'v_beban_produksi.integer'  => 'Total Wajib Produksi harus numerik',
             'jumlah_importir.integer'  => 'Jumlah produksi harus numerik',
         ];

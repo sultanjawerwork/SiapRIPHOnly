@@ -23,14 +23,14 @@ class DashboardDataController extends Controller
 {
 	public function monitoringDataByYear($periodetahun)
 	{
-		abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
+		// abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
 		$riphData = RiphAdmin::where('periode', $periodetahun)->get();
 		$commitments = PullRiph::where('periodetahun', $periodetahun)->get();
 
-		$allPengajuan = Pengajuan::whereNotNull('status')
-			->whereYear('created_at', $periodetahun)
-			->get();
+		// $allPengajuan = Pengajuan::whereNotNull('status')
+		// 	->whereYear('created_at', $periodetahun)
+		// 	->get();
 
 		$jumlahImportir = $riphData->sum('jumlah_importir');
 		$v_pengajuan_import = $riphData->sum('v_pengajuan_import');
@@ -46,28 +46,28 @@ class DashboardDataController extends Controller
 			return $commitment->lokasi->pluck('volume');
 		})->sum();
 
-		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
-			return [
-				'no_pengajuan' => $singlePengajuan->no_pengajuan,
-				'commitment' => [
-					'datauser' => [
-						'company_name' => $singlePengajuan->commitment->datauser->company_name,
-					],
-				],
-				'no_ijin' => $singlePengajuan->commitment->no_ijin,
-				'status' => $singlePengajuan->status,
-				'onlinestatus' => $singlePengajuan->onlinestatus,
-				'onfarmstatus' => $singlePengajuan->onfarmstatus,
-			];
-		});
+		// $verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+		// 	return [
+		// 		'no_pengajuan' => $singlePengajuan->no_pengajuan,
+		// 		'commitment' => [
+		// 			'datauser' => [
+		// 				'company_name' => $singlePengajuan->commitment->datauser->company_name,
+		// 			],
+		// 		],
+		// 		'no_ijin' => $singlePengajuan->commitment->no_ijin,
+		// 		'status' => $singlePengajuan->status,
+		// 		'onlinestatus' => $singlePengajuan->onlinestatus,
+		// 		'onfarmstatus' => $singlePengajuan->onfarmstatus,
+		// 	];
+		// });
 
-		$ajucount = $allPengajuan->where('status', '1')->count();
-		$proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count();
-		$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count();
-		$recomendationcount = $allPengajuan->where('status', '6')->count();
-		$lunascount = $allPengajuan->where('status', '7')->count();
-		$lunasLuas = $allPengajuan->where('status', '7')->sum('luas_verif');
-		$lunasVolume = $allPengajuan->sum('volume_verif');
+		// $ajucount = $allPengajuan->where('status', '1')->count();
+		// $proccesscount = $allPengajuan->where('onlinestatus', '2')->where('onfarmstatus', '')->count();
+		// $verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')->count();
+		// $recomendationcount = $allPengajuan->where('status', '6')->count();
+		// $lunascount = $allPengajuan->where('status', '7')->count();
+		// $lunasLuas = $allPengajuan->where('status', '7')->sum('luas_verif');
+		// $lunasVolume = $allPengajuan->sum('volume_verif');
 
 		$data = [
 			'jumlah_importir'       => $jumlahImportir,
@@ -80,13 +80,13 @@ class DashboardDataController extends Controller
 			'total_volume'          => $total_volume,
 			'prosenTanam'           => ($v_beban_tanam == 0) ? 0 : ($total_luastanam / $v_beban_tanam * 100),
 			'prosenProduksi'        => ($v_beban_produksi == 0) ? 0 : ($total_volume / $v_beban_produksi * 100),
-			'ajucount'              => $ajucount,
-			'proccesscount'         => $proccesscount,
-			'verifiedcount'         => $verifiedcount,
-			'lunascount'            => $lunascount,
-			'lunasLuas'             => $lunasLuas,
-			'lunasVolume'           => $lunasVolume,
-			'verifikasis'           => $verifikasis,
+			// 'ajucount'              => $ajucount,
+			// 'proccesscount'         => $proccesscount,
+			// 'verifiedcount'         => $verifiedcount,
+			// 'lunascount'            => $lunascount,
+			// 'lunasLuas'             => $lunasLuas,
+			// 'lunasVolume'           => $lunasVolume,
+			// 'verifikasis'           => $verifikasis,
 		];
 
 		return response()->json($data);
@@ -168,29 +168,36 @@ class DashboardDataController extends Controller
 		if ($wajib_tanam == 0) {
 			$prosentanam = 0;
 		} else {
-			$prosentanam = $realisasi_tanam / $wajib_tanam;
+			$prosentanam = ($realisasi_tanam / $wajib_tanam) * 100;
 		}
 		if ($wajib_produksi == 0) {
 			$prosenproduksi = 0;
 		} else {
-			$prosenproduksi = $realisasi_produksi / $wajib_produksi;
+			$prosenproduksi = ($realisasi_produksi / $wajib_produksi) * 100;
 		}
 
-		$allPengajuan = Pengajuan::whereNotNull('status')
-			->whereYear('created_at', $periodetahun)
+		$allPengajuan = PullRiph::whereYear('created_at', $periodetahun)
+			->where(function ($query) {
+				$query->has('ajutanam')
+					->orWhereHas('ajuproduksi')
+					->orWhereHas('ajuskl')
+					->orWhereHas('completed');
+			})
+			->with('ajutanam', 'ajuproduksi', 'ajuskl', 'completed')
 			->get();
-		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+
+		$verifikasis = $allPengajuan->map(function ($verifikasi) {
 			return [
-				'no_pengajuan' => $singlePengajuan->no_pengajuan,
 				'commitment' => [
 					'datauser' => [
-						'company_name' => $singlePengajuan->commitment->datauser->company_name,
+						'company_name' => $verifikasi->datauser->company_name,
 					],
 				],
-				'no_ijin' => $singlePengajuan->commitment->no_ijin,
-				'status' => $singlePengajuan->status,
-				'onlinestatus' => $singlePengajuan->onlinestatus,
-				'onfarmstatus' => $singlePengajuan->onfarmstatus,
+				'no_ijin' => $verifikasi->no_ijin,
+				'statusTanam'	=> $verifikasi->ajutanam->status ?? '',
+				'statusProduksi' => $verifikasi->ajuproduksi->status ?? '',
+				'statusSkl' => $verifikasi->ajuskl->status ?? '',
+				'statusCompleted'	=> $verifikasi->completed->url ?? '',
 			];
 		});
 

@@ -56,6 +56,7 @@
 								<th>Total Vol. RIPH</th>
 								<th>Komitmen Tanam (ha)</th>
 								<th>Komitmen Produksi (ton)</th>
+								<th>Jumlah RIPH</th>
 								<th>Jumlah Importir</th>
 								<th>Tindakan</th>
 							</tr>
@@ -69,6 +70,7 @@
 									<td>{{ number_format($riph->v_pengajuan_import*0.05/6, 0, ',', '.') }}</td>
 									<td>{{ number_format($riph->v_pengajuan_import*0.05, 0, ',', '.') }}</td>
 									<td>{{ number_format($riph->jumlah_importir, 0, ',', '.') }}</td>
+									<td>(jumlah importir)</td>
 									<td>
 										<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" href="/admin/riphAdmin/{{ $riph->id }}/edit" data-toggle="tooltip" data-offset="0,10" data-original-title="Ubah Data"><i class="fal fa-edit"></i></a>
 										<a class="btn btn-xs btn-danger btn-icon waves-effect waves-themed" href="" data-toggle="tooltip" data-offset="0,10" data-original-title="Hapus Data"><i class="fal fa-trash"></i></a>
