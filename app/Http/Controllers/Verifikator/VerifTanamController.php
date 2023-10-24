@@ -14,7 +14,6 @@ use Gate;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\LokasiCheck;
-use App\Models\Pengajuan;
 use App\Models\CommitmentCheck;
 use App\Models\PksCheck;
 use App\Models\Lokasi;
@@ -40,6 +39,7 @@ class VerifTanamController extends Controller
 		return view('admin.verifikasi.tanam.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasis'));
 	}
 
+	//halaman pemeriksaan
 	public function check($id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -89,6 +89,7 @@ class VerifTanamController extends Controller
 		return view('admin.verifikasi.tanam.check', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'lokasichecks', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin'));
 	}
 
+	//set status hasil pemeriksaan pada tab-pane kelengkapan berkas
 	public function checkBerkas(Request $request, $id)
 	{
 		$user = Auth::user();
@@ -102,7 +103,7 @@ class VerifTanamController extends Controller
 		try {
 			DB::beginTransaction();
 			$checks = [
-				'sptjmcheck',
+				'sptjmtanamcheck',
 				'spvtcheck',
 				'rtacheck',
 				'sphtanamcheck',
@@ -132,16 +133,17 @@ class VerifTanamController extends Controller
 			$verifTanam->save();
 			DB::commit();
 			// Flash message sukses
-			return redirect()->back()->with('success', 'Hasil pemeriksaan berkas dan status berhasil disimpan.');
+			return redirect()->back()->with('success', 'Tahap pemeriksaan berkas kelengkapan dinyatakan selesai dan berhasil disimpan.');
 		} catch (\Exception $e) {
 			// Rollback transaksi jika ada kesalahan
 			DB::rollBack();
 
 			// Flash message kesalahan
-			return redirect()->back()->with('error', 'Terjadi kesalahan saat mengunggh berkas: ' . $e->getMessage());
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan: ' . $e->getMessage());
 		}
 	}
 
+	//halaman pemeriksaan perjanjian kerjasama
 	public function verifPks($noIjin, $poktan_id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -169,6 +171,7 @@ class VerifTanamController extends Controller
 		return view('admin.verifikasi.tanam.verifPks', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'pks', 'npwp', 'commitment', 'actionRoute', 'cancelRoute'));
 	}
 
+	//set statu hasil pemeriksaan single PKS
 	public function verifPksStore(Request $request, $id)
 	{
 		$user = Auth::user();
@@ -180,9 +183,10 @@ class VerifTanamController extends Controller
 		$pks->verif_at = Carbon::now();
 
 		$pks->save();
-		return redirect()->route('verification.tanam.check', ['id' => $verifId])->with('success', 'Data Pemeriksaan berhasil disimpan');
+		return redirect()->route('verification.tanam.check', ['id' => $verifId])->with('success', 'Hasil Pemeriksaan berkas Perjanjian Kerjasama berhasil disimpan');
 	}
 
+	//set status hasil pemeriksaan pada tab-pane Perjanjian Kemitraan
 	public function checkPksSelesai(Request $request, $id)
 	{
 		$user = Auth::user();
@@ -190,7 +194,7 @@ class VerifTanamController extends Controller
 		$npwp = $verifTanam->npwp;
 		$noIjin = $verifTanam->no_ijin;
 
-		if ($verifTanam == '2') {
+		if ($verifTanam->status == '2') {
 			$verifTanam->status = '3'; //pemeriksaan PKS selesai
 		}
 		$verifTanam->check_by = $user->id;
@@ -198,9 +202,10 @@ class VerifTanamController extends Controller
 		// dd($verifTanam);
 		$verifTanam->save();
 
-		return redirect()->back()->with('success', 'Hasil pemeriksaan berkas dan status berhasil disimpan.');
+		return redirect()->back()->with('success', 'Tahap Pemeriksaan seluruh berkas Perjanjian dinyatakan selesai.');
 	}
 
+	//set status hasil pemeriksaan verifikasi tanam
 	public function storeCheck(Request $request, $id)
 	{
 		// Verifikator
@@ -263,14 +268,14 @@ class VerifTanamController extends Controller
 			);
 
 			DB::commit();
-			return redirect()->route('verification.tanam.show', $id)->with('success', 'Data berhasil disimpan');
+			return redirect()->route('verification.tanam.show', $id)->with('success', 'Pemeriksaan Realisasi Komitmen Wajib Tanam dinyatakan Selesai dan Data berhasil disimpan.');
 		} catch (\Exception $e) {
 			DB::rollback();
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
 		}
 	}
 
-
+	//view hasil pemeriksaan
 	public function show($id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -306,6 +311,7 @@ class VerifTanamController extends Controller
 		return view('admin.verifikasi.tanam.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
 	}
 
+	//view lokasi tanam untuk verifikasi (view only)
 	public function lokasicheck($noIjin, $anggota_id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');

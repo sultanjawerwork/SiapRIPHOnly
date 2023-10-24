@@ -6,13 +6,13 @@
 <!-- Page Content -->
 <div class="subheader">
 	<h1 class="subheader-title">
-		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Realisasi & Verifikasi</span>
+		<i class="subheader-icon {{ ($heading_class ?? '') }}"></i><span class="fw-700 mr-2 ml-2">{{  ($page_heading ?? '') }}</span><span class="fw-300">Verifikasi</span>
 	</h1>
 	<div class="subheader-block d-lg-flex align-items-center  d-print-none d-block">
 		<div class="d-inline-flex flex-column justify-content-center ">
 			<div class="form-group row">
-				<label for="periodetahun" class="col-sm-4 col-form-label text-right">Tahun</label>
-				<div class="col-sm-8">
+				<label for="periodetahun" class="col-sm-7 col-form-label text-right">Verifikasi Tahun</label>
+				<div class="col-sm-5">
 					<input id="periodetahun" name="periode" type="text" class="form-control custom-select yearpicker" placeholder="{{$currentYear}}" aria-label="Pilih tahun" aria-describedby="basic-addon2">
 				</div>
 			</div>
@@ -25,7 +25,6 @@
 			<div class="card-body bg-danger-300">
 				<div class="">
 					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian pengajuan verifikasi">
-						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="ajucount"></span>
 						<small class="m-0 l-h-n">Pengajuan</small>
 					</h3>
@@ -38,8 +37,7 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-warning-400">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses.">
-						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses verifikasi.">
 						<span id="proccesscount"></span>
 						<small class="m-0 l-h-n">Diproses</small>
 					</h3>
@@ -52,10 +50,10 @@
 		<div class="panel rounded overflow-hidden position-relative text-white mb-g">
 			<div class="card-body bg-info-300">
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah selesai RIPH periode ini.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah diverifikasi dengan status SELESAI.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 						<span id="verifiedcount"></span>
-						<small class="m-0 l-h-n">Selesai</small>
+						<small class="m-0 l-h-n">Selesai (Perbaikan <span id="failCount"></span>)</small>
 					</h3>
 				</div>
 			</div>
@@ -82,7 +80,7 @@
 		<div class="panel" id="panel-2">
 			<div class="panel-hdr">
 				<h2>
-					<i class="subheader-icon fal fa-ballot-check mr-1"></i>Daftar Verifikasi<span class="fw-300"><i> Dalam Proses</i></span>
+					<i class="subheader-icon fal fa-ballot-check mr-1"></i>Pengajuan dan Progress<span class="fw-300"><i> Verifikasi</i></span>
 				</h2>
 				<div class="panel-toolbar">
 					{{-- @include('layouts.globaltoolbar') --}}
@@ -90,7 +88,19 @@
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
-					<table class="table table-bordered table-hover table-sm w-100" id="verifprogress">
+					<table class="table table-bordered table-hover table-sm w-100" id="tabelVerif">
+						<thead class="thead-themed">
+							<th width="25%">Nama Perusahaan</th>
+							<th width="20%">Nomor RIPH</th>
+							<th width="20%">Jenis</th>
+							<th width="10%">Diajukan</th>
+							<th width="10%">Diperbarui</th>
+							<th width="15%">Progress</th>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<table hidden class="table table-bordered table-hover table-sm w-100" id="verifprogress">
 						<thead>
 							<th>Nama Perusahaan</th>
 							<th>Nomor Pengajuan</th>
@@ -137,8 +147,8 @@
 								</tr>
 							@endforeach --}}
 						</tbody>
-					</table><hr>
-					<span class="help-block mt-2">
+					</table>
+					<span hidden class="help-block mt-2">
 						<label for="" class="form-label">Keterangan:</label>
 						<div class="row d-flex align-items-top">
 							<div class="col-md-4 col-sm-6">
@@ -186,11 +196,31 @@
 @section('scripts')
 @parent
 	<script>
-		$(document).ready(function() {
+		// $(document).ready(function() {
 			//initialize datatable verifprogress
-			$('#verifprogress').dataTable({
+			// Create the "Status" select element and add the options
+			// var selectStatus = $('<select>')
+			// 	.attr('id', 'selectverifprogressStatus')
+			// 	.addClass('custom-select custom-select-sm col-3 mr-2')
+			// 	.on('change', function() {
+			// 	var status = $(this).val();
+			// 	table.column(6).search(status).draw();
+			// 	});
+
+			// $('<option>').val('').text('Semua Status').appendTo(selectStatus);
+			// $('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
+			// $('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
+
+			// // Add the select elements before the first datatable button in the second table
+			// $('#verifprogress_wrapper .dt-buttons').before(selectStatus);
+		// });
+	</script>
+	<script>
+		$(document).ready(function() {
+			var table = $('#tabelVerif').dataTable({
 				responsive: true,
 				lengthChange: false,
+				ordering:true,
 				dom:
 				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>" +
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
@@ -230,25 +260,6 @@
 				]
 			});
 
-			// Create the "Status" select element and add the options
-			// var selectStatus = $('<select>')
-			// 	.attr('id', 'selectverifprogressStatus')
-			// 	.addClass('custom-select custom-select-sm col-3 mr-2')
-			// 	.on('change', function() {
-			// 	var status = $(this).val();
-			// 	table.column(6).search(status).draw();
-			// 	});
-
-			// $('<option>').val('').text('Semua Status').appendTo(selectStatus);
-			// $('<option>').val('1').text('Sudah Terbit').appendTo(selectStatus);
-			// $('<option>').val('2').text('Belum Terbit').appendTo(selectStatus);
-
-			// // Add the select elements before the first datatable button in the second table
-			// $('#verifprogress_wrapper .dt-buttons').before(selectStatus);
-		});
-	</script>
-	<script>
-		$(document).ready(function() {
 			// Initialize the year picker
 			$('.yearpicker').datepicker({
 				format: 'yyyy',
@@ -256,79 +267,65 @@
 				minViewMode: 'years',
 				autoclose: true
 			});
+
 			$('#periodetahun').on('change', function() {
 				var periodetahun = $(this).val();
 				var url = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
 				url = url.replace(':periodetahun', periodetahun);
 
-				$.get(url, function (data) {
-					$('#ajucount').text(data.ajucount);
-					$('#proccesscount').text(data.proccesscount);
-					$('#verifiedcount').text(data.verifiedcount);
-					$('#recomendationcount').text(data.recomendationcount);
-					$('#lunascount').text(data.lunascount);
+				$('#tabelVerif').off('draw.dt');
+				$('#tabelVerif').on('draw.dt', function () {
+					$.get(url, function (data) {
+						$('#ajucount').text(data.ajucount);
+						$('#proccesscount').text(data.proccesscount);
+						$('#verifiedcount').text(data.verifiedcount);
+						$('#failCount').text(data.failCount);
+						$('#lunascount').text(data.lunascount);
 
-					// // Build table for pengajuan
-					var tableBody = $("#verifprogress tbody");
-					tableBody.empty(); // Clear previous table data
-					$.each(data.verifikasis, function (index, verifikasi) {
-						console.log('Verifikasi:', verifikasi);
-						var row = $("<tr></tr>");
-						var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
-						var nomorPengajuan = $("<td></td>").text(verifikasi.no_pengajuan);
-						var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+						var tabelVerif = $("#tabelVerif tbody");
+						tabelVerif.empty();
+						$.each(data.progresVT, function (index, verifikasi){
+							var row = $("<tr></tr>");
+							var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
+							var jenisVerif = $("<td></td>").text(verifikasi.jenis);
+							var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+							var created = $("<td></td>").text(verifikasi.created_at);
+							var updated = $("<td></td>").text(verifikasi.updated_at);
 
-						var ajuCell = $('<td class="text-center"></td>').html(function() {
-							if (verifikasi.status) {
-								return '<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>';
+							var tahapCell = $('<td class="text-center"></td>').html(function() {
+								if (verifikasi.TProgress === '1') {
+									return '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
+								} else if (verifikasi.TProgress === '2') {
+									return '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Berkas</span>';
+								} else if (verifikasi.TProgress === '3') {
+									return '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> PKS</span>';
+								} else if (verifikasi.TProgress === '4') {
+									return '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Selesai</span>';
+								} else if (verifikasi.TProgress === '5') {
+									return '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
+								}
+							});
+							row.append(namaPerusahaan, nomorRIPH, jenisVerif, created, updated, tahapCell);
+							tabelVerif.append(row);
+							function formatNumber(number) {
+								return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+							}
+
+							function formatdecimals(number) {
+								var parts = number.toFixed(2).toString().split(".");
+								var formattedNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								if (parts.length > 1) {
+									formattedNumber += "," + parts[1];
+								} else {
+									formattedNumber += ",00"; // Add two decimal places if there are none
+								}
+								return formattedNumber;
 							}
 						});
-
-						var dataCell = $('<td class="text-center"></td>').html(function() {
-							if (verifikasi.status === '2') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
-							} else if (verifikasi.status === '3') {
-								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
-							}
-						});
-
-						var lapanganCell = $('<td class="text-center"></td>').html(function() {
-							if (verifikasi.status === '2' && !verifikasi.onfarmstatus) {
-								return '<span class="badge badge-xs badge-warning"><i class="fal fa-exclamation-circle mr-1"></i>Belum diperiksa</span>';
-							} else if (verifikasi.status === '4') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-check-circle mr-1"></i>Selesai</span>';
-							} else if (verifikasi.status === '5') {
-								return '<span class="badge badge-xs badge-danger"><i class="fal fa-ban mr-1"></i>Tidak Sesuai</span>';
-							}
-						});
-
-						var lunasCell = $('<td></td>').html(function() {
-							if (verifikasi.status === '6') {
-								return '<span class="badge badge-xs badge-primary"><i class="fal fa-file-signature mr-1"></i>Rekomendasi</span>';
-							} else if (verifikasi.status === '7') {
-								return '<span class="badge badge-xs badge-success"><i class="fal fa-award mr-1"></i>Lunas</span> <span hidden>7</span>';
-							}
-						});
-
-						row.append(namaPerusahaan, nomorPengajuan, nomorRIPH, ajuCell, dataCell, lapanganCell, lunasCell);
-						tableBody.append(row);
 					});
-
-					function formatNumber(number) {
-						return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-					}
-
-					function formatdecimals(number) {
-						var parts = number.toFixed(2).toString().split(".");
-						var formattedNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-						if (parts.length > 1) {
-							formattedNumber += "," + parts[1];
-						} else {
-							formattedNumber += ",00"; // Add two decimal places if there are none
-						}
-						return formattedNumber;
-					}
 				});
+				// Jalankan draw.dt secara manual setelah mengganti URL
+				table.DataTable().draw();
 			});
 		});
 	</script>

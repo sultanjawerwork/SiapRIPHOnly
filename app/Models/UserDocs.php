@@ -18,35 +18,37 @@ class UserDocs extends Model
 
 		//dokumen tanam
 		'spvt', //surat pengajuan verifikasi tanam
-		'sptjm', //surat pertanggungjawaban mutlak
+		'sptjmtanam', //surat pertanggungjawaban mutlak
 		'rta', //form realisasi tanam
 		'sphtanam', //
-		'spdst', //surat pengantar dinas telah selesai tanam
+		// 'spdst', //surat pengantar dinas telah selesai tanam
 		'logbooktanam',
 
 		//hasil periksa dok tanam
 		'spvtcheck', //surat pengajuan verifikasi tanam
-		'sptjmcheck', //surat pertanggungjawaban mutlak
+		'sptjmtanamcheck', //surat pertanggungjawaban mutlak
 		'rtacheck', //form realisasi tanam
 		'sphtanamcheck', //
-		'spdstcheck', //surat pengantar dinas telah selesai tanam
+		// 'spdstcheck', //surat pengantar dinas telah selesai tanam
 		'logbooktanamchek',
 		'tanamcheck_by',
 		'tanamverif_at',
 
 		//dokumen produksi
 		'spvp', //surat pengajuan verifikasi produksi
+		'sptjmproduksi', //surat pertanggungjawaban mutlak
 		'rpo', //realisasi produksi
 		'sphproduksi', //sph produksi
-		'spdsp', //surat pengantar dinas telah selesai produksi
+		// 'spdsp', //surat pengantar dinas telah selesai produksi
 		'logbookproduksi',
 		'formLa',
 
 		//hasil periksa dokumen produksi
 		'spvpcheck', //surat pengajuan verifikasi produksi
+		'sptjmproduksicheck',
 		'rpocheck', //realisasi produksi
 		'sphproduksicheck', //sph produksi
-		'spdspcheck', //surat pengantar dinas telah selesai produksi
+		// 'spdspcheck', //surat pengantar dinas telah selesai produksi
 		'logbookproduksicheck',
 		'formLacheck',
 
@@ -54,10 +56,10 @@ class UserDocs extends Model
 		'prodverif_at',
 
 		//DOKUMEN PENGAJUAN SKL
-		'spskl', //surat pengajuan penerbitan skl
-		'spsklcheck',
-		'spsklcheck_by',
-		'spsklverif_at',
+		// 'spskl', //surat pengajuan penerbitan skl
+		// 'spsklcheck',
+		// 'spsklcheck_by',
+		// 'spsklverif_at',
 	];
 
 	public function commitment()

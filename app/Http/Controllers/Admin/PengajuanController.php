@@ -146,7 +146,7 @@ class PengajuanController extends Controller
 		// Validasi berkas
 		if ($userDoc === null) {
 			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
-		} elseif ($userDoc->sptjm === null) {
+		} elseif ($userDoc->sptjmtanam === null) {
 			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
 		} elseif ($userDoc->spvt === null) {
 			$errorMessage = 'Surat Pengajuan Verifikasi Tanam tidak ditemukan.';
@@ -228,26 +228,16 @@ class PengajuanController extends Controller
 		// Validasi berkas
 		if ($userDoc === null) {
 			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
-		} elseif ($userDoc->sptjm === null) {
+		} elseif ($userDoc->sptjmproduksi === null) {
 			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
 		} elseif ($userDoc->spvp === null) {
 			$errorMessage = 'Surat Pengajuan Verifikasi Produksi tidak ditemukan.';
-			// } elseif ($userDoc->rta === null) {
-			// 	$errorMessage = 'Form Realisasi Tanam tidak ditemukan.';
 		} elseif ($userDoc->rpo === null) {
 			$errorMessage = 'Form Realisasi Produksi tidak ditemukan.';
 		} elseif ($userDoc->sphproduksi === null) {
 			$errorMessage = 'Dokumen SPH-SBS (Produksi) tidak ditemukan.';
-			// } elseif ($userDoc->formLa === null) {
-			// 	$errorMessage = 'Dokumen Laporan Akhir tidak ditemukan.';
-			// } elseif ($realisasiTanam < $wajibTanam) {
-			// 	$errorMessage = 'Realisasi Luas Tanam yang dilaporkan tidak memenuhi syarat.';
-			// } elseif ($verifTanam === null || $verifTanam->status !== '4') {
-			// 	$errorMessage = 'Hasil Verifikasi tahap tanam tidak memenuhi syarat.';
 		} elseif ($realisasiProduksi < $wajibProduksi) {
 			$errorMessage = 'Realisasi Produksi yang dilaporkan tidak memenuhi syarat.';
-			// } elseif ($verifProduksi === null || $verifProduksi->status !== '4') {
-			// 	$errorMessage = 'Hasil Verifikasi tahap Produksi tidak memenuhi syarat.';
 		}
 
 		$optionalMessage = 'Pengajuan Verifikasi Produksi untuk RIPH No ' . $commitment->no_ijin . ' tidak dapat dilakukan. Ajukan kembali setelah Anda melengkapi data dan syarat-syarat yang diperlukan.';
@@ -314,8 +304,8 @@ class PengajuanController extends Controller
 		//data validasi
 		$lokasis = Lokasi::where('no_ijin', $commitment->no_ijin)->get();
 		$wajibTanam = $commitment->luas_wajib_tanam;
-		$wajibProduksi = $commitment->volume_produksi;
 		$realisasiTanam = $lokasis->sum('luas_tanam');
+		$wajibProduksi = $commitment->volume_produksi;
 		$realisasiProduksi = $lokasis->sum('volume');
 
 		// Validasi berkas
@@ -323,8 +313,6 @@ class PengajuanController extends Controller
 			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
 		} elseif ($userDoc->sptjm === null) {
 			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
-		} elseif ($userDoc->spskl === null) {
-			$errorMessage = 'Surat Pengajuan Penerbitan SKL tidak ditemukan.';
 		} elseif ($userDoc->rta === null) {
 			$errorMessage = 'Form Realisasi Tanam tidak ditemukan.';
 		} elseif ($userDoc->rpo === null) {
@@ -333,10 +321,6 @@ class PengajuanController extends Controller
 			$errorMessage = 'Dokumen SPH-SBS (Tanam dan Produksi) tidak ditemukan.';
 		} elseif ($userDoc->formLa === null) {
 			$errorMessage = 'Dokumen Laporan Akhir tidak ditemukan.';
-			// } elseif ($realisasiTanam < $wajibTanam) {
-			// 	$errorMessage = 'Realisasi Luas Tanam yang dilaporkan tidak memenuhi syarat.';
-			// } elseif ($verifTanam === null || $verifTanam->status !== '4') {
-			// 	$errorMessage = 'Hasil Verifikasi tahap tanam tidak memenuhi syarat.';
 		} elseif ($realisasiProduksi < $wajibProduksi) {
 			$errorMessage = 'Realisasi Produksi yang dilaporkan tidak memenuhi syarat.';
 		} elseif ($verifProduksi === null || $verifProduksi->status !== '4') {

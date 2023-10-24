@@ -21,17 +21,17 @@ td {
 						<div class="panel-content">
 							<div class="row d-flex justify-content-between">
 								<div class="form-group col-md-4">
-									<label class="form-label" for="no_pengajuan">Nomor Pengajuan</label>
+									<label class="form-label" for="company_name">Perusahaan</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text">
 												<i class="fal fa-file-invoice"></i>
 											</span>
 										</div>
-										<input type="text" class="form-control form-control-sm" id="no_pengajuan" name="no_pengajuan"
-											value="{{$verifikasi->no_pengajuan}}" disabled>
+										<input type="text" class="form-control form-control-sm" id="company_name" name="company_name"
+											value="{{$commitment->datauser->company_name}}" disabled>
 									</div>
-									<span class="help-block">Nomor Pengajuan Verifikasi.</span>
+									<span class="help-block">Nama Perusahaan yang mengajukan verifikasi.</span>
 								</div>
 								<div class="form-group col-md-4">
 									<label class="form-label" for="no_ijin">Nomor RIPH</label>
@@ -165,20 +165,20 @@ td {
 											<tbody>
 												<tr>
 													<td>Surat Pertanggungjawaban Mutlak</td>
-													<td>{{$userDocs->sptjm}}</td>
+													<td>{{$userDocs->sptjmtanam}}</td>
 													<td>
-														@if ($userDocs->sptjm)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
+														@if ($userDocs->sptjmtanam)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
 																<i class="fas fa-search mr-1"></i>
 																Lihat Dokumen
 															</a>
 														@endif
 													</td>
 													<td>
-														<select class="form-control form-control-sm" name="sptjmcheck" id="sptjmcheck">
+														<select class="form-control form-control-sm" name="sptjmtanamcheck" id="sptjmtanamcheck">
 															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->sptjmcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->sptjmcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+															<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
 														</select>
 													</td>
 												</tr>
@@ -240,26 +240,6 @@ td {
 													</td>
 												</tr>
 												<tr>
-													<td>Pengantar Dinas telah selesai Tanam</td>
-													<td>{{$userDocs->spdst}}</td>
-													<td>
-														@if ($userDocs->spdst)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
-																<i class="fas fa-search mr-1"></i>
-																Lihat Dokumen
-															</a>
-														@endif
-													</td>
-													<td>
-														<select class="form-control form-control-sm" name="spdstcheck" id="spdstcheck">
-															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->spdstcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->spdstcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-															<option value="" {{ $userDocs->logbookcheck == '' ? 'selected' : '' }}>Tidak ada</option>
-														</select>
-													</td>
-												</tr>
-												<tr>
 													<td>Logbook (s.d tanam)</td>
 													<td>{{$userDocs->logbooktanam}}</td>
 													<td>
@@ -288,7 +268,7 @@ td {
 									</div>
 									<div class="col-md text-right">
 										<button type="submit" class="btn btn-primary btn-sm">
-											Selesai
+											<i class="fal fa-save"></i> Simpan Hasil Pemeriksaan
 										</button>
 									</div>
 								</div>
@@ -346,10 +326,11 @@ td {
 								@method('PUT')
 								<div class="card-footer d-flex alignt-items-center justify-content-between">
 									<div>
+										{{-- <p class="help-block">Dengan menekan tombol <span class="fw-700 text-primary">'Simpan Hasil Pemeriksaan'</span>, seluruh berkas Perjanjian Kerjasama (PKS) yang belum terperiksa akan dinyatakan <span class="fw-700 text-danger">'Sesuai'</span>.</p> --}}
 									</div>
 									<div>
 										<button type="submit" class="btn btn-primary btn-sm">
-											simpan
+											<i class="fal fa-save"></i> Simpan Hasil Pemeriksaan
 										</button>
 									</div>
 								</div>
@@ -401,13 +382,10 @@ td {
 										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
 										<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}" hidden>
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
-										<div class="row d-flex justify-content-between">
-											<div class="form-group col-md-12">
-												<label for="note">Catatan Pemeriksaan <sup class="text-danger"> *</sup></label>
-												<textarea name="note" id="note" rows="3" class="form-control form-control-sm">{{ old('note', $verifikasi ? $verifikasi->note : '') }}</textarea>
-											</div>
-											<div class="form-group col-md-6">
-												<label class="">Nota Dinas<sup class="text-danger"> *</sup></label>
+
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
 													<input type="file" class="custom-file-input" name="ndhprt" id="ndhprt" value="{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : '') }}">
 													<label class="custom-file-label" for="ndhprt">{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : 'pilih berkas') }}</label>
@@ -421,8 +399,10 @@ td {
 													<span class="help-block fw-500">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
 												@endif
 											</div>
-											<div class="form-group col-md-6">
-												<label class="">Berita Acara<sup class="text-danger">*</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger">*</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
 													<input type="file" class="custom-file-input" name="batanam" id="batanam" value="{{ old('batanam', $verifikasi ? $verifikasi->batanam : '') }}">
 													<label class="custom-file-label" for="batanam">{{ old('batanam', $verifikasi ? $verifikasi->batanam : 'pilih berkas') }}</label>
@@ -436,33 +416,46 @@ td {
 													<span class="help-block">Berita Acara Pemeriksaan Realisasi Tanam. <span class="text-danger"></span></span>
 												@endif
 											</div>
-											<div class="form-group col-md-3">
-												<label for="">Metode Pemeriksaan<sup class="text-danger"> *</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Metode Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<select name="metode" id="metode" class="form-control custom-select" required>
 													<option value="" hidden>-- pilih metode --</option>
+													<option value="Dokumen" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Dokumen' ? 'selected' : '' }}>Dokumen</option>
 													<option value="Lapangan" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Lapangan' ? 'selected' : '' }}>Lapangan</option>
 													<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih metode pemeriksaan</small>
 											</div>
-											<div class="form-group col-md-3">
-												<label for="">Kesimpulan Pemeriksaan<sup class="text-danger"> *</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<select name="status" id="status" class="form-control custom-select" required>
 													<option value="" hidden>-- pilih status --</option>
 													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
-													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Tidak Sesuai/Perbaikan</option>
+													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
 											</div>
-											<div class="form-group col-md-6">
-												<label class="">Dengan ini kami menyatakan verifikasi tanam telah SELESAI dilaksanakan.</label>
-												<div class="input-group">
-													<input type="text" class="form-control" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
-													<div class="input-group-append">
-														<button class="btn btn-danger" type="submit" onclick="return validateInput()" id="btnSubmit">
-															<i class="fas fa-save text-align-center mr-1"></i>Simpan
-														</button>
-													</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2">Catatan Pemeriksaan <sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
+												<textarea name="note" id="note" rows="3" class="form-control form-control-sm">{{ old('note', $verifikasi ? $verifikasi->note : '') }}</textarea>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="form-group">
+											<label>Dengan ini kami menyatakan verifikasi tanam telah <span class="text-danger fw-500">SELESAI</span> dilaksanakan.</label>
+											<div class="input-group">
+												<input type="text" class="form-control" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
+												<div class="input-group-append">
+													<button class="btn btn-danger" type="submit" onclick="return validateInput()" id="btnSubmit">
+														<i class="fas fa-save text-align-center mr-1"></i>Simpan
+													</button>
 												</div>
 											</div>
 										</div>
@@ -540,8 +533,8 @@ td {
 				],
 				columnDefs: [
 
-					{ className: 'text-right', targets: [3,4] },
-					{ className: 'text-center', targets: [5] },
+					{ className: 'text-right', targets: [0] },
+					{ className: 'text-center', targets: [1] },
 				]
 			});
 

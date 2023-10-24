@@ -106,10 +106,10 @@
 												@endphp
 												@if ($isFirstGroupIncomplete)
 													<i class="fal fa-map-marker-slash text-danger fw-bold"
-													data-toggle="tooltip" data-original-title="Data Geolokasi belum lengkap!"></i>
+													data-toggle="tooltip" data-original-title="Data Spasial belum lengkap!"></i>
 												@else
 													<i class="fal fa-map-marker-check text-danger fw-bold"
-													data-toggle="tooltip" data-original-title="Data Geolokasi belum lengkap!"></i>
+													data-toggle="tooltip" data-original-title="Data Spasial belum lengkap!"></i>
 												@endif
 												@if ($isSecondGroupIncomplete)
 													<i class="fal fa-seedling text-danger fw-bold"
@@ -129,7 +129,7 @@
 									<td class="text-center">{{$lokasi->tgl_panen}}</td>
 									<td  class="text-center">
 										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
-											title="Data Geolokasi dan Realisasi Tanam" class="btn btn-xs btn-icon btn-primary"
+											title="Data Spasial dan Realisasi Tanam" class="btn btn-xs btn-icon btn-primary"
 											data-toggle="tooltip" >
 											<i class="fal fa-map"></i>
 										</a>
@@ -198,6 +198,15 @@
 																		<span class="help-block">Luas area lahan diukur mandiri.</span>
 																	</div>
 																	<div class="form-group col-md-12">
+																		<label class="form-label">Dokumentasi Tanam<sup class="text-danger"> *</sup></label>
+																		<div class="custom-file input-group">
+																			<input type="file" class="custom-file-input" id="customControlValidation7"
+																				name="tanam_pict" id="tanam_pict">
+																			<label class="custom-file-label" for="tanam_pict">{{ $lokasi->tanam_pict ? $lokasi->tanam_pict : 'Pilih berkas...' }}</label>
+																		</div>
+																		<span class="help-block">Unggah Dokumentasi Tanam. Ekstensi jpg ukuran maks 4mb.</span>
+																	</div>
+																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumen Pendukung<span class="text-danger">*</span></label>
 																		<div class="custom-file input-group">
 																			<input type="file" class="custom-file-input" name="tanam_doc" id="tanam_doc" value="{{ old('tanam_doc', $lokasi->tanam_doc) }}">
@@ -212,15 +221,6 @@
 																				Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.
 																			@endif
 																		</span>
-																	</div>
-																	<div class="form-group col-md-12">
-																		<label class="form-label">Dokumentasi Tanam<sup class="text-danger"> *</sup></label>
-																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" id="customControlValidation7"
-																				name="tanam_pict" id="tanam_pict">
-																			<label class="custom-file-label" for="tanam_pict">{{ $lokasi->tanam_pict ? $lokasi->tanam_pict : 'Pilih berkas...' }}</label>
-																		</div>
-																		<span class="help-block">Unggah Dokumentasi Tanam. Ekstensi jpg ukuran maks 4mb.</span>
 																	</div>
 																</div>
 															</div>
@@ -255,10 +255,10 @@
 														<input type="hidden" value="{{$lokasi->anggota_id}}">
 														<div class="card" style="width:100%">
 															{{-- <div class="card-header fw-500">Realisasi Wajib Produksi</div> --}}
-															@if($lokasi->tanam_pict)
-																<img src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$lokasi->panen_pict) }}" class="card-img-top" alt="Foto Tanam">
+															@if($lokasi->panen_pict)
+																<img src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$lokasi->panen_pict) }}" class="card-img-top" alt="Foto Panen">
 															@else
-																<img src="{{ url('img/posts_img/1619.svg') }}" class="card-img-top" alt="Foto Tanam">
+																<img src="{{ url('img/posts_img/1619.svg') }}" class="card-img-top" alt="Foto Produksi">
 															@endif
 															<div class="card-body">
 																<div class="row">
@@ -278,13 +278,23 @@
 																		<label class="form-label" for="luas_tanam">Volume Produksi (ton)<sup class="text-danger"> *</sup></label>
 																		<div class="input-group">
 																			<div class="input-group-prepend">
-																				<span class="input-group-text"><i class="fal fa-ruler-combined"></i></span>
+																				<span class="input-group-text"><i class="fal fa-balance-scale"></i></span>
 																			</div>
 																			<input type="number" value="{{ old('volume', $lokasi->volume) }}"
 																				name="volume" id="volume" step="0.01"
 																				class="font-weight-bold form-control form-control-sm bg-white" />
 																		</div>
-																		<span class="help-block">Luas area lahan diukur mandiri.</span>
+																		<span class="help-block">Volume panen diukur/timbang mandiri.</span>
+																	</div>
+																	<div class="form-group col-md-12">
+																		<label class="form-label">Dokumentasi Produksi<sup class="text-danger"> *</sup></label>
+																		<div class="custom-file input-group">
+																			<input type="file" class="custom-file-input" id="customControlValidation7"
+																				value="{{ old('panen_pict', $lokasi->panen_pict) }}"
+																				name="panen_pict" id="panen_pict">
+																				<label class="custom-file-label" for="panen_pict">{{ $lokasi->panen_pict ? $lokasi->panen_pict : 'Pilih berkas...' }}</label>
+																		</div>
+																		<span class="help-block">Unggah Dokumentasi Panen. Ekstensi jpg ukuran maks 4mb.</span>
 																	</div>
 																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumen Pendukung<sup class="text-danger"> *</sup></label>
@@ -303,16 +313,6 @@
 																				Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.
 																			@endif
 																		</span>
-																	</div>
-																	<div class="form-group col-md-12">
-																		<label class="form-label">Dokumentasi Produksi<sup class="text-danger"> *</sup></label>
-																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" id="customControlValidation7"
-																				value="{{ old('panen_pict', $lokasi->panen_pict) }}"
-																				name="panen_pict" id="panen_pict">
-																				<label class="custom-file-label" for="panen_pict">{{ $lokasi->panen_pict ? $lokasi->panen_pict : 'Pilih berkas...' }}</label>
-																		</div>
-																		<span class="help-block">Unggah Dokumentasi Panen. Ekstensi jpg ukuran maks 4mb.</span>
 																	</div>
 																</div>
 															</div>

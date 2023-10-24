@@ -339,7 +339,7 @@
 								<th>Pengelola</th>
 								<th class="text-center">Luas Tanam</th>
 								<th class="text-center">Produksi</th>
-								<th>Data Geolokasi</th>
+								<th>Data Spasial</th>
 							</tr>
 						</thead>
 					</table>

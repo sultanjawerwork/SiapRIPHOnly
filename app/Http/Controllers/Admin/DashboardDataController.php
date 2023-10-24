@@ -18,6 +18,7 @@ use App\Models\PullRiph;
 use App\Models\Lokasi;
 use App\Models\Pks;
 use App\Models\Pengajuan;
+use Carbon\Carbon;
 
 class DashboardDataController extends Controller
 {
@@ -97,43 +98,102 @@ class DashboardDataController extends Controller
 	{
 		abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-		$allPengajuan = Pengajuan::whereNotNull('status')
-			->whereYear('created_at', $periodetahun)
-			->get();
+		// $allPengajuan = Pengajuan::whereNotNull('status')
+		// 	->whereYear('created_at', $periodetahun)
+		// 	->get();
 
-		$verifikasis = $allPengajuan->map(function ($singlePengajuan) {
+		$allPengajuan = PullRiph::where(function ($query) use ($periodetahun) {
+			$query->whereHas('ajutanam', function ($subquery) use ($periodetahun) {
+				$subquery->whereYear('created_at', $periodetahun);
+			})->orWhereHas('ajuproduksi', function ($subquery) use ($periodetahun) {
+				$subquery->whereYear('created_at', $periodetahun);
+			})->orWhereHas('ajuskl', function ($subquery) use ($periodetahun) {
+				$subquery->whereYear('created_at', $periodetahun);
+			})->orWhereHas('completed', function ($subquery) use ($periodetahun) {
+				$subquery->whereYear('created_at', $periodetahun);
+			});
+		})->with('ajutanam', 'ajuproduksi', 'ajuskl', 'completed')->get();
+
+
+		$verifikasis = $allPengajuan->map(function ($verifikasi) {
 			return [
-				'no_pengajuan' => $singlePengajuan->no_pengajuan,
+				'no_pengajuan' => $verifikasi->no_pengajuan,
 				'commitment' => [
 					'datauser' => [
-						'company_name' => $singlePengajuan->commitment->datauser->company_name,
+						'company_name' => $verifikasi->datauser->company_name,
 					],
 				],
-				'no_ijin' => $singlePengajuan->commitment->no_ijin,
-				'status' => $singlePengajuan->status,
-				'onlinestatus' => $singlePengajuan->onlinestatus,
-				'onfarmstatus' => $singlePengajuan->onfarmstatus,
+				'no_ijin' => $verifikasi->no_ijin,
+				'statusTanam'	=> $verifikasi->ajutanam->status ?? '',
+				'statusProduksi' => $verifikasi->ajuproduksi->status ?? '',
+				'statusSkl' => $verifikasi->ajuskl->status ?? '',
+				'statusCompleted'	=> $verifikasi->completed->url ?? '',
 			];
 		});
 
-		$ajucount = $allPengajuan->where('status', '1')->count();
-		$proccesscount = $allPengajuan->where('onlinestatus', '2')
-			->where('onfarmstatus', '')
-			->count();
-		$verifiedcount = $allPengajuan->whereNotNull('onfarmstatus')
-			->count();
+		$ajuTanamCount = $verifikasis->where('statusTanam', '1')->count();
+		$ajuProduksiCount = $verifikasis->where('statusProduksi', '1')->count();
+		$ajuSklCount = $verifikasis->where('statusSkl', '1')->count();
+		$ajucount = $ajuTanamCount + $ajuProduksiCount + $ajuSklCount;
+
+		$prosesTanamCount = $verifikasis->whereIn('statusTanam', [2, 3])->count();
+		$prosesProduksiCount = $verifikasis->whereIn('statusProduksi', [2, 3])->count();
+		$prosesSklCount = $verifikasis->whereIn('statusSkl', [2, 3])->count();
+		$proccesscount = $prosesTanamCount + $prosesProduksiCount + $prosesSklCount;
+
+		//lanjutkan ke proses selanjutnya
+		$verifiedTanamCount = $verifikasis->where('statusTanam', 4)->count();
+		$verifiedProduksiCount = $verifikasis->where('statusProduksi', 4)->count();
+		$verifiedSklCount = $verifikasis->where('statusSkl', 4)->count();
+		$verifiedcount = $verifiedTanamCount + $verifiedProduksiCount + $verifiedSklCount;
+		$lunascount = $verifikasis->where('statusCompleted', '!=', null)->count();
+
+		$failTanamCount = $verifikasis->where('statusTanam', 5)->count();
+		$failProduksiCount = $verifikasis->where('statusProduksi', 5)->count();
+		$failSklCount = $verifikasis->where('statusSkl', 5)->count();
+		$failCount = $failTanamCount + $failProduksiCount + $failSklCount;
+
 		$recomendationcount = $allPengajuan->where('status', '')
 			->count();
-		$lunascount = $allPengajuan->where('status', '7')
-			->count();
+
+		$progresVT = $allPengajuan->where('ajutanam.status', '>=', 1)->where('ajutanam.status', '<=', 4)->map(function ($verifikasi) {
+			return [
+				'jenis' => 'Verifikasi Tanam',
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $verifikasi->datauser->company_name,
+					],
+				],
+				'no_ijin' => $verifikasi->no_ijin,
+				'created_at' => Carbon::parse($verifikasi->ajutanam->created_at)->format('M d, Y'),
+				'updated_at' => Carbon::parse($verifikasi->ajutanam->updated_at)->format('M d, Y'),
+				'TProgress' => $verifikasi->ajutanam->status ?? '',
+			];
+		});
+
+		$progresVP = $allPengajuan->where('ajuproduksi.status', '!=', null)->map(function ($verifikasi) {
+			return [
+				'jenis' => 'Verifikasi Produksi',
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $verifikasi->datauser->company_name,
+					],
+				],
+				'no_ijin' => $verifikasi->no_ijin,
+				'PProgress' => $verifikasi->ajuproduksi->status ?? '',
+			];
+		});
 
 		$data = [
-			'ajucount' => $ajucount,
-			'proccesscount' => $proccesscount,
-			'verifiedcount' => $verifiedcount,
-			'recomendationcount' => $recomendationcount,
-			'lunascount' => $lunascount,
-			'verifikasis' => $verifikasis,
+			'ajucount'				=> $ajucount,
+			'proccesscount'			=> $proccesscount,
+			'verifiedcount'			=> $verifiedcount,
+			'failCount'				=> $failCount,
+			'recomendationcount'	=> $recomendationcount,
+			'lunascount'			=> $lunascount,
+			'verifikasis'			=> $verifikasis,
+			'progresVT'				=> $progresVT,
+			'progresVP'				=> $progresVP,
 		];
 
 		return response()->json($data);

@@ -21,7 +21,7 @@
 				<div class="panel-hdr">
 					<h2>
 						Data <span class="fw-300">
-							<i>Geolokasi</i>
+							<i>Spasial</i>
 						</span>
 					</h2>
 					<div class="panel-toolbar">

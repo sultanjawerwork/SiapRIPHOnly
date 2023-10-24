@@ -39,6 +39,32 @@
 														<span class="icon-stack-1x text-white opacity-90">!</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
+												@else
+													<div disable class="btn-group btn-group-toggle" role="group">
+														<label class="btn btn-{{ $verifikasi->status == 1 ? 'warning' : 'success' }} btn-xs" data-toggle="tooltip" data-original-title="Verifikasi diajukan">1
+															<i class="fa {{ $verifikasi->status == 1 ? 'fa-exclamation-circle' : 'fa-check' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Verifikasi Berkas Kelengkapan">2
+															<i class="fa {{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Verifikasi Berkas PKS">3
+															<i class="fa {{ in_array($verifikasi->status, [3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ $verifikasi->status == 4 ? 'success' : ($verifikasi->status == 5 ? 'danger' : 'default') }} btn-xs" data-toggle="tooltip" data-original-title="Hasil Pemeriksaan">4
+															<i class="fa {{ $verifikasi->status == 4 ? 'fa-check' : ($verifikasi->status == 5 ? 'fa-ban' : 'fa-hourglass') }}"></i>
+														</label>
+													</div>
+												@endif
+												{{-- @if ($verifikasi->status === '1')
+													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
+														<i class="base-7 icon-stack-3x color-warning-300"></i>
+														<i class="base-7 icon-stack-2x color-warning-800 opacity-70"></i>
+														<span class="icon-stack-1x text-white opacity-90">!</span>
+													</span>
+													<span hidden>{{$verifikasi->status}}</span>
 												@elseif ($verifikasi->status === '2')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pemeriksaan Berkas Kelengkapan">
 														<i class="base-7 icon-stack-3x color-info-400"></i>
@@ -60,7 +86,7 @@
 														<i class="fa fa-check icon-stack-1x text-white"></i>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@endif
+												@endif --}}
 											</td>
 											<td class="text-center">
 												@if ($verifikasi->status === '4')

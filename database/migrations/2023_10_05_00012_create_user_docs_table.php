@@ -23,6 +23,7 @@ return new class extends Migration
 			//dokumen tanam
 			$table->string('spvt')->nullable(); //surat pengajuan verifikasi tanam
 			$table->string('sptjm')->nullable();
+			$table->string('sptjmtanam')->nullable();
 			$table->string('rta')->nullable();
 			$table->string('sphtanam')->nullable();
 			$table->string('spdst')->nullable(); //surat pengantar dinas telah selesai tanam
@@ -31,6 +32,7 @@ return new class extends Migration
 			//hasil periksa dok tanam
 			$table->string('spvtcheck')->nullable(); //surat pengajuan verifikasi tanam
 			$table->string('sptjmcheck')->nullable();
+			$table->string('sptjmtanamcheck')->nullable();
 			$table->string('rtacheck')->nullable();
 			$table->string('sphtanamcheck')->nullable();
 			$table->string('spdstcheck')->nullable(); //surat pengantar dinas telah selesai tanam
@@ -40,6 +42,7 @@ return new class extends Migration
 
 			//dokumen produksi
 			$table->string('spvp')->nullable(); //surat pengajuan verifikasi produksi
+			$table->string('sptjmproduksi')->nullable();
 			$table->string('rpo')->nullable();
 			$table->string('formLa')->nullable();
 			$table->string('sphproduksi')->nullable();
@@ -48,6 +51,7 @@ return new class extends Migration
 
 			// hasil periksa dok produksi
 			$table->string('spvpcheck')->nullable(); //surat pengajuan verifikasi produksi
+			$table->string('sptjmproduksicheck')->nullable();
 			$table->string('rpocheck')->nullable();
 			$table->string('formLacheck')->nullable();
 			$table->string('sphproduksicheck')->nullable();

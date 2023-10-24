@@ -99,7 +99,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="text-muted">Geolokasi</td>
+										<td class="text-muted">Spasial</td>
 										<td>:</td>
 										<td class="fw-500">
 											{{$hasGeoloc}} titik

@@ -239,19 +239,17 @@ class CommitmentController extends Controller
 			DB::beginTransaction();
 
 			$fileFields = [
-				'sptjm',
+				'sptjmtanam',
+				'sptjmproduksi',
 				'spvt',
 				'rta',
 				'sphtanam',
-				'spdst',
 				'logbooktanam',
 				'spvp',
 				'rpo',
 				'formLa',
 				'sphproduksi',
-				'spdsp',
 				'logbookproduksi',
-				'spskl'
 				// Tambahkan field-file lainnya di sini
 			];
 
