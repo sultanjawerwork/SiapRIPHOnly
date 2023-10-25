@@ -64,6 +64,7 @@ td {
 										<i class="fal fa-edit"></i>
 									</a>
 								</td>
+								{{-- tanam --}}
 								<td class="text-center">
 									{{-- @if ($pksFileCount == $pksCount) --}}
 										@if (!empty($commitment->userDocs->sptjmtanam))
@@ -90,13 +91,13 @@ td {
 														<i class="fal fa-clipboard-list-check"></i>
 													</a>
 												@elseif($commitment->ajuTanam->status === '4')
-													<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-													title data-original-title="Verifikasi Tanam selesai.">
+													<a href="{{route('admin.task.pengajuan.tanam.show', $commitment->id)}}" class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
+													title data-original-title="Verifikasi Tanam selesai. Klik untuk Lihat hasil.">
 														<i class="fal fa-check"></i>
-													</span>
+													</a>
 												@elseif($commitment->ajuTanam->status === '5')
 													<div class="dropdown">
-														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Perbaiki data dan laporan">
 															<i class="fa fa-exclamation"></i>
 														</a>
 														<div class="dropdown-menu">
@@ -116,7 +117,7 @@ td {
 												</span>
 											@endif
 										@else
-											<span id="syaratTanam" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan Keterangan Lunas.">
+											<span id="syaratTanam" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan verifikasi.">
 												<i class="fas fa-info-circle text-info"></i>
 											</span>
 										@endif

@@ -311,7 +311,9 @@ class PengajuanController extends Controller
 		// Validasi berkas
 		if ($userDoc === null) {
 			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
-		} elseif ($userDoc->sptjm === null) {
+		} elseif ($userDoc->sptjmtanam === null) {
+			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
+		} elseif ($userDoc->sptjmproduksi === null) {
 			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
 		} elseif ($userDoc->rta === null) {
 			$errorMessage = 'Form Realisasi Tanam tidak ditemukan.';

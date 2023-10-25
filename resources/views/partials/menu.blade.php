@@ -72,7 +72,7 @@
 
 			{{-- dashhboard --}}
 			@can('dashboard_access')
-				@if (Auth::user()->roles[0]->title == 'User' || Auth::user()->roles[0]->title == 'user_v2')
+				@if (Auth::user()->roles[0]->title == 'User')
 					<li class="{{ request()->is('admin/dashboard*') ? 'active open' : '' }} ">
 						<a href="#" title="Dashboard" data-filter-tags="dashboard pemantauan kinerja">
 							<i class="fal fa-analytics"></i>
@@ -107,12 +107,6 @@
 									data-filter-tags="{{ strtolower(trans('cruds.dashboardAdmin.title_lang')) }}">
 									<i
 										class="fa-fw fal fa-stamp c-sidebar-nav-icon"></i>{{ trans('cruds.dashboardAdmin.title_lang') }}
-								</a>
-							</li>
-							<li hidden class="c-sidebar-nav-item {{ request()->is('admin/dashboard/monitoring') ? 'active' : '' }}">
-								<a href="{{ route('admin.dashboard.monitoring') }}" class="c-sidebar-nav-link"
-									data-filter-tags="{{ strtolower(trans('cruds.dashboardAdmin.title_lang')) }}">
-									<i class="fa-fw fal fa-chart-pie c-sidebar-nav-icon"></i>{{ trans('cruds.dashboardAdmin.title_lang') }} (Data Lama)
 								</a>
 							</li>
 							<li class="c-sidebar-nav-item {{ request()->is('admin/dashboard/map') ? 'active' : '' }}">

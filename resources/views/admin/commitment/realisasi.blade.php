@@ -15,6 +15,19 @@
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane fade active show" id="panel-5" role="tabpanel" aria-labelledby="panel-5">
+			<div class="row mb-3">
+				<div class="col-12">
+					<div class="panel-tag fade show bg-white border-info text-info m-0 l-h-m-n">
+						<div class="d-flex align-items-center">
+							<i class="fas fa-info-circle mr-1"></i>
+							<div class="flex-1">
+								<small><span class="mr-1 fw-500">INFORMASI!</span>Anda dapat mengisi data Realisasi Komitmen Tanam dan Produksi setelah melengkapi data Perjanjian Kerjasama.</small>
+							</div>
+							<a href="{{route('admin.task.commitment')}}" class="btn btn-info btn-xs btn-w-m waves-effect waves-themed">Kembali</a>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="panel" id="panel-5">
 				<div class="panel-container show">
 					<div class="panel-content">
@@ -226,7 +239,6 @@
 							</tbody>
 						</table>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -241,6 +253,7 @@
 								<div class="flex-1">
 									<small><span class="mr-1 fw-700">PERHATIAN!</span>Seluruh Dokumen Tanam & Produksi harus diunggah sebelum <span class="fw-700 text-uppercase">Pengajuan Surat Keterangan Lunas</span> dilakukan.</small>
 								</div>
+								<a href="{{route('admin.task.commitment')}}" class="btn btn-info btn-xs btn-w-m waves-effect waves-themed">Kembali</a>
 							</div>
 						</div>
 					</div>

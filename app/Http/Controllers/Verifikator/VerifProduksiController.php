@@ -116,16 +116,13 @@ class VerifProduksiController extends Controller
 		try {
 			DB::beginTransaction();
 			$checks = [
-				'sptjmcheck',
-				'spvtcheck',
+				'sptjmtanamcheck',
 				'rtacheck',
 				'sphtanamcheck',
-				'spdstcheck',
-				'logbooktanamcheck',
 				'spvpcheck',
+				'sptjmproduksicheck',
 				'rpocheck',
 				'sphproduksicheck',
-				'spdspcheck',
 				'logbookproduksicheck',
 				'formLacheck',
 			];

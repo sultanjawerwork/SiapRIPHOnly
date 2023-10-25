@@ -84,6 +84,9 @@
 				<h2>
 					<i class="subheader-icon fal fa-seedling mr-1"></i>Komitmen Wajib Tanam
 				</h2>
+				<div class="panel-toolbar">
+					<a href="{{route('admin.dashboard.monitoringrealisasi')}}" class="btn btn-xs btn-success waves-effect waves-themed">Lihat Rincian</a>
+				</div>
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">
@@ -136,6 +139,9 @@
 				<h2>
 					<i class="subheader-icon fal fa-dolly mr-1"></i>Komitmen Wajib Produksi
 				</h2>
+				<div class="panel-toolbar">
+					<a href="{{route('admin.dashboard.monitoringrealisasi')}}" class="btn btn-xs btn-warning waves-effect waves-themed">Lihat Rincian</a>
+				</div>
 			</div>
 			<div class="panel-container show">
 				<div class="panel-content">

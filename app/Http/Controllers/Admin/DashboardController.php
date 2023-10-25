@@ -237,4 +237,16 @@ class DashboardController extends Controller
 
 		return view('admin.dashboard.monitoring', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns'));
 	}
+
+	public function monitoringRealisasi(Request $request)
+	{
+		$module_name = 'Dashboard';
+		$page_title = 'Monitoring Realisasi' . $request->input('periodetahun');
+		$page_heading = 'Monitoring Realisasi' . $request->input('periodetahun');
+		$heading_class = 'fas fa-th mr-1';
+
+		$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
+
+		return view('admin.dashboard.monitoringrealisasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns'));
+	}
 }

@@ -111,7 +111,41 @@
 							<th>Tahap 3</th>
 						</thead>
 						<tbody>
-
+							{{-- @foreach ($allPengajuan as $pengajuan)
+								<tr>
+									<td>{{$pengajuan->commitment->datauser->company_name}}</td>
+									<td>{{$pengajuan->no_pengajuan}}</td>
+									<td>{{$pengajuan->no_ijin}}</td>
+									<td class="text-center">
+										@if ($pengajuan->status)
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-check-circle"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '2')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '3')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->onlinestatus === '4')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@elseif ($pengajuan->onlinestatus === '5')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+									<td class="text-center">
+										@if ($pengajuan->status === '6')
+											<span class="btn btn-xs btn-icon btn-info"><i class="fa fa-file-signature"></i></span>
+										@elseif ($pengajuan->status === '7')
+											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-award"></i></span>
+										@elseif ($pengajuan->status === '8')
+											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+										@endif
+									</td>
+								</tr>
+							@endforeach --}}
 						</tbody>
 					</table>
 					<span hidden class="help-block mt-2">
@@ -162,16 +196,35 @@
 @section('scripts')
 @parent
 	<script>
-		$(document).ready(function () {
+		$(document).ready(function() {
+			// Initialize the year picker
+			$('.yearpicker').datepicker({
+				format: 'yyyy',
+				viewMode: 'years',
+				minViewMode: 'years',
+				autoclose: true
+			});
+
+
+			// Event handler untuk mengubah URL saat elemen select berubah
+			$('#periodetahun').on('change', function () {
+				var selectedValue = $(this).val(); // Mendapatkan nilai yang dipilih
+				var updatedUrl = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
+				updatedUrl = updatedUrl.replace(':periodetahun', selectedValue);
+
+				// Perbarui URL pada fungsi updateTableData
+				updateTableData(updatedUrl);
+			});
+
 			var table = $('#tabelVerif').dataTable({
 				responsive: true,
 				lengthChange: false,
-				ordering: true,
+				ordering:true,
 				dom:
-					"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>"+
-					"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>"+
-					"<'row'<'col-sm-12'tr>>"+
-					"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				"<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'<'select'>>>" +
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 				buttons: [
 					{
 						extend: 'pdfHtml5',
@@ -194,98 +247,90 @@
 				]
 			});
 
-			// Ketika halaman dimuat
-			var currentYear = new Date().getFullYear();
-			$('#periodetahun').val(currentYear);
-			var url = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
-			url = url.replace(':periodetahun', currentYear);
-			updateTableData(url);
+			$('#periodetahun').on('change', function() {
+				var periodetahun = $(this).val();
+				var url = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
+				url = url.replace(':periodetahun', periodetahun);
 
-			// Initialize the year picker
-			$('.yearpicker').datepicker({
-				format: 'yyyy',
-				viewMode: 'years',
-				minViewMode: 'years',
-				autoclose: true
-			});
-
-			$('#periodetahun').on('change', function () {
-				var selectedValue = $(this).val(); // Get the selected value
-				var updatedUrl = '{{ route("admin.verifikatormonitoringDataByYear", ":periodetahun") }}';
-				updatedUrl = updatedUrl.replace(':periodetahun', selectedValue);
-				table.fnClearTable();
-				// Update the table data using the new URL
-				updateTableData(updatedUrl);
-			});
-
-			// Function to update the table data using AJAX
-			function updateTableData(url) {
-				$.ajax({
-					url: url,
-					type: 'GET',
-					dataType: 'json',
-					success: function (data) {
-						// Update the table and other elements with data received from the server
+				$('#tabelVerif').off('draw.dt');
+				$('#tabelVerif').on('draw.dt', function () {
+					$.get(url, function (data) {
 						$('#ajucount').text(data.ajucount);
 						$('#proccesscount').text(data.proccesscount);
 						$('#verifiedcount').text(data.verifiedcount);
 						$('#failCount').text(data.failCount);
 						$('#lunascount').text(data.lunascount);
-						table.fnClearTable();
-						// Populate the table with data tanam from the server
-						$.each(data.progresVT, function (index, verifikasi) {
-							var company = verifikasi.commitment.datauser.company_name;
-							var jenis = verifikasi.jenis;
-							var no_ijin = verifikasi.no_ijin;
-							var created = verifikasi.created_at;
-							var updated = verifikasi.updated_at;
-							var progress = verifikasi.TProgress;
-							var progressHTML = ''; // Ini adalah variabel untuk menyimpan HTML yang akan dihasilkan
 
-							if (progress === '1') {
-								progressHTML = '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
-							} else if (progress === '2') {
-								progressHTML = '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Berkas</span>';
-							} else if (progress === '3') {
-								progressHTML = '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> PKS</span>';
-							} else if (progress === '4') {
-								progressHTML = '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Selesai</span>';
-							} else if (progress === '5') {
-								progressHTML = '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
+						var tabelVerif = $("#tabelVerif tbody");
+						tabelVerif.empty();
+						$.each(data.progresVT, function (index, verifikasi){
+							var row = $("<tr></tr>");
+							var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
+							var jenisVerif = $("<td></td>").text(verifikasi.jenis);
+							var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+							var created = $("<td></td>").text(verifikasi.created_at);
+							var updated = $("<td></td>").text(verifikasi.updated_at);
+
+							var tahapCell = $('<td class="text-center"></td>').html(function() {
+								if (verifikasi.TProgress === '1') {
+									return '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
+								} else if (verifikasi.TProgress === '2') {
+									return '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Berkas</span>';
+								} else if (verifikasi.TProgress === '3') {
+									return '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> PKS</span>';
+								} else if (verifikasi.TProgress === '4') {
+									return '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Selesai</span>';
+								} else if (verifikasi.TProgress === '5') {
+									return '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
+								}
+							});
+							row.append(namaPerusahaan, nomorRIPH, jenisVerif, created, updated, tahapCell);
+							tabelVerif.append(row);
+							function formatNumber(number) {
+								return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 							}
-							table.fnAddData([company, no_ijin, jenis,created, updated, progressHTML]);
+
+							function formatdecimals(number) {
+								var parts = number.toFixed(2).toString().split(".");
+								var formattedNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+								if (parts.length > 1) {
+									formattedNumber += "," + parts[1];
+								} else {
+									formattedNumber += ",00"; // Add two decimal places if there are none
+								}
+								return formattedNumber;
+							}
 						});
 
-						// Populate the table with data produksi from the server
-						$.each(data.progresVP, function (index, verifikasi) {
-							var company = verifikasi.commitment.datauser.company_name;
-							var jenis = verifikasi.jenis;
-							var no_ijin = verifikasi.no_ijin;
-							var created = verifikasi.created_at;
-							var updated = verifikasi.updated_at;
-							var progress = verifikasi.PProgress;
-							var progressHTML = ''; // Ini adalah variabel untuk menyimpan HTML yang akan dihasilkan
+						$.each(data.progresVP, function (index, verifikasi){
+							var row = $("<tr></tr>");
+							var namaPerusahaan = $("<td></td>").text(verifikasi.commitment.datauser.company_name);
+							var jenisVerif = $("<td></td>").text(verifikasi.jenis);
+							var nomorRIPH = $("<td></td>").text(verifikasi.no_ijin);
+							var created = $("<td></td>").text(verifikasi.created_at);
+							var updated = $("<td></td>").text(verifikasi.updated_at);
 
-							if (progress === '1') {
-								progressHTML = '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
-							} else if (progress === '2') {
-								progressHTML = '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Berkas</span>';
-							} else if (progress === '3') {
-								progressHTML = '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> PKS</span>';
-							} else if (progress === '4') {
-								progressHTML = '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Selesai</span>';
-							} else if (progress === '5') {
-								progressHTML = '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
-							}
-							table.fnAddData([company, no_ijin, jenis,created, updated, progressHTML]);
+							var tahapCell = $('<td class="text-center"></td>').html(function() {
+								if (verifikasi.PProgress === '1') {
+									return '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
+								} else if (verifikasi.PProgress === '2') {
+									return '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Berkas</span>';
+								} else if (verifikasi.PProgress === '3') {
+									return '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> PKS</span>';
+								} else if (verifikasi.PProgress === '4') {
+									return '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Selesai</span>';
+								} else if (verifikasi.PProgress === '5') {
+									return '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
+								}
+							});
+							row.append(namaPerusahaan, nomorRIPH, jenisVerif, created, updated, tahapCell);
+							tabelVerif.append(row);
 						});
-						table.fnDraw();
-					},
-					error: function (xhr, status, error) {
-						console.log("AJAX request error: " + error);
-					}
+					});
 				});
-			}
+				// Jalankan draw.dt secara manual setelah mengganti URL
+				table.DataTable().draw();
+			});
 		});
 	</script>
 @endsection

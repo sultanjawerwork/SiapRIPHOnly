@@ -173,6 +173,13 @@
 								<td></td>
 								<td></td>
 							</tr>
+
+							<tr>
+								<td class="text-uppercase fw-500">KELENGKAPAN BERKAS</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
 							<tr>
 								<td class="text-uppercase fw-500">A. TAHAP TANAM</td>
 								<td></td>
@@ -209,12 +216,12 @@
 									@if ($userDocs->sptjmtanam)
 										@if ($userDocs->sptjmtanamcheck === 'sesuai')
 											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
-												Berkas Ada
+												Ada
 											</a>
 											<i class="fa fa-check text-success ml-1"></i>
 										@else
 											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
-												Berkas Ada
+												Ada
 											</a>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
@@ -296,150 +303,152 @@
 							</tr>
 
 							{{-- berkas produksi --}}
-							<tr>
-								<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Surat Pengajuan Verifikasi Produksi</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->spvp)
-										@if ($userDocs->spvpcheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvp) }}">
-												Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+							@if(!(request()->is('admin/task/commitment/*/pengajuan/tanam/show') || request()->is('admin/task/commitment/*/formavt')))
+								<tr>
+									<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Surat Pengajuan Verifikasi Produksi</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->spvp)
+											@if ($userDocs->spvpcheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvp) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvp) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvp) }}">
-												Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Surat Pertanggungjawaban Mutlak (Produksi)</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->sptjmproduksi)
-										@if ($userDocs->sptjmproduksicheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmproduksi) }}">
-												Berkas Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Surat Pertanggungjawaban Mutlak (Produksi)</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->sptjmproduksi)
+											@if ($userDocs->sptjmproduksicheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmproduksi) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmproduksi) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmproduksi) }}">
-												Berkas Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Form Realisasi Produksi</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->rpo)
-										@if ($userDocs->rpocheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rpo) }}">
-												Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Form Realisasi Produksi</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->rpo)
+											@if ($userDocs->rpocheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rpo) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rpo) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->rpo) }}">
-												Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">SPH-SBS (Produksi)</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->sphproduksi)
-										@if ($userDocs->sphproduksicheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphproduksi) }}">
-												Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">SPH-SBS (Produksi)</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->sphproduksi)
+											@if ($userDocs->sphproduksicheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphproduksi) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphproduksi) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphproduksi) }}">
-												Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Logbook (s.d Produksi)</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->logbookproduksi)
-										@if ($userDocs->logbookproduksicheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbookproduksi) }}">
-												Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Logbook (s.d Produksi)</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->logbookproduksi)
+											@if ($userDocs->logbookproduksicheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbookproduksi) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbookproduksi) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbookproduksi) }}">
-												Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td class="text-muted pl-4">Laporan Akhir</td>
-								<td>:</td>
-								<td class="fw-500">
-									@if ($userDocs->formLa)
-										@if ($userDocs->formLacheck === 'sesuai')
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
-												Berkas Ada
-											</a>
-											<i class="fa fa-check text-success ml-1"></i>
+									</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td class="text-muted pl-4">Laporan Akhir</td>
+									<td>:</td>
+									<td class="fw-500">
+										@if ($userDocs->formLa)
+											@if ($userDocs->formLacheck === 'sesuai')
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
+													Ada
+												</a>
+												<i class="fa fa-check text-success ml-1"></i>
+											@else
+												<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
+													Ada
+												</a>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
 										@else
-											<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
-												Berkas Ada
-											</a>
+											<span class="text-danger">Tidak ada berkas</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
-									@else
-										<span class="text-danger">Tidak ada berkas</span>
-										<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-									@endif
-								</td>
-								<td></td>
-							</tr>
+									</td>
+									<td></td>
+								</tr>
+							@endif
 
 							{{-- hasil pemeriksaan --}}
 							<tr class="bg-primary-50" style="height: 25px; opacity: 0.2">
@@ -503,7 +512,7 @@
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
 									@else
-										Tidak ada pengajuan
+										Belum/Tidak ada pengajuan
 										<i class="fas fa-exclamation-circle text-warning ml-1"></i>
 									@endif
 								</td>
@@ -559,7 +568,7 @@
 												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 											@endif
 										@else
-											<span class="text-danger">Tidak ada pengajuan</span>
+											<span class="text-danger">Belum/Tidak ada pengajuan</span>
 											<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 										@endif
 									</td>
@@ -616,7 +625,7 @@
 														<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 													@endif
 												@else
-													<span class="text-danger">Tidak ada pengajuan</span>
+													<span class="text-danger">Belum/Tidak ada pengajuan</span>
 													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 												@endif
 											</td>

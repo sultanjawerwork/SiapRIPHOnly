@@ -142,11 +142,11 @@ td {
 													{{$countPks}} PKS
 												</td>
 												<td>
-													@if($countPks < $countPoktan)
+													{{-- @if($countPks < $countPoktan)
 														<i class="fas fa-exclamation-circle mr-1 text-warning"></i><span class="text-warning fw-500">TIDAK SESUAI</span>
 													@else
 														<i class="fas fa-check mr-1 text-success"></i><span class="text-success fw-500">SESUAI</span>
-													@endif
+													@endif --}}
 												</td>
 											</tr>
 										</tbody>
@@ -187,66 +187,6 @@ td {
 											<tbody>
 												<tr>
 													<td>
-														@if ($userDocs->sptjm)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
-																Surat Pertanggungjawaban Mutlak
-															</a>
-														@else
-															<span>Surat Pertanggungjawaban Mutlak</span>
-														@endif
-													</td>
-													<td class="text-center">
-														WAJIB
-														@if (empty($userDocs->sptjmcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
-														@endif
-													</td>
-													<td>
-														@if ($userDocs->sptjm)
-															<select class="form-control form-control-sm" name="sptjmcheck" id="sptjmcheck">
-																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->sptjmcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->sptjmcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-															</select>
-														@else
-															<span class="text-danger">
-																-- tidak dilampirkan --
-															</span>
-														@endif
-													</td>
-												</tr>
-												<tr>
-													<td>
-														@if ($userDocs->spvt)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $userDocs->spvt ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) : '' }}">
-																Surat Pengajuan Verifikasi Tanam
-															</a>
-														@else
-															<span>Surat Pengajuan Verifikasi Tanam</span>
-														@endif
-													</td>
-													<td class="text-center">
-														WAJIB
-														@if (empty($userDocs->spvtcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
-														@endif
-													</td>
-													<td>
-														@if ($userDocs->spvt)
-															<select class="form-control form-control-sm" name="spvtcheck" id="spvtcheck">
-																<option value="">- Pilih status -</option>
-																<option value="sesuai" {{ $userDocs->spvtcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-																<option value="perbaiki" {{ $userDocs->spvtcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-															</select>
-														@else
-															<span class="text-danger">
-																-- tidak dilampirkan --
-															</span>
-														@endif
-													</td>
-												</tr>
-												<tr>
-													<td>
 														@if ($userDocs->spvp)
 															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ $userDocs->spvp ? asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvp) : '' }}">
 																Surat Pengajuan Verifikasi Produksi
@@ -258,15 +198,75 @@ td {
 													<td class="text-center">
 														WAJIB
 														@if (empty($userDocs->spvpcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td>
 														@if ($userDocs->spvp)
-															<select class="form-control form-control-sm" name="spvpcheck" id="spvpcheck">
+															<select class="form-control form-control-sm {{ $userDocs->spvpcheck ? '' : 'border-danger' }}" name="spvpcheck" id="spvpcheck">
 																<option value="">- Pilih status -</option>
 																<option value="sesuai" {{ $userDocs->spvpcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 																<option value="perbaiki" {{ $userDocs->spvpcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															</select>
+														@else
+															<span class="text-danger">
+																-- tidak dilampirkan --
+															</span>
+														@endif
+													</td>
+												</tr>
+												<tr>
+													<td>
+														@if ($userDocs->sptjmtanam)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
+																Surat Pertanggungjawaban Mutlak (tanam)
+															</a>
+														@else
+															<span>Surat Pertanggungjawaban Mutlak (tanam)</span>
+														@endif
+													</td>
+													<td class="text-center">
+														WAJIB
+														@if (empty($userDocs->sptjmtanamcheck))
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
+														@endif
+													</td>
+													<td>
+														@if ($userDocs->sptjmtanam)
+															<select class="form-control form-control-sm {{ $userDocs->sptjmtanamcheck ? '' : 'border-danger' }}" name="sptjmtanamcheck" id="sptjmtanamcheck">
+																<option value="">- Pilih status -</option>
+																<option value="sesuai" {{ $userDocs->sptjmtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+																<option value="perbaiki" {{ $userDocs->sptjmtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
+															</select>
+														@else
+															<span class="text-danger">
+																-- tidak dilampirkan --
+															</span>
+														@endif
+													</td>
+												</tr>
+												<tr>
+													<td>
+														@if ($userDocs->sptjmproduksi)
+															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmproduksi) }}">
+																Surat Pertanggungjawaban Mutlak (produksi)
+															</a>
+														@else
+															<span>Surat Pertanggungjawaban Mutlak (produksi)</span>
+														@endif
+													</td>
+													<td class="text-center">
+														WAJIB
+														@if (empty($userDocs->sptjmproduksicheck))
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
+														@endif
+													</td>
+													<td>
+														@if ($userDocs->sptjmproduksi)
+															<select class="form-control form-control-sm {{ $userDocs->sptjmproduksicheck ? '' : 'border-danger' }}" name="sptjmproduksicheck" id="sptjmproduksicheck">
+																<option value="">- Pilih status -</option>
+																<option value="sesuai" {{ $userDocs->sptjmproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
+																<option value="perbaiki" {{ $userDocs->sptjmproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
 															</select>
 														@else
 															<span class="text-danger">
@@ -288,12 +288,12 @@ td {
 													<td class="text-center">
 														WAJIB
 														@if (empty($userDocs->rtacheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td>
 														@if ($userDocs->rta)
-															<select class="form-control form-control-sm" name="rtacheck" id="rtacheck">
+															<select class="form-control form-control-sm {{ $userDocs->rtacheck ? '' : 'border-danger' }}" name="rtacheck" id="rtacheck">
 																<option value="">- Pilih status -</option>
 																<option value="sesuai" {{ $userDocs->rtacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 																<option value="perbaiki" {{ $userDocs->rtacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
@@ -318,12 +318,12 @@ td {
 													<td class="text-center">
 														WAJIB
 														@if (empty($userDocs->rpocheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td>
 														@if ($userDocs->rpo)
-															<select class="form-control form-control-sm" name="rpocheck" id="rpocheck">
+															<select class="form-control form-control-sm {{ $userDocs->rpocheck ? '' : 'border-danger' }}" name="rpocheck" id="rpocheck">
 																<option value="">- Pilih status -</option>
 																<option value="sesuai" {{ $userDocs->rpocheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 																<option value="perbaiki" {{ $userDocs->rpocheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
@@ -348,12 +348,12 @@ td {
 													<td class="text-center">
 														Pendukung
 														@if (empty($userDocs->sphtanamcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td class="text-center">
 														@if ($userDocs->sphtanam)
-														<select class="form-control form-control-sm" name="sphtanamcheck" id="sphtanamcheck">
+														<select class="form-control form-control-sm {{ $userDocs->sphtanamcheck ? '' : 'border-danger' }}" name="sphtanamcheck" id="sphtanamcheck">
 															<option value="">- Pilih status -</option>
 															<option value="sesuai" {{ $userDocs->sphtanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 															<option value="perbaiki" {{ $userDocs->sphtanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
@@ -378,105 +378,15 @@ td {
 													<td class="text-center">
 														Pendukung
 														@if (empty($userDocs->sphproduksicheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td class="text-center">
 														@if ($userDocs->sphproduksi)
-														<select class="form-control form-control-sm" name="sphproduksicheck" id="sphproduksicheck">
+														<select class="form-control form-control-sm {{ $userDocs->sphproduksicheck ? '' : 'border-danger' }}" name="sphproduksicheck" id="sphproduksicheck">
 															<option value="">- Pilih status -</option>
 															<option value="sesuai" {{ $userDocs->sphproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 															<option value="perbaiki" {{ $userDocs->sphproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-														</select>
-														@else
-															<span class="text-danger">
-																-- tidak dilampirkan --
-															</span>
-														@endif
-													</td>
-												</tr>
-												<tr>
-													<td>
-														@if ($userDocs->spdst)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
-																Surat Keterangan/Pengantar Dinas Telah Selesai Tanam
-															</a>
-														@else
-															<span>Surat Keterangan/Pengantar Dinas Telah Selesai Tanam</span>
-														@endif
-													</td>
-													<td class="text-center">
-														Pendukung
-														@if (empty($userDocs->spdstcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
-														@endif
-													</td>
-													<td class="text-center">
-														@if ($userDocs->spdst)
-														<select class="form-control form-control-sm" name="spdstcheck" id="spdstcheck">
-															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->spdstcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->spdstcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-														</select>
-														@else
-															<span class="text-danger">
-																-- tidak dilampirkan --
-															</span>
-														@endif
-													</td>
-												</tr>
-												<tr>
-													<td>
-														@if ($userDocs->spdsp)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdsp) }}">
-																Surat Keterangan/Pengantar Dinas Telah Selesai Produksi
-															</a>
-														@else
-															<span>Surat Keterangan/Pengantar Dinas Telah Selesai Produksi</span>
-														@endif
-													</td>
-													<td class="text-center">
-														Pendukung
-														@if (empty($userDocs->spdspcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
-														@endif
-													</td>
-													<td class="text-center">
-														@if ($userDocs->spdsp)
-														<select class="form-control form-control-sm" name="spdspcheck" id="spdspcheck">
-															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->spdspcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->spdspcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
-														</select>
-														@else
-															<span class="text-danger">
-																-- tidak dilampirkan --
-															</span>
-														@endif
-													</td>
-												</tr>
-												<tr>
-													<td>
-														@if ($userDocs->logbooktanam)
-															<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->logbooktanam) }}">
-																Logbook Tanam
-															</a>
-														@else
-															<span>Logbook Tanam</span>
-														@endif
-													</td>
-													<td class="text-center">
-														Pendukung
-														@if (empty($userDocs->logbooktanamcheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
-														@endif
-													</td>
-													<td class="text-center">
-														@if ($userDocs->logbooktanam)
-														<select class="form-control form-control-sm" name="logbooktanamcheck" id="logbooktanamcheck">
-															<option value="">- Pilih status -</option>
-															<option value="sesuai" {{ $userDocs->logbooktanamcheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
-															<option value="perbaiki" {{ $userDocs->logbooktanamcheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
 														</select>
 														@else
 															<span class="text-danger">
@@ -498,12 +408,12 @@ td {
 													<td class="text-center">
 														Pendukung
 														@if (empty($userDocs->logbookproduksicheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td class="text-center">
 														@if ($userDocs->logbookproduksi)
-														<select class="form-control form-control-sm" name="logbookproduksicheck" id="logbookproduksicheck">
+														<select class="form-control form-control-sm {{ $userDocs->logbookproduksicheck ? '' : 'border-danger' }}" name="logbookproduksicheck" id="logbookproduksicheck">
 															<option value="">- Pilih status -</option>
 															<option value="sesuai" {{ $userDocs->logbookproduksicheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 															<option value="perbaiki" {{ $userDocs->logbookproduksicheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
@@ -528,12 +438,12 @@ td {
 													<td class="text-center">
 														Wajib
 														@if (empty($userDocs->formLacheck))
-															<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup>
+															{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> --}}
 														@endif
 													</td>
 													<td class="text-center">
 														@if ($userDocs->formLa)
-														<select class="form-control form-control-sm" name="formLacheck" id="formLacheck">
+														<select class="form-control form-control-sm {{ $userDocs->formLacheck ? '' : 'border-danger' }}" name="formLacheck" id="formLacheck">
 															<option value="">- Pilih status -</option>
 															<option value="sesuai" {{ $userDocs->formLacheck == 'sesuai' ? 'selected' : '' }}>Sesuai</option>
 															<option value="perbaiki" {{ $userDocs->formLacheck == 'perbaiki' ? 'selected' : '' }}>Perbaiki</option>
@@ -551,11 +461,11 @@ td {
 								</div>
 								<div class="card-footer d-flex alignt-items-center justify-content-between">
 									<div>
-										<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> :Belum dilakukan pemeriksaan.
+										{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> :Belum dilakukan pemeriksaan. --}}
 									</div>
 									<div>
 										<button type="submit" class="btn btn-primary btn-sm">
-											simpan
+											<i class="fal fa-save mr-1"></i>Simpan Hasil Pemeriksaan
 										</button>
 									</div>
 								</div>
@@ -614,7 +524,7 @@ td {
 									</div>
 									<div>
 										<button type="submit" class="btn btn-primary btn-sm">
-											simpan
+											<i class="fal fa-save mr-1"></i>Simpan Hasil Pemeriksaan
 										</button>
 									</div>
 								</div>
@@ -667,13 +577,9 @@ td {
 										<input type="text" name="no_ijin" value="{{$verifikasi->no_ijin}}" hidden>
 										<input type="text" name="no_pengajuan" value="{{$verifikasi->no_pengajuan}}" hidden>
 										<input type="text" name="npwp" value="{{$verifikasi->npwp}}" hidden>
-										<div class="row d-flex justify-content-between">
-											<div class="form-group col-md-12">
-												<label for="note">Catatan Pemeriksaan <sup class="text-danger"> *</sup></label>
-												<textarea name="note" id="note" rows="3" class="form-control form-control-sm" required>{{ old('note', $verifikasi ? $verifikasi->note : '') }}</textarea>
-											</div>
-											<div class="form-group col-md-6">
-												<label class="">Nota Dinas<sup class="text-danger"> *</sup></label>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
 													<input type="file" class="custom-file-input" name="ndhprp" id="ndhprp" value="{{ old('ndhprp', optional($verifikasi)->ndhprp) }}">
 													<label class="custom-file-label" for="ndhprp">{{ old('ndhprp', $verifikasi ? $verifikasi->ndhprp : 'Pilih berkas') }}</label>
@@ -684,11 +590,13 @@ td {
 														Lihat Nota Dinas.
 													</a>
 												@else
-													<span class="help-block">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
+													<span class="help-block">Nota Dinas Hasil Pemeriksaan Realisasi Produksi. <span class="text-danger">(wajib)</span></span>
 												@endif
 											</div>
-											<div class="form-group col-md-6">
-												<label class="">Berita Acara<sup class="text-danger">*</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
 													<input type="file" class="custom-file-input" name="baproduksi" id="baproduksi" value="{{ old('baproduksi', optional($verifikasi)->baproduksi) }}">
 													<label class="custom-file-label" for="baproduksi">{{ old('baproduksi', $verifikasi ? $verifikasi->baproduksi : 'Pilih berkas') }}</label>
@@ -699,36 +607,49 @@ td {
 														Lihat Berita Acara.
 													</a>
 												@else
-													<span class="help-block">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
+													<span class="help-block">Berita Acara Hasil Pemeriksaan Realisasi Produksi. <span class="text-danger">(wajib)</span></span>
 												@endif
 											</div>
-											<div class="form-group col-md-3">
-												<label for="">Metode Pemeriksaan<sup class="text-danger"> *</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Metode Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<select name="metode" id="metode" class="form-control custom-select" required>
 													<option value="" hidden>-- pilih metode --</option>
+													<option value="Dokumen" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Dokumen' ? 'selected' : '' }}>Dokumen</option>
 													<option value="Lapangan" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Lapangan' ? 'selected' : '' }}>Lapangan</option>
-													<option value="Lapangan" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
+													<option value="Wawancara" {{ old('metode', $verifikasi ? $verifikasi->metode : '') == 'Wawancara' ? 'selected' : '' }}>Wawancara</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih metode pemeriksaan</small>
 											</div>
-											<div class="form-group col-md-3">
-												<label for="">Kesimpulan Pemeriksaan<sup class="text-danger"> *</sup></label>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2 col-form-label">Hasil Pemeriksaan<sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
 												<select name="status" id="status" class="form-control custom-select" required>
 													<option value="" hidden>-- pilih status --</option>
 													<option value="4" {{ old('status', $verifikasi ? $verifikasi->status : '') == '4' ? 'selected' : '' }}>Sesuai</option>
-													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Tidak Sesuai/Perbaikan</option>
+													<option value="5" {{ old('status', $verifikasi ? $verifikasi->status : '') == '5' ? 'selected' : '' }}>Perbaikan Data</option>
 												</select>
 												<small id="helpId" class="text-muted">Pilih hasil pemeriksaan</small>
 											</div>
-											<div class="form-group col-md-6">
-												<label class="">Dengan ini kami menyatakan verifikasi produksi telah SELESAI dilaksanakan.</label>
-												<div class="input-group">
-													<input type="text" class="form-control" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
-													<div class="input-group-append">
-														<button class="btn btn-danger" type="submit" onclick="return validateInput()" id="btnSubmit">
-															<i class="fas fa-save text-align-center mr-1"></i>Simpan
-														</button>
-													</div>
+										</div>
+										<div class="form-group row">
+											<label class="col-md-3 col-lg-2">Catatan Pemeriksaan <sup class="text-danger"> *</sup></label>
+											<div class="col-md-9 col-lg-10">
+												<textarea name="note" id="note" rows="3" class="form-control form-control-sm">{{ old('note', $verifikasi ? $verifikasi->note : '') }}</textarea>
+											</div>
+										</div>
+									</div>
+									<div class="card-footer">
+										<div class="form-group">
+											<label class="">Dengan ini kami menyatakan verifikasi produksi telah <span class="text-danger fw-500">SELESAI</span> dilaksanakan.</label>
+											<div class="input-group">
+												<input type="text" class="form-control form-control-sm" placeholder="ketik username Anda di sini" id="validasi" name="validasi"required>
+												<div class="input-group-append">
+													<button class="btn btn-danger btn-sm" type="submit" onclick="return validateInput()" id="btnSubmit">
+														<i class="fas fa-save text-align-center mr-1"></i>Simpan
+													</button>
 												</div>
 											</div>
 										</div>

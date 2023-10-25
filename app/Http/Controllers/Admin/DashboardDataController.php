@@ -98,10 +98,6 @@ class DashboardDataController extends Controller
 	{
 		abort_if(Auth::user()->roleaccess != 1, Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-		// $allPengajuan = Pengajuan::whereNotNull('status')
-		// 	->whereYear('created_at', $periodetahun)
-		// 	->get();
-
 		$allPengajuan = PullRiph::where(function ($query) use ($periodetahun) {
 			$query->whereHas('ajutanam', function ($subquery) use ($periodetahun) {
 				$subquery->whereYear('created_at', $periodetahun);
@@ -180,7 +176,24 @@ class DashboardDataController extends Controller
 					],
 				],
 				'no_ijin' => $verifikasi->no_ijin,
+				'created_at' => Carbon::parse($verifikasi->ajuproduksi->created_at)->format('M d, Y'),
+				'updated_at' => Carbon::parse($verifikasi->ajuproduksi->updated_at)->format('M d, Y'),
 				'PProgress' => $verifikasi->ajuproduksi->status ?? '',
+			];
+		});
+
+		$progresVSkl = $allPengajuan->where('ajuskl.status', '!=', null)->map(function ($verifikasi) {
+			return [
+				'jenis' => 'Verifikasi SKL',
+				'commitment' => [
+					'datauser' => [
+						'company_name' => $verifikasi->datauser->company_name,
+					],
+				],
+				'no_ijin' => $verifikasi->no_ijin,
+				'created_at' => Carbon::parse($verifikasi->ajuproduksi->created_at)->format('M d, Y'),
+				'updated_at' => Carbon::parse($verifikasi->ajuproduksi->updated_at)->format('M d, Y'),
+				'SklProgress' => $verifikasi->ajuskl->status ?? '',
 			];
 		});
 
@@ -194,6 +207,7 @@ class DashboardDataController extends Controller
 			'verifikasis'			=> $verifikasis,
 			'progresVT'				=> $progresVT,
 			'progresVP'				=> $progresVP,
+			'progresVSkl'			=> $progresVSkl,
 		];
 
 		return response()->json($data);
@@ -304,5 +318,34 @@ class DashboardDataController extends Controller
 		$res = json_decode(json_encode((array)simplexml_load_string($response)), true);
 
 		return $res;
+	}
+
+	public function monitoringDataRealisasi($periodetahun)
+	{
+		$commitments = PullRiph::where('periodetahun', $periodetahun)
+			->with('lokasi')
+			->get();
+
+		$dataRealisasi = $commitments->map(function ($realisasi) {
+			// Menghitung total luas tanam dan total volume
+			$totalLuasTanam = $realisasi->lokasi->sum('luas_tanam');
+			$totalVolume = $realisasi->lokasi->sum('volume');
+
+			return [
+				'company' => $realisasi->datauser->company_name,
+				'no_ijin' => $realisasi->no_ijin,
+				'volume_riph' => number_format($realisasi->volume_riph, 2, ',', '.'),
+				'wajib_tanam' => number_format($realisasi->luas_wajib_tanam, 2, ',', '.'),
+				'wajib_produksi' => number_format($realisasi->volume_produksi, 2, ',', '.'),
+				'realisasi_tanam' => number_format($totalLuasTanam, 2, ',', '.'),
+				'realisasi_produksi' => number_format($totalVolume, 2, ',', '.'),
+			];
+		});
+
+		// dd($dataRealisasi);
+		$data = [
+			'dataRealisasi'			=> $dataRealisasi,
+		];
+		return response()->json($data);
 	}
 }

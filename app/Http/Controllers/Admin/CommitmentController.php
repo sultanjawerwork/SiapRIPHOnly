@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengajuan;
 use App\Models\PullRiph;
 use App\Models\PenangkarRiph;
 use App\Models\Pks;

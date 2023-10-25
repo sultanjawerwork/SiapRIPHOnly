@@ -434,6 +434,7 @@ class VerifSklController extends Controller
 				'submit_by' => $user->id,
 			]
 		);
+		$avskl->status = 6;
 		$avskl->save();
 		return redirect()->route('verification.skl.verifSklShow', $id)->with('success', 'Rekomendasi berhasil diajukan.');
 	}
@@ -527,8 +528,11 @@ class VerifSklController extends Controller
 				$skl = Skl::find($id);
 				$skl->approved_by = Auth::user()->id;
 				$skl->approved_at = Carbon::now();
-
 				$skl->save();
+
+
+				$avskl = AjuVerifSkl::where('no_ijin', $skl->no_ijin);
+				$avskl->status = 7;
 				return redirect()->route('verification.skl.recomendations')->with(['success' => 'Penerbitan SKL telah Anda setujui dan siap diterbitkan.']);
 			});
 		} catch (\Exception $e) {
@@ -641,6 +645,7 @@ class VerifSklController extends Controller
 
 		// Simpan perubahan pada model-model terkait
 		$skl->save();
+		$pengajuan->status = 8;
 		$pengajuan->save();
 		$commitment->save();
 
