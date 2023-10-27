@@ -677,7 +677,7 @@
 				@if(request()->is('admin/task/commitment/*/formavskl') || request()->is('admin/task/commitment/*/pengajuan/skl/show'))
 					<form action="{{route('admin.task.commitment.avskl.store', $commitment->id)}}" method="post">
 						@csrf
-						@if(!$commitment->ajuSkl || !in_array($commitment->ajuSkl->status, ['1', '2', '3', '4']))
+						@if(!$commitment->ajuskl || !in_array($commitment->ajuskl->status, ['1', '2', '3', '4']))
 							<button type="submit" class="btn btn-xs btn-warning" data-toggle="tooltip"
 							title data-original-title="Ajukan penerbitan SKL dan status Lunas">
 								<i class="fal fa-upload mr-1"></i>

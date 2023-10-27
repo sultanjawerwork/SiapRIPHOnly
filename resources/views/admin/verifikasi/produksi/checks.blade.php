@@ -459,11 +459,11 @@ td {
 										</table>
 									</div>
 								</div>
-								<div class="card-footer d-flex alignt-items-center justify-content-between">
-									<div>
-										{{-- <sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> :Belum dilakukan pemeriksaan. --}}
-									</div>
-									<div>
+								<div class="card-footer d-flex align-items-center justify-content-between">
+									{{-- <div>
+										<sup class="text-danger"><i class="fa fa-exclamation-circle"></i></sup> :Belum dilakukan pemeriksaan.
+									</div> --}}
+									<div class="ml-auto">
 										<button type="submit" class="btn btn-primary btn-sm">
 											<i class="fal fa-save mr-1"></i>Simpan Hasil Pemeriksaan
 										</button>

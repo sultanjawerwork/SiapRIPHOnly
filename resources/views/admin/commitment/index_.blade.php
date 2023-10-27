@@ -15,7 +15,7 @@
 							<th>Tahun</th>
 							<th>Tgl. Terbit</th>
 							<th>Tgl. Akhir</th>
-							<th>Vol. Import</th>
+							<th>Vol. RIPH</th>
 							<th>Kewajiban</th>
 							<th>Tindakan</th>
 						</thead>

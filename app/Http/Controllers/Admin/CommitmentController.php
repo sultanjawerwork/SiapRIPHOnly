@@ -249,6 +249,7 @@ class CommitmentController extends Controller
 				'formLa',
 				'sphproduksi',
 				'logbookproduksi',
+				'spskl'
 				// Tambahkan field-file lainnya di sini
 			];
 

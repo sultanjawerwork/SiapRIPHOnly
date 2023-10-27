@@ -147,13 +147,13 @@
 									</tr>
 									<tr>
 										<td class="text-uppercase fw-500 h6">
-											Ringkasan Hasil Verifikasi
+											Ringkasan Hasil
 										</td>
 										<td></td>
 										<td></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">A. TAHAP TANAM</td>
+										<td class="text-uppercase fw-500">A. VERIFIKASI TANAM</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
 									</tr>
@@ -178,7 +178,7 @@
 										<td class="fw-500" id="avtVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Metode Pemeriksaan</td>
 										<td>:</td>
 										<td class="fw-500" id="avtMetode"></td>
 									</tr>
@@ -193,7 +193,7 @@
 										<td class="fw-500" id="avtStatus"></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
+										<td class="text-uppercase fw-500">B. VERIFIKASI PRODUKSI</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
 									</tr>
@@ -218,7 +218,7 @@
 										<td class="fw-500" id="avpVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Metode Pemeriksaan</td>
 										<td>:</td>
 										<td class="fw-500" id="avpMetode"></td>
 									</tr>
@@ -233,19 +233,9 @@
 										<td class="fw-500" id="avpStatus"></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">C. TAHAP AKHIR</td>
+										<td class="text-uppercase fw-500">C. PENERBITAN SKL</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Nota Dinas Pemeriksaan SKL</td>
-										<td>:</td>
-										<td class="fw-500" id="ndhpskl"></td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Berita Acara Pemeriksaan SKL</td>
-										<td>:</td>
-										<td class="fw-500" id="baskls"></td>
 									</tr>
 									<tr>
 										<td class="text-muted pl-4">Tanggal Pengajuan</td>
@@ -253,14 +243,19 @@
 										<td class="fw-500" id="avsklDate"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Tanggal Pemeriksaan</td>
+										<td class="text-muted pl-4">Tanggal Rekomendasi</td>
 										<td>:</td>
 										<td class="fw-500" id="avsklVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Nomor SKL</td>
 										<td>:</td>
-										<td class="fw-500" id="avsklMetode"></td>
+										<td class="fw-500" id="noSkl"></td>
+									</tr>
+									<tr>
+										<td class="text-muted pl-4">Tanggal Terbit</td>
+										<td>:</td>
+										<td class="fw-500" id="publishedDate"></td>
 									</tr>
 									<tr>
 										<td class="text-muted pl-4">Catatan Pemeriksaan</td>
@@ -268,22 +263,22 @@
 										<td class="fw-500" id="avsklNote"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Hasil Pemeriksaan (Status)</td>
+										<td class="text-muted pl-4">Tanggal Disetujui</td>
 										<td>:</td>
-										<td class="fw-500" id="avsklStatus"></td>
+										<td class="fw-500" id="approveAt"></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
-					<div class="card-footer d-flex justify-content-between">
+					{{-- <div class="card-footer d-flex justify-content-between">
 						<div class="col-md"></div>
 						@if (!$verifikasi->skl)
 							<button type="submit" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#submitSkl">
 								Rekomendasi SKL
 							</button>
 						@endif
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>
@@ -308,7 +303,7 @@
 		</div>
 
 		<!-- Modal submit -->
-		<div class="modal fade" id="submitSkl" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+		{{-- <div class="modal fade" id="submitSkl" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -340,7 +335,7 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		</div> --}}
 	@endcan
 @endsection
 
@@ -412,15 +407,17 @@
 					$("#avsklVerifAt").text(data.avsklVerifAt);
 					$("#avsklMetode").text(data.avsklMetode);
 					$("#avsklNote").text(data.avsklNote);
+					$('#noSkl').text(data.noSkl);
+					$('#publishedDate').text(data.publishedDate);
 
 					var formattedPeriode = 'Tahun ' + (data.periode);
 					$("#periode").text(formattedPeriode);
 
-					var formattedWajibTanam = parseFloat(data.wajibTanam).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ha';
-					var formattedRealisasiTanam = parseFloat(data.realisasiTanam).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ha';
-					var formattedWajibProduksi = parseFloat(data.wajibProduksi).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ton';
-					var formattedRealisasiProduksi = parseFloat(data.realisasiProduksi).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ton';
-					var formattedHasGeoLoc = parseFloat(data.hasGeoloc).toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' titik';
+					var formattedWajibTanam = (data.wajibTanam) + ' ha';
+					var formattedRealisasiTanam = (data.realisasiTanam) + ' ha';
+					var formattedWajibProduksi = (data.wajibProduksi) + ' ton';
+					var formattedRealisasiProduksi = (data.realisasiProduksi) + ' ton';
+					var formattedHasGeoLoc = (data.hasGeoloc) + ' titik';
 
 					$("#ndhprt").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprtLink + '">' + data.ndhprt + '</a>');
 					$("#batanam").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.batanamLink + '">' + data.batanam + '</a>');

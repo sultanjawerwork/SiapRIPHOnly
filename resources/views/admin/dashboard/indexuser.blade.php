@@ -23,7 +23,7 @@
 	<div class="col-md-4">
 		<div id="totalRiph" class="p-3 bg-primary-500 rounded overflow-hidden position-relative text-white mb-g">
 			<div class="">
-				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Volume import produk hortikultura yang tercantum di dalam Surat Rekomendasi Import Produk Hortikultura">
+				<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Volume RIPH yang tercantum di dalam Surat Rekomendasi Import Produk Hortikultura">
 					<span id="volumeImport">{{ number_format($volumeImport, 0, ',', '.') }}</span>
 					<small class="m-0 l-h-n">Volume RIPH (ton)</small>
 				</h3>

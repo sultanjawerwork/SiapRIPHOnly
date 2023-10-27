@@ -312,9 +312,9 @@ class PengajuanController extends Controller
 		if ($userDoc === null) {
 			$errorMessage = 'Anda belum memiliki kelengkapan dokumen untuk diperiksa.';
 		} elseif ($userDoc->sptjmtanam === null) {
-			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
+			$errorMessage = 'Surat Pertanggungjawaban Mutlak (tanam) tidak ditemukan.';
 		} elseif ($userDoc->sptjmproduksi === null) {
-			$errorMessage = 'Surat Pertanggungjawaban Mutlak tidak ditemukan.';
+			$errorMessage = 'Surat Pertanggungjawaban Mutlak (produksi) tidak ditemukan.';
 		} elseif ($userDoc->rta === null) {
 			$errorMessage = 'Form Realisasi Tanam tidak ditemukan.';
 		} elseif ($userDoc->rpo === null) {
@@ -329,7 +329,7 @@ class PengajuanController extends Controller
 			$errorMessage = 'Hasil Verifikasi tahap Produksi tidak memenuhi syarat.';
 		}
 
-		$optionalMessage = 'Pengajuan Surat Keterangan Lunas untuk RIPH No ' . $commitment->no_ijin . ' tidak dapat dilakukan. Ajukan kembali setelah Anda melengkapi syarat-syarat yang diperlukan.';
+		$optionalMessage = 'Pengajuan Keterangan Lunas untuk RIPH No ' . $commitment->no_ijin . ' tidak dapat dilakukan. Ajukan kembali setelah Anda melengkapi syarat-syarat yang diperlukan.';
 
 		if (isset($errorMessage)) {
 			return redirect()->route('admin.task.commitment')->withErrors($errorMessage . $optionalMessage);

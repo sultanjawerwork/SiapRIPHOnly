@@ -29,7 +29,36 @@
 											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
 											<td class="text-center">
+												{{-- new --}}
 												@if ($verifikasi->status === '1')
+													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
+														<i class="base-7 icon-stack-3x color-warning-300"></i>
+														<i class="base-7 icon-stack-2x color-warning-800 opacity-70"></i>
+														<span class="icon-stack-1x text-white opacity-90">!</span>
+													</span>
+													<span hidden>{{$verifikasi->status}}</span>
+												@else
+													<div disable class="btn-group btn-group-toggle" role="group">
+														<label class="btn btn-{{ $verifikasi->status == 1 ? 'warning' : 'success' }} btn-xs" data-toggle="tooltip" data-original-title="Pelaku Usaha mengajukan SKL">1
+															<i class="fa {{ $verifikasi->status == 1 ? 'fa-exclamation-circle' : 'fa-check' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Rekomendasi Penerbitan SKL telah disampaikan kepada Pimpinan.">2
+															<i class="fa {{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Pejabat/Pimpinan telah menyetujui penerbitan">3
+															<i class="fa {{ in_array($verifikasi->status, [3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ $verifikasi->status == 4 ? 'success' : ($verifikasi->status == 5 ? 'danger' : 'default') }} btn-xs" data-toggle="tooltip" data-original-title="SKL telah diterbitkan.">4
+															<i class="fa {{ $verifikasi->status == 4 ? 'fa-check' : ($verifikasi->status == 5 ? 'fa-ban' : 'fa-hourglass') }}"></i>
+														</label>
+													</div>
+												@endif
+
+												{{-- old --}}
+												{{-- @if ($verifikasi->status === '1')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
 														<i class="base-7 icon-stack-3x color-warning-300"></i>
 														<i class="base-7 icon-stack-2x color-warning-700 opacity-70"></i>
@@ -66,10 +95,19 @@
 														</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@endif
+												@endif --}}
 											</td>
 											<td class="text-center">
 												@if(!$verifikasi->skl)
+													@if ($verifikasi->status = 3)
+														button print draft & upload skl di ttd
+													@elseif($verifikasi->status = 4)
+														button print skl
+													@endif
+													<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
+														title="Lihat rekomendasi" class="mr-1 btn btn-xs btn-icon btn-info">
+														<i class="fal fa-file-search"></i>
+													</a>
 													@if($verifikasi->status >= 4)
 														<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
 															title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
@@ -83,7 +121,7 @@
 													@endif
 												@else
 													<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
-														data-toggle="tooltip" data-original-title="Sudah direkomendasikan. Klik untuk melihat progress rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
+														data-toggle="tooltip" data-original-title="Klik untuk melihat data rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
 												@endif
