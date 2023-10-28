@@ -344,6 +344,10 @@
 </script>
 <script>
 	$(document).ready(function() {
+		var currentDate = new Date();
+		var currentYear = currentDate.getFullYear(); // Mendapatkan tahun berjalan
+		var url = '{{ route("admin.userMonitoringDataByYear", ":periodetahun") }}';
+		url = url.replace(':periodetahun', currentYear);
 		// Datepicker initialization
 		// Initialize the year picker
 		$('.yearpicker').datepicker({

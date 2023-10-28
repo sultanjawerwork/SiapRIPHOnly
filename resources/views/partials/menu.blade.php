@@ -25,8 +25,7 @@
 		{{-- picture --}}
 		<div class="info-card">
 			@if (!empty(Auth::user()::find(Auth::user()->id)->data_user->avatar))
-				<img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->avatar) }}"
-					class="profile-image rounded-circle" alt="">
+				<img src="{{ asset('storage/' . Auth::user()->data_user->avatar) }}" class="profile-image rounded-circle" alt="">
 			@else
 				<img src="{{ asset('/img/avatars/farmer.png') }}" class="profile-image rounded-circle" alt="">
 			@endif
@@ -279,7 +278,7 @@
 						</a>
 					</li>
 				@endcan
-				@can('completed_access')
+				@can('administrator_access')
 					<li class="c-sidebar-nav-item {{ request()->is('verification/skl')
 						|| request()->is('verification/skl*') ? 'active' : '' }}">
 						<a href="{{ route('verification.skl') }}"
@@ -300,7 +299,7 @@
 							@endif
 						</a>
 					</li>
-					<li class="c-sidebar-nav-item {{ request()->is('skl/recomended/list') ? 'active' : '' }}">
+					{{-- <li class="c-sidebar-nav-item {{ request()->is('skl/recomended/list') ? 'active' : '' }}">
 						<a href="{{ route('skl.recomended.list') }}"
 							data-filter-tags="daftar rekomendasi skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
@@ -314,16 +313,14 @@
 							<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newApproved }}</span>
 						@endif
 						</a>
+					</li> --}}
+					<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
+						<a href="{{ route('skl.arsip') }}"
+							data-filter-tags="daftar skl terbit">
+							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
+							<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
+						</a>
 					</li>
-				@endcan
-				@can('completed_access')
-				<li class="c-sidebar-nav-item {{ request()->is('skl/arsip') ? 'active' : '' }}">
-					<a href="{{ route('skl.arsip') }}"
-						data-filter-tags="daftar skl terbit">
-						<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
-						<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
-					</a>
-				</li>
 				@endcan
 			@endcan
 			{{-- direktur task --}}

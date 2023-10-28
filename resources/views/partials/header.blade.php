@@ -227,8 +227,7 @@
 			<a href="#" data-toggle="dropdown" title="{{ Auth::user()->name }}"
 				class="header-icon d-flex align-items-center justify-content-center ml-2">
 				@if (!empty(Auth::user()::find(Auth::user()->id)->data_user->logo))
-					<img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->logo) }}"
-						class="profile-image rounded-circle">
+					<img src="{{ asset('storage/' . Auth::user()->data_user->logo) }}" class="profile-image rounded-circle" alt="">
 				@else
 					<img src="{{ asset('/img/favicon.png') }}" class="profile-image rounded-circle"
 						alt="{{ Auth::user()->name }}">
@@ -239,8 +238,7 @@
 					<div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
 						<span class="mr-2">
 							@if (!empty(Auth::user()::find(Auth::user()->id)->data_user->avatar))
-								<img src="{{ Storage::disk('public')->url(Auth::user()::find(Auth::user()->id)->data_user->avatar) }}"
-									class="profile-image rounded-circle">
+							<img src="{{ asset('storage/' . Auth::user()->data_user->avatar) }}" class="profile-image rounded-circle" alt="">
 							@else
 								<img src="{{ asset('/img/avatars/farmer.png') }}"
 									class="profile-image rounded-circle" alt="{{ Auth::user()->name }}">
