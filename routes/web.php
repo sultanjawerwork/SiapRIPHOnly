@@ -31,7 +31,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('/dashboard/monitoring', 'DashboardController@monitoring')->name('dashboard.monitoring');
 	Route::get('/dashboard/map', 'DashboardController@map')->name('dashboard.map');
 
-	Route::get('/dashboard/monitoringrealisasi', 'DashboardController@monitoringrealisasi')->name('dashboard.monitoringrealisasi');
+	Route::get('/dashboard/monitoringrealisasi/{periodetahun}', 'DashboardController@monitoringrealisasi')->name('dashboard.monitoringrealisasi');
 	Route::get('/monitoringDataRealisasi/{periodetahun}', 'DashboardDataController@monitoringDataRealisasi')->name('monitoringDataRealisasi');
 
 	Route::get('mapDataAll', 'UserMapDashboard@index')->name('mapDataAll');

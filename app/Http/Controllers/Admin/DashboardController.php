@@ -238,7 +238,7 @@ class DashboardController extends Controller
 		return view('admin.dashboard.monitoring', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns'));
 	}
 
-	public function monitoringRealisasi(Request $request)
+	public function monitoringRealisasi(Request $request, $periodetahun)
 	{
 		$module_name = 'Dashboard';
 		$page_title = 'Monitoring Realisasi' . $request->input('periodetahun');
