@@ -265,7 +265,7 @@
 									<tr>
 										<td class="text-muted pl-4">Tanggal Disetujui</td>
 										<td>:</td>
-										<td class="fw-500" id="approveAt"></td>
+										<td class="fw-500" id="approvedAt"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -409,6 +409,11 @@
 					$("#avsklNote").text(data.avsklNote);
 					$('#noSkl').text(data.noSkl);
 					$('#publishedDate').text(data.publishedDate);
+					// Assuming data.approvedAt is a valid date string, for example, '2023-10-27'
+					var date = new Date(data.approvedAt);
+					var formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+					$('#approvedAt').text(formattedDate);
+					$('#submitBy').text(data.submitBy);
 
 					var formattedPeriode = 'Tahun ' + (data.periode);
 					$("#periode").text(formattedPeriode);

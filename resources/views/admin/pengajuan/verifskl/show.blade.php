@@ -577,7 +577,7 @@
 								@if(request()->is('admin/task/commitment/*/pengajuan/skl/show'))
 									@if ($commitment->ajuskl)
 										<tr>
-											<td class="text-uppercase fw-500">C. TAHAP AKHIR</td>
+											<td class="text-uppercase fw-500">C. PENGAJUAN SKL</td>
 											<td></td>
 											<td></td>
 											<td></td>
@@ -589,38 +589,32 @@
 											<td></td>
 										</tr>
 										<tr>
-											<td class="text-muted pl-4">Tanggal Verifikasi</td>
+											<td class="text-muted pl-4">Tanggal Rekomendasi</td>
 											<td>:</td>
 											<td class="fw-500">{{ $avsklVerifAt ? \Carbon\Carbon::parse($avsklVerifAt)->format('d F Y') : '-'}}</td>
 											<td></td>
 										</tr>
 										<tr>
-											<td class="text-muted pl-4">Metode Verifikasi</td>
-											<td>:</td>
-											<td class="fw-500">{{ $avsklMetode ? $avsklMetode : '-'}}</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td class="text-muted pl-4">Catatan Verifikasi</td>
+											<td class="text-muted pl-4">Catatan Rekomendasi</td>
 											<td>:</td>
 											<td class="fw-500">{{ $avsklNote ? $avsklNote : '-'}}</td>
 											<td></td>
 										</tr>
 										<tr>
-											<td class="text-muted pl-4">Hasil Verifikasi</td>
+											<td class="text-muted pl-4">Progress Pengajuan</td>
 											<td>:</td>
 											<td class="fw-500">
 												@if ($avsklStatus)
 													@if ($avsklStatus === '1')
-														<span class="text-danger">Verifikasi sedang diajukan</span>
-														<i class="fas fa-exclamation-circle text-warning ml-1"></i>
-													@elseif($avsklStatus === '2' || $avsklStatus === '3')
-														<span class="text-danger">Dalam proses pemeriksaan/verifikasi oleh Petugas</span>
-														<i class="fas fa-exclamation-circle text-warning ml-1"></i>
+														<span class="">Pengajuan SKL</span>
+													@elseif($avsklStatus === '2')
+														<span class="">Proses Rekomendasi</span>
+													@elseif($avsklStatus === '3')
+														<span class="">Telah Disetujui</span>
 													@elseif($avsklStatus === '4')
-														<span class="text-success">Pemeriksaan/Verifikasi telah Selesai</span>
+														<span class="">Telah Diterbitkan</span>
 														<i class="fas fa-check text-success ml-1"></i>
-														@elseif($avsklStatus === '5')
+													@elseif($avsklStatus === '5')
 														<span class="text-danger">Perbaiki Laporan</span>
 														<i class="fas fa-exclamation-circle text-danger ml-1"></i>
 													@endif

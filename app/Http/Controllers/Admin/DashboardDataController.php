@@ -191,8 +191,8 @@ class DashboardDataController extends Controller
 					],
 				],
 				'no_ijin' => $verifikasi->no_ijin,
-				'created_at' => Carbon::parse($verifikasi->ajuproduksi->created_at)->format('M d, Y'),
-				'updated_at' => Carbon::parse($verifikasi->ajuproduksi->updated_at)->format('M d, Y'),
+				'created_at' => Carbon::parse($verifikasi->ajuskl->created_at)->format('M d, Y'),
+				'updated_at' => Carbon::parse($verifikasi->ajuskl->updated_at)->format('M d, Y'),
 				'SklProgress' => $verifikasi->ajuskl->status ?? '',
 			];
 		});

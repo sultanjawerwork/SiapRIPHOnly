@@ -87,6 +87,7 @@ class PengajuanController extends Controller
 			'avsklStatus' => $verifSkl->status,
 			'avsklMetode' => $verifSkl->metode,
 			'avsklNote' => $verifSkl->note,
+			'publishedAt' => $verifSkl->published_date,
 			'userDocs' => $userDocs,
 			'wajibTanam' => $commitment->luas_wajib_tanam,
 			'wajibProduksi' => $commitment->volume_produksi,

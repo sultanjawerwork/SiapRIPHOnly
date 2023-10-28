@@ -222,22 +222,41 @@
 										@endif
 									</td> --}}
 									<td class="text-center">
-										@if ($statusAjutanam === '4')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@if ($statusAjutanam === '1')
+											<span class="btn btn-xs btn-icon btn-warning" data-toggle="tooltip" data-original-title="Sudah diajukan"><i class="fa fa-upload"></i></span>
+										@elseif ($statusAjutanam === '2')
+											<span class="btn btn-xs btn-icon btn-info" data-toggle="tooltip" data-original-title="Proses Pemeriksaan Berkas"><i class="fa fa-file-search"></i></span>
+										@elseif ($statusAjutanam === '3')
+											<span class="btn btn-xs btn-icon btn-primary" data-toggle="tooltip" data-original-title="Proses Pemeriksaan PKS"><i class="fa fa-file-search"></i></span>
+										@elseif ($statusAjutanam === '4')
+											<span class="btn btn-xs btn-icon btn-success" data-toggle="tooltip" data-original-title="Selesai diperiksa dan Sesuai"><i class="fa fa-check-circle"></i></span>
 										@elseif ($statusAjutanam === '5')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+											<span class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Selesai diperiksa. Perbaiki Data"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($statusAjuproduksi === '4')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@if ($statusAjuproduksi === '1')
+											<span class="btn btn-xs btn-icon btn-warning" data-toggle="tooltip" data-original-title="Sudah diajukan"><i class="fa fa-upload"></i></span>
+										@elseif ($statusAjuproduksi === '2')
+											<span class="btn btn-xs btn-icon btn-info" data-toggle="tooltip" data-original-title="Proses Pemeriksaan Berkas"><i class="fa fa-file-search"></i></span>
+										@elseif ($statusAjuproduksi === '3')
+											<span class="btn btn-xs btn-icon btn-primary" data-toggle="tooltip" data-original-title="Proses Pemeriksaan PKS"><i class="fa fa-file-search"></i></span>
+										@elseif ($statusAjuproduksi === '4')
+											<span class="btn btn-xs btn-icon btn-success" data-toggle="tooltip" data-original-title="Selesai diperiksa dan Sesuai"><i class="fa fa-check-circle"></i></span>
 										@elseif ($statusAjuproduksi === '5')
-											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
+											<span class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Selesai diperiksa. Perbaiki Data"><i class="fa fa-ban"></i></span>
 										@endif
 									</td>
 									<td class="text-center">
-										@if ($statusAjuskl === '4')
-											<span class="btn btn-xs btn-icon btn-success"><i class="fa fa-check-circle"></i></span>
+										@if (empty($statusAjuskl))
+										@elseif($statusAjuskl == 1)
+											<span class="btn btn-xs btn-icon btn-info" data-toggle="tooltip" data-original-title="Penerbitan SKL sudah diajukan"><i class="fal fa-upload"></i></span>
+										@elseif($statusAjuskl == 2)
+											<span class="btn btn-xs btn-icon btn-primary" data-toggle="tooltip" data-original-title="Direkomendasikan"><i class="fal fa-thumbs-up"></i></span>
+										@elseif($statusAjuskl == 3)
+											<span class="btn btn-xs btn-icon btn-warning" data-toggle="tooltip" data-original-title="Penerbitan SKL sudah disetujui. Menunggu Petugas mengunggah berkas SKL."><i class="fal fa-signature"></i></span>
+										@elseif($statusAjuskl == 4)
+											<span class="btn btn-xs btn-icon btn-success" data-toggle="tooltip" data-original-title="SKL Terbit"><i class="fa fa-award"></i></span>
 										@elseif ($statusAjuskl === '5')
 											<span class="btn btn-xs btn-icon btn-danger"><i class="fa fa-ban"></i></span>
 										@endif
@@ -250,39 +269,7 @@
 								</tr>
 							@endforeach
 						</tbody>
-					</table><hr>
-					<span class="help-block mt-2">
-						<label for="" class="form-label">Keterangan:</label>
-						<div class="row d-flex align-items-top">
-							<div class="col-md-4 col-sm-6" hidden>
-								<ul>
-									<li>Tahap 1: Pemeriksaan Data</li>
-									<li>Tahap 2: Pemeriksaan Lapangan</li>
-									<li>Tahap 3: Pengajuan Ket. Lunas</li>
-									<li>Lunas: Penerbitan SKL</li>
-								</ul>
-							</div>
-							<div class="col-md-8 col-sm-6">
-								<ul>
-									<li class="mb-1">
-										<span class="btn btn-icon btn-xs btn-success mr-1">
-											<i class="fa fa-check-circle"></i>
-										</span> : Pemeriksaan selesai dan dinyatakan sesuai.
-									</li>
-									<li class="mb-1">
-										<span class="btn btn-icon btn-xs btn-danger mr-1">
-											<i class="fa fa-ban"></i>
-										</span> : Pemeriksaan selesai, data dinyatakan <span class="text-danger">PERBAIKAN</span>.
-									</li>
-									<li>
-										<span class="btn btn-icon btn-xs btn-success mr-1">
-											<i class="fa fa-award"></i>
-										</span> : Komitmen dinyatakan <span class="fw-700">LUNAS dan SKL diterbitkan.</span></span>.
-									</li>
-								</ul>
-							</div>
-						</div>
-					</span>
+					</table>
 				</div>
 			</div>
 		</div>

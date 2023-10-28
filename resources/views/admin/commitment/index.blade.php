@@ -199,24 +199,18 @@ td {
 													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Penerbitan SKL sudah diajukan">
 														<i class="fal fa-upload"></i>
 													</a>
-												@elseif($commitment->ajuSkl->status === '2' || $commitment->ajuSkl->status === '3')
-													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Pemeriksaan Berkas">
+												@elseif($commitment->ajuSkl->status === '2')
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Rekomendasi Penerbitan SKL">
 														<i class="fal fa-search"></i>
 													</a>
+												@elseif($commitment->ajuSkl->status === '3')
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL Disetujui untuk Diterbitkan">
+														<i class="fal fa-thumbs-up"></i>
+													</a>
 												@elseif($commitment->ajuSkl->status === '4')
-													@if (!$commitment->skl)
-														<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Pemeriksaan Selesai">
-															<i class="fal fa-file-check"></i>
-														</a>
-													@elseif ($commitment->skl->submit_by && empty($commitment->skl->skl_upload) )
-														<a href="javascript:void(0)" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Rekomendasi Penerbitan">
-															<i class="fal fa-thumbs-up"></i>
-														</a>
-													@elseif ($commitment->skl->submit_by && $commitment->skl->approved_by &&$commitment->skl->published_date && $commitment->completed->url)
-														<a href="{{route('admin.task.skl.arsip')}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL sudah Terbit">
-															<i class="fal fa-award"></i>
-														</a>
-													@endif
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL sudah Terbit. Klik untuk melihat Ringkasan Verifikasi.">
+														<i class="fal fa-award"></i>
+													</a>
 												@elseif($commitment->ajuSkl->status === '5')
 													<div class="dropdown">
 														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >

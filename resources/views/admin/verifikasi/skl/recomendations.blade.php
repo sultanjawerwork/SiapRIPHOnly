@@ -35,7 +35,7 @@
 												</td>
 												<td class="text-center">{{$recomend->created_at}}</td>
 												<td class="text-center">
-													@if($recomend->published_date)
+													@if($recomend->approved_by)
 														<a href="{{route('verification.skl.published', $recomend->id)}}" class="btn btn-xs btn-success btn-icon">
 															<i class="fal fa-award"></i>
 														</a>

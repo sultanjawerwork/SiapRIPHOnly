@@ -22,6 +22,7 @@ use App\Models\MasterPoktan;
 use App\Models\PullRiph;
 use App\Models\Pks;
 use App\Models\Skl;
+use App\Models\User;
 use App\Models\UserDocs;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -68,6 +69,7 @@ class VerifSklController extends Controller
 
 		$skl = Skl::where('pengajuan_id', $verifikasi->id)->first();
 
+		// dd($skl->approved_at);
 
 		$data = [
 			//ringkasan umum
@@ -75,12 +77,12 @@ class VerifSklController extends Controller
 			'npwp' => $npwp_company,
 			'noIjin' => $commitment->no_ijin,
 			'periode' => $commitment->periodetahun,
-			'tglIjin' => Carbon::parse($commitment->tgl_ijin)->format('d-m-y'),
-			'tglAkhir'	=> Carbon::parse($commitment->tgl_akhir)->format('d-m-y'),
+			'tglIjin' => Carbon::parse($commitment->tgl_ijin)->format('d-m-Y'),
+			'tglAkhir'	=> Carbon::parse($commitment->tgl_akhir)->format('d-m-Y'),
 
 			//ringkasan pengajuan verifikasi tanam
-			'avtDate' => optional($verifTanam)->created_at->format('d-m-y'),
-			'avtVerifAt' => Carbon::parse(optional($verifTanam)->verif_at)->format('d-m-y'),
+			'avtDate' => optional($verifTanam)->created_at->format('d-m-Y'),
+			'avtVerifAt' => Carbon::parse(optional($verifTanam)->verif_at)->format('d-m-Y'),
 			'avtStatus' => optional($verifTanam)->status,
 			'avtMetode' => optional($verifTanam)->metode,
 			'avtNote' => optional($verifTanam)->note,
@@ -88,8 +90,8 @@ class VerifSklController extends Controller
 			'batanam' => optional($verifTanam)->batanam,
 
 			//ringkasan pengajuan verifikasi produksi
-			'avpDate' => optional($verifProduksi)->created_at->format('d-m-y'),
-			'avpVerifAt' => Carbon::parse(optional($verifProduksi)->verif_at)->format('d-m-y'),
+			'avpDate' => optional($verifProduksi)->created_at->format('d-m-Y'),
+			'avpVerifAt' => Carbon::parse(optional($verifProduksi)->verif_at)->format('d-m-Y'),
 			'avpStatus' => optional($verifProduksi)->status,
 			'avpMetode' => optional($verifProduksi)->metode,
 			'avpNote' => optional($verifProduksi)->note,
@@ -97,8 +99,8 @@ class VerifSklController extends Controller
 			'baproduksi' => optional($verifProduksi)->baproduksi,
 
 			//ringkasan pengajuan skl
-			'avsklDate' => optional($verifikasi)->created_at->format('d-m-y'),
-			'avsklVerifAt' => Carbon::parse(optional($verifikasi)->verif_at)->format('d-m-y'),
+			'avsklDate' => optional($verifikasi)->created_at->format('d-m-Y'),
+			'avsklVerifAt' => Carbon::parse(optional($verifikasi)->verif_at)->format('d-m-Y'),
 			'avsklStatus' => optional($verifikasi)->status,
 			'avsklMetode' => optional($verifikasi)->metode,
 			'avsklNote' => optional($verifikasi)->note,
@@ -144,7 +146,10 @@ class VerifSklController extends Controller
 			'ndhpsklLink' => asset("storage/uploads/{$npwp}/{$commitment->periodetahun}/{$verifikasi->ndhpskl}"),
 			'basklsLink' => asset("storage/uploads/{$npwp}/{$commitment->periodetahun}/{$verifikasi->baskls}"),
 			'noSkl' => optional($skl)->no_skl,
-			'publishedDate' => optional($skl)->published_date->format('d-m-y'),
+			'publishedDate' => optional($skl)->published_date->format('d-m-Y'),
+			'approvedAt' => $skl->approved_at,
+			'submitBy' => optional(User::find(optional($skl)->submit_by))->name ?? 'Tidak dikenali oleh System',
+
 
 			//used document
 			'userDocs' => $userDocs,
@@ -535,8 +540,9 @@ class VerifSklController extends Controller
 				$skl->save();
 
 
-				$avskl = AjuVerifSkl::where('no_ijin', $skl->no_ijin);
-				$avskl->status = 7;
+				$avskl = AjuVerifSkl::where('no_ijin', $skl->no_ijin)->first();
+				$avskl->status = 3;
+				$avskl->save();
 				return redirect()->route('verification.skl.recomendations')->with(['success' => 'Penerbitan SKL telah Anda setujui dan siap diterbitkan.']);
 			});
 		} catch (\Exception $e) {
@@ -649,7 +655,7 @@ class VerifSklController extends Controller
 
 		// Simpan perubahan pada model-model terkait
 		$skl->save();
-		$pengajuan->status = 8;
+		$pengajuan->status = 4;
 		$pengajuan->save();
 		$commitment->save();
 
