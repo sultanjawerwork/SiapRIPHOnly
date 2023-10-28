@@ -8,6 +8,14 @@
 		background-color: #FFF;
 	}
 </style>
+@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
+<div class="row mb-5">
+	<div class="col text-center">
+		<span class="h3">Maaf, Anda tidak memerlukan halaman ini</span><br>
+		<i class="fal fa-grin-tongue-squint text-warning display-2"></i>
+	</div>
+</div>
+@else
 <div class="panel" >
 	<div class="panel-hdr">
 		<h2>
@@ -275,7 +283,7 @@
 		</form>
 	</div>
 </div>
-
+@endif
 
 @endsection
 

@@ -33,7 +33,7 @@
 											{{ $errors->first('nip') }}
 										</div>
 									@endif
-									<span class="help-block">isi data jabatan.</span>
+									<span class="help-block">Isi dengan Nomor Induk Pegawai Anda.</span>
 								</div>
 							</div>
 							<div class="col-md-8">
@@ -61,7 +61,7 @@
 									@if ($data_admin->sign_img)
 										<a href="#" class="help-block" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/dataadmin/'.$data_admin->sign_img) }}">
 											<i class="fas fa-search mr-1"></i>
-											Lihat Nota Dinas.
+											Lihat Scan tandatangan.
 										</a>
 									@else
 										<span class="help-block">Unggah hasil pindah tandatangan Anda<span class="text-danger">(wajib)</span></span>
@@ -111,7 +111,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<img src="" width="100%"  frameborder="0">
+				<img src="" width="100%"  frameborder="0" id="scanTtd">
 			</div>
 		</div>
 	</div>
@@ -125,7 +125,7 @@
 		$(document).ready(function() {
 			$('#viewDocs').on('shown.bs.modal', function (e) {
 				var docUrl = $(e.relatedTarget).data('doc');
-				$('img').attr('src', docUrl);
+				$('#scanTtd').attr('src', docUrl);
 			});
 		});
 	</script>

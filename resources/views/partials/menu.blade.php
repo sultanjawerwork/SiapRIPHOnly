@@ -241,7 +241,7 @@
 						|| request()->is('verification/tanam*') ? 'active' : '' }}">
 						<a href="{{ route('verification.tanam') }}"
 							data-filter-tags="verifikasi tanam">
-							<i class="fal fa-ballot-check c-sidebar-nav-icon"></i>
+							<i class="fal fa-seedling c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Tahap Tanam</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifTanam();
@@ -262,7 +262,7 @@
 						|| request()->is('verification/produksi*') ? 'active' : '' }}">
 						<a href="{{ route('verification.produksi') }}"
 							data-filter-tags="verifikasi produksi">
-							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
+							<i class="fal fa-dolly c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Tahap Produksi</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifProduksi();
@@ -283,7 +283,7 @@
 						|| request()->is('verification/skl*') ? 'active' : '' }}">
 						<a href="{{ route('verification.skl') }}"
 							data-filter-tags="verifikasi produksi">
-							<i class="fal fa-map-marker-check c-sidebar-nav-icon"></i>
+							<i class="fal fa-award c-sidebar-nav-icon"></i>
 							<span class="nav-link-text">Pengajuan SKL</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifSkl();

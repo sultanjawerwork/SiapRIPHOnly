@@ -351,6 +351,10 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
 });
 
+Route::group(['namespace' => 'Verifikator'], function () {
+	Route::get('skl/lunas/{id}/print', 'SklController@published')->name('skl.lunas');
+});
+
 Route::group(['prefix' => 'skl', 'as' => 'skl.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {
 	// daftar rekomendasi (index rekomendasi dan skl untuk verifikator)
 	Route::get('recomended/list', 'VerifSklController@recomended')->name('recomended.list');

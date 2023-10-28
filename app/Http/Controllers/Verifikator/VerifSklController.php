@@ -508,6 +508,8 @@ class VerifSklController extends Controller
 		$verifikasi = AjuVerifSkl::find($skl->pengajuan_id);
 		$commitment = PullRiph::where('no_ijin', $skl->no_ijin)->first();
 		$pejabat = $user;
+		$ttd = $user->name;
+		// dd($ttd);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
 		$total_luas = $commitment->lokasi->sum('luas_tanam');
@@ -516,11 +518,13 @@ class VerifSklController extends Controller
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
+			'No. SKL'	=> $skl->no_skl,
+			'ttd'	=> $ttd,
 			'Status' => 'LUNAS',
 			'Tautan' => route('verification.skl.published', $skl->id)
 		];
 
-		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['ttd'] . ', Status: ' . $data['Status'] . ', Tautan Berkas' . $data['Tautan']);
 
 		return view('admin.verifikasi.skl.draftSKL', compact('page_title', 'skl', 'verifikasi', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
 	}
@@ -538,7 +542,6 @@ class VerifSklController extends Controller
 				$skl->approved_by = Auth::user()->id;
 				$skl->approved_at = Carbon::now();
 				$skl->save();
-
 
 				$avskl = AjuVerifSkl::where('no_ijin', $skl->no_ijin)->first();
 				$avskl->status = 3;
@@ -581,6 +584,7 @@ class VerifSklController extends Controller
 		$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
 		$commitment = PullRiph::where('no_ijin', $skl->no_ijin)->first();
 		$pejabat = DataAdministrator::where('user_id', $skl->approved_by)->first();
+		// dd($pejabat->nama);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
 		$total_luas = $commitment->lokasi->sum('luas_tanam');
@@ -589,11 +593,12 @@ class VerifSklController extends Controller
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
+			'No. SKL' => $skl->no_skl,
+			'Pejabat' => $pejabat->nama,
 			'Status' => 'LUNAS',
-			'Tautan' => route('verification.skl.published', $skl->id)
 		];
 
-		$QrCode = QrCode::size(70)->generate($data['Perusahaan'] . ', ' . $data['No. RIPH'] . ', ' . $data['Status'] . ', ' . $data['Tautan']);
+		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['Pejabat'] . ', Status: ' . $data['Status']);
 
 		return view('admin.verifikasi.skl.printReadySkl', compact('page_title', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
 	}
