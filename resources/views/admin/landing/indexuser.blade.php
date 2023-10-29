@@ -14,7 +14,7 @@
 			{{-- skl --}}
 			@php($cntAjuVerifSkl = \App\Models\AjuVerifSkl::newPengajuanCount())
 			@php($getAjuVerifSkl = \App\Models\AjuVerifSkl::getNewPengajuan())
-
+			@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0));
 			{{-- rekomendasi --}}
 			@php($cntRecomendations = \App\Models\Skl::newPengajuanCount())
 			@php($getRecomendations = \App\Models\Skl::getNewPengajuan())
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		@if (Auth::user()->roles[0]->title == 'Pejabat')
-			@if (!$profile || (!$profile->jabatan || !$profile->nip || !$profile->sign_img))
+			@if (!$profile || (!$profile->jabatan || !$profile->nip))
 				<div class="row mb-5">
 					<div class="col-md">
 					<div class="alert alert-danger">
@@ -210,9 +210,9 @@
 								</span>
 							</h2>
 							<div class="panel-toolbar">
-								@if ($cntAjuVerifTanam > 0 || $cntAjuVerifProduksi > 0 || $cntAjuVerifSkl > 0)
-									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Anda memiliki {{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}} Pengajuan Verifikasi">
-										{{$cntAjuVerifTanam + $cntAjuVerifProduksi + $cntAjuVerifSkl}}
+								@if ($cntpengajuan)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Anda memiliki {{$cntpengajuan}} Pengajuan Verifikasi">
+										{{$cntpengajuan}}
 									</a>
 								@else
 								@endif
@@ -267,29 +267,31 @@
 											</a>
 										</li>
 									@endforeach
-									@foreach ($getAjuVerifSkl as $item)
-										<li>
-											<a href="{{ route('verification.skl.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
-												<span class="mr-2">
-													@if (!empty($item->data_user->logo))
-														<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
-															class="profile-image rounded-circle" alt="">
-													@else
-														<img src="{{ asset('/img/avatars/farmer.png') }}"
-															class="profile-image rounded-circle" alt="">
-													@endif
-												</span>
-												<span class="d-flex flex-column flex-1">
-													<span class="name">{{ $item->datauser->company_name }} <span
-														class="badge badge-danger fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
-													<span class="msg-a fs-sm">
-														<span class="badge badge-danger">Penerbitan SKL</span>
+									@if (Auth::user()->roles[0]->title == 'Admin')
+										@foreach ($getAjuVerifSkl as $item)
+											<li>
+												<a href="{{ route('verification.skl.check', [$item->id]) }}"  class="d-flex align-items-center show-child-on-hover">
+													<span class="mr-2">
+														@if (!empty($item->data_user->logo))
+															<img src="{{ Storage::disk('public')->url($item->data_user->logo) }}"
+																class="profile-image rounded-circle" alt="">
+														@else
+															<img src="{{ asset('/img/avatars/farmer.png') }}"
+																class="profile-image rounded-circle" alt="">
+														@endif
 													</span>
-													<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
-												</span>
-											</a>
-										</li>
-									@endforeach
+													<span class="d-flex flex-column flex-1">
+														<span class="name">{{ $item->datauser->company_name }} <span
+															class="badge badge-danger fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+														<span class="msg-a fs-sm">
+															<span class="badge badge-danger">Penerbitan SKL</span>
+														</span>
+														<span class="fs-nano text-muted mt-1">{{ $item->created_at->diffForHumans() }}</span>
+													</span>
+												</a>
+											</li>
+										@endforeach
+									@endif
 								</ul>
 							</div>
 						</div>

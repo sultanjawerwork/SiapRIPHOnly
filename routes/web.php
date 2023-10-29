@@ -318,41 +318,12 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 
 	Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 
-	//verifikasi online/data
-	// Route::get('data', 'VerifOnlineController@index')->name('data');
-	// Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
-	// Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
-	// Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
-	// Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
-	// Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
-	// Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
-	// Route::get('data/pks/{id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
-	// Route::put('data/pks/{id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
-	// Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
-	// Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
-	// Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');
 
-	//verifikasi onfarm/lapangan
-	// Route::get('onfarm', 'VerifOnfarmController@index')->name('onfarm');
-	// Route::get('onfarm/{id}/show', 'VerifOnfarmController@show')->name('onfarm.show');
-	// Route::get('onfarm/{id}/farmlist', 'VerifOnfarmController@farmlist')->name('onfarm.farmlist');
-	// Route::get('onfarm/{noIjin}/lokasi/{anggota_id}', 'VerifOnfarmController@farmcheck')->name('onfarm.farmcheck');
-	// Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
-	// Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
-
-	// Route::resource('skl', 'SklController');
-	// Route::get('skl', 'SklController@index')->name('skl'); //daftar siap rekomendasi
-
-	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show'); //summary skl
-	// Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed'); //daftar seluruh skl yang telah terbit (lama & baru)
+	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
 
 	//ke bawah ini mungkin di hapus
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
 	Route::get('skl/published/{id}/print', 'SklController@published')->name('skl.published');
-});
-
-Route::group(['namespace' => 'Verifikator'], function () {
-	Route::get('skl/lunas/{id}/print', 'SklController@published')->name('skl.lunas');
 });
 
 Route::group(['prefix' => 'skl', 'as' => 'skl.', 'namespace' => 'Verifikator', 'middleware' => ['auth']], function () {

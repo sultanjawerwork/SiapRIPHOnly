@@ -392,9 +392,13 @@
 				$('#noSkl').text(data.noSkl);
 				$('#publishedDate').text(data.publishedDate);
 				// Assuming data.approvedAt is a valid date string, for example, '2023-10-27'
-				var date = new Date(data.approvedAt);
-				var formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
-				$('#approvedAt').text(formattedDate);
+				if (data.approvedAt === null) {
+					$('#approvedAt').text('Belum disetujui');
+				} else {
+					var date = new Date(data.approvedAt);
+					var formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+					$('#approvedAt').text(formattedDate);
+				}
 				$('#submitBy').text(data.submitBy);
 
 				var formattedPeriode = 'Tahun ' + (data.periode);

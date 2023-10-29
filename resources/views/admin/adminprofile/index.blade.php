@@ -12,7 +12,7 @@
 						<div class="row mb-3">
 							<div class="col-12">
 								<div class="form-group">
-									<label class="required" for="name">{{ trans('cruds.user.fields.name') }}</label>
+									<label class="required" for="name">{{ trans('cruds.user.fields.name') }}<sup class="text-danger"> *</sup></label>
 									<input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="nama" id="nama" value="{{ old('name', $user->name) }}" required>
 									@if($errors->has('name'))
 										<div class="invalid-feedback">
@@ -26,7 +26,7 @@
 						<div class="row mb-3">
 							<div class="col-md-4">
 								<div class="form-group">
-									<label class="required" for="nip">Nomor Induk Pegawai</label>
+									<label class="" for="nip">Nomor Induk Pegawai<sup class="text-danger"> *</sup></label>
 									<input class="form-control {{ $errors->has('nip') ? 'is-invalid' : '' }}" type="text" name="nip" id="nip" value="{{ old('nip', $data_admin->nip ?? '') }}" required>
 									@if($errors->has('nip'))
 										<div class="invalid-feedback">
@@ -36,9 +36,9 @@
 									<span class="help-block">Isi dengan Nomor Induk Pegawai Anda.</span>
 								</div>
 							</div>
-							<div class="col-md-8">
+							<div class="col-md-4">
 								<div class="form-group">
-									<label class="required" for="jabatan">Jabatan</label>
+									<label class="required" for="jabatan">Jabatan<sup class="text-danger"> *</sup></label>
 									<input class="form-control {{ $errors->has('jabatan') ? 'is-invalid' : '' }}" type="text" name="jabatan" id="jabatan" value="{{ old('jabatan', $data_admin->jabatan ?? '') }}" required>
 									@if($errors->has('jabatan'))
 										<div class="invalid-feedback">
@@ -48,12 +48,9 @@
 									<span class="help-block">isi data jabatan.</span>
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-4 col-md-5">
-
+							<div class="col-md-4">
 								<div class="form-group">
-									<label class="">Scan Tandatangan<sup class="text-danger"> *</sup></label>
+									<label class="">Scan Tandatangan</label>
 									<div class="custom-file input-group">
 										<input type="file" class="custom-file-input" name="sign_img" id="sign_img" value="{{ old('sign_img', optional($data_admin)->sign_img) }}">
 										<label class="custom-file-label" for="sign_img">{{ old('sign_img', $data_admin ? $data_admin->sign_img : 'Pilih berkas') }}</label>
@@ -64,11 +61,16 @@
 											Lihat Scan tandatangan.
 										</a>
 									@else
-										<span class="help-block">Unggah hasil pindah tandatangan Anda<span class="text-danger">(wajib)</span></span>
+										<span class="help-block">Unggah hasil pindah tandatangan Anda.</span>
 									@endif
 								</div>
 							</div>
-							<div class="col-lg-8 col-md-7">
+						</div>
+						<div class="row">
+							<div class="col-lg-4 col-md-5">
+
+							</div>
+							<div class="col-lg-8 col-md-7" hidden>
 								<div class="form-group">
 									<label class="required" for="digital_sign">Tandatangan Digital (API KEY)</label>
 									<input class="form-control {{ $errors->has('digital_sign') ? 'is-invalid' : '' }}" type="text" name="digital_sign" id="digital_sign" value="{{ old('digital_sign', $data_admin->digital_sign ?? '') }}" disabled="">

@@ -242,7 +242,7 @@
 						<a href="{{ route('verification.tanam') }}"
 							data-filter-tags="verifikasi tanam">
 							<i class="fal fa-seedling c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Tahap Tanam</span>
+							<span class="nav-link-text">Verifikasi Tanam</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifTanam();
 								$unverified = $pengajuan->NewRequest();
@@ -263,7 +263,7 @@
 						<a href="{{ route('verification.produksi') }}"
 							data-filter-tags="verifikasi produksi">
 							<i class="fal fa-dolly c-sidebar-nav-icon"></i>
-							<span class="nav-link-text">Tahap Produksi</span>
+							<span class="nav-link-text">Verifikasi Produksi</span>
 							@php
 								$pengajuan = new \App\Models\AjuVerifProduksi();
 								$unverified = $pengajuan->NewRequest();

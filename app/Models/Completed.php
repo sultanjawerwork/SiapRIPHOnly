@@ -41,4 +41,9 @@ class Completed extends Model
 	{
 		return $this->belongsTo(DataUser::class, 'npwp', 'npwp_company');
 	}
+
+	public function skl()
+	{
+		return $this->belongsTo(Skl::class, 'no_skl', 'no_skl');
+	}
 }

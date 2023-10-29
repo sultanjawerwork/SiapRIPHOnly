@@ -47,6 +47,7 @@ class VerifSklController extends Controller
 
 		//table pengajuan. jika sudah mengajukan SKL, maka pengajuan terkait tidak muncul
 		$verifikasis = AjuVerifSkl::orderBy('created_at', 'desc')
+			->where('status', '!=', '4')
 			->get();
 
 		// dd($verifikasis);
@@ -146,8 +147,10 @@ class VerifSklController extends Controller
 			'ndhpsklLink' => asset("storage/uploads/{$npwp}/{$commitment->periodetahun}/{$verifikasi->ndhpskl}"),
 			'basklsLink' => asset("storage/uploads/{$npwp}/{$commitment->periodetahun}/{$verifikasi->baskls}"),
 			'noSkl' => optional($skl)->no_skl,
-			'publishedDate' => optional($skl)->published_date->format('d-m-Y'),
-			'approvedAt' => $skl->approved_at,
+			'publishedDate' => optional($skl)->published_date ? optional($skl)->published_date->format('d-m-Y') : null,
+			'approvedAt' => optional($skl)->approved_at ? optional($skl)->approved_at : null,
+
+			// 'approvedAt' => $skl->approved_at,
 			'submitBy' => optional(User::find(optional($skl)->submit_by))->name ?? 'Tidak dikenali oleh System',
 
 
@@ -507,9 +510,9 @@ class VerifSklController extends Controller
 		$skl = Skl::findOrFail($id);
 		$verifikasi = AjuVerifSkl::find($skl->pengajuan_id);
 		$commitment = PullRiph::where('no_ijin', $skl->no_ijin)->first();
-		$pejabat = $user;
+		$pejabat = DataAdministrator::where('user_id', $user->id)->first();
 		$ttd = $user->name;
-		// dd($ttd);
+		// dd($pejabat);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
 		$total_luas = $commitment->lokasi->sum('luas_tanam');
@@ -519,14 +522,13 @@ class VerifSklController extends Controller
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
 			'No. SKL'	=> $skl->no_skl,
-			'ttd'	=> $ttd,
+			'Pejabat'	=> $pejabat->nama,
 			'Status' => 'LUNAS',
-			'Tautan' => route('verification.skl.published', $skl->id)
 		];
 
-		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['ttd'] . ', Status: ' . $data['Status'] . ', Tautan Berkas' . $data['Tautan']);
+		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['Pejabat'] . ', Status: ' . $data['Status'] . ', Tautan Berkas: Belum tersedia.');
 
-		return view('admin.verifikasi.skl.draftSKL', compact('page_title', 'skl', 'verifikasi', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.skl_new', compact('page_title', 'skl', 'verifikasi', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
 	}
 
 	//fungsi untuk pejabat menyetujui skl diterbitkan.
@@ -546,6 +548,39 @@ class VerifSklController extends Controller
 				$avskl = AjuVerifSkl::where('no_ijin', $skl->no_ijin)->first();
 				$avskl->status = 3;
 				$avskl->save();
+
+				$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
+				$commitment = PullRiph::find($pengajuan->commitment_id);
+				$filenpwp = str_replace(['.', '-'], '', $skl->npwp);
+				$noIjin = str_replace(['.', '-', '/'], '', $skl->no_ijin);
+				$thn = $commitment->periodetahun;
+				$filename = 'skl_' . $noIjin . '.' . 'pdf';
+				$path = 'uploads/' . $filenpwp . '/' . $thn . '/' . $filename;
+				$filePath = asset('storage/' . $path);
+				$skl->skl_upload = $filename;
+				// $skl->published_date = Carbon::now();
+				$commitment->skl = $filename;
+				$completedData['skl_upload'] = $filename;
+				$completedData['url'] = $filePath;
+
+				$completedData = [
+					'no_skl' => $skl->no_skl,
+					'npwp' => $skl->npwp,
+					'no_ijin' => $skl->no_ijin,
+					'periodetahun' => $thn,
+					'published_date' => $skl->published_date,
+					'status' => 'Lunas',
+					'skl_upload' => $filename,
+					'url' => $filePath,
+				];
+				Completed::updateOrCreate(
+					[
+						'no_skl' => $skl->no_skl,
+						'no_ijin' => $skl->no_ijin,
+					],
+					$completedData
+				);
+
 				return redirect()->route('verification.skl.recomendations')->with(['success' => 'Penerbitan SKL telah Anda setujui dan siap diterbitkan.']);
 			});
 		} catch (\Exception $e) {
@@ -573,7 +608,6 @@ class VerifSklController extends Controller
 			abort(403, 'Unauthorized');
 		}
 		$module_name = 'SKL';
-		$page_title = 'Draft SKL';
 		$page_heading = 'Preview Draft SKL';
 		$heading_class = 'fa fa-file-signature';
 
@@ -581,26 +615,30 @@ class VerifSklController extends Controller
 		if (empty($skl->approved_by)) {
 			abort(403, 'Tidak dapat dicetak. Pejabat terkait belum menyetujui penerbitan SKL.');
 		}
-		$pengajuan = AjuVerifSkl::find($skl->pengajuan_id);
+		$verifikasi = AjuVerifSkl::find($skl->pengajuan_id);
 		$commitment = PullRiph::where('no_ijin', $skl->no_ijin)->first();
 		$pejabat = DataAdministrator::where('user_id', $skl->approved_by)->first();
-		// dd($pejabat->nama);
+		// dd($pejabat);
 		$wajib_tanam = $commitment->luas_wajib_tanam;
 		$wajib_produksi = $commitment->volume_produksi;
 		$total_luas = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
-		// dd($pengajuan);
+		$Url = Completed::where('no_skl', $skl->no_skl)->first()->url;
+		// dd($Url);
+
+		$page_title = 'SKL Cetak ' . $skl->skl_upload;
 		$data = [
 			'Perusahaan' => $commitment->datauser->company_name,
 			'No. RIPH' => $commitment->no_ijin,
 			'No. SKL' => $skl->no_skl,
 			'Pejabat' => $pejabat->nama,
+			'Url'	=> $Url,
 			'Status' => 'LUNAS',
 		];
 
-		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['Pejabat'] . ', Status: ' . $data['Status']);
+		$QrCode = QrCode::size(70)->generate('Perusahaan: ' . $data['Perusahaan'] . ', No. RIPH: ' . $data['No. RIPH'] . ', No. SKL: ' . $data['No. SKL'] . ', Disetujui dan Ditandatangani oleh: ' . $data['Pejabat'] . ', Status: ' . $data['Status'] . ', Tautan Berkas: ' . $data['Url']);
 
-		return view('admin.verifikasi.skl.printReadySkl', compact('page_title', 'skl', 'pengajuan', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
+		return view('admin.verifikasi.skl.skl_new', compact('page_title', 'skl', 'verifikasi', 'commitment', 'pejabat', 'QrCode', 'wajib_tanam', 'wajib_produksi', 'total_luas', 'total_volume'));
 	}
 
 	//sub fungsi sklupload
@@ -677,15 +715,22 @@ class VerifSklController extends Controller
 
 		$roleaccess = Auth::user()->roleaccess;
 		if ($roleaccess == 1) {
-			$completeds = Completed::where('url', '!=', null)->get();
+			$completeds = Completed::where('luas_tanam', '!=', null)->get();
 		}
-
 		if ($roleaccess == 2) {
 			$user = Auth::user();
 			$npwp = $user->data_user->npwp_company;
-			$completeds = Completed::where('npwp', $npwp)->get();
+			$completeds = Completed::where('npwp', $npwp)
+				->where('luas_tanam', '!=', null)
+				->get();
 		}
 
 		return view('admin.verifikasi.skl.completed', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'completeds'));
+	}
+
+	public function sklreadcount()
+	{
+		//ditujukan untuk membuat notifikasi bahwa terdapat skl yang baru terbit
+		$a = '';
 	}
 }

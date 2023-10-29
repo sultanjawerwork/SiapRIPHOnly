@@ -281,28 +281,28 @@
 						});
 
 						// Populate the table with data skl from the server
-						$.each(data.progresVSkl, function (index, verifikasi) {
-							var company = verifikasi.commitment.datauser.company_name;
-							var jenis = verifikasi.jenis;
-							var no_ijin = verifikasi.no_ijin;
-							var created = verifikasi.created_at;
-							var updated = verifikasi.updated_at;
-							var progress = verifikasi.SklProgress;
-							var progressHTML = ''; // Ini adalah variabel untuk menyimpan HTML yang akan dihasilkan
+						// $.each(data.progresVSkl, function (index, verifikasi) {
+						// 	var company = verifikasi.commitment.datauser.company_name;
+						// 	var jenis = verifikasi.jenis;
+						// 	var no_ijin = verifikasi.no_ijin;
+						// 	var created = verifikasi.created_at;
+						// 	var updated = verifikasi.updated_at;
+						// 	var progress = verifikasi.SklProgress;
+						// 	var progressHTML = ''; // Ini adalah variabel untuk menyimpan HTML yang akan dihasilkan
 
-							if (progress === '1') {
-								progressHTML = '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
-							} else if (progress === '2') {
-								progressHTML = '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Rekomendasi</span>';
-							} else if (progress === '3') {
-								progressHTML = '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> Disetujui</span>';
-							} else if (progress === '4') {
-								progressHTML = '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Terbit</span>';
-							} else if (progress === '5') {
-								progressHTML = '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
-							}
-							table.fnAddData([company, no_ijin, jenis,created, updated, progressHTML]);
-						});
+						// 	if (progress === '1') {
+						// 		progressHTML = '<span class="badge btn-xs btn-warning"><i class="fa fa-exclamation-circle"></i> Baru</span>';
+						// 	} else if (progress === '2') {
+						// 		progressHTML = '<span class="badge btn-xs btn-primary"><i class="fal fa-hourglass"></i> Rekomendasi</span>';
+						// 	} else if (progress === '3') {
+						// 		progressHTML = '<span class="badge btn-xs btn-info"><i class="fal fa-hourglass"></i> Disetujui</span>';
+						// 	} else if (progress === '4') {
+						// 		progressHTML = '<span class="badge btn-xs btn-success"><i class="fa fa-check"></i> Terbit</span>';
+						// 	} else if (progress === '5') {
+						// 		progressHTML = '<span class="badge btn-xs btn-danger"><i class="fa fa-ban"></i> Perbaikan</span>';
+						// 	}
+						// 	table.fnAddData([company, no_ijin, jenis,created, updated, progressHTML]);
+						// });
 						table.fnDraw();
 					},
 					error: function (xhr, status, error) {

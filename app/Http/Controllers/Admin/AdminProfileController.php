@@ -19,8 +19,8 @@ class AdminProfileController extends Controller
 	public function index()
 	{
 		$module_name = 'Profile';
-		$page_title = 'Profile Pejabat';
-		$page_heading = 'Profile Pejabat';
+		$page_title = 'Profile Pengguna';
+		$page_heading = 'Profile Pengguna';
 		$heading_class = 'fa fa-user-tie';
 
 		$user = Auth::user();
