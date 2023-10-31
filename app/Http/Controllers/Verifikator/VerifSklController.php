@@ -84,7 +84,7 @@ class VerifSklController extends Controller
 		];
 
 
-		if ($verifTanam) {
+		if ($verifTanam != null) {
 			//ringkasan pengajuan verifikasi tanam\
 			$tanam = [
 				'avtDate' => optional($verifTanam)->created_at->format('d-m-Y'),
