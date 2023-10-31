@@ -281,7 +281,7 @@ class PengajuanController extends Controller
 		$commitment = PullRiph::find($id);
 		$data = $this->getDataPengajuan($commitment);
 
-		return view('admin.pengajuan.verifSkl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment') + $data);
+		return view('admin.pengajuan.verifskl.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'commitment') + $data);
 	}
 
 	public function ajuVerifSklStore($id)
