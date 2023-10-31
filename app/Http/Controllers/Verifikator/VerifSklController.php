@@ -71,7 +71,7 @@ class VerifSklController extends Controller
 
 		$skl = Skl::where('pengajuan_id', $verifikasi->id)->first();
 
-		// dd($skl->approved_at);
+		// dd($verifTanam->created_at);
 
 		$data = [
 			//ringkasan umum
@@ -80,53 +80,35 @@ class VerifSklController extends Controller
 			'noIjin' => $commitment->no_ijin,
 			'periode' => $commitment->periodetahun,
 			'tglIjin' => Carbon::parse($commitment->tgl_ijin)->format('d-m-Y'),
-			'tglAkhir'	=> Carbon::parse($commitment->tgl_akhir)->format('d-m-Y')
-		];
+			'tglAkhir'	=> Carbon::parse($commitment->tgl_akhir)->format('d-m-Y'),
+
+			'avtDate' => $verifTanam->created_at,
+			'avtVerifAt' => $verifTanam->verif_at,
+			'avtStatus' => optional($verifTanam)->status,
+			'avtMetode' => optional($verifTanam)->metode,
+			'avtNote' => optional($verifTanam)->note,
+			'ndhprt' => optional($verifTanam)->ndhprt,
+			'batanam' => optional($verifTanam)->batanam,
+
+			//ringkasan pengajuan verifikasi produksi
+			'avpDate' => optional($verifProduksi)->created_at->format('d-m-Y'),
+			'avpVerifAt' => Carbon::parse(optional($verifProduksi)->verif_at)->format('d-m-Y'),
+			'avpStatus' => optional($verifProduksi)->status,
+			'avpMetode' => optional($verifProduksi)->metode,
+			'avpNote' => optional($verifProduksi)->note,
+			'ndhprp' => optional($verifProduksi)->ndhprp,
+			'baproduksi' => optional($verifProduksi)->baproduksi,
+
+			//ringkasan pengajuan skl
+			'avsklDate' => optional($verifikasi)->created_at->format('d-m-Y'),
+			'avsklVerifAt' => Carbon::parse(optional($verifikasi)->verif_at)->format('d-m-Y'),
+			'avsklStatus' => optional($verifikasi)->status,
+			'avsklMetode' => optional($verifikasi)->metode,
+			'avsklNote' => optional($verifikasi)->note,
+			'ndhpskl' => optional($verifikasi)->ndhpskl,
+			'baskls' => optional($verifikasi)->baskls,
 
 
-		if ($verifTanam != null) {
-			//ringkasan pengajuan verifikasi tanam\
-			$tanam = [
-				'avtDate' => optional($verifTanam)->created_at,
-				'avtVerifAt' => Carbon::parse(optional($verifTanam)->verif_at)->format('d-m-Y'),
-				'avtStatus' => optional($verifTanam)->status,
-				'avtMetode' => optional($verifTanam)->metode,
-				'avtNote' => optional($verifTanam)->note,
-				'ndhprt' => optional($verifTanam)->ndhprt,
-				'batanam' => optional($verifTanam)->batanam
-			];
-		}
-
-		if ($verifProduksi) {
-			//ringkasan pengajuan verifikasi tanam\
-			$produksi = [
-
-				//ringkasan pengajuan verifikasi produksi
-				'avpDate' => optional($verifProduksi)->created_at->format('d-m-Y'),
-				'avpVerifAt' => Carbon::parse(optional($verifProduksi)->verif_at)->format('d-m-Y'),
-				'avpStatus' => optional($verifProduksi)->status,
-				'avpMetode' => optional($verifProduksi)->metode,
-				'avpNote' => optional($verifProduksi)->note,
-				'ndhprp' => optional($verifProduksi)->ndhprp,
-				'baproduksi' => optional($verifProduksi)->baproduksi,
-			];
-		}
-
-		if ($verifikasi) {
-			//ringkasan pengajuan verifikasi tanam\
-			$verif = [
-				//ringkasan pengajuan skl
-				'avsklDate' => optional($verifikasi)->created_at->format('d-m-Y'),
-				'avsklVerifAt' => Carbon::parse(optional($verifikasi)->verif_at)->format('d-m-Y'),
-				'avsklStatus' => optional($verifikasi)->status,
-				'avsklMetode' => optional($verifikasi)->metode,
-				'avsklNote' => optional($verifikasi)->note,
-				'ndhpskl' => optional($verifikasi)->ndhpskl,
-				'baskls' => optional($verifikasi)->baskls,
-			];
-		}
-
-		$sisa = [
 			//ringkasan kewajiban dan realisasi
 			'wajibTanam' => number_format($commitment->luas_wajib_tanam, 2, '.', ','),
 			'wajibProduksi' => number_format($commitment->volume_produksi, 2, '.', ','),
@@ -176,9 +158,6 @@ class VerifSklController extends Controller
 			//used document
 			'userDocs' => $userDocs,
 		];
-
-		array_push($data, $tanam, $produksi, $verif, $sisa);
-		// dd($userDocs->ndhprp);
 
 		return response()->json($data);
 	}

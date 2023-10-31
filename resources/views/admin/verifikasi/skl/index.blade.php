@@ -99,7 +99,7 @@
 											</td>
 											<td class="text-center">
 												@if(!$verifikasi->skl)
-													<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
+													<a href="{{route('verification.skl.check', $verifikasi->id)}}"
 														title="Lihat rekomendasi" class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-search"></i>
 													</a>
@@ -108,57 +108,59 @@
 														data-toggle="tooltip" data-original-title="Klik untuk melihat data rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
-													@if ($verifikasi->status == 3)
+
+													@if ($verifikasi->status === 3)
 														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
 															<i class="fal fa-print"></i>
 														</a>
 														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$verifikasi->skl->pengajuan_id}}">
 															<i class="fas fa-upload text-align-center"></i>
 														</button>
+
+														{{-- modal upload skl --}}
+														<div class="modal fade" id="modalUploadSkl{{$verifikasi->skl->pengajuan_id}}"
+															tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+															<div class="modal-dialog modal-dialog-center" role="document">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<div>
+																			<h5 class="modal-title" id="myModalLabel">Unggah Berkas SKL</h5>
+																			<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
+																		</div>
+																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																			<span aria-hidden="true">&times;</span>
+																		</button>
+																	</div>
+																	{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
+																	<form action="{{route('skl.upload', $verifikasi->skl->pengajuan_id)}}" method="post" enctype="multipart/form-data">
+																		@csrf
+																		@method('put')
+																		<div class="modal-body">
+																			<div class="form-group">
+																				<label class="">Unggah hasil cetak SKL</label>
+																				<div class="custom-file input-group">
+																					<input type="file" class="custom-file-input" name="skl_upload" id="skl_upload">
+																					<label class="custom-file-label" for="">Pilih berkas...</label>
+																				</div>
+																				<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
+																			</div>
+																		</div>
+																		<div class="modal-footer">
+																			<button type="button" class="btn btn-warning btn-sm"
+																				data-dismiss="modal">
+																				<i class="fal fa-times-circle text-danger fw-500"></i> Close
+																			</button>
+																			<button class="btn btn-primary btn-sm" type="submit">
+																				<i class="fal fa-upload mr-1"></i>Unggah
+																			</button>
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
 													@endif
 												@endif
 											</td>
-											{{-- modal upload skl --}}
-											<div class="modal fade" id="modalUploadSkl{{$verifikasi->skl->pengajuan_id}}"
-												tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-												<div class="modal-dialog modal-dialog-center" role="document">
-													<div class="modal-content">
-														<div class="modal-header">
-															<div>
-																<h5 class="modal-title" id="myModalLabel">Unggah Berkas SKL</h5>
-																<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
-															</div>
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
-														</div>
-														{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
-														<form action="{{route('skl.upload', $verifikasi->skl->pengajuan_id)}}" method="post" enctype="multipart/form-data">
-															@csrf
-															@method('put')
-															<div class="modal-body">
-																<div class="form-group">
-																	<label class="">Unggah hasil cetak SKL</label>
-																	<div class="custom-file input-group">
-																		<input type="file" class="custom-file-input" name="skl_upload" id="skl_upload">
-																		<label class="custom-file-label" for="">Pilih berkas...</label>
-																	</div>
-																	<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
-																</div>
-															</div>
-															<div class="modal-footer">
-																<button type="button" class="btn btn-warning btn-sm"
-																	data-dismiss="modal">
-																	<i class="fal fa-times-circle text-danger fw-500"></i> Close
-																</button>
-																<button class="btn btn-primary btn-sm" type="submit">
-																	<i class="fal fa-upload mr-1"></i>Unggah
-																</button>
-															</div>
-														</form>
-													</div>
-												</div>
-											</div>
 										</tr>
 									@endforeach
 								</tbody>
