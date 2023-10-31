@@ -347,7 +347,7 @@ class PengajuanController extends Controller
 			]
 		);
 		return redirect()->route('admin.task.commitment')
-			->with('success', 'Surat Keterangan Lunas berhasil diajukan.');
+			->with('success', 'Permohonan Penerbitan Surat Keterangan Lunas berhasil diajukan.');
 	}
 
 	public function showAjuTanam($id)
