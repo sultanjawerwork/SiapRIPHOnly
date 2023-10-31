@@ -87,7 +87,7 @@ class VerifSklController extends Controller
 		if ($verifTanam) {
 			//ringkasan pengajuan verifikasi tanam\
 			$tanam = [
-				'avtDate' => optional($verifTanam)->created_at->format('d-m-Y') ?? '',
+				'avtDate' => optional($verifTanam)->created_at->format('d-m-Y'),
 				'avtVerifAt' => Carbon::parse(optional($verifTanam)->verif_at)->format('d-m-Y'),
 				'avtStatus' => optional($verifTanam)->status,
 				'avtMetode' => optional($verifTanam)->metode,
@@ -177,7 +177,7 @@ class VerifSklController extends Controller
 			'userDocs' => $userDocs,
 		];
 
-		array_push($data, $verifTanam, $verifProduksi, $verif, $sisa);
+		array_push($data, $tanam, $produksi, $verif, $sisa);
 		// dd($userDocs->ndhprp);
 
 		return response()->json($data);
