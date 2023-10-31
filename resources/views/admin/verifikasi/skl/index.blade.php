@@ -97,7 +97,7 @@
 													<span hidden>{{$verifikasi->status}}</span>
 												@endif --}}
 											</td>
-											<td class="text-center">
+											<td class="">
 												@if(!$verifikasi->skl)
 													<a href="{{route('verification.skl.check', $verifikasi->id)}}"
 														title="Lihat rekomendasi" class="mr-1 btn btn-xs btn-icon btn-info">
@@ -108,8 +108,8 @@
 														data-toggle="tooltip" data-original-title="Klik untuk melihat data rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
-
-													@if ($verifikasi->status === 3)
+													{{-- {{dd($verifikasi->status)}} --}}
+													@if ($verifikasi->status == 3)
 														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
 															<i class="fal fa-print"></i>
 														</a>

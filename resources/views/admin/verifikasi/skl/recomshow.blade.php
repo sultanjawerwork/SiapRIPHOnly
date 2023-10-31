@@ -410,8 +410,20 @@
 				var formattedRealisasiProduksi = parseFloat(data.realisasiProduksi).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ton';
 				var formattedHasGeoLoc = parseFloat(data.hasGeoloc).toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' titik';
 
-				$("#ndhprt").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprtLink + '">' + data.ndhprt + '</a>');
-				$("#batanam").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.batanamLink + '">' + data.batanam + '</a>');
+				if (data.ndhprt === null){
+					var ndTanam = '';
+				}else if(data.ndhprt !== null){
+					var ndTanam = data.ndhprt;
+				}
+
+				if (data.batanam === null){
+					var baTanam = '';
+				}else if(data.batanam !== null){
+					var baTanam = data.batanam;
+				}
+
+				$("#ndhprt").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprtLink + '">' + ndTanam + '</a>');
+				$("#batanam").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.batanamLink + '">' + baTanam + '</a>');
 				$("#ndhprp").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.ndhprpLink + '">' + data.ndhprp + '</a>');
 				$("#baproduksi").html('<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="' + data.baproduksiLink + '">' + data.baproduksi + '</a>');
 
@@ -424,7 +436,10 @@
 				$("#realisasiProduksi").text(formattedRealisasiProduksi);
 				$("#hasGeoloc").text(formattedHasGeoLoc);
 
-				if (data.avtStatus === '1' || data.avtStatus === '2' || data.avtStatus === '3') {
+				if (data.avtStatus === null) {
+					// Handle case when avtStatus doesn't match any of the above conditions
+					$("#avtStatus").text('Belum/Tidak mengajuka verifikasi').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
+				} else if (data.avtStatus === '1' || data.avtStatus === '2' || data.avtStatus === '3') {
 					$("#avtStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
 				} else if (data.avtStatus === '4') {
 					$("#avtStatus").text('Memenuhi Syarat').addClass("text-success text-uppercase fw-500").append('<i class="fas fa-check ml-1"></i>');
