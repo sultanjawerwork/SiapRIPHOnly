@@ -208,8 +208,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 			return redirect()->route('skl.arsip');
 		})->name('skl.arsip');
 
-		Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
-		Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
+		// Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
+		// Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
 
 		//berkas
 		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');

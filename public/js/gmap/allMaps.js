@@ -15,9 +15,8 @@ function initMap() {
 		var periodetahun = $(this).val();
 		var url =
 			periodetahun === "all"
-				? "http://127.0.0.1:8000/api/getAPIAnggotaMitraAll/"
-				: "http://127.0.0.1:8000/api/getAPIAnggotaMitraByYear/" +
-				  periodetahun;
+				? "/api/getAPIAnggotaMitraAll/"
+				: "/api/getAPIAnggotaMitraByYear/" + periodetahun;
 
 		// Make an AJAX request to retrieve marker data and polygons
 		$.ajax({
