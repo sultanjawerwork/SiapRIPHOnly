@@ -80,9 +80,9 @@
 {{-- <script src="{{ asset('js/miscellaneous/lightgallery/lightgallery.bundle.js') }}"></script> --}}
 @parent
 @if (Auth::user()->roles[0]->title == 'User')
-	<script src="{{ asset('js/gmap/userDashboardMaps.js') }}"></script>
+	<script src="{{ asset('js/gmap/userDashboardMaps.js?v=1.0.1') }}"></script>
 @else
-	<script src="{{ asset('js/gmap/allMaps.js') }}"></script>
+	<script src="{{ asset('js/gmap/allMaps.js?v=1.0.1') }}"></script>
 @endif
 {{-- <script src="{{ asset('js/gmap/clickMap.js') }}"></script> --}}
 
