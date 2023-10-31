@@ -194,13 +194,13 @@
 							<span class="nav-link-text text-wrap">
 								Daftar SKL Terbits
 							</span>
-							@php
+							{{-- @php
 								$newSkl = new \App\Models\SklReads();
 								$newSklCount = $newSkl->getNewSklCount();
 							@endphp
 							@if ($newSklCount > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
-							@endif
+							@endif --}}
 						</a>
 					</li>
 				@endcan
@@ -326,13 +326,13 @@
 							data-filter-tags="daftar skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 							<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
-							@php
+							{{-- @php
 								$newSkl = new \App\Models\SklReads();
 								$newSklCount = $newSkl->getNewSklCount();
 							@endphp
 							@if ($newSklCount > 0)
 								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
-							@endif
+							@endif --}}
 						</a>
 					</li>
 				@endcan

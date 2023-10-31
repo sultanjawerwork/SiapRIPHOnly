@@ -13,8 +13,8 @@
 	@php($cntAjuVerifSkl = \App\Models\AjuVerifSkl::newPengajuanCount())
 	@php($getAjuVerifSkl = \App\Models\AjuVerifSkl::getNewPengajuan())
 
-	@php($cntNewSkl = \App\Models\SklReads::getNewSklCount())
-	@php($getNewSkl = \App\Models\SklReads::getNewSkl())
+	{{-- @php($cntNewSkl = \App\Models\SklReads::getNewSklCount())
+	@php($getNewSkl = \App\Models\SklReads::getNewSkl()) --}}
 
 	@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0));
 
@@ -83,17 +83,17 @@
 
 		<div>
 			<a href="#" class="header-icon" data-toggle="dropdown"
-				title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin'), {{ $cntpengajuan}} Pengajuan Baru, {{ $cntNewSkl}} SKL Baru diterbitkan @elseif (Auth::user()->roles[0]->title == 'Pejabat'), {{$cntRecomendations}} Rekomendasi SKL diajukan @elseif (Auth::user()->roles[0]->title == 'Verifikator'), {{$cntpengajuan}} Pengajuan Baru @endif">
+				title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin'), {{ $cntpengajuan}} Pengajuan Baru, 0 SKL Baru diterbitkan @elseif (Auth::user()->roles[0]->title == 'Pejabat'), {{$cntRecomendations}} Rekomendasi SKL diajukan @elseif (Auth::user()->roles[0]->title == 'Verifikator'), {{$cntpengajuan}} Pengajuan Baru @endif">
 				<i class="fal fa-envelope"></i>
 				@if (Auth::user()->roles[0]->title == 'Admin')
-					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan + $cntNewSkl}} </span>
+				<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span> {{--+ $cntNewSkl--}}
 				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
 				@elseif (Auth::user()->roles[0]->title == 'Verifikator')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan}} </span>
 				@endif
 				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
-					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan + $cntNewSkl}} </span>
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span> {{--+ $cntNewSkl--}}
 				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
 				@endif
@@ -105,7 +105,7 @@
 						<small class="mb-0 opacity-80">{{ $unreadmsg }} Pesan baru</small>
 						@if (Auth::user()->roles[0]->title == 'Admin')
 							<small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
-							<small class="mb-0 opacity-80">{{ $cntNewSkl }} SKL Baru</small>
+							{{-- <small class="mb-0 opacity-80">{{ $cntNewSkl }} SKL Baru</small> --}}
 						@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 							<small class="mb-0 opacity-80">{{ $cntRecomendations }} Rekomendasi Baru</small>
 						@elseif (Auth::user()->roles[0]->title == 'Verifikator')
@@ -276,7 +276,7 @@
 							<div class="tab-pane" id="tab-new-skl" role="tabpanel">
 								<div class="custom-scroll h-100">
 									<ul class="notification notification-1">
-										@foreach ($getNewSkl as $item)
+										{{-- @foreach ($getNewSkl as $item)
 											<li>
 												<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
 													<span class="mr-2">
@@ -296,7 +296,7 @@
 													</span>
 												</a>
 											</li>
-										@endforeach
+										@endforeach --}}
 									</ul>
 								</div>
 							</div>
