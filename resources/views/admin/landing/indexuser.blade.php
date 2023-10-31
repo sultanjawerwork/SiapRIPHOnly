@@ -14,7 +14,7 @@
 			{{-- skl --}}
 			@php($cntAjuVerifSkl = \App\Models\AjuVerifSkl::newPengajuanCount())
 			@php($getAjuVerifSkl = \App\Models\AjuVerifSkl::getNewPengajuan())
-			@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0));
+			@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0))
 			{{-- rekomendasi --}}
 			@php($cntRecomendations = \App\Models\Skl::newPengajuanCount())
 			@php($getRecomendations = \App\Models\Skl::getNewPengajuan())
