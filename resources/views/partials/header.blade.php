@@ -16,7 +16,7 @@
 	{{-- @php($cntNewSkl = \App\Models\SklReads::getNewSklCount())
 	@php($getNewSkl = \App\Models\SklReads::getNewSkl()) --}}
 
-	@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0));
+	@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0))
 
 
 
