@@ -392,7 +392,7 @@
 						</div>
 					</div>
 				@endif
-				@if (Auth::user()->roles[0]->title == 'User')
+				{{-- @if (Auth::user()->roles[0]->title == 'User')
 					<div id="panel-3" class="panel">
 						<div class="panel-hdr">
 							<h2>
@@ -404,7 +404,7 @@
 							<div class="panel-toolbar">
 								@if ($cntgetNewSkl > 0)
 									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntRecomendations}} Rekomendasi Penerbitan yang perlu Anda tindaklanjuti.">
-										{{-- {{$cntgetNewSkl}} --}}
+										{{$cntgetNewSkl}}
 									</a>
 								@else
 								@endif
@@ -436,7 +436,7 @@
 							</div>
 						</div>
 					</div>
-				@endif
+				@endif --}}
 			</div>
 		</div>
 		<!-- Page Content -->
