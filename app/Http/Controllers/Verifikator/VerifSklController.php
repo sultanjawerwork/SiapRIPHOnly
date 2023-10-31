@@ -22,6 +22,7 @@ use App\Models\MasterPoktan;
 use App\Models\PullRiph;
 use App\Models\Pks;
 use App\Models\Skl;
+use App\Models\SklReads;
 use App\Models\User;
 use App\Models\UserDocs;
 use Illuminate\Support\Facades\DB;
@@ -726,11 +727,5 @@ class VerifSklController extends Controller
 		}
 
 		return view('admin.verifikasi.skl.completed', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'completeds'));
-	}
-
-	public function sklreadcount()
-	{
-		//ditujukan untuk membuat notifikasi bahwa terdapat skl yang baru terbit
-		$a = '';
 	}
 }

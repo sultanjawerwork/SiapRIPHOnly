@@ -29,12 +29,12 @@ class DashboardDataController extends Controller
 		$riphData = RiphAdmin::where('periode', $periodetahun)->get();
 		$commitments = PullRiph::where('periodetahun', $periodetahun)->get();
 
-		$jumlahImportir = $riphData->sum('jumlah_importir');
+		$jumlahImportir = $riphData->sum('jumlah_importir'); //data dari siap riph adalah jumlah importir, seharusnya jumlah riph yang telah mendapatkan persetujuan import (PI)
 		$v_pengajuan_import = $riphData->sum('v_pengajuan_import');
 		$v_beban_tanam = $riphData->sum('v_beban_tanam');
 		$v_beban_produksi = $riphData->sum('v_beban_produksi');
 		$volume_import = $commitments->sum('volume_riph');
-		$company = $commitments->count('no_ijin');
+		$company = $commitments->count('no_ijin'); // jumlah RIPH yang telah melakukan sinkronisasi data di simethris
 
 		$total_luastanam = $commitments->flatMap(function ($commitment) {
 			return $commitment->lokasi->pluck('luas_tanam');

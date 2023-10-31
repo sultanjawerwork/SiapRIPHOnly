@@ -30,6 +30,10 @@
 			@php($getRecomendations = null)
 		@endif
 
+		@if (Auth::user()->roles[0]->title == 'User')
+			@php($getNewSkl = \App\Models\SklReads::getNewSkl())
+			@php($cntgetNewSkl = \App\Models\SklReads::getNewSklCount())
+		@endif
 
 		<div class="row mb-5">
 			<div class="col text-center">
@@ -388,6 +392,51 @@
 						</div>
 					</div>
 				@endif
+				@if (Auth::user()->roles[0]->title == 'User')
+					<div id="panel-3" class="panel">
+						<div class="panel-hdr">
+							<h2>
+								<i class="subheader-icon fal fa-file-certificate mr-1"></i>
+								<span class="text-primary fw-700 text-uppercase">
+									SKL Terbit
+								</span>
+							</h2>
+							<div class="panel-toolbar">
+								@if ($cntgetNewSkl > 0)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntRecomendations}} Rekomendasi Penerbitan yang perlu Anda tindaklanjuti.">
+										{{$cntgetNewSkl}}
+									</a>
+								@else
+								@endif
+							</div>
+						</div>
+						<div class="panel-container collapse">
+							<div class="panel-content p-0">
+								<ul class="notification">
+									@foreach ($getNewSkl as $item)
+										<li>
+											<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													<i class="fal fa-award fa-4x text-success"></i>
+												</span>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->no_ijin }} <span
+														class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm">
+														<span class="badge badge-success">Direkomendasikan</span>
+													</span>
+
+													<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
+												</span>
+											</a>
+										</li>
+
+									@endforeach
+								</ul>
+							</div>
+						</div>
+					</div>
+				@endif
 			</div>
 		</div>
 		<!-- Page Content -->
@@ -398,26 +447,23 @@
 
 	<script>
 		$(document).ready(function() {
-			// initialize datatable
-			// $('#dt_feeds').dataTable({
-			// 	// pagingType: 'full_numbers',
-			// 	responsive: true,
-			// 	lengthChange: false,
-			// 	pageLength: 10,
-			// 	order: [
-			// 		[0, 'desc']
-			// 	],
-			// 	dom:
+			function markAsRead(sklId) {
+				var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Ambil token CSRF
 
-			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
-			// 		"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'>>" +
-			// 		"<'row'<'col-sm-12't>>" +
-			// 		"<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'>>",
-			// 	buttons: [
-
-			// 	]
-			// });
-
+				// Kirim permintaan Ajax ke metode controller untuk menandai SKL sebagai sudah dibaca
+				$.ajax({
+					type: 'POST',
+					url: '{{ route('admin.sklReads') }}', // Menggunakan route yang sesuai
+					data: {
+						skl_id: sklId,
+						_token: csrfToken // Sertakan token CSRF di sini
+					},
+					success: function(response) {
+						// Setelah berhasil menandai, buka URL tautan
+						window.location.href = event.target.getAttribute('href');
+					}
+				});
+			}
 		});
 	</script>
 @endsection

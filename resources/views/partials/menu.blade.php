@@ -192,8 +192,15 @@
 							data-filter-tags="daftar skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 							<span class="nav-link-text text-wrap">
-								Daftar SKL Terbit
+								Daftar SKL Terbits
 							</span>
+							@php
+								$newSkl = new \App\Models\SklReads();
+								$newSklCount = $newSkl->getNewSklCount();
+							@endphp
+							@if ($newSklCount > 0)
+								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
+							@endif
 						</a>
 					</li>
 				@endcan
@@ -319,6 +326,13 @@
 							data-filter-tags="daftar skl terbit">
 							<i class="fal fa-file-certificate c-sidebar-nav-icon"></i>
 							<span class="nav-link-text text-wrap">Daftar SKL Terbit</span>
+							@php
+								$newSkl = new \App\Models\SklReads();
+								$newSklCount = $newSkl->getNewSklCount();
+							@endphp
+							@if ($newSklCount > 0)
+								<span class="dl-ref bg-danger-500 hidden-nav-function-minify hidden-nav-function-top">{{ $newSklCount }}</span>
+							@endif
 						</a>
 					</li>
 				@endcan
@@ -531,7 +545,7 @@
 
 				{{-- Master template --}}
 				@can('template_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') || request()->is('admin/task/template/*') ? 'active' : '' }}">
+					<li hidden class="c-sidebar-nav-item {{ request()->is('admin/task/template') || request()->is('admin/task/template/*') ? 'active' : '' }}">
 						<a href="{{ route('admin.task.template') }}"
 							data-filter-tags="{{ strtolower(trans('cruds.mastertemplate.title_lang')) }}">
 							<i class="fal fa-file-upload c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
@@ -541,7 +555,7 @@
 
 				{{-- data report --}}
 				@can('data_report_access')
-					<li
+					<li hidden
 						class="{{ request()->is('admin/datareport') || request()->is('admin/datareport/*') ? 'active open' : '' }}">
 						<a href="#" title="Data Report"
 							data-filter-tags="lapoan wajib tanam produksi report realisasi">
@@ -595,7 +609,7 @@
 
 
 				@can('varietas_access')
-					<li class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
+					<li hidden class="{{ request()->is('admin/daftarpejabat*') ? 'active open' : '' }} ">
 						<a href="{{route('admin.pejabats')}}" title="Daftar Pejabat Penandatangan SKL"
 							data-filter-tags="setting permission user">
 							<i class="fal fa-user-tie"></i>

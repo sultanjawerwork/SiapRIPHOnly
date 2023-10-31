@@ -48,6 +48,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
 	Route::get('rekapRiphData', 'DashboardDataController@rekapRiphData')->name('get.rekap.riph');
 
+	//sklReads
+	Route::post('sklReads', 'SklReadsController@sklReads')->name('sklReads');
+
 	// Permissions
 	Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
 	Route::resource('permissions', 'PermissionsController');
@@ -62,7 +65,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 	// Audit Logs
 	Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
-
 	Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
 
 	Route::get('profile', 'ProfileController@index')->name('profile.show');
@@ -96,7 +98,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	//verifikasi
 	Route::get('dir_check_b', 'MessengerController@showReply')->name('verifikasi.dir_check_b');
 	Route::get('dir_check_c', 'MessengerController@showReply')->name('verifikasi.dir_check_c');
-
 
 	Route::get('riphAdmin', 'RiphAdminController@index')->name('riphAdmin.index');
 	Route::get('riphAdmin/create', 'RiphAdminController@create')->name('riphAdmin.create');

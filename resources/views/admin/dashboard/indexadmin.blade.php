@@ -48,10 +48,10 @@
 				<div class="tab-pane fade active show" role="tabpanel" id="summaryRealisasi">
 					<div class="row">
 						<div class="col-md-3">
-							<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+							<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH (termasuk yang belum mendapatkan Persetujuan Import) dan Jumlah RIPH yang telah masuk ke dalam Database Simethris.">
 								<div class="card-body bg-primary-400">
 									<div class="">
-										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah Perusahaan Pemegang RIPH">
+										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 											<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 											<span id="jumlah_importir">{{$jumlah_importir}}</span>
 											<small class="m-0 l-h-n">Perusahaan / <span id="company" class="mr-1">{{$company}}</span>Terdaftar</small>
@@ -62,10 +62,10 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+							<div class="panel rounded overflow-hidden position-relative text-white mb-g"  data-toggle="tooltip" title data-original-title="Jumlah volume RIPH pada periode ini (termasuk yang belum mendapatkan Persetujuan Import).">
 								<div class="card-body bg-danger-300">
 									<div class="">
-										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah volume RIPH pada periode ini.">
+										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 											<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 											<span id="v_pengajuan_import">{{ number_format($v_pengajuan_import, 0, ',', '.') }}</span>
 											<small class="m-0 l-h-n">Volume RIPH (ton)</small>
@@ -76,10 +76,10 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+							<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Total Luas Komitmen Wajib Tanam pada periode ini (termasuk yang belum mendapatkan Persetujuan Import.).">
 								<div class="card-body bg-success-500">
 									<div class="">
-										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Total Luas Komitmen Wajib Tanam pada periode ini.">
+										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 											<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 											<span id="v_beban_tanam">{{ number_format($v_beban_tanam, 2, ',', '.') }}</span>
 											<small class="m-0 l-h-n">Komitmen Wajib Tanam (ha)</small>
@@ -90,10 +90,10 @@
 							</div>
 						</div>
 						<div class="col-md-3">
-							<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+							<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Volume wajib produksi pada periode ini (termasuk yang belum mendapatkan Persetujuan Import).">
 								<div class="card-body bg-warning-500">
 									<div class="">
-										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Volume wajib produksi pada periode ini.">
+										<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 											<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 											<span id="v_beban_produksi">{{ number_format($v_beban_produksi, 2, ',', '.') }}</span>
 											<small class="m-0 l-h-n">Komitmen Wajib Produksi (ton)</small>
@@ -130,7 +130,7 @@
 														data-linecap="butt"
 														data-scalelength="7"
 														data-toggle="tooltip"
-														title data-original-title="{{ number_format($prosenTanam, 2, ',', '.') }}% dari total kewajiban."
+														title data-original-title="{{ number_format($prosenTanam, 2, ',', '.') }}%. Perbandingan Luas Total realisasi tanam yang dilaporkan pelaku usaha terhadap Total Komitmen."
 														data-placement="bottom">
 														<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
 															<span class="fs-xxl fw-500 text-dark">
@@ -144,12 +144,12 @@
 												</div>
 											</div>
 											<div class="col-lg-7 col-sm-6">
-												<div class="shadow-1 p-2 bg-success-600 rounded overflow-hidden position-relative text-white mb-2">
+												<div class="shadow-1 p-2 bg-success-600 rounded overflow-hidden position-relative text-white mb-2"  data-toggle="tooltip" title data-original-title="Luas Realisasi Tanam dilaporkan Pelaku Usaha.">
 													<div class="card-body">
-														<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Luas Realisasi Tanam dilaporkan Pelaku Usaha.">
+														<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 															<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
-															<span id="total_luastanam">{{ number_format($total_luastanam, 2, ',', '.') }}</span> ha
-															<small class="m-0 l-h-n">Total realisasi luas tanam.</small>
+															<span id="total_luastanam">{{ number_format($total_luastanam, 2, ',', '.') }}</span>
+															<small class="m-0 l-h-n">Total realisasi luas tanam (ha).</small>
 														</h4>
 													</div>
 													<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -184,7 +184,7 @@
 														data-linecap="butt"
 														data-scalelength="7"
 														data-toggle="tooltip"
-														title data-original-title="{{ number_format($prosenProduksi, 2, ',', '.') }}% dari total kewajiban."
+														title data-original-title="{{ number_format($prosenProduksi, 2, ',', '.') }}%. Perbandingan Total Produksi yang dilaporkan pelaku usaha terhadap Total Komitmen Produksi."
 														data-placement="bottom"
 														class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center">
 														<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-xl">
@@ -199,11 +199,11 @@
 												</div>
 											</div>
 											<div class="col-lg-7 col-sm-6">
-												<div class="shadow-1 p-2 bg-warning-600 rounded overflow-hidden position-relative text-white mb-2">
+												<div class="shadow-1 p-2 bg-warning-600 rounded overflow-hidden position-relative text-white mb-2" data-toggle="tooltip" title data-original-title="Volume Realisasi Produksi dilaporkan Pelaku Usaha.">
 													<div class="card-body">
-														<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Volume Realisasi Produksi dilaporkan Pelaku Usaha.">
-															<span id="total_volume">{{ number_format($total_volume, 2, ',', '.') }}</span> ha
-															<small class="m-0 l-h-n">Total realisasi produksi.</small>
+														<h4 class="display-5 d-block l-h-n m-0 fw-500 text-white">
+															<span id="total_volume">{{ number_format($total_volume, 2, ',', '.') }}</span>
+															<small class="m-0 l-h-n">Total realisasi produksi (ton).</small>
 														</h4>
 													</div>
 													<i class="fal fa-dolly position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -253,10 +253,10 @@
 		<div class="panel-content">
 			<div class="row">
 				<div class="col-md-3">
-					<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+					<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Jumlah antrian pengajuan verifikasi.">
 						<div class="card-body bg-danger-300">
 							<div class="">
-								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian pengajuan verifikasi">
+								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 									<span id="ajucount"></span>
 									<small class="m-0 l-h-n">Pengajuan</small>
 								</h3>
@@ -266,10 +266,10 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+					<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses verifikasi.">
 						<div class="card-body bg-warning-400">
 							<div class="">
-								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah antrian dalam proses verifikasi.">
+								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 									<span id="proccesscount"></span>
 									<small class="m-0 l-h-n">Diproses</small>
 								</h3>
@@ -279,10 +279,10 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+					<div class="panel rounded overflow-hidden position-relative text-white mb-g" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah diverifikasi dengan status SELESAI dan jumlah pengajuan yang dikembalikan kepada pelaku usaha untuk dilakukan PERBAIKAN laporan.">
 						<div class="card-body bg-info-300">
 							<div class="">
-								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah pengajuan yang telah diverifikasi dengan status SELESAI.">
+								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 									<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang belum diverifikasi. where status = 1 (user) -->
 									<span id="verifiedcount"></span>
 									<small class="m-0 l-h-n">Selesai (Perbaikan <span id="failCount"></span>)</small>
@@ -293,10 +293,10 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="panel rounded overflow-hidden position-relative text-white mb-g">
+					<div class="panel rounded overflow-hidden position-relative text-white mb-g"  data-toggle="tooltip" title data-original-title="Jumlah RIPH yang dinyatakan LUNAS dan Terbit SKL pada periode ini.">
 						<div class="card-body bg-success-500">
 							<div class="">
-								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white" data-toggle="tooltip" title data-original-title="Jumlah SKL diterbitkan untuk RIPH periode ini.">
+								<h3 class="display-5 d-block l-h-n m-0 fw-500 text-white">
 									<span id="lunascount"></span>
 									<small class="m-0 l-h-n">Lunas</small>
 								</h3>
