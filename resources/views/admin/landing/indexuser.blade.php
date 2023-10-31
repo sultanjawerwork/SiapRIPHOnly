@@ -30,10 +30,10 @@
 			@php($getRecomendations = null)
 		@endif
 
-		@if (Auth::user()->roles[0]->title == 'User')
+		{{-- @if (Auth::user()->roles[0]->title == 'User')
 			@php($getNewSkl = \App\Models\SklReads::getNewSkl())
 			@php($cntgetNewSkl = \App\Models\SklReads::getNewSklCount())
-		@endif
+		@endif --}}
 
 		<div class="row mb-5">
 			<div class="col text-center">
@@ -404,7 +404,7 @@
 							<div class="panel-toolbar">
 								@if ($cntgetNewSkl > 0)
 									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntRecomendations}} Rekomendasi Penerbitan yang perlu Anda tindaklanjuti.">
-										{{$cntgetNewSkl}}
+										{{-- {{$cntgetNewSkl}} --}}
 									</a>
 								@else
 								@endif

@@ -86,14 +86,14 @@
 				title="{{ $unreadmsg }} pesan @if (Auth::user()->roles[0]->title == 'Admin'), {{ $cntpengajuan}} Pengajuan Baru, 0 SKL Baru diterbitkan @elseif (Auth::user()->roles[0]->title == 'Pejabat'), {{$cntRecomendations}} Rekomendasi SKL diajukan @elseif (Auth::user()->roles[0]->title == 'Verifikator'), {{$cntpengajuan}} Pengajuan Baru @endif">
 				<i class="fal fa-envelope"></i>
 				@if (Auth::user()->roles[0]->title == 'Admin')
-				<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span> {{--+ $cntNewSkl--}}
+				<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span>
 				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
 				@elseif (Auth::user()->roles[0]->title == 'Verifikator')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan}} </span>
 				@endif
 				@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifikator')
-					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span> {{--+ $cntNewSkl--}}
+					<span class="badge badge-icon">{{ $unreadmsg  +  $cntpengajuan }} </span>
 				@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 					<span class="badge badge-icon">{{ $unreadmsg  +  $cntRecomendations}} </span>
 				@endif
@@ -105,7 +105,6 @@
 						<small class="mb-0 opacity-80">{{ $unreadmsg }} Pesan baru</small>
 						@if (Auth::user()->roles[0]->title == 'Admin')
 							<small class="mb-0 opacity-80">{{ $cntpengajuan }} Pengajuan baru</small>
-							{{-- <small class="mb-0 opacity-80">{{ $cntNewSkl }} SKL Baru</small> --}}
 						@elseif (Auth::user()->roles[0]->title == 'Pejabat')
 							<small class="mb-0 opacity-80">{{ $cntRecomendations }} Rekomendasi Baru</small>
 						@elseif (Auth::user()->roles[0]->title == 'Verifikator')
