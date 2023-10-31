@@ -87,7 +87,7 @@ class VerifSklController extends Controller
 		if ($verifTanam != null) {
 			//ringkasan pengajuan verifikasi tanam\
 			$tanam = [
-				'avtDate' => optional($verifTanam)->created_at->format('d-m-Y'),
+				'avtDate' => optional($verifTanam)->created_at,
 				'avtVerifAt' => Carbon::parse(optional($verifTanam)->verif_at)->format('d-m-Y'),
 				'avtStatus' => optional($verifTanam)->status,
 				'avtMetode' => optional($verifTanam)->metode,
