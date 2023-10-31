@@ -88,7 +88,7 @@
 						<tbody>
 							<tr>
 								<td class="text-muted">
-									<span class="fw-700 h6">Wajib Tanam</span><br>
+									<span class="fw-700 h6">Komitmen Wajib Tanam</span><br>
 									<span class="help-block">Komitmen wajib tanam yang telah dipenuhi hingga saat ini</span>
 								</td>
 								<td class="text-right">
@@ -217,7 +217,7 @@
 								<th>Pengelola</th>
 								<th class="text-center">Luas Tanam</th>
 								<th class="text-center">Produksi</th>
-								<th>Data Geolokasi</th>
+								<th>Data Spasial</th>
 							</tr>
 						</thead>
 					</table>

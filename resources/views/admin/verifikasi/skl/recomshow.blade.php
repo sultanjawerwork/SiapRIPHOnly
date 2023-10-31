@@ -100,7 +100,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="text-muted">Jumlah Lokasi Tanam/Geolokasi</td>
+										<td class="text-muted">Jumlah Lokasi Tanam/Spasial</td>
 										<td>:</td>
 										<td class="fw-500" id="hasGeoloc">
 										</td>
@@ -160,7 +160,7 @@
 										<td></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">A. TAHAP TANAM</td>
+										<td class="text-uppercase fw-500">A. VERIFIKASI TANAM</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
 									</tr>
@@ -185,7 +185,7 @@
 										<td class="fw-500" id="avtVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Metode Pemeriksaan</td>
 										<td>:</td>
 										<td class="fw-500" id="avtMetode"></td>
 									</tr>
@@ -200,7 +200,7 @@
 										<td class="fw-500" id="avtStatus"></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">B. TAHAP PRODUKSI</td>
+										<td class="text-uppercase fw-500">B. VERIFIKASI PRODUKSI</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
 									</tr>
@@ -225,7 +225,7 @@
 										<td class="fw-500" id="avpVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Metode Pemeriksaan</td>
 										<td>:</td>
 										<td class="fw-500" id="avpMetode"></td>
 									</tr>
@@ -240,19 +240,9 @@
 										<td class="fw-500" id="avpStatus"></td>
 									</tr>
 									<tr>
-										<td class="text-uppercase fw-500">C. TAHAP AKHIR</td>
+										<td class="text-uppercase fw-500">C. PENERBITAN SKL</td>
 										<td>:</td>
 										<td class="fw-500" id=""></td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Nota Dinas Pemeriksaan SKL</td>
-										<td>:</td>
-										<td class="fw-500" id="ndhpskl"></td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Berita Acara Pemeriksaan SKL</td>
-										<td>:</td>
-										<td class="fw-500" id="baskls"></td>
 									</tr>
 									<tr>
 										<td class="text-muted pl-4">Tanggal Pengajuan</td>
@@ -260,14 +250,24 @@
 										<td class="fw-500" id="avsklDate"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Tanggal Pemeriksaan</td>
+										<td class="text-muted pl-4">Tanggal Rekomendasi</td>
 										<td>:</td>
 										<td class="fw-500" id="avsklVerifAt"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Metode Pengajuan</td>
+										<td class="text-muted pl-4">Direkomendasikan Oleh</td>
 										<td>:</td>
-										<td class="fw-500" id="avsklMetode"></td>
+										<td class="fw-500" id="submitBy"></td>
+									</tr>
+									<tr>
+										<td class="text-muted pl-4">Nomor SKL</td>
+										<td>:</td>
+										<td class="fw-500" id="noSkl"></td>
+									</tr>
+									<tr>
+										<td class="text-muted pl-4">Tanggal Terbit</td>
+										<td>:</td>
+										<td class="fw-500" id="publishedDate"></td>
 									</tr>
 									<tr>
 										<td class="text-muted pl-4">Catatan Pemeriksaan</td>
@@ -275,9 +275,9 @@
 										<td class="fw-500" id="avsklNote"></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Hasil Pemeriksaan (Status)</td>
+										<td class="text-muted pl-4">Tanggal Disetujui</td>
 										<td>:</td>
-										<td class="fw-500" id="avsklStatus"></td>
+										<td class="fw-500" id="approvedAt"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -285,16 +285,14 @@
 					</div>
 					<div class="card-footer d-flex justify-content-between">
 						<div> </div>
-						@if (empty($skl->skl_upload))
-							<form action="{{route('verification.skl.recomendation.approve', $skl->id)}}" method="post" onsubmit="return confirm('Anda setuju untuk menerbitkan Surat Keterangan Lunas untuk RIPH terkait?')">
-								<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendations')}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
-								@csrf
-								@method('PUT')
-								<button class="btn btn-sm btn-danger" type="submit" id="btnSubmit" >
-									<i class="fas fa-upload text-align-center mr-1"></i>Terbitkan SKL
-								</button>
-							</form>
-						@endif
+						<div class="ml-auto">
+							<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendations')}}" role="button"><i class="fal fa-undo text-align-center mr-1"></i> Kembali</a>
+							@if (empty($skl->skl_upload))
+								<a class="btn btn-sm btn-danger" href="{{route('verification.skl.recomendation.draft', $skl->id)}}" role="button"><i class="fal fa-file-certificate text-align-center mr-1"></i> Lihat Draft SKL</a>
+							@else
+								<a class="btn btn-sm btn-info" href="{{route('verification.skl.recomendation.draft', $skl->id)}}" role="button"><i class="fal fa-award text-align-center mr-1"></i> Lihat SKL</a>
+							@endif
+						</div>
 					</div>
 				</div>
 			</div>
@@ -391,6 +389,17 @@
 				$("#avsklVerifAt").text(data.avsklVerifAt);
 				$("#avsklMetode").text(data.avsklMetode);
 				$("#avsklNote").text(data.avsklNote);
+				$('#noSkl').text(data.noSkl);
+				$('#publishedDate').text(data.publishedDate);
+				// Assuming data.approvedAt is a valid date string, for example, '2023-10-27'
+				if (data.approvedAt === null) {
+					$('#approvedAt').text('Belum disetujui');
+				} else {
+					var date = new Date(data.approvedAt);
+					var formattedDate = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+					$('#approvedAt').text(formattedDate);
+				}
+				$('#submitBy').text(data.submitBy);
 
 				var formattedPeriode = 'Tahun ' + (data.periode);
 				$("#periode").text(formattedPeriode);
@@ -433,15 +442,11 @@
 					$("#avpStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
 				}
 
-				if (data.avsklStatus === '1' || data.avsklStatus === '2' || data.avsklStatus === '3') {
-					$("#avsklStatus").text('Belum memenuhi syarat').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
-					$("#btnSubmit").prop("disabled", true).removeClass("btn-primary").addClass("btn-default").append('<i class="fas fa-times-circle text-danger ml-1"></i>');
+				if (data.avsklStatus === '2') {
+					$("#btnSubmit").prop("disabled", false).removeClass("btn-default").addClass("btn-primary").append('<i class="fas fa-check ml-1"></i>');
 				} else if (data.avsklStatus === '4') {
-					$("#avsklStatus").text('Direkomendasikan untuk Terbit').addClass("text-success text-uppercase fw-500").append('<i class="fas fa-check ml-1"></i>');
 					$("#btnSubmit").prop("disabled", false).removeClass("btn-default").addClass("btn-primary").append('<i class="fas fa-check ml-1"></i>');
 				} else {
-					// Handle case when avsklStatus doesn't match any of the above conditions
-					$("#avsklStatus").text('Status Tidak dikenali.').addClass("text-danger text-uppercase fw-500").append('<i class="fas fa-times ml-1"></i>');
 					$("#btnSubmit").prop("disabled", true).removeClass("btn-primary").addClass("btn-default");
 				}
 

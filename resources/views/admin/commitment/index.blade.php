@@ -64,9 +64,10 @@ td {
 										<i class="fal fa-edit"></i>
 									</a>
 								</td>
+								{{-- tanam --}}
 								<td class="text-center">
 									{{-- @if ($pksFileCount == $pksCount) --}}
-										@if (!empty($commitment->userDocs->sptjm))
+										@if (!empty($commitment->userDocs->sptjmtanam))
 											{{-- Tanam --}}
 											@if (!empty($commitment->userDocs->spvt) && !empty($commitment->userDocs->rta))
 												@if(!$commitment->ajuTanam)
@@ -90,13 +91,13 @@ td {
 														<i class="fal fa-clipboard-list-check"></i>
 													</a>
 												@elseif($commitment->ajuTanam->status === '4')
-													<span class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
-													title data-original-title="Verifikasi Tanam selesai.">
+													<a href="{{route('admin.task.pengajuan.tanam.show', $commitment->id)}}" class="btn btn-xs btn-success btn-icon" data-toggle="tooltip"
+													title data-original-title="Verifikasi Tanam selesai. Klik untuk Lihat hasil.">
 														<i class="fal fa-check"></i>
-													</span>
+													</a>
 												@elseif($commitment->ajuTanam->status === '5')
 													<div class="dropdown">
-														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Perbaiki data dan laporan">
 															<i class="fa fa-exclamation"></i>
 														</a>
 														<div class="dropdown-menu">
@@ -115,12 +116,16 @@ td {
 													<i class="fas fa-info-circle text-info"></i>
 												</span>
 											@endif
+										@else
+											<span id="syaratTanam" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan verifikasi.">
+												<i class="fas fa-info-circle text-info"></i>
+											</span>
 										@endif
 									{{-- @endif --}}
 								</td>
 								<td class="text-center">
 									{{-- @if ($pksFileCount == $pksCount) --}}
-										@if (!empty($commitment->userDocs->sptjm))
+										@if (!empty($commitment->userDocs->sptjmproduksi))
 											{{-- produksi --}}
 											@if (!empty($commitment->userDocs->spvp) && !empty($commitment->userDocs->rpo))
 												@if ($commitment->sumVolume >= $commitment->minThresholdProd)
@@ -168,16 +173,20 @@ td {
 													@endif
 												@endif
 											@else
-												<span id="syaratProduksi" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan Keterangan Lunas.">
+												<span id="syaratProduksi" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan Verifikasi Realisasi Komitmen Wajib Produksi.">
 													<i class="fas fa-info-circle text-info"></i>
 												</span>
 											@endif
+										@else
+											<span id="syaratProduksi" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan Verifikasi Realisasi Komitmen Wajib Produksi.">
+												<i class="fas fa-info-circle text-info"></i>
+											</span>
 										@endif
 									{{-- @endif --}}
 								</td>
 								<td class="text-center">
 									{{-- @if ($pksFileCount == $pksCount) --}}
-										@if (!empty($commitment->userDocs->sptjm))
+										@if (!empty($commitment->userDocs->sptjmproduksi))
 											{{-- skl --}}
 											@if ($commitment->ajuProduksi && $commitment->ajuProduksi->status === '4')
 												@if(!$commitment->ajuSkl)
@@ -190,24 +199,18 @@ td {
 													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Penerbitan SKL sudah diajukan">
 														<i class="fal fa-upload"></i>
 													</a>
-												@elseif($commitment->ajuSkl->status === '2' || $commitment->ajuSkl->status === '3')
-													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Pemeriksaan Berkas">
+												@elseif($commitment->ajuSkl->status === '2')
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Rekomendasi Penerbitan SKL">
 														<i class="fal fa-search"></i>
 													</a>
+												@elseif($commitment->ajuSkl->status === '3')
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL Disetujui untuk Diterbitkan">
+														<i class="fal fa-thumbs-up"></i>
+													</a>
 												@elseif($commitment->ajuSkl->status === '4')
-													@if (!$commitment->skl)
-														<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Pemeriksaan Selesai">
-															<i class="fal fa-file-check"></i>
-														</a>
-													@elseif ($commitment->skl->submit_by && empty($commitment->skl->skl_upload) )
-														<a href="javascript:void(0)" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="Proses Rekomendasi Penerbitan">
-															<i class="fal fa-thumbs-up"></i>
-														</a>
-													@elseif ($commitment->skl->submit_by && $commitment->skl->approved_by &&$commitment->skl->published_date && $commitment->completed->url)
-														<a href="{{route('admin.task.skl.arsip')}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL sudah Terbit">
-															<i class="fal fa-award"></i>
-														</a>
-													@endif
+													<a href="{{route('admin.task.pengajuan.skl.show', $commitment->id)}}" class="btn btn-xs btn-info btn-icon" data-toggle="tooltip" title data-original-title="SKL sudah Terbit. Klik untuk melihat Ringkasan Verifikasi.">
+														<i class="fal fa-award"></i>
+													</a>
 												@elseif($commitment->ajuSkl->status === '5')
 													<div class="dropdown">
 														<a href="#" class="btn btn-danger btn-xs btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -229,6 +232,10 @@ td {
 													<i class="fas fa-info-circle text-info"></i>
 												</span>
 											@endif
+										@else
+											<span id="syaratSkl" data-toggle="modal" data-target="#syaratModal" title="Klik untuk melihat syarat pengajuan Keterangan Lunas.">
+												<i class="fas fa-info-circle text-info"></i>
+											</span>
 										@endif
 									{{-- @endif --}}
 								</td>
@@ -254,37 +261,37 @@ td {
 			</div>
 			<div class="modal-body">
 				<div id="syaratTanamContent" style="display: none;">
-					Syarat pengajuan verifikasi tanam
+					Syarat Pengajuan Verifikasi Realisasi Komitmen Tanam
 					<ol class=text-left>
-						<li>Dokumen Surat Pertanggungjawaban Mutlak telah diunggah</li>
-						<li>Dokumen Surat Pengajuan Verifikasi Tanam telah diunggah</li>
-						<li>Dokumen Realisasi Tanam telah diunggah</li>
+						<li>Dokumen Surat Pertanggungjawaban Mutlak Realisasi Komitmen Tanam telah diunggah</li>
+						<li>Dokumen Surat Pengajuan Verifikasi Realisasi Komitmen Tanam telah diunggah</li>
+						<li>Form Realisasi Komitmen Tanam telah diunggah (RTA)</li>
+						<li>Form SPH-SBS Tanam dari Petugas Data Kecamatan Setempat</li>
 					</ol>
 				</div>
 				<div id="syaratProduksiContent" style="display: none;">
-					Syarat pengajuan verifikasi produksi
+					Syarat Pengajuan Verifikasi Realisasi Komitmen Produksi
 					<ol class=text-left>
-						<li>Dokumen Surat Pertanggungjawaban Mutlak telah diunggah</li>
-						<li>Dokumen Surat Pengajuan Verifikasi Produksi telah diunggah</li>
-						<li>Dokumen Realisasi Produksi telah diunggah</li>
-						<li>Jumlah Realisasi Produksi yang dilaporkan minimum 100% dari kewajiban Produksi</li>
+						<li>Seluruh Syarat Dokumen Realisasi Komitmen Wajib Produksi telah diunggah</li>
+						<li>Jumlah Realisasi Komitmen Produksi yang dilaporkan minimum 100% dari Komitmen Produksi</li>
 					</ol>
 				</div>
 				<div id="syaratSklContent" style="display: none;">
-					Syarat pengajuan Keterangan Lunas
+					Syarat Pengajuan Surat Keterangan Lunas Realisasi Komitmen Tanam-Produksi
 					<ol class=text-left>
-						<li>Seluruh syarat pengajuan verifikasi Produksi telah dipenuhi</li>
-						<li>Status Verifikasi Produksi telah SELESAI</li>
-						<li>Surat Pengajuan Keterangan Lunas telah diunggah</li>
-						<li>Dokumen Rencana Tanam telah diunggah</li>
-						<li>Dokumen Realisasi Produksi telah diunggah</li>
-						<li>Dokumen SPH-SBS Produksi telah diunggah</li>
-						<li>Dokumen Laporan Akhir telah diunggah</li>
+						<li>Status Verifikasi Produksi telah dinyatakan SELESAI</li>
+						<li>Seluruh Syarat Dokumen Realisasi Komitmen Wajib Produksi telah diunggah</li>
+						<li>Seluruh Syarat Dokumen Realisasi Komitmen Wajib Tanam telah diunggah</li>
 					</ol>
+				</div>
+				<div class="">
+					<a href="{{ route('admin.task.commitment.realisasi', $commitment->id) }}" data-toggle="tooltip" title data-original-title="Unggah Dokumen" id="tabLink">
+						Kunjungi halaman unggah dokumen >>
+					</a>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
@@ -297,9 +304,6 @@ td {
 @section('scripts')
 @parent
 <script>
-    $(document).ready(function () {
-
-    });
 </script>
 
 

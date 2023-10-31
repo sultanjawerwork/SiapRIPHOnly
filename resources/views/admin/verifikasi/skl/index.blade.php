@@ -29,7 +29,36 @@
 											<td>{{$verifikasi->commitment->no_ijin}}</td>
 											<td class="text-center">{{ date('d F Y', strtotime($verifikasi->created_at)) }}</td>
 											<td class="text-center">
+												{{-- new --}}
 												@if ($verifikasi->status === '1')
+													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
+														<i class="base-7 icon-stack-3x color-warning-300"></i>
+														<i class="base-7 icon-stack-2x color-warning-800 opacity-70"></i>
+														<span class="icon-stack-1x text-white opacity-90">!</span>
+													</span>
+													<span hidden>{{$verifikasi->status}}</span>
+												@else
+													<div disable class="btn-group btn-group-toggle" role="group">
+														<label class="btn btn-{{ $verifikasi->status == 1 ? 'warning' : 'success' }} btn-xs" data-toggle="tooltip" data-original-title="Pelaku Usaha mengajukan SKL">1
+															<i class="fa {{ $verifikasi->status == 1 ? 'fa-exclamation-circle' : 'fa-check' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Rekomendasi Penerbitan SKL telah disampaikan kepada Pimpinan.">2
+															<i class="fa {{ in_array($verifikasi->status, [2, 3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ in_array($verifikasi->status, [3, 4, 5]) ? 'success' : 'default' }} btn-xs" data-toggle="tooltip" data-original-title="Pejabat/Pimpinan telah menyetujui penerbitan">3
+															<i class="fa {{ in_array($verifikasi->status, [3, 4, 5]) ? 'fa-check' : 'fa-hourglass' }}"></i>
+														</label>
+
+														<label class="btn btn-{{ $verifikasi->status == 4 ? 'success' : ($verifikasi->status == 5 ? 'danger' : 'default') }} btn-xs" data-toggle="tooltip" data-original-title="SKL telah diterbitkan.">4
+															<i class="fa {{ $verifikasi->status == 4 ? 'fa-check' : ($verifikasi->status == 5 ? 'fa-ban' : 'fa-hourglass') }}"></i>
+														</label>
+													</div>
+												@endif
+
+												{{-- old --}}
+												{{-- @if ($verifikasi->status === '1')
 													<span class="icon-stack fa-2x" data-toggle="tooltip" data-original-title="Pengajuan baru">
 														<i class="base-7 icon-stack-3x color-warning-300"></i>
 														<i class="base-7 icon-stack-2x color-warning-700 opacity-70"></i>
@@ -66,28 +95,70 @@
 														</span>
 													</span>
 													<span hidden>{{$verifikasi->status}}</span>
-												@endif
+												@endif --}}
 											</td>
 											<td class="text-center">
 												@if(!$verifikasi->skl)
-													@if($verifikasi->status >= 4)
-														<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
-															title="Lihat hasil" class="mr-1 btn btn-xs btn-icon btn-info">
-															<i class="fal fa-file-search"></i>
-														</a>
-													@else
-														<a href="{{route('verification.skl.check', $verifikasi->id)}}" class="btn btn-icon btn-xs btn-primary"
-															title="Mulai/Lanjutkan Pemeriksaan">
-															<i class="fal fa-file-search"></i>
-														</a>
-													@endif
+													<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
+														title="Lihat rekomendasi" class="mr-1 btn btn-xs btn-icon btn-info">
+														<i class="fal fa-file-search"></i>
+													</a>
 												@else
 													<a href="{{route('verification.skl.verifSklShow', $verifikasi->id)}}"
-														data-toggle="tooltip" data-original-title="Sudah direkomendasikan. Klik untuk melihat progress rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
+														data-toggle="tooltip" data-original-title="Klik untuk melihat data rekomendasi SKL." class="mr-1 btn btn-xs btn-icon btn-info">
 														<i class="fal fa-file-certificate"></i>
 													</a>
+													@if ($verifikasi->status == 3)
+														<a href="{{route('skl.print', $verifikasi->skl->pengajuan_id)}}" class="btn btn-xs btn-icon btn-danger" data-toggle="tooltip" data-original-title="Telah Disetujui. Segera cetak SKL">
+															<i class="fal fa-print"></i>
+														</a>
+														<button class="btn btn-xs btn-icon btn-warning" type="button" title="Unggah SKL yang telah ditandatangani Pejabat" data-toggle="modal" data-target="#modalUploadSkl{{$verifikasi->skl->pengajuan_id}}">
+															<i class="fas fa-upload text-align-center"></i>
+														</button>
+													@endif
 												@endif
 											</td>
+											{{-- modal upload skl --}}
+											<div class="modal fade" id="modalUploadSkl{{$verifikasi->skl->pengajuan_id}}"
+												tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+												<div class="modal-dialog modal-dialog-center" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<div>
+																<h5 class="modal-title" id="myModalLabel">Unggah Berkas SKL</h5>
+																<small id="helpId" class="text-muted">Unggah berkas SKL yang telah ditandatangani oleh Pejabat.</small>
+															</div>
+															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														{{-- {{route('verification.skl.sklUpload', $recomend->skl->id)}} --}}
+														<form action="{{route('skl.upload', $verifikasi->skl->pengajuan_id)}}" method="post" enctype="multipart/form-data">
+															@csrf
+															@method('put')
+															<div class="modal-body">
+																<div class="form-group">
+																	<label class="">Unggah hasil cetak SKL</label>
+																	<div class="custom-file input-group">
+																		<input type="file" class="custom-file-input" name="skl_upload" id="skl_upload">
+																		<label class="custom-file-label" for="">Pilih berkas...</label>
+																	</div>
+																	<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
+																</div>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-warning btn-sm"
+																	data-dismiss="modal">
+																	<i class="fal fa-times-circle text-danger fw-500"></i> Close
+																</button>
+																<button class="btn btn-primary btn-sm" type="submit">
+																	<i class="fal fa-upload mr-1"></i>Unggah
+																</button>
+															</div>
+														</form>
+													</div>
+												</div>
+											</div>
 										</tr>
 									@endforeach
 								</tbody>

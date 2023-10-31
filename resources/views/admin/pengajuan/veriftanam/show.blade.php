@@ -104,7 +104,7 @@
 												<td>Anggota</td>
 											</tr>
 											<tr>
-												<td>Geolokasi</td>
+												<td>Spasial</td>
 												<td class="text-right">{{$hasGeoloc}}</td>
 												<td>Titik</td>
 											</tr>

@@ -6,7 +6,7 @@
 @can('master_riph_access')
 <div class="row">
 	<div class="col-md-12">
-		<form action="{{route('admin.riphadmin.storefetched')}}" method="post">
+		<form action="{{route('admin.riphAdmin.storefetched')}}" method="post">
 			@csrf
 			<div class="row align-items-center">
 				<div class="form-group col-md-2">
@@ -22,7 +22,7 @@
 							<small id="helpId" class="text-muted">Help text</small>
 						</div>
 						<div class="form-group col-md-4">
-							<label for="">Total Import</label>
+							<label for="">Total Volume RIPH</label>
 							<input type="text" name="volumeRIPH" id="volumeRIPH" class="form-control" placeholder="" aria-describedby="helpId" readonly>
 							<small id="helpId" class="text-muted">Help text</small>
 						</div>
@@ -54,8 +54,9 @@
 								<th>Periode</th>
 								<th>Tanggal Update</th>
 								<th>Total Vol. RIPH</th>
-								<th>Beban Tanam (ha)</th>
-								<th>Beban Produksi (ton)</th>
+								<th>Komitmen Tanam (ha)</th>
+								<th>Komitmen Produksi (ton)</th>
+								<th>Jumlah RIPH</th>
 								<th>Jumlah Importir</th>
 								<th>Tindakan</th>
 							</tr>
@@ -69,6 +70,7 @@
 									<td>{{ number_format($riph->v_pengajuan_import*0.05/6, 0, ',', '.') }}</td>
 									<td>{{ number_format($riph->v_pengajuan_import*0.05, 0, ',', '.') }}</td>
 									<td>{{ number_format($riph->jumlah_importir, 0, ',', '.') }}</td>
+									<td>(jumlah importir)</td>
 									<td>
 										<a class="btn btn-xs btn-primary btn-icon waves-effect waves-themed" href="/admin/riphAdmin/{{ $riph->id }}/edit" data-toggle="tooltip" data-offset="0,10" data-original-title="Ubah Data"><i class="fal fa-edit"></i></a>
 										<a class="btn btn-xs btn-danger btn-icon waves-effect waves-themed" href="" data-toggle="tooltip" data-offset="0,10" data-original-title="Hapus Data"><i class="fal fa-trash"></i></a>

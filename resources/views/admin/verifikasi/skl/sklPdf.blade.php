@@ -115,7 +115,7 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td width="25%" class="text-center">Beban</td>
+								<td width="25%" class="text-center">Komitmen</td>
 								<td width="25%" class="text-center">Realisasi</td>
 								<td width="25%" class="text-center">Terverifikasi</td>
 							</tr>

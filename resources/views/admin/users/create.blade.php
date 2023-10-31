@@ -47,14 +47,14 @@
                                     <span class="help-block">{{ trans('cruds.user.fields.username_helper') }}</span>
                                 </div>
                                 <div class="form-group">
-                                    <label class="required" for="roleaccess">{{ trans('cruds.user.fields.roleaccess') }}</label>
+                                    <label class="required" for="roleaccess">Sebagai</label>
                                     <select class="form-control select2 {{ $errors->has('roleaccess') ? 'is-invalid' : '' }}" name="roleaccess" id="roleaccess" required>
                                         <option value="0" selected>{{ trans('panel.role_placeholder') }}</option>
                                         @foreach($access as $id => $role)
                                             <option value="{{ $id }}">{{ $role }}</option>
                                         @endforeach
                                     </select>
-                                    
+
                                     @if($errors->has('roleaccess'))
                                         <div class="invalid-feedback">
                                             {{ $errors->first('roleaccess') }}

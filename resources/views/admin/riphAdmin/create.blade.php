@@ -12,7 +12,7 @@
 						Form Isian
 					</h2>
 					<div class="panel-toolbar">
-						
+
 					</div>
 				</div>
 				<div class="alert alert-info border-0 mb-0">
@@ -78,17 +78,17 @@
 								</div>
 								<div class="col-md-4 mb-3">
 									<div class="form-group">
-										<label class="form-label" for="v_beban_tanam">Total Wajib Tanam (ha)</label>
+										<label class="form-label" for="v_beban_tanam">Total Komitmen Wajib Tanam (ha)</label>
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<span class="input-group-text" id="">
 													<i class="fal fa-ruler"></i>
 												</span>
 											</div>
-											<input name="v_beban_tanam" id="v_beban_tanam" class="form-control" value="" readonly>
+											<input name="v_Komitmen_tanam" id="v_beban_tanam" class="form-control" value="" readonly>
 										</div>
 										<div class="help-block">
-											Total wajib tanam pada periode ini. Formula: (Total Import x 5%) / 6.
+											Total wajib tanam pada periode ini. Formula: (Total Volume RIPH x 5%) / 6.
 										</div>
 									</div>
 								</div>
@@ -103,7 +103,7 @@
 
 										</div>
 										<div class="help-block">
-											Total wajib produksi pada periode ini. Formula: Total Import x 5%.
+											Total wajib produksi pada periode ini. Formula: Total Volume RIPH x 5%.
 										</div>
 									</div>
 								</div>
@@ -130,23 +130,23 @@
 	  var v_pengajuan_import = $('#v_pengajuan_import');
 	  var v_beban_tanam = $('#v_beban_tanam');
 	  var v_beban_produksi = $('#v_beban_produksi');
-  
+
 	  // Calculate and set the values of v_beban_tanam and v_beban_produksi inputs
 	  function calculate() {
 		var v_pengajuan_import_val = parseFloat(v_pengajuan_import.val()) || 0;
 		var v_beban_tanam_val = (v_pengajuan_import_val * 0.05 / 6).toFixed(2);
 		var v_beban_produksi_val = (v_pengajuan_import_val * 0.05).toFixed(2);
-  
+
 		v_beban_tanam.val(v_beban_tanam_val);
 		v_beban_produksi.val(v_beban_produksi_val);
 	  }
-  
+
 	  // Call the calculate function when v_pengajuan_import input field changes
 	  v_pengajuan_import.on('input', function() {
 		calculate();
 	  });
 	});
-</script>  
-  
+</script>
+
 
 @endsection

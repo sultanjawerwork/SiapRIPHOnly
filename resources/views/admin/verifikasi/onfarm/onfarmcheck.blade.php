@@ -139,7 +139,7 @@
 													</div>
 													<input id="mapId" name="mapId" placeholder="Id peta publik" class="form-control">
 													<div class="input-group-append">
-														
+
 														<button class="btn btn-default waves-effect waves-themed"
 															onclick="link_parser()">Open</button>
 													</div>
@@ -165,7 +165,7 @@
 									<div class="row">
 										<div class="form-group col-md-12">
 											<label class="form-label" for="gmap">
-												Peta yang dilaporkan oleh Importir.
+												Peta yang dilaporkan oleh Pelaku Usaha.
 											</label>
 										</div>
 									</div>
@@ -342,7 +342,7 @@
 									<div class="panel-content">
 										<div class="row">
 											<div class="col-md-6">
-												
+
 											</div>
 											<div class="form-group col-12">
 												<label for="">Catatan Pemeriksaan</label>
@@ -405,17 +405,17 @@
 				name: "Dokumen Panen"
 			}
 		];
-	
+
 		pdfUrls.forEach(function (item) {
 			const option = document.createElement('option');
 			option.value = item.url;
 			option.textContent = item.name;
 			pdfSelect.appendChild(option);
 		});
-	
+
 		// Set the default value to the Tanam Doc url
 		pdfSelect.value = pdfUrls[0].url;
-	
+
 		pdfSelect.addEventListener('change', function () {
 			const pdfUrl = this.value;
 			pdfIframe.src = pdfUrl;
@@ -498,7 +498,7 @@
 			// get the input value and the current username from the page
 			var inputVal = document.getElementById('validasi').value;
 			var currentUsername = '{{ Auth::user()->username }}';
-			
+
 			// check if the input is not empty and matches the current username
 			if (inputVal !== '' && inputVal === currentUsername) {
 				return true; // allow form submission

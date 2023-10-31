@@ -79,7 +79,7 @@
 					<div id="panel-3" class="panel card">
 						<div class="panel-hdr">
 							<h2>
-								Data<span class="fw-300"><i>Geolokasi</i></span>
+								Data<span class="fw-300"><i>Spasial</i></span>
 							</h2>
 							<div class="panel-toolbar">
 								@include('partials.globaltoolbar')
@@ -173,7 +173,7 @@
 									<label class="form-label" for="tgl_prod">Dokumentasi</label>
 									<div class="d-flex align-items-center flex-row">
 										<div id="js-galleryTanam">
-											
+
 										</div>
 									</div>
 								</div>
@@ -285,7 +285,7 @@
 			initMap();
 		});
 	</script>
-	
+
 	<script>
 		$(document).ready(function()
 		{
@@ -383,7 +383,7 @@
 				// get the input value and the current username from the page
 				var inputVal = document.getElementById('validasi').value;
 				var currentUsername = '{{ Auth::user()->username }}';
-				
+
 				// check if the input is not empty and matches the current username
 				if (inputVal !== '' && inputVal === currentUsername) {
 					return true; // allow form submission

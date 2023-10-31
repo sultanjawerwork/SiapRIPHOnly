@@ -31,6 +31,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('/dashboard/monitoring', 'DashboardController@monitoring')->name('dashboard.monitoring');
 	Route::get('/dashboard/map', 'DashboardController@map')->name('dashboard.map');
 
+	Route::get('/dashboard/monitoringrealisasi/{periodetahun}', 'DashboardController@monitoringrealisasi')->name('dashboard.monitoringrealisasi');
+	Route::get('/monitoringDataRealisasi/{periodetahun}', 'DashboardDataController@monitoringDataRealisasi')->name('monitoringDataRealisasi');
+
 	Route::get('mapDataAll', 'UserMapDashboard@index')->name('mapDataAll');
 	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
 	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
@@ -44,6 +47,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	//dashboard data for user
 	Route::get('usermonitoringDataByYear/{periodeTahun}', 'DashboardDataController@userMonitoringDataByYear')->name('userMonitoringDataByYear');
 	Route::get('rekapRiphData', 'DashboardDataController@rekapRiphData')->name('get.rekap.riph');
+
+	//sklReads
+	Route::post('sklReads', 'SklReadsController@sklReads')->name('sklReads');
 
 	// Permissions
 	Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
@@ -59,7 +65,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 	// Audit Logs
 	Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
-
 	Route::get('global-search', 'GlobalSearchController@search')->name('globalSearch');
 
 	Route::get('profile', 'ProfileController@index')->name('profile.show');
@@ -94,9 +99,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('dir_check_b', 'MessengerController@showReply')->name('verifikasi.dir_check_b');
 	Route::get('dir_check_c', 'MessengerController@showReply')->name('verifikasi.dir_check_c');
 
-
-	Route::resource('riphAdmin', 'RiphAdminController');
-	Route::post('riphadmin/storefetched', 'RiphAdminController@storefetched')->name('riphadmin.storefetched');
+	Route::get('riphAdmin', 'RiphAdminController@index')->name('riphAdmin.index');
+	Route::get('riphAdmin/create', 'RiphAdminController@create')->name('riphAdmin.create');
+	Route::post('riphAdmin/storefetched', 'RiphAdminController@storefetched')->name('riphAdmin.storefetched');
+	Route::post('riphAdmin', 'RiphAdminController@store')->name('riphAdmin.store');
+	Route::get('riphAdmin/{riphAdmin}/edit', 'RiphAdminController@edit')->name('riphAdmin.edit');
+	Route::put('riphAdmin/{riphAdmin}', 'RiphAdminController@update')->name('riphAdmin.update');
+	Route::delete('riphAdmin/{riphAdmin}', 'RiphAdminController@destroy')->name('riphAdmin.destroy');
 
 	//daftar pejabat penandatangan SKL
 	Route::get('daftarpejabats', 'PejabatController@index')->name('pejabats');
@@ -310,33 +319,8 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 
 	Route::get('{noIjin}/lokasi/{anggota_id}', 'VerifTanamController@lokasicheck')->name('lokasicheck');
 
-	//verifikasi online/data
-	// Route::get('data', 'VerifOnlineController@index')->name('data');
-	// Route::get('data/{id}/show', 'VerifOnlineController@show')->name('data.show');
-	// Route::get('data/pengajuan/{id}', 'VerifOnlineController@check')->name('data.check');
-	// Route::get('data/commitment/{id}', 'VerifOnlineController@commitmentcheck')->name('data.commitmentcheck');
-	// Route::put('data/commitment/{id}/store', 'VerifOnlineController@commitmentstore')->name('data.commitmentcheck.store');
-	// Route::get('data/pks/{poktan_id}', 'VerifOnlineController@pkscheck')->name('data.pkscheck');
-	// Route::post('data/pks/{poktan_id}/store', 'VerifOnlineController@pksstore')->name('data.pkscheck.store');
-	// Route::get('data/pks/{id}/edit', 'VerifOnlineController@pksedit')->name('data.pkscheck.edit');
-	// Route::put('data/pks/{id}/update', 'VerifOnlineController@pksupdate')->name('data.pkscheck.update');
-	// Route::get('data/{noIjin}/lokasi/{anggota_id}', 'VerifOnlineController@lokasicheck')->name('data.lokasicheck');
-	// Route::post('data/lokasi/store', 'VerifOnlineController@lokasistore')->name('data.lokasicheck.store');
-	// Route::put('data/baonline/{id}/store', 'VerifOnlineController@baonline')->name('data.baonline.store');
 
-	//verifikasi onfarm/lapangan
-	// Route::get('onfarm', 'VerifOnfarmController@index')->name('onfarm');
-	// Route::get('onfarm/{id}/show', 'VerifOnfarmController@show')->name('onfarm.show');
-	// Route::get('onfarm/{id}/farmlist', 'VerifOnfarmController@farmlist')->name('onfarm.farmlist');
-	// Route::get('onfarm/{noIjin}/lokasi/{anggota_id}', 'VerifOnfarmController@farmcheck')->name('onfarm.farmcheck');
-	// Route::put('onfarm/lokasi/{id}', 'VerifOnfarmController@farmupdate')->name('onfarm.farmcheck.update');
-	// Route::put('onfarm/{id}/update', 'VerifOnfarmController@update')->name('onfarm.update');
-
-	// Route::resource('skl', 'SklController');
-	// Route::get('skl', 'SklController@index')->name('skl'); //daftar siap rekomendasi
-
-	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show'); //summary skl
-	// Route::get('arsip/completeds', 'SklController@completedindex')->name('arsip.completed'); //daftar seluruh skl yang telah terbit (lama & baru)
+	Route::get('skl/{id}/show', 'SklController@show')->name('skl.show');
 
 	//ke bawah ini mungkin di hapus
 	Route::get('skl/publishes', 'SklController@publishes')->name('skl.publishes');
@@ -370,4 +354,5 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
+	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
 });

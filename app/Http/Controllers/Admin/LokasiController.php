@@ -83,7 +83,7 @@ class LokasiController extends Controller
 
 		// dd($anggota);
 		$anggota->save();
-		return redirect()->back()->with('success', 'Data Geolokasi berhasil diperbarui');
+		return redirect()->back()->with('success', 'Data Spasial berhasil diperbarui');
 	}
 
 	public function storeTanam(Request $request, $anggotaId)

@@ -112,7 +112,7 @@
 								<td></td>
 							</tr>
 							<tr>
-								<td class="text-muted">Jumlah Lokasi Tanam/Geolokasi</td>
+								<td class="text-muted">Jumlah Lokasi Tanam/Spasial</td>
 								<td>:</td>
 								<td class="fw-500">{{ $hasGeoloc }} titik</td>
 								<td></td>

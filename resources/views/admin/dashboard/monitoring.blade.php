@@ -10,7 +10,7 @@
 			<span class="fw-700 mr-1">{{  ($page_heading ?? '') }}</span>
 			<span class="fw-300">Realisasi & Verifikasi</span>
 		</h1>
-		
+
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label class="form-label" for="provinsi"></label>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="help-block">
 				</div>
-			</div>	
+			</div>
 		</div>
 	</div>
 	<div class="row">
@@ -47,7 +47,7 @@
 					<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Total volume RIPH yang dilaporkan oleh Pelaku Usaha dalam sistem SIMETHRIS">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang SEDANG diverifikasi. where status = 2 (mulai/on progress) -->
 						<span id="total_import">0</span>
-						<small class="m-0 l-h-n">Volume Import (ton)</small>
+						<small class="m-0 l-h-n">Volume RIPH (ton)</small>
 					</h3>
 				</div>
 				<i class="fal fa-balance-scale position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -59,10 +59,10 @@
 					<i class="fal fa-info-circle"></i>
 				</a>
 				<div class="">
-					<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Luas wajib tanam dalam satuan hektar yang harus dipenuhi berdasarkan volume import yang dilaporkan oleh Pelaku usaha.">
+					<h3 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Luas Komitmen Wajib Tanam dalam satuan hektar yang harus dipenuhi berdasarkan volume RIPH yang dilaporkan oleh Pelaku usaha.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang TELAH diverifikasi. where status = 3 & 4 (Verified OK & Verified Perbaikan) -->
 						<span id="wajibTanam">0</span>
-						<small class="m-0 l-h-n">Kewajiban Tanam (ha)</small>
+						<small class="m-0 l-h-n">Komitmen Wajib Tanam (ha)</small>
 					</h3>
 				</div>
 				<i class="fal fa-seedling position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -71,10 +71,10 @@
 		<div class="col-md-3">
 			<div id="accomplished" class="p-3 bg-success-300 rounded overflow-hidden position-relative text-white mb-g">
 				<div class="">
-					<h4 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Volume wajib produksi dalam satuan ton yang harus berdasarkan volume import yang dilaporkan oleh Pelaku Usaha.">
+					<h4 class="display-5 d-block l-h-n m-0 fw-500" data-toggle="tooltip" title data-original-title="Volume wajib produksi dalam satuan ton yang harus berdasarkan volume RIPH yang dilaporkan oleh Pelaku Usaha.">
 						<!-- nilai ini diperoleh dari jumlah seluruh pengajuan yang TELAH LUNAS. where status = 5 (LUNAS) -->
 						<span id="wajibProduksi">0</span>
-						<small class="m-0 l-h-n">Kewajiban Produksi (ton)</small>
+						<small class="m-0 l-h-n">Komitmen Wajib Produksi (ton)</small>
 					</h4>
 				</div>
 				<i class="fal fa-dolly position-absolute pos-right pos-bottom opacity-40 mb-n1 mr-n1" style="font-size:4rem"></i>
@@ -86,7 +86,7 @@
 			<div class="panel" id="panel-2">
 				<div class="panel-hdr">
 					<h2>
-						<i class="subheader-icon fal fa-seedling mr-1"></i>Wajib Tanam
+						<i class="subheader-icon fal fa-seedling mr-1"></i>Komitmen Wajib Tanam
 					</h2>
 				</div>
 				<div class="panel-container show">
@@ -97,7 +97,7 @@
 								<div class="tab-content" id="v-pills-tabContent">
 									<div class="tab-pane fade show active" id="real_Tanam" role="tabpanel" aria-labelledby="real_Tanam">
 										<div class="c-chart-wrapper">
-											<div 
+											<div
 												id = "naschartTanam"
 												class="js-easy-pie-chart color-success-300 position-relative d-inline-flex align-items-center justify-content-center "
 												data-percent="50.00"
@@ -203,7 +203,7 @@
 									</div>
 									<div class="tab-pane fade" id="verif_Produksi" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 										<div class="c-chart-wrapper">
-											<div 
+											<div
 												id = "naschartProduksiVerif"
 												class="js-easy-pie-chart color-warning-500 position-relative d-inline-flex align-items-center justify-content-center"
 												data-percent="50.00"

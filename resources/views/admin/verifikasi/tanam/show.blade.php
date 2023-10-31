@@ -99,7 +99,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="text-muted">Geolokasi</td>
+										<td class="text-muted">Lokasi Tanam (Spasial)</td>
 										<td>:</td>
 										<td class="fw-500">
 											{{$hasGeoloc}} titik
@@ -145,50 +145,6 @@
 										<td></td>
 									</tr>
 									<tr>
-										<td class="text-muted pl-4">Surat Pertanggungjawaban Mutlak</td>
-										<td>:</td>
-										<td class="fw-500">
-											@if ($userDocs->sptjmcheck)
-												@if ($userDocs->sptjmcheck === 'sesuai')
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
-														Ada
-													</a>
-													<i class="fa fa-check text-success ml-1"></i>
-												@else
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjm) }}">
-														Ada
-													</a>
-													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-												@endif
-											@else
-												<span class="text-danger">Tidak ada berkas</span>
-												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Laporan Akhir</td>
-										<td>:</td>
-										<td class="fw-500">
-											@if ($userDocs->formLacheck)
-												@if ($userDocs->formLacheck === 'sesuai')
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
-														Ada
-													</a>
-													<i class="fa fa-check text-success ml-1"></i>
-												@else
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->formLa) }}">
-														Ada
-													</a>
-													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-												@endif
-											@else
-												<span class="text-danger">Tidak ada berkas</span>
-												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-											@endif
-										</td>
-									</tr>
-									<tr>
 										<td class="text-uppercase fw-500">
 											A. Tahap Tanam
 										</td>
@@ -207,6 +163,28 @@
 													<i class="fa fa-check text-success ml-1"></i>
 												@else
 													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spvt) }}">
+														Ada
+													</a>
+													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+												@endif
+											@else
+												<span class="text-danger">Tidak ada berkas</span>
+												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
+											@endif
+										</td>
+									</tr>
+									<tr>
+										<td class="text-muted pl-4">Surat Pertanggungjawaban Mutlak (tanam)</td>
+										<td>:</td>
+										<td class="fw-500">
+											@if ($userDocs->sptjmtanamcheck)
+												@if ($userDocs->sptjmtanamcheck === 'sesuai')
+													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
+														Ada
+													</a>
+													<i class="fa fa-check text-success ml-1"></i>
+												@else
+													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sptjmtanam) }}">
 														Ada
 													</a>
 													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
@@ -251,28 +229,6 @@
 													<i class="fa fa-check text-success ml-1"></i>
 												@else
 													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->sphtanam) }}">
-														Ada
-													</a>
-													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-												@endif
-											@else
-												<span class="text-danger">Tidak ada berkas</span>
-												<i class="fas fa-exclamation-circle text-danger ml-1"></i>
-											@endif
-										</td>
-									</tr>
-									<tr>
-										<td class="text-muted pl-4">Keterangan/Pengantar Dinas Telah Selesai Tanam</td>
-										<td>:</td>
-										<td class="fw-500">
-											@if ($userDocs->spdstcheck)
-												@if ($userDocs->spdstcheck === 'sesuai')
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
-														Ada
-													</a>
-													<i class="fa fa-check text-success ml-1"></i>
-												@else
-													<a href="#" data-toggle="modal" data-target="#viewDocs" data-doc="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$userDocs->spdst) }}">
 														Ada
 													</a>
 													<i class="fas fa-exclamation-circle text-danger ml-1"></i>
@@ -436,10 +392,19 @@
 					{
 						text: '<i class="fal fa-external-link"></i>',
 						titleAttr: 'Lihat Detail',
-						className: 'btn btn-icon btn-outline-info btn-xs',
+						className: 'btn btn-icon btn-outline-info btn-xs mr-1',
 						action: function () {
 							// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
 							window.location.href = '{{ route('verification.tanam.check', $verifikasi->id) }}';
+						}
+					},
+					{
+						text: 'Kembali',
+						titleAttr: 'Lihat Detail',
+						className: 'btn btn-info btn-xs',
+						action: function () {
+							// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
+							window.location.href = '{{ route('verification.tanam') }}';
 						}
 					}
 				],

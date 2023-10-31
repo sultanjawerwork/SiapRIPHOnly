@@ -8,6 +8,14 @@
 		background-color: #FFF;
 	}
 </style>
+@if (Auth::user()->roles[0]->title == 'Admin' || Auth::user()->roles[0]->title == 'Verifiktor')
+<div class="row mb-5">
+	<div class="col text-center">
+		<span class="h3">Maaf, Anda tidak memerlukan halaman ini</span><br>
+		<i class="fal fa-grin-tongue-squint text-warning display-2"></i>
+	</div>
+</div>
+@else
 <div class="panel" >
 	<div class="panel-hdr">
 		<h2>
@@ -28,43 +36,8 @@
 								<div name="panel-1" class="panel" data-title="Panel Data" data-intro="Panel ini berisi data-data" data-step="2">
 									<div class="panel-hdr">
 										<h2>
-											Informasi Biodata <span class="fw-300"></span>
-										</h2>
-
-									</div>
-									<div class="panel-container show">
-										<div class="panel-content">
-											<div class="form-group row">
-												<div class="col-md-6">
-													<label class="form-label" for="name">Nama Lengkap <span class="text-danger">*</span></label>
-													<input type="text" id="name" name="name"  class="form-control" placeholder="Nama Lengkap" value="{{ ($data_user->name??'') }}" required>
-												</div>
-												<div class="col-md-6">
-													<label class="form-label" for="email">Email <span class="text-danger">*</span></label>
-													<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" required autocomplete="email">
-												</div>
-											</div>
-											<div class="form-group row">
-												<div class="col-md-6">
-													<label class="form-label" for="mobile_phone">No. Handphone <span class="text-danger">*</span></label>
-													<input type="text" name="mobile_phone" class="form-control" placeholder="No. Handphone" value="{{ ($data_user->mobile_phone??'') }}" required>
-													<div class="help-block">Jangan menggunakan no. pribadi.</div>
-												</div>
-												<div class="col-md-6">
-													<label class="form-label" for="ktp">No. KTP <span class="text-danger">*</span></label>
-													<input type="text" name="ktp" class="form-control ktp" placeholder="No. KTP" value="{{ ($data_user->ktp??'') }}">
-													<div class="help-block">Diisi digit no KTP</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div name="panel-2" class="panel" data-title="Panel Data" data-intro="Panel ini berisi data-data" data-step="2">
-									<div class="panel-hdr">
-										<h2>
 											Informasi Perusahaan <span class="fw-300"></span>
 										</h2>
-
 									</div>
 									<div class="panel-container show row">
 										<div class="col-md-3">
@@ -231,6 +204,40 @@
 										</div>
 									</div>
 								</div>
+								<div name="panel-2" class="panel" data-title="Panel Data" data-intro="Panel ini berisi data-data" data-step="2">
+									<div class="panel-hdr">
+										<h2>
+											Informasi Biodata <span class="fw-300"></span>
+										</h2>
+
+									</div>
+									<div class="panel-container show">
+										<div class="panel-content">
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="form-label" for="name">Nama Lengkap <span class="text-danger">*</span></label>
+													<input type="text" id="name" name="name"  class="form-control" placeholder="Nama Lengkap" value="{{ ($data_user->name??'') }}" required>
+												</div>
+												<div class="col-md-6">
+													<label class="form-label" for="email">Email <span class="text-danger">*</span></label>
+													<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ auth()->user()->email }}" required autocomplete="email">
+												</div>
+											</div>
+											<div class="form-group row">
+												<div class="col-md-6">
+													<label class="form-label" for="mobile_phone">No. Handphone <span class="text-danger">*</span></label>
+													<input type="text" name="mobile_phone" class="form-control" placeholder="No. Handphone" value="{{ ($data_user->mobile_phone??'') }}" required>
+													<div class="help-block">Jangan menggunakan no. pribadi.</div>
+												</div>
+												<div class="col-md-6">
+													<label class="form-label" for="ktp">No. KTP <span class="text-danger">*</span></label>
+													<input type="text" name="ktp" class="form-control ktp" placeholder="No. KTP" value="{{ ($data_user->ktp??'') }}">
+													<div class="help-block">Diisi digit no KTP</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-12">
 								<div name="panel-3" class="panel" data-title="Panel Data" data-intro="Panel ini berisi data-data" data-step="2">
@@ -275,7 +282,7 @@
 		</form>
 	</div>
 </div>
-
+@endif
 
 @endsection
 

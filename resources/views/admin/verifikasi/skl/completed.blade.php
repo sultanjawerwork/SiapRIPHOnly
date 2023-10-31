@@ -36,13 +36,12 @@
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->published_date)) }}</td>
 												<td class="text-center">{{ date('d-m-Y', strtotime($completed->created_at)) }}</td>
 												<td class="text-center d-flex justify-content-center">
-													{{-- @can('old_skl_show') --}}
-														{{-- @if (Auth::user()->roles[0]->title === 'User') --}}
-															<a href="{{$completed->url}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL">
-																<i class="fal fa-file-certificate"></i>
-															</a>
-														{{-- @endif --}}
-													{{-- @endcan --}}
+													<a href="{{route('verification.skl.verifSklShow', $completed->skl->pengajuan_id)}}" class="btn btn-icon btn-info btn-xs mr-1" title="Lihat Hasil Verifikasi">
+														<i class="fal fa-file-search"></i>
+													</a>
+													<a href="{{$completed->url}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL" onClick="markAsRead({{ $completed->skl->id }})" target="_blank">
+														<i class="fal fa-file-certificate"></i>
+													</a>
 												</td>
 											</tr>
 										@endforeach
@@ -107,6 +106,25 @@
 		});
 
 	});
+
+	// Fungsi untuk menandai SKL sebagai sudah dibaca
+	function markAsRead(sklId) {
+		var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Ambil token CSRF
+
+		// Kirim permintaan Ajax ke metode controller untuk menandai SKL sebagai sudah dibaca
+		$.ajax({
+			type: 'POST',
+			url: '{{ route('admin.sklReads') }}', // Menggunakan route yang sesuai
+			data: {
+				skl_id: sklId,
+				_token: csrfToken // Sertakan token CSRF di sini
+			},
+			success: function(response) {
+				// Setelah berhasil menandai, buka URL tautan
+				window.location.href = event.target.getAttribute('href');
+			}
+		});
+	}
 </script>
 
 @endsection

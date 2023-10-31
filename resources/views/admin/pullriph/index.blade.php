@@ -179,7 +179,7 @@
 								<a href="#" class="d-flex align-items-center">
 									<span class="d-flex flex-column flex-1 ml-1">
 										<span class="name">
-											<h6>Volume Import (ton)</h6>
+											<h6>Volume RIPH (ton)</h6>
 											<span id="volume_riph"  class="fw-500 position-absolute pos-top pos-right mt-1">
 
 											</span>
@@ -213,7 +213,7 @@
 								<a href="#" class="d-flex align-items-center">
 									<span class="d-flex flex-column flex-1 ml-1">
 										<span class="name">
-											<h6>Luas Wajib Tanam (ha)</h6>
+											<h6>Komitmen Wajib Tanam (ha)</h6>
 											<span id="luas_wajib_tanam"  class="fw-500 position-absolute pos-top pos-right mt-1">
 
 											</span>

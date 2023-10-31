@@ -115,7 +115,7 @@
 					<dd class="col-sm-3">Wajib Tanam</dd>
 					<dt class="col-sm-9">
 						<dl class="row">
-							<dd class="col-sm-3">Beban</dd>
+							<dd class="col-sm-3">Komitmen</dd>
 							<dt class="col-sm-9">: {{ number_format($commitment->volume_riph * 0.05 / 6, 2, '.', ',') }} ha;</dt>
 							<dd class="col-sm-3">Realisasi</dd>
 							<dt class="col-sm-9">: {{ number_format($total_luas, 2, '.', ',') }} ha.</dt>
@@ -126,7 +126,7 @@
 					<dd class="col-sm-3">Wajib Produksi</dd>
 					<dt class="col-sm-9">
 						<dl class="row">
-							<dd class="col-sm-3">Beban</dd>
+							<dd class="col-sm-3">Komitmen</dd>
 							<dt class="col-sm-9">: {{ number_format($commitment->volume_riph * 0.05, 2, '.', ',') }} ton;</dt>
 							<dd class="col-sm-3">Realisasi</dd>
 							<dt class="col-sm-9">: {{ number_format($total_volume, 2, '.', ',') }} ton.</dt>
@@ -148,7 +148,7 @@
 							</tr>
 							<tr>
 								<td></td>
-								<td width="25%" class="text-center">Beban</td>
+								<td width="25%" class="text-center">Komitmen</td>
 								<td width="25%" class="text-center">Realisasi</td>
 								<td width="25%" class="text-center">Terverifikasi</td>
 							</tr>

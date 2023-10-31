@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengajuan;
 use App\Models\PullRiph;
 use App\Models\PenangkarRiph;
 use App\Models\Pks;
@@ -239,17 +238,16 @@ class CommitmentController extends Controller
 			DB::beginTransaction();
 
 			$fileFields = [
-				'sptjm',
+				'sptjmtanam',
+				'sptjmproduksi',
 				'spvt',
 				'rta',
 				'sphtanam',
-				'spdst',
 				'logbooktanam',
 				'spvp',
 				'rpo',
 				'formLa',
 				'sphproduksi',
-				'spdsp',
 				'logbookproduksi',
 				'spskl'
 				// Tambahkan field-file lainnya di sini
