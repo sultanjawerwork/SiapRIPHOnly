@@ -177,7 +177,7 @@ class VerifSklController extends Controller
 			'userDocs' => $userDocs,
 		];
 
-		array_push($data, $verifTanam, $verifProduksi, $verif, $sisa);
+		array_push($data, $tanam, $produksi, $verif, $sisa);
 		// dd($userDocs->ndhprp);
 
 		return response()->json($data);
