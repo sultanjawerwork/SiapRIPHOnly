@@ -78,7 +78,7 @@ class PullRiph extends Model
 
 	public function pks()
 	{
-		return $this->hasMany(PKS::class, 'no_ijin', 'no_ijin');
+		return $this->hasMany(Pks::class, 'no_ijin', 'no_ijin');
 	}
 
 	public function lokasi()
