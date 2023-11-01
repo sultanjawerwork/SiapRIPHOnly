@@ -6,6 +6,7 @@
 @can('pull_access')
 <div class="row">
 	<div class="col-12">
+		@include('partials.sysalert')
 		<form  id="dataForm" action="{{ route('admin.task.pull.store') }}" method="POST" enctype="multipart/form-data">
 		@csrf
 
