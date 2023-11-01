@@ -120,7 +120,7 @@ function createPolygon(anggotaMitra) {
 function showMarkerDetails(marker) {
 	// Send an AJAX request to get the marker data
 	$.ajax({
-		url: "http://127.0.0.1:8000/api/getAPIAnggotaMitra/" + marker.id,
+		url: "/api/getAPIAnggotaMitra/" + marker.id,
 		type: "GET",
 		dataType: "json",
 		success: function (data) {
