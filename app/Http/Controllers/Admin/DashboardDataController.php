@@ -344,6 +344,7 @@ class DashboardDataController extends Controller
 		}
 
 		$allPengajuan = PullRiph::whereYear('created_at', $periodetahun)
+			->where('npwp', $npwpuser)
 			->where(function ($query) {
 				$query->has('ajutanam')
 					->orWhereHas('ajuproduksi')
