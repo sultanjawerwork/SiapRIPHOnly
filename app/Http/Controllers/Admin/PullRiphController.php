@@ -149,9 +149,81 @@ class PullRiphController extends Controller
 		$dtjson = json_decode($datariph);
 		if ($riph) {
 			$lastPoktan = '';
-			if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
-				// Kelompoktani adalah array
-				foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
+			if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
+				return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
+			} else {
+				if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
+					// Kelompoktani adalah array
+					foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
+						$nama = trim($poktan->nama_kelompok, ' ');
+						$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
+						// Menghapus karakter yang tidak diperlukan
+						$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
+						$ktp = trim($ktp, "\u{00a0}");
+						$ktp = trim($ktp, "\u{00c2}");
+						$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
+						$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
+						$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
+						$idkecamatan = isset($poktan->id_kecamatan) ? trim($poktan->id_kecamatan, ' ') : '';
+						$idkelurahan = isset($poktan->id_kelurahan) && is_string($poktan->id_kelurahan) ? trim($poktan->id_kelurahan, ' ') : '';
+
+						MasterPoktan::updateOrCreate(
+							[
+								'npwp' => $stnpwp,
+								'poktan_id' => $idpoktan
+							],
+							[
+								'id' => $idpoktan,
+								'user_id' => $user->id,
+								'npwp' => $stnpwp,
+								'poktan_id' => $idpoktan,
+								'id_kabupaten' => $idkabupaten,
+								'id_kecamatan' => $idkecamatan,
+								'id_kelurahan' => $idkelurahan,
+								'nama_kelompok' => strtoupper($nama),
+								'nama_pimpinan' => (is_string($poktan->nama_pimpinan) ? trim($poktan->nama_pimpinan, ' ') : ''),
+								'hp_pimpinan'   => (is_string($poktan->hp_pimpinan) ? trim($poktan->hp_pimpinan, ' ') : '')
+							]
+						);
+						$lastPoktan = $idpoktan;
+						Pks::updateOrCreate(
+							[
+								'npwp' => $stnpwp,
+								'no_ijin' => $noijin,
+								'poktan_id' => $idpoktan
+							],
+							[
+								'kabupaten_id' => $idkabupaten,
+								'kecamatan_id' => $idkecamatan,
+								'kelurahan_id' => $idkelurahan
+							]
+						);
+						MasterAnggota::updateOrCreate(
+							[
+								'npwp' => $stnpwp,
+								'anggota_id' => $idpetani,
+								'poktan_id' => $idpoktan
+							],
+							[
+								'id' => $idpetani,
+								'user_id' => $user->id,
+								'nama_petani'  => trim($poktan->nama_petani, ' '),
+								'ktp_petani' => $ktp,
+								'luas_lahan'   => trim($poktan->luas_lahan, ' '),
+								'periode_tanam' => trim($poktan->periode_tanam, ' ')
+							]
+						);
+						Lokasi::updateOrCreate(
+							[
+								'npwp' => $stnpwp,
+								'no_ijin' => $noijin,
+								'poktan_id' => $idpoktan,
+								'anggota_id' => $idpetani,
+							]
+						);
+					}
+				} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
+					$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
 					$nama = trim($poktan->nama_kelompok, ' ');
 					$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
 					// Menghapus karakter yang tidak diperlukan
@@ -219,74 +291,6 @@ class PullRiphController extends Controller
 						]
 					);
 				}
-			} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
-				$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
-				$nama = trim($poktan->nama_kelompok, ' ');
-				$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
-				// Menghapus karakter yang tidak diperlukan
-				$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
-				$ktp = trim($ktp, "\u{00a0}");
-				$ktp = trim($ktp, "\u{00c2}");
-				$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
-				$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
-				$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
-				$idkecamatan = isset($poktan->id_kecamatan) ? trim($poktan->id_kecamatan, ' ') : '';
-				$idkelurahan = isset($poktan->id_kelurahan) && is_string($poktan->id_kelurahan) ? trim($poktan->id_kelurahan, ' ') : '';
-
-				MasterPoktan::updateOrCreate(
-					[
-						'npwp' => $stnpwp,
-						'poktan_id' => $idpoktan
-					],
-					[
-						'id' => $idpoktan,
-						'user_id' => $user->id,
-						'npwp' => $stnpwp,
-						'poktan_id' => $idpoktan,
-						'id_kabupaten' => $idkabupaten,
-						'id_kecamatan' => $idkecamatan,
-						'id_kelurahan' => $idkelurahan,
-						'nama_kelompok' => strtoupper($nama),
-						'nama_pimpinan' => (is_string($poktan->nama_pimpinan) ? trim($poktan->nama_pimpinan, ' ') : ''),
-						'hp_pimpinan'   => (is_string($poktan->hp_pimpinan) ? trim($poktan->hp_pimpinan, ' ') : '')
-					]
-				);
-				$lastPoktan = $idpoktan;
-				Pks::updateOrCreate(
-					[
-						'npwp' => $stnpwp,
-						'no_ijin' => $noijin,
-						'poktan_id' => $idpoktan
-					],
-					[
-						'kabupaten_id' => $idkabupaten,
-						'kecamatan_id' => $idkecamatan,
-						'kelurahan_id' => $idkelurahan
-					]
-				);
-				MasterAnggota::updateOrCreate(
-					[
-						'npwp' => $stnpwp,
-						'anggota_id' => $idpetani,
-						'poktan_id' => $idpoktan
-					],
-					[
-						'id' => $idpetani,
-						'user_id' => $user->id,
-						'nama_petani'  => trim($poktan->nama_petani, ' '),
-						'ktp_petani' => $ktp,
-						'luas_lahan'   => trim($poktan->luas_lahan, ' '),
-						'periode_tanam' => trim($poktan->periode_tanam, ' ')
-					]
-				);
-				Lokasi::updateOrCreate(
-					[
-						'npwp' => $stnpwp,
-						'no_ijin' => $noijin,
-						'poktan_id' => $idpoktan,
-						'anggota_id' => $idpetani,
-					]
-				);
 			}
 		}
 
