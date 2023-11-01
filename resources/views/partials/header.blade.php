@@ -13,8 +13,8 @@
 	@php($cntAjuVerifSkl = \App\Models\AjuVerifSkl::newPengajuanCount())
 	@php($getAjuVerifSkl = \App\Models\AjuVerifSkl::getNewPengajuan())
 
-	{{-- @php($cntNewSkl = \App\Models\SklReads::getNewSklCount())
-	@php($getNewSkl = \App\Models\SklReads::getNewSkl()) --}}
+	@php($cntNewSkl = \App\Models\SklReads::getNewSklCount())
+	@php($getNewSkl = \App\Models\SklReads::getNewSkl())
 
 	@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0))
 
@@ -275,7 +275,7 @@
 							<div class="tab-pane" id="tab-new-skl" role="tabpanel">
 								<div class="custom-scroll h-100">
 									<ul class="notification notification-1">
-										{{-- @foreach ($getNewSkl as $item)
+										@foreach ($getNewSkl as $item)
 											<li>
 												<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
 													<span class="mr-2">
@@ -295,7 +295,7 @@
 													</span>
 												</a>
 											</li>
-										@endforeach --}}
+										@endforeach
 									</ul>
 								</div>
 							</div>
