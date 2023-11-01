@@ -295,6 +295,7 @@ class PullRiphController extends Controller
 					}
 				// }
 			}
+			DB::commit();
 		} catch (\Exception $e) {
 			DB::rollback();
 			return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
