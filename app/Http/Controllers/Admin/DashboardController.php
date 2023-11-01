@@ -174,6 +174,7 @@ class DashboardController extends Controller
 			// 	->get(['no_pengajuan', 'no_ijin', 'status', 'onlinestatus', 'onfarmstatus']);
 
 			$allPengajuan = PullRiph::whereYear('created_at', $currentYear)
+				->where('npwp', $npwpuser)
 				->where(function ($query) {
 					$query->has('ajutanam')
 						->orWhereHas('ajuproduksi')
