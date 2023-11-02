@@ -69,7 +69,7 @@
 											</span>
 										</div>
 										<div class="custom-file">
-											<input type="file" id="kml_file" placeholder="ambil berkas KML..." onchange="kml_parser()"
+											<input type="file" accept=".kml" id="kml_file" placeholder="ambil berkas KML..." onchange="kml_parser()"
 												class="custom-file-input border-left-0 bg-transparent pl-0" >
 											<label class="custom-file-label text-muted" for="inputGroupFile01">ambil berkas KML...</label>
 										</div>

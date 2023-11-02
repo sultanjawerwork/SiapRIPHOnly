@@ -77,10 +77,10 @@
 																	<div class="form-group">
 																		<label class="">Unggah hasil cetak SKL</label>
 																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" name="skl_upload" id="skl_upload">
+																			<input type="file" accept="" class="custom-file-input" name="skl_upload" id="skl_upload">
 																			<label class="custom-file-label" for="">Pilih berkas...</label>
 																		</div>
-																		<span class="help-block">Unggah Dokumen Pendukung. Ekstensi pdf ukuran maks 4mb.</span>
+																		<span class="help-block">Unggah hasil cetak SKL. Ekstensi pdf ukuran maks 2mb.</span>
 																	</div>
 																</div>
 																<div class="modal-footer">

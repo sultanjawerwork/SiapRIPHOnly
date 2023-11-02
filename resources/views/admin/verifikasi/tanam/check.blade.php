@@ -387,7 +387,7 @@ td {
 											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="ndhprt" id="ndhprt" value="{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : '') }}">
+													<input type="file" accept=".pdf" class="custom-file-input" name="ndhprt" id="ndhprt" value="{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : '') }}">
 													<label class="custom-file-label" for="ndhprt">{{ old('ndhprt', $verifikasi ? $verifikasi->ndhprt : 'pilih berkas') }}</label>
 												</div>
 												@if ($verifikasi->ndhprt)
@@ -396,7 +396,7 @@ td {
 														Lihat Nota Dinas.
 													</a>
 												@else
-													<span class="help-block fw-500">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span></span>
+													<span class="help-block fw-500">Nota Dinas Hasil Pemeriksaan Realisasi Tanam. <span class="text-danger">(wajib)</span>. PDF, max 2Mb.</span>
 												@endif
 											</div>
 										</div>
@@ -404,7 +404,7 @@ td {
 											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger">*</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="batanam" id="batanam" value="{{ old('batanam', $verifikasi ? $verifikasi->batanam : '') }}">
+													<input type="file" accept=".pdf" class="custom-file-input" name="batanam" id="batanam" value="{{ old('batanam', $verifikasi ? $verifikasi->batanam : '') }}">
 													<label class="custom-file-label" for="batanam">{{ old('batanam', $verifikasi ? $verifikasi->batanam : 'pilih berkas') }}</label>
 												</div>
 												@if ($verifikasi->batanam)
@@ -413,7 +413,7 @@ td {
 														Lihat Berita Acara.
 													</a>
 												@else
-													<span class="help-block">Berita Acara Pemeriksaan Realisasi Tanam. <span class="text-danger"></span></span>
+													<span class="help-block">Berita Acara Pemeriksaan Realisasi Tanam. PDF, max 2Mb.<span class="text-danger"></span></span>
 												@endif
 											</div>
 										</div>

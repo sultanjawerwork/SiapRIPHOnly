@@ -6,7 +6,7 @@
 {{-- @include('partials.breadcrumb') --}}
 @include('partials.subheader')
 
-        
+
 @can('feeds_create')
 	<form method="post" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
 		@csrf
@@ -23,7 +23,7 @@
 						</div>
 					@endif
 					<small id="title" class="text-muted">{{ __('Isikan judul artikel.') }}</small>
-				</div>            
+				</div>
 				{{-- end input judul --}}
 
 				{{-- article content input --}}
@@ -80,7 +80,7 @@
 										@endif
 										<span class="help-block">{{ __('Isikan judul artikel.') }}</span>
 									</div>
-									
+
 									<div class="form-group row">
 										<div class="col-md-12">
 											<label class="form-label" for="body">{{ __('Isi artikel') }} <span class="text-danger">*</span></label>
@@ -102,7 +102,7 @@
 											</div>
 										</span>
 									</div>
-									
+
 									<div class="form-group">
 										<label class="form-label" for="tags">Tags</label>
 										<div class="input-group input-group-sm input-group-multi-transition">
@@ -111,7 +111,7 @@
 										</div>
 										<span class="help-block">Tag untuk artikel ini.</span>
 									</div>
-											
+
 								</div>
 							</div>
 						</div>
@@ -126,7 +126,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="custom-file">
-								<input type="file" class="form-control form-control-sm" id="img_cover" name="img_cover"
+								<input type="file" accept=".jpg" class="form-control form-control-sm" id="img_cover" name="img_cover"
 									aria-describedby="image">
 								<label class="custom-file-label" for="img_cover"></label>
 							</div>

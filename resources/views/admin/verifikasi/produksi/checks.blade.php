@@ -581,7 +581,7 @@ td {
 											<label class="col-md-3 col-lg-2 col-form-label">Nota Dinas<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="ndhprp" id="ndhprp" value="{{ old('ndhprp', optional($verifikasi)->ndhprp) }}">
+													<input type="file" accept=".pdf" class="custom-file-input" name="ndhprp" id="ndhprp" value="{{ old('ndhprp', optional($verifikasi)->ndhprp) }}">
 													<label class="custom-file-label" for="ndhprp">{{ old('ndhprp', $verifikasi ? $verifikasi->ndhprp : 'Pilih berkas') }}</label>
 												</div>
 												@if ($verifikasi->ndhprp)
@@ -598,7 +598,7 @@ td {
 											<label class="col-md-3 col-lg-2 col-form-label">Berita Acara<sup class="text-danger"> *</sup></label>
 											<div class="col-md-9 col-lg-10">
 												<div class="custom-file input-group">
-													<input type="file" class="custom-file-input" name="baproduksi" id="baproduksi" value="{{ old('baproduksi', optional($verifikasi)->baproduksi) }}">
+													<input type="file" accept=".pdf" class="custom-file-input" name="baproduksi" id="baproduksi" value="{{ old('baproduksi', optional($verifikasi)->baproduksi) }}">
 													<label class="custom-file-label" for="baproduksi">{{ old('baproduksi', $verifikasi ? $verifikasi->baproduksi : 'Pilih berkas') }}</label>
 												</div>
 												@if ($verifikasi->baproduksi)

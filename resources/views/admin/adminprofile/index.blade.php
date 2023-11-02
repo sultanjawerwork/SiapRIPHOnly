@@ -52,7 +52,7 @@
 								<div class="form-group">
 									<label class="">Scan Tandatangan</label>
 									<div class="custom-file input-group">
-										<input type="file" class="custom-file-input" name="sign_img" id="sign_img" value="{{ old('sign_img', optional($data_admin)->sign_img) }}">
+										<input type="file" accept=".jpg, png" class="custom-file-input" name="sign_img" id="sign_img" value="{{ old('sign_img', optional($data_admin)->sign_img) }}">
 										<label class="custom-file-label" for="sign_img">{{ old('sign_img', $data_admin ? $data_admin->sign_img : 'Pilih berkas') }}</label>
 									</div>
 									@if ($data_admin->sign_img)
@@ -61,7 +61,7 @@
 											Lihat Scan tandatangan.
 										</a>
 									@else
-										<span class="help-block">Unggah hasil pindah tandatangan Anda.</span>
+										<span class="help-block">Unggah hasil pindah tandatangan Anda. Berkas JPG atau PNG, max 2Mb.</span>
 									@endif
 								</div>
 							</div>

@@ -205,7 +205,7 @@
 																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumentasi Tanam<sup class="text-danger"> *</sup></label>
 																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" id="customControlValidation7"
+																			<input type="file" accept=".jpg, .png" class="custom-file-input" id="customControlValidation7"
 																				name="tanam_pict" id="tanam_pict">
 																			<label class="custom-file-label" for="tanam_pict">{{ $lokasi->tanam_pict ? $lokasi->tanam_pict : 'Pilih berkas...' }}</label>
 																		</div>
@@ -214,7 +214,7 @@
 																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumen Pendukung<span class="text-danger">*</span></label>
 																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" name="tanam_doc" id="tanam_doc" value="{{ old('tanam_doc', $lokasi->tanam_doc) }}">
+																			<input type="file" accept=".pdf" class="custom-file-input" name="tanam_doc" id="tanam_doc" value="{{ old('tanam_doc', $lokasi->tanam_doc) }}">
 																			<label class="custom-file-label" for="tanam_doc">{{ $lokasi->tanam_doc ? $lokasi->tanam_doc : 'Pilih berkas...' }}</label>
 																		</div>
 																		<span class="help-block">
@@ -294,7 +294,7 @@
 																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumentasi Produksi<sup class="text-danger"> *</sup></label>
 																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" id="customControlValidation7"
+																			<input type="file" accept=".jpg, .png" class="custom-file-input" id="customControlValidation7"
 																				value="{{ old('panen_pict', $lokasi->panen_pict) }}"
 																				name="panen_pict" id="panen_pict">
 																				<label class="custom-file-label" for="panen_pict">{{ $lokasi->panen_pict ? $lokasi->panen_pict : 'Pilih berkas...' }}</label>
@@ -304,7 +304,7 @@
 																	<div class="form-group col-md-12">
 																		<label class="form-label">Dokumen Pendukung<sup class="text-danger"> *</sup></label>
 																		<div class="custom-file input-group">
-																			<input type="file" class="custom-file-input" id="customControlValidation7"
+																			<input type="file" accept=".pdf" class="custom-file-input" id="customControlValidation7"
 																				value="{{ old('panen_doc', $lokasi->panen_doc) }}"
 																				name="panen_doc" id="panen_doc">
 																			<label class="custom-file-label" for="panen_doc">{{ $lokasi->panen_doc ? $lokasi->panen_doc : 'Pilih berkas...' }}</label>
