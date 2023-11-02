@@ -134,28 +134,34 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('getriph', 'PullRiphController@pull')->name('pull.getriph');
 		Route::post('pull', 'PullRiphController@store')->name('pull.store');
 
+
 		Route::get('commitment', 'CommitmentController@index')->name('commitment');
-		Route::get('commitment/{id}/show', 'CommitmentController@show')->name('commitment.show');
-		Route::put('commitment/{id}/update', 'CommitmentController@update')->name('commitment.update');
-		Route::delete('commitment/{pullriph}', 'CommitmentController@destroy')->name('commitment.destroy');
+		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+			Route::get('{id}/show', 'CommitmentController@show')->name('show');
+			Route::delete('{pullriph}', 'CommitmentController@destroy')->name('destroy');
+
+			//pengisian data realisasi
+			Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
+			Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('realisasi.storeUserDocs');
+			Route::get('{id}/penangkar', 'PenangkarRiphController@mitra')->name('penangkar');
+			Route::post('{id}/penangkar/store', 'PenangkarRiphController@store')->name('penangkar.store');
+		});
 		Route::delete('commitmentmd', 'CommitmentController@massDestroy')->name('commitment.massDestroy');
 
 		//master penangkar
 		Route::get('penangkar', 'MasterPenangkarController@index')->name('penangkar');
-		Route::get('penangkar/create', 'MasterPenangkarController@create')->name('penangkar.create');
-		Route::post('penangkar/store', 'MasterPenangkarController@store')->name('penangkar.store');
-		Route::get('penangkar/{id}/edit', 'MasterPenangkarController@edit')->name('penangkar.edit');
-		Route::put('penangkar/{id}/update', 'MasterPenangkarController@update')->name('penangkar.update');
-		Route::delete('penangkar/{id}/delete', 'MasterPenangkarController@destroy')->name('penangkar.delete');
+		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+			Route::get('create', 'MasterPenangkarController@create')->name('create');
+			Route::post('store', 'MasterPenangkarController@store')->name('store');
+			Route::get('{id}/edit', 'MasterPenangkarController@edit')->name('edit');
+			Route::put('{id}/update', 'MasterPenangkarController@update')->name('update');
+			Route::delete('{id}/delete', 'MasterPenangkarController@destroy')->name('delete');
+		});
 
-		//pengisian data realisasi
-		Route::get('commitment/{id}/realisasi', 'CommitmentController@realisasi')->name('commitment.realisasi');
-		Route::post('commitment/{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('commitment.realisasi.storeUserDocs');
-		Route::get('commitment/{id}/penangkar', 'PenangkarRiphController@mitra')->name('commitment.penangkar');
-		Route::post('commitment/{id}/penangkar/store', 'PenangkarRiphController@store')->name('commitment.penangkar.store');
 		Route::delete('mitra/{id}/delete', 'PenangkarRiphController@destroy')->name('mitra.delete');
 
 		// daftar pks
+
 		Route::get('pks/{id}/edit', 'PksController@edit')->name('pks.edit');
 		Route::put('pks/{id}/update', 'PksController@update')->name('pks.update');
 
@@ -227,11 +233,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 
 		//dihapus
-		// Route::post('commitment/unggah', 'CommitmentController@store')->name('commitment.store');
-		// Route::get('commitment/{pullriph}', 'CommitmentController@show')->name('commitment.show');
-		// Route::get('commitment/{id}/edit', 'CommitmentController@edit')->name('commitment.edit');
-		// pengajuan
-		// Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
 
 		//Daftar SKL untuk user
 		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');

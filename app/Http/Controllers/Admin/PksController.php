@@ -210,9 +210,13 @@ class PksController extends Controller
 		$pks->periode_tanam = $request->input('periode_tanam');
 		if ($request->hasFile('berkas_pks')) {
 			$file = $request->file('berkas_pks');
-			$filename = 'pks_' . $pks->poktan_id . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
-			$pks->berkas_pks = $filename;
+			if ($file->getClientOriginalExtension() === 'pdf') {
+				$filename = 'pks_' . $pks->poktan_id . '.' . $file->getClientOriginalExtension();
+				$file->storeAs('uploads/' . $filenpwp . '/' . $commitment->periodetahun, $filename, 'public');
+				$pks->berkas_pks = $filename;
+			} else {
+				return redirect()->back()->with('error', 'Berkas harus memiliki ekstensi .pdf.');
+			}
 		}
 		$pks->save();
 

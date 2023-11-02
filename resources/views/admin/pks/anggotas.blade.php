@@ -129,6 +129,11 @@
 									<td class="text-center">{{$lokasi->tgl_panen}}</td>
 									<td  class="text-center">
 										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
+											title="Isi Data Realisasi Tanam dan Produksi" class="btn btn-xs btn-icon btn-primary"
+											data-toggle="tooltip" >
+											<i class="fal fa-plus-circle"></i>
+										</a>
+										<a href="{{route('admin.task.lokasi.tanam', $lokasi->anggota_id)}}"
 											title="Data Spasial dan Realisasi Tanam" class="btn btn-xs btn-icon btn-primary"
 											data-toggle="tooltip" >
 											<i class="fal fa-map"></i>
