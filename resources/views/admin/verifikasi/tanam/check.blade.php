@@ -351,11 +351,11 @@ td {
 								<div class="panel-content">
 									<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
 										<thead class="thead-themed text-uppercase text-muted">
-											<th>Kelompoktani</th>
-											<th>Nama Lokasi</th>
-											<th>Pengelola</th>
-											<th>Luas</th>
-											<th>Tindakan</th>
+											<th class="text-center">Kelompoktani</th>
+											<th class="text-center">Jumlah Lokasi</th>
+											<th class="text-center">Nama Petani</th>
+											<th class="text-center">Luas</th>
+											<th class="text-center">Tindakan</th>
 										</thead>
 										<tbody>
 										</tbody>
@@ -533,8 +533,8 @@ td {
 				],
 				columnDefs: [
 
-					{ className: 'text-right', targets: [0] },
-					{ className: 'text-center', targets: [1] },
+					{ className: 'text-right', targets: [1, 3] },
+					{ className: 'text-center', targets: [4] },
 				]
 			});
 
@@ -555,20 +555,23 @@ td {
 									minimumFractionDigits: 2,
 									maximumFractionDigits: 2,
 								});
-								var LuasTanam = formatter.format(luasTanam);
+								var noDecimal = new Intl.NumberFormat('en-GB', {
+									style: 'decimal',
+									minimumFractionDigits: 0,
+									maximumFractionDigits: 0,
+								});
+								var LuasTanam = formatter.format(luasTanam) + ' ha';
 
-								var id = lokasi.id;
-								var npwp = lokasi.npwp;
-								var noIjin = lokasi.no_ijin;
 								var poktan = lokasi.poktan;
 								var anggota = lokasi.anggota;
 								var namaLokasi = lokasi.nama_lokasi;
+								var jmlLokasi = noDecimal.format(namaLokasi) + ' titik';
 								var actionBtn = `
 									<a href="${lokasi.show}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
 										<i class="fal fa-search"></i>
 									</a>
 								`;
-								tableData.row.add([poktan, namaLokasi, anggota,LuasTanam, actionBtn]).draw(false);
+								tableData.row.add([poktan, jmlLokasi, anggota,LuasTanam, actionBtn]).draw(false);
 							});
 						}
 						tableData.draw(); // Draw the table after adding the rows

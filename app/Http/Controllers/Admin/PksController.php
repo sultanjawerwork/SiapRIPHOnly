@@ -11,8 +11,12 @@ use App\Models\PullRiph;
 use App\Models\MasterKecamatan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\SimeviTrait;
+use App\Models\DataRealisasi;
+use App\Models\FotoProduksi;
+use App\Models\FotoTanam;
 use App\Models\Saprodi;
 use App\Models\Varietas;
+use Dflydev\DotAccessData\Data;
 use Gate;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +25,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Exception;
+use Illuminate\Support\Facades\Storage;
 
 class PksController extends Controller
 {
@@ -226,9 +231,9 @@ class PksController extends Controller
 	public function anggotas($id)
 	{
 		$module_name = 'Realisasi';
-		$page_title = 'Lokasi Tanam';
-		$page_heading = 'Daftar Lokasi Tanam';
-		$heading_class = 'fal fa-map-marked';
+		$page_title = 'Daftar Petani Mitra';
+		$page_heading = 'Daftar Petani Mitra';
+		$heading_class = 'fal fa-user-hard-hat';
 
 		$npwpCompany = Auth::user()->data_user->npwp_company;
 		$pks = Pks::where('npwp', $npwpCompany)
@@ -255,6 +260,304 @@ class PksController extends Controller
 		}
 
 		return view('admin.pks.anggotas', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'commitment', 'anggotas', 'lokasis', 'disabled', 'sumLuas', 'sumProduksi'));
+	}
+
+	public function listLokasi($pksId, $anggotaId)
+	{
+		$module_name = 'Realisasi';
+		$page_title = 'Daftar Lokasi Tanam';
+		$page_heading = 'Daftar Lokasi Tanam per Anggota';
+		$heading_class = 'fal fa-map-marked';
+
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$pks = Pks::find($pksId);
+		$anggota = Lokasi::find($anggotaId);
+		$listLokasi = DataRealisasi::where('lokasi_id', $anggotaId)->get();
+
+
+		return view('admin.pks.listLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'listLokasi'));
+	}
+
+	public function addLokasiTanam($pksId, $anggotaId)
+	{
+		$module_name = 'Realisasi';
+		$page_title = 'Realisasi Tanam-Produksi';
+		$page_heading = 'Realisasi Tanam-Produksi';
+		$heading_class = 'fal fa-farm';
+
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$pks = Pks::findOrFail($pksId);
+		$anggota = Lokasi::findOrFail($anggotaId);
+
+		return view('admin.pks.addLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota'));
+	}
+
+	public function storeLokasiTanam(Request $request)
+	{
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+
+		$pksId = $request->input('pks_id');
+		$anggotaId = $request->input('lokasi_id');
+		// dd($anggotaId);
+
+		$newLokasi = new DataRealisasi();
+		$newLokasi->npwp_company = $npwpCompany;
+		$newLokasi->no_ijin = $request->input('no_ijin');
+		$newLokasi->poktan_id = $request->input('poktan_id');
+		$newLokasi->pks_id = $request->input('pks_id');
+		$newLokasi->anggota_id = $request->input('anggota_id');
+		$newLokasi->lokasi_id = $request->input('lokasi_id');
+
+		$newLokasi->nama_lokasi = $request->input('nama_lokasi');
+		$newLokasi->latitude = $request->input('latitude');
+		$newLokasi->longitude = $request->input('longitude');
+		$newLokasi->polygon = $request->input('polygon');
+		$newLokasi->altitude = $request->input('altitude');
+		$newLokasi->luas_kira = $request->input('luas_kira');
+
+		//data tanam
+		$newLokasi->mulai_tanam = $request->input('mulai_tanam');
+		$newLokasi->akhir_tanam = $request->input('akhir_tanam');
+		$newLokasi->luas_lahan = $request->input('luas_lahan');
+
+		$newLokasi->save();
+
+		// udate table lokasis
+		$lokasiId = $request->input('lokasi_id');
+		$updateLokasi = Lokasi::find($lokasiId);
+		$dataRealisasi = DataRealisasi::where('lokasi_id', $lokasiId)->get();
+		$firstTanam = $dataRealisasi->min('mulai_tanam');
+		$firstProduksi = $dataRealisasi->min('mulai_panen');
+		$sumLuas = $dataRealisasi->sum('luas_lahan');
+		$sumVolume = $dataRealisasi->sum('volume');
+
+		$updateLokasi->tgl_tanam = $firstTanam;
+		$updateLokasi->tgl_panen = $firstProduksi;
+		$updateLokasi->luas_tanam = $sumLuas;
+		$updateLokasi->volume = $sumVolume;
+		$countLokasi = $dataRealisasi->count();
+		$updateLokasi->nama_lokasi = $countLokasi;
+		$updateLokasi->save();
+		dd('Luas awal: ' . $updateLokasi->luas_tanam, 'Luas baru: ' . $sumLuas, 'Volume awal: ' . $updateLokasi->volume, 'Volume baru: ' . $sumVolume, 'Jumlah awal: ' . $updateLokasi->nama_lokasi = $countLokasi, 'Jumlah baru: ' . $updateLokasi->count);
+
+		// dd($request->all());
+		return redirect()->route('admin.task.pks.anggota.listLokasi', [$pksId, $anggotaId])->with('message', "Data berhasil disimpan.");
+	}
+
+	public function editLokasiTanam($pksId, $anggotaId, $id)
+	{
+		$module_name = 'Realisasi';
+		$page_title = 'Realisasi Tanam';
+		$page_heading = 'Realisasi Tanam dan Spasial';
+		$heading_class = 'fal fa-farm';
+
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$pks = Pks::findOrFail($pksId);
+		$anggota = Lokasi::findOrFail($anggotaId);
+		$lokasi = DataRealisasi::find($id);
+
+		return view('admin.pks.editLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'lokasi'));
+	}
+
+	public function updateLokasiTanam(Request $request, $id)
+	{
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+
+		$pksId = $request->input('pks_id');
+		$anggotaId = $request->input('lokasi_id');
+		// dd($anggotaId);
+
+		$updateLokasi = DataRealisasi::find($id);
+		$updateLokasi->npwp_company = $npwpCompany;
+		$updateLokasi->no_ijin = $request->input('no_ijin');
+		$updateLokasi->poktan_id = $request->input('poktan_id');
+		$updateLokasi->pks_id = $request->input('pks_id');
+		$updateLokasi->anggota_id = $request->input('anggota_id');
+		$updateLokasi->lokasi_id = $request->input('lokasi_id');
+
+		$updateLokasi->nama_lokasi = $request->input('nama_lokasi');
+		$updateLokasi->latitude = $request->input('latitude');
+		$updateLokasi->longitude = $request->input('longitude');
+		$updateLokasi->polygon = $request->input('polygon');
+		$updateLokasi->altitude = $request->input('altitude');
+		$updateLokasi->luas_kira = $request->input('luas_kira');
+
+		//data tanam
+		$updateLokasi->mulai_tanam = $request->input('mulai_tanam');
+		$updateLokasi->akhir_tanam = $request->input('akhir_tanam');
+		$updateLokasi->luas_lahan = $request->input('luas_lahan');
+		$updateLokasi->save();
+
+		// udate table lokasis
+		$lokasiId = $request->input('lokasi_id');
+		$dataLokasi = Lokasi::find($lokasiId);
+		$dataRealisasi = DataRealisasi::where('lokasi_id', $lokasiId)->get();
+		$firstTanam = $dataRealisasi->min('mulai_tanam');
+		$firstProduksi = $dataRealisasi->min('mulai_panen');
+		$sumLuas = $dataRealisasi->sum('luas_lahan');
+		$sumVolume = $dataRealisasi->sum('volume');
+		$dataLokasi->tgl_tanam = $firstTanam;
+		$dataLokasi->tgl_panen = $firstProduksi;
+		$dataLokasi->luas_tanam = $sumLuas;
+		$dataLokasi->volume = $sumVolume;
+		$countLokasi = $dataRealisasi->count();
+		$dataLokasi->nama_lokasi = $countLokasi;
+		$dataLokasi->save();
+		// dd($request->all());
+		return redirect()->route('admin.task.pks.anggota.listLokasi', [$pksId, $anggotaId])->with('message', "Data berhasil disimpan.");
+	}
+
+	public function storeRealisasiProduksi(Request $request, $id)
+	{
+		$produksi = DataRealisasi::findOrFail($id);
+		$produksi->mulai_panen = $request->input('mulai_panen');
+		$produksi->akhir_panen = $request->input('akhir_panen');
+		$produksi->volume = $request->input('volume');
+		$produksi->save();
+
+		// udate table lokasis
+		$lokasiId = $produksi->lokasi_id;
+		$updateLokasi = Lokasi::find($lokasiId);
+		$dataRealisasi = DataRealisasi::where('lokasi_id', $lokasiId)->get();
+		$firstTanam = $dataRealisasi->min('mulai_tanam');
+		$firstProduksi = $dataRealisasi->min('mulai_panen');
+		$sumLuas = $dataRealisasi->sum('luas_lahan');
+		$sumVolume = $dataRealisasi->sum('volume');
+		$updateLokasi->tgl_tanam = $firstTanam;
+		$updateLokasi->tgl_panen = $firstProduksi;
+		$updateLokasi->luas_tanam = $sumLuas;
+		$updateLokasi->volume = $sumVolume;
+		$countLokasi = $dataRealisasi->count();
+		$updateLokasi->nama_lokasi = $countLokasi;
+		$updateLokasi->save();
+		// dd($request->all());
+		return redirect()->back()->with('success', 'Data berhasil diperbarui.');
+	}
+
+	public function fotoLokasi($pksId, $anggotaId, $id)
+	{
+		$module_name = 'Realisasi';
+		$page_title = 'Foto Kegiatan';
+		$page_heading = 'Foto Kegiatan Realisasi';
+		$heading_class = 'fal fa-images';
+		$page_desc = 'Halaman unggahan Foto-foto kegiatan pelaksanaan realisasi komitmen wajib tanam-produksi.';
+
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
+		$pks = Pks::findOrFail($pksId);
+		$anggota = Lokasi::findOrFail($anggotaId);
+		$lokasi = DataRealisasi::find($id);
+
+		$fotoTanams = FotoTanam::where('realisasi_id', $id)->get();
+		$fotoProduksis = FotoProduksi::where('realisasi_id', $id)->get();
+
+		return view('admin.pks.fotoLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'filenpwp', 'pks', 'anggota', 'lokasi', 'fotoTanams', 'fotoProduksis'));
+	}
+
+	public function dropZoneTanam(Request $request)
+	{
+		$realisasiId = $request->input('lokasiId');
+		$periode = $request->input('periode');
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
+		$uploadedFiles = [];
+
+		$image = $request->file('file');
+		if ($request->file('file')) {
+			$newFileName = 'foto_tanam_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
+			$image->storeAs($filePath, $newFileName, 'public');
+
+			// Setel $imagePath ke path file lengkap
+			$imagePath = url('/') . '/' . $filePath . $newFileName;
+		}
+
+		FotoTanam::create([
+			'realisasi_id' => $realisasiId,
+			'filename' => $newFileName,
+			'url' => $imagePath,
+		]);
+
+		return response()->json(['success' => 'Sukses', 'lokasi' => $realisasiId, 'files' => $uploadedFiles]);
+	}
+
+	public function dropZoneProduksi(Request $request)
+	{
+		$realisasiId = $request->input('lokasiId');
+		$periode = $request->input('periode');
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
+		$uploadedFiles = [];
+
+		$image = $request->file('file');
+		if ($request->file('file')) {
+			$newFileName = 'foto_produksi_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+			$image->storeAs('uploads/' . $filenpwp . '/' . $periode . '/', $newFileName, 'public');
+		}
+
+		FotoProduksi::create([
+			'realisasi_id' => $realisasiId,
+			'filename' => $newFileName,
+		]);
+
+		return response()->json(['success' => 'Sukses', 'lokasi' => $realisasiId, 'files' => $uploadedFiles]);
+	}
+
+	public function deleteFotoTanam($id)
+	{
+		$foto = FotoTanam::find($id);
+		$realisasiId = DataRealisasi::where('id', $foto->realisasi_id)->first();
+		$commitment = PullRiph::where('no_ijin', $realisasiId->no_ijin)->first();
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
+
+		// Hapus foto dari basis data
+		$foto->delete();
+
+		// Setelah menghapus, Anda bisa mengarahkan ke halaman yang sesuai atau memberikan respons yang sesuai.
+		return redirect()->back()->with('success', 'Foto berhasil dihapus.');
+	}
+
+	public function deleteFotoProduksi($id)
+	{
+		$foto = FotoProduksi::find($id);
+		$realisasiId = DataRealisasi::where('id', $foto->realisasi_id)->first();
+		$commitment = PullRiph::where('no_ijin', $realisasiId->no_ijin)->first();
+		$npwpCompany = Auth::user()->data_user->npwp_company;
+		$filenpwp = str_replace(['.', '-'], '', $npwpCompany);
+
+		// Hapus foto dari basis data
+		$foto->delete();
+
+		// Setelah menghapus, Anda bisa mengarahkan ke halaman yang sesuai atau memberikan respons yang sesuai.
+		return redirect()->back()->with('success', 'Foto berhasil dihapus.');
+	}
+
+	public function deleteLokasiTanam($id)
+	{
+		$lokasi = DataRealisasi::find($id);
+		FotoTanam::where('realisasi_id', $id)->delete();
+		FotoProduksi::where('realisasi_id', $id)->delete();
+
+		// udate table lokasis
+		$anggotaId = $lokasi->lokasi_id;
+		$updateAnggota = Lokasi::find($anggotaId);
+
+		$dataRealisasi = DataRealisasi::where('lokasi_id', $anggotaId)->where('id', '!=', $id)->get();
+		$firstTanam = $dataRealisasi->min('mulai_tanam');
+		$firstProduksi = $dataRealisasi->min('mulai_panen');
+		$sumLuas = $dataRealisasi->sum('luas_lahan');
+		$sumVolume = $dataRealisasi->sum('volume');
+		$updateAnggota->tgl_tanam = $firstTanam;
+		$updateAnggota->tgl_panen = $firstProduksi;
+		$updateAnggota->luas_tanam = $sumLuas;
+		$updateAnggota->volume = $sumVolume;
+		$countLokasi = $dataRealisasi->count();
+		$updateAnggota->nama_lokasi = $countLokasi;
+		$updateAnggota->save();
+		$lokasi->delete();
+
+		return redirect()->route('admin.task.pks.anggota.listLokasi', [$updateAnggota->id, $anggotaId])->with('message', "Data berhasil dihapus.");
 	}
 
 	public function saprodi($id)

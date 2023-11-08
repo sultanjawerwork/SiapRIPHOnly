@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('styles')
-{{-- <link rel="stylesheet" media="screen, print" href="{{ asset('css/miscellaneous/lightgallery/lightgallery.bundle.css') }}"> --}}
+<link rel="stylesheet" media="screen, print" href="{{ asset('css/miscellaneous/lightgallery/lightgallery.bundle.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {{-- <script src="{{ asset('js/gmap/js.js') }}"></script> --}}
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1ea90fk4RXPswzkOJzd17W3EZx_KNB1M&libraries=drawing,geometry"></script>
@@ -22,48 +22,178 @@
 		</div>
 	</div>
 
+	<div class="row d-flex align-items-top">
+		<div class="col-md-6 collapse" id="panelData1">
+			<div class="card text-left">
+				<div class="card-body">
+					<ul class="list-group">
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Nomor RIPH</span>
+							<span class="fw-500" id="no_ijin"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Periode RIPH</span>
+							<span class="fw-500" id="perioderiph"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Nomor Perjanjian</span>
+							<span class="fw-500" id="pks"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Kelompoktani</span>
+							<span class="fw-500" id="kelompok"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Petani</span>
+							<span class="fw-500" id="petani"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Mulai Tanam</span>
+							<span class="fw-500" id="mulaitanam"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Akhir Tanam</span>
+							<span class="fw-500" id="akhirtanam"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Luas Tanam (ha)</span>
+							<span class="fw-500" id="luas_tanam"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Nama Lokasi</span>
+							<span class="fw-500" id="lokasi"></span>
+						</li>
+						<li class="list-group-item">
+							<a class="text-muted">Lokasi Tanam: </a><br>
+							<span class="fw-500" id="alamat"></span><br>
+							<span class="help-block">Alamat menurut data Peta Goggle berdasarkan titik kordinat yang diberikan.</span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Varietas ditanam</span>
+							<span class="fw-500" id="varietas"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Mulai Panen</span>
+							<span class="fw-500" id="mulaipanen"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Akhir Panen</span>
+							<span class="fw-500" id="akhirpanen"></span>
+						</li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							<span class="text-muted">Volume (ton)</span>
+							<span class="fw-500" id="volume"></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 collapse" id="panelData2">
+			<div class="card text-left">
+				<div class="card-body">
+					<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoTanam">
+					</div>
+					<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoProduksi">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	{{-- modal show data --}}
 	<!-- Modal -->
 	<!-- Modal -->
 <!-- Modal -->
 	<div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="markerModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-left modal-transparent" role="document">
+		<div class="modal-dialog modal-dialog-left" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title fw-700 text-white" id="nama_lokasi"></h5>
+					<h5 class="modal-title fw-700" id="nama_lokasi"></h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="d-flex justify-content-end align-items-center js-gallery mb-1" id="js-gallery">
-						<a data-sub-html="Foto Panen" title="Foto Panen" target="_blank">
-							<img class="img-fluid img-thumbnail" id="panenPict">
-						</a>
-						<a data-sub-html="Foto Tanam" title="Foto Panen" target="_blank">
-							<img class="img-fluid img-thumbnail" id="tanamPict" >
-						</a>
-					</div>
 					<div class="card no-shadow" id="card-1">
 						<div class="card-body">
 							<ul class="list-group mt-0">
 								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a>Nama Lokasi</a>
+									<a class="text-muted">Nama Lokasi</a>
 									<span class="fw-500" id="nama_lokasi"></span>
 								</li>
+								<li class="list-group-item p-2">
+									<a class="text-muted">Lokasi Tanam: </a><br>
+									<span class="fw-500" id="alamat"></span><br>
+									<span class="help-block">Alamat menurut data Peta Goggle berdasarkan titik kordinat yang diberikan.</span>
+								</li>
 								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a>RIPH</a>
+									<a class="text-muted">Perusahaan</a>
+									<span class="fw-500" id="company"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">RIPH</a>
 									<span class="fw-500" id="no_ijin"></span>
 								</li>
 								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a>PKS</a>
+									<a class="text-muted">Periode RIPH</a>
+									<span class="fw-500" id="perioderiph"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">PKS</a>
 									<span class="fw-500" id="no_perjanjian"></span>
 								</li>
 								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
-									<a>Perusahaan</a>
-									<span class="fw-500" id="company"></span>
+									<a class="text-muted">Kelompoktani</a>
+									<span class="fw-500" id="nama_kelompok"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Petani</a>
+									<span class="fw-500" id="nama_petani"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Varietas ditanam</a>
+									<span class="fw-500" id="varietas"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Tanggal Tanam</a>
+									<span>
+										<span class="fw-500 mr-1" id="mulaitanam"></span>s.d
+										<span class="fw-500 ml-1" id="akhirtanam"></span>
+									</span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Luas Tanam</a>
+									<span>
+										<span class="fw-500 mr-1" id="luas_tanam"></span>ha
+									</span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Tanggal Panen</a>
+									<span>
+										<span class="fw-500 mr-1" id="mulaipanen"></span>s.d
+										<span class="fw-500 ml-1" id="akhirpanen"></span>
+									</span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center p-2">
+									<a class="text-muted">Volume Produksi</a>
+									<span>
+										<span class="fw-500 mr-1" id="volume"></span>ton
+									</span>
 								</li>
 							</ul>
+						</div>
+					</div>
+					<div class="panel" id="panel-1">
+						<div class="panel-hdr">
+							<h2>Foto-foto</h2>
+						</div>
+						<div class="panel-container">
+							<div class="panel-content">
+								<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoTanam">
+								</div>
+								<div class="row row-cols-1 row-cols-md-2 js-lightgallery" id="galleryFotoProduksi">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -77,7 +207,7 @@
 
 <!-- start script for this page -->
 @section('scripts')
-{{-- <script src="{{ asset('js/miscellaneous/lightgallery/lightgallery.bundle.js') }}"></script> --}}
+<script src="{{ asset('js/miscellaneous/lightgallery/lightgallery.bundle.js') }}"></script>
 @parent
 @if (Auth::user()->roles[0]->title == 'User')
 	<script src="{{ asset('js/gmap/userDashboardMaps.js?v=1.0.1') }}"></script>
@@ -96,37 +226,36 @@
         // });
 		// Add an event listener to the periodetahun select element
 			//
-    });
-</script>
 
-<!-- gallery -->
-{{-- <script>
-	$(document).ready(function() {
-		var $initScope = $('#js-gallery');
-		if ($initScope.length) {
-			$initScope.justifiedGallery({
+		var $initScope = $('#js-lightgallery');
+		if ($initScope.length)
+		{
+			$initScope.justifiedGallery(
+			{
 				border: -1,
-				rowHeight: 75,
+				rowHeight: 150,
 				margins: 8,
 				waitThumbnailsLoad: true,
 				randomize: false,
-			}).on('jg.complete', function() {
-				$initScope.lightGallery({
+			}).on('jg.complete', function()
+			{
+				$initScope.lightGallery(
+				{
 					thumbnail: true,
 					animateThumb: true,
 					showThumbByDefault: true,
 				});
 			});
 		};
-		$initScope.on('onAfterOpen.lg', function(event) {
+		$initScope.on('onAfterOpen.lg', function(event)
+		{
 			$('body').addClass("overflow-hidden");
 		});
-		$initScope.on('onCloseAfter.lg', function(event) {
+		$initScope.on('onCloseAfter.lg', function(event)
+		{
 			$('body').removeClass("overflow-hidden");
 		});
-	});
-</script> --}}
+    });
+</script>
 
-
-<!-- gallery -->
 @endsection

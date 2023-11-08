@@ -53,6 +53,11 @@ class Pks extends Model
 		return $this->belongsTo(PullRiph::class, 'no_ijin', 'no_ijin');
 	}
 
+	public function varietas()
+	{
+		return $this->belongsTo(Varietas::class, 'varietas_tanam');
+	}
+
 	// public function pkscheck()
 	// {
 	// 	return $this->hasMany(PksCheck::class, 'pks_id');

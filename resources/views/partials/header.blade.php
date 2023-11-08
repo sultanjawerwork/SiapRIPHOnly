@@ -19,7 +19,6 @@
 	@php($cntpengajuan = $cntAjuVerifTanam + $cntAjuVerifProduksi + (Auth::user()->roles[0]->title == 'Admin' ? $cntAjuVerifSkl : 0))
 
 
-
 	{{-- rekomendasi --}}
 	@php($cntRecomendations = \App\Models\Skl::newPengajuanCount())
 	@php($getRecomendations = \App\Models\Skl::getNewPengajuan())
@@ -275,27 +274,29 @@
 							<div class="tab-pane" id="tab-new-skl" role="tabpanel">
 								<div class="custom-scroll h-100">
 									<ul class="notification notification-1">
-										@foreach ($getNewSkl as $item)
-											<li>
-												<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
-													<span class="mr-2">
-														<i class="fal fa-award fa-4x text-success"></i>
-													</span>
-													<span class="d-flex flex-column flex-1">
-														<span class="msg-a fs-sm">
-															<span class="badge badge-success">
-																SKL Diterbitkan
-																<span class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span>
+										@if($cntNewSkl > 0)
+											@foreach ($getNewSkl as $item)
+												<li>
+													<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
+														<span class="mr-2">
+															<i class="fal fa-award fa-4x text-success"></i>
+														</span>
+														<span class="d-flex flex-column flex-1">
+															<span class="msg-a fs-sm">
+																<span class="badge badge-success">
+																	SKL Diterbitkan
+																	<span class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span>
+																</span>
 															</span>
+															<span class="name">
+																No: {{ $item->no_skl }}
+															</span>
+															<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
 														</span>
-														<span class="name">
-															No: {{ $item->no_skl }}
-														</span>
-														<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
-													</span>
-												</a>
-											</li>
-										@endforeach
+													</a>
+												</li>
+											@endforeach
+										@endif
 									</ul>
 								</div>
 							</div>

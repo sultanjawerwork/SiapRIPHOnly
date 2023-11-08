@@ -93,7 +93,7 @@ class PengajuanController extends Controller
 			'wajibProduksi' => $commitment->volume_produksi,
 			'realisasiTanam' => $lokasis->sum('luas_tanam'),
 			'realisasiProduksi' => $lokasis->sum('volume'),
-			'hasGeoloc' => $lokasis->where('polygon', '!=', null)->count(),
+			'hasGeoloc' => $lokasis->sum('nama_lokasi'),
 			'countPoktan' => $pks->count(),
 			'countPks' => $pks->where('berkas_pks', '!=', null)->count(),
 			'countAnggota' => $lokasis->count(),

@@ -186,19 +186,6 @@ class DashboardController extends Controller
 
 			return view('admin.dashboard.indexuser', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'periodeTahuns', 'volumeImport', 'wajib_tanam', 'wajib_produksi', 'jumlah_poktan', 'jumlah_anggota', 'realisasi_tanam', 'jumlah_anggota', 'realisasi_tanam', 'realisasi_produksi', 'prosentanam', 'prosenproduksi', 'currentYear', 'allPengajuan'));
 		}
-		if (($roleaccess == 3)) {
-			$module_name = 'Dashboard';
-			$page_title = 'Ringkasan Data';
-			$page_heading = 'Dashboard';
-			$page_desc = 'Pemantauan dan Analisa Kinerja Realisasi Komitmen';
-			$heading_class = 'fal fa-tachometer';
-
-
-			// $periodeTahuns = CommitmentBackdate::all()->groupBy('periodetahun');
-
-
-			return view('v2.dashboard.data', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns'));
-		}
 	}
 
 	public function map()
@@ -217,14 +204,14 @@ class DashboardController extends Controller
 			'masteranggota'
 		])->get();
 
-		$periodeTahuns = PullRiph::all()->groupBy('periodetahun');
+		$periodeTahuns = PullRiph::pluck('periodetahun')->unique();
 		$users = User::where('roleaccess', 2)
 			->has('data_user')
 			->get();
 
 		// dd($users);
 
-		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'anggotaMitras', 'page_desc', 'periodeTahuns', 'users'));
+		return view('admin.dashboard.map', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'page_desc', 'periodeTahuns', 'users'));
 	}
 
 	public function monitoring(Request $request)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataRealisasi;
 use App\Models\Lokasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,50 +18,84 @@ class AnggotaMitraController extends Controller
 
 	public function index()
 	{
-		$anggotaMitras = Lokasi::with([
-			'pks' => function ($query) {
-				$query->with('commitment');
-			},
-			'pks',
-			'masteranggota'
-		])
-			->whereNotNull('latitude')
-			->get();
-
+		$dataRealisasis = DataRealisasi::with(['fototanam', 'fotoproduksi'])->get();
 		$result = [];
-
-		foreach ($anggotaMitras as $anggotaMitra) {
-			$luasTanam = $anggotaMitra->luas_tanam ? $anggotaMitra->luas_tanam : 'belum tanam';
-			$volume = $anggotaMitra->volume ? $anggotaMitra->volume : 'belum panen';
-
+		foreach ($dataRealisasis as $dataRealisasi) {
 			$result[] = [
-				'id' => $anggotaMitra->id,
-				'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
-				'latitude' => $anggotaMitra->latitude,
-				'longitude' => $anggotaMitra->longitude,
-				'polygon' => $anggotaMitra->polygon,
+				'id' => $dataRealisasi->id,
+				'npwp' => str_replace(['.', '-'], '', $dataRealisasi->npwp_company),
+				'company' => $dataRealisasi->commitment->datauser->company_name,
+				'noIjin' => str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
+				'no_ijin' => $dataRealisasi->no_ijin,
+				'perioderiph' => $dataRealisasi->commitment->periodetahun,
+				'pks_mitra_id' => $dataRealisasi->poktan_id,
+				'no_perjanjian' => $dataRealisasi->pks->no_perjanjian,
+				'nama_kelompok' => $dataRealisasi->masterkelompok->nama_kelompok,
+				'nama_petani' => $dataRealisasi->masteranggota->nama_petani,
 
-				'pks_mitra_id' => $anggotaMitra->poktan_id,
-				'no_ijin' => $anggotaMitra->pullriph->no_ijin,
-				'periodetahun' => $anggotaMitra->pullriph->periodetahun,
-				'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
-				'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
-				'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
-				'nama_lokasi' => $anggotaMitra->nama_lokasi,
+				'nama_lokasi' => $dataRealisasi->nama_lokasi,
+				'varietas' => $dataRealisasi->pks->varietas->nama_varietas,
+				'latitude' => $dataRealisasi->latitude,
+				'longitude' => $dataRealisasi->longitude,
+				'polygon'	=> $dataRealisasi->polygon,
+				'altitude' => $dataRealisasi->altitude,
 
-				'altitude' => $anggotaMitra->altitude,
-				'luas_kira' => $anggotaMitra->luas_kira,
-				'tgl_tanam' => $anggotaMitra->tgl_tanam,
-				'luas_tanam' => $luasTanam,
-				'varietas' => $anggotaMitra->varietas,
-				'tgl_panen' => $anggotaMitra->tgl_panen,
-				'volume' => $volume,
-				'tanam_pict' => $anggotaMitra->tanam_pict,
-				'panen_pict' => $anggotaMitra->panen_pict,
+				'tgl_tanam' => $dataRealisasi->mulai_tanam,
+				'tgl_akhir_tanam' => $dataRealisasi->akhir_tanam,
+				'luas_tanam' => $dataRealisasi->luas_lahan,
+				'fotoTanam' => $dataRealisasi->fototanam,
 
-				'company' => $anggotaMitra->pullriph->datauser->company_name,
+				'tgl_panen' => $dataRealisasi->mulai_panen,
+				'tgl_akhir_panen' => $dataRealisasi->akhir_panen,
+				'volume' => $dataRealisasi->volume,
+				'fotoProduksi' => $dataRealisasi->fotoproduksi,
+
 			];
 		}
+		// $anggotaMitras = Lokasi::with([
+		// 	'pks' => function ($query) {
+		// 		$query->with('commitment');
+		// 	},
+		// 	'pks',
+		// 	'masteranggota'
+		// ])
+		// 	->whereNotNull('latitude')
+		// 	->get();
+
+		// $result = [];
+
+		// foreach ($anggotaMitras as $anggotaMitra) {
+		// 	$luasTanam = $anggotaMitra->luas_tanam ? $anggotaMitra->luas_tanam : 'belum tanam';
+		// 	$volume = $anggotaMitra->volume ? $anggotaMitra->volume : 'belum panen';
+
+		// 	$result[] = [
+		// 		'id' => $anggotaMitra->id,
+		// 		'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
+		// 		'latitude' => $anggotaMitra->latitude,
+		// 		'longitude' => $anggotaMitra->longitude,
+		// 		'polygon' => $anggotaMitra->polygon,
+
+		// 		'pks_mitra_id' => $anggotaMitra->poktan_id,
+		// 		'no_ijin' => $anggotaMitra->pullriph->no_ijin,
+		// 		'periodetahun' => $anggotaMitra->pullriph->periodetahun,
+		// 		'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
+		// 		'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
+		// 		'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
+		// 		'nama_lokasi' => $anggotaMitra->nama_lokasi,
+
+		// 		'altitude' => $anggotaMitra->altitude,
+		// 		'luas_kira' => $anggotaMitra->luas_kira,
+		// 		'tgl_tanam' => $anggotaMitra->tgl_tanam,
+		// 		'luas_tanam' => $luasTanam,
+		// 		'varietas' => $anggotaMitra->varietas,
+		// 		'tgl_panen' => $anggotaMitra->tgl_panen,
+		// 		'volume' => $volume,
+		// 		'tanam_pict' => $anggotaMitra->tanam_pict,
+		// 		'panen_pict' => $anggotaMitra->panen_pict,
+
+		// 		'company' => $anggotaMitra->pullriph->datauser->company_name,
+		// 	];
+		// }
 
 		return response()->json($result);
 	}
@@ -182,41 +217,36 @@ class AnggotaMitraController extends Controller
 	 */
 	public function show($id)
 	{
-		// the url for the REST Api of anggotaMitra : http://127.0.0.1:8000/api/getAPIAnggotaMitra/{id}
-		$anggotaMitra = Lokasi::with([
-			'pks' => function ($query) {
-				$query->with('commitment');
-			},
-			'pks',
-			'masteranggota'
-		])->find($id);
+		$dataRealisasi = DataRealisasi::find($id);
 
 		$result[] = [
-			'id' => $anggotaMitra->id,
-			// 'latitude' => $anggotaMitra->latitude,
-			// 'longitude' => $anggotaMitra->longitude,
-			// 'polygon' => $anggotaMitra->polygon,
+			'id' => $id,
+			'npwp' => str_replace(['.', '-'], '', $dataRealisasi->npwp_company),
+			'company' => $dataRealisasi->commitment->datauser->company_name,
+			'noIjin' => str_replace(['.', '/'], '', $dataRealisasi->no_ijin),
+			'no_ijin' => $dataRealisasi->no_ijin,
+			'perioderiph' => $dataRealisasi->commitment->periodetahun,
+			'pks_mitra_id' => $dataRealisasi->poktan_id,
+			'no_perjanjian' => $dataRealisasi->pks->no_perjanjian,
+			'nama_kelompok' => $dataRealisasi->masterkelompok->nama_kelompok,
+			'nama_petani' => $dataRealisasi->masteranggota->nama_petani,
 
-			'pks_mitra_id' => $anggotaMitra->poktan_id,
-			'npwp' => str_replace(['.', '-'], '', $anggotaMitra->npwp),
-			'no_ijin' => $anggotaMitra->pullriph->no_ijin,
-			'periodetahun' => $anggotaMitra->pullriph->periodetahun,
-			'no_perjanjian' => $anggotaMitra->pks->no_perjanjian,
-			'nama_petani' => $anggotaMitra->masteranggota->nama_petani,
-			'nama_kelompok' => $anggotaMitra->pks->masterpoktan->nama_kelompok,
-			'nama_lokasi' => $anggotaMitra->nama_lokasi,
+			'nama_lokasi' => $dataRealisasi->nama_lokasi,
+			'varietas' => $dataRealisasi->pks->varietas->nama_varietas,
+			'latitude' => $dataRealisasi->latitude,
+			'longitude' => $dataRealisasi->longitude,
+			'polygon'	=> $dataRealisasi->polygon,
+			'altitude' => $dataRealisasi->altitude,
 
-			'altitude' => $anggotaMitra->altitude,
-			'luas_kira' => $anggotaMitra->luas_kira,
-			'tgl_tanam' => $anggotaMitra->tgl_tanam,
-			'luas_tanam' => $anggotaMitra->luas_tanam,
-			'varietas' => $anggotaMitra->varietas,
-			'tgl_panen' => $anggotaMitra->tgl_panen,
-			'volume' => $anggotaMitra->volume,
-			'tanam_pict' => $anggotaMitra->tanam_pict,
-			'panen_pict' => $anggotaMitra->panen_pict,
+			'tgl_tanam' => $dataRealisasi->mulai_tanam,
+			'tgl_akhir_tanam' => $dataRealisasi->akhir_tanam,
+			'luas_tanam' => $dataRealisasi->luas_lahan,
+			'fotoTanam' => $dataRealisasi->fototanam,
 
-			'company' => $anggotaMitra->pullriph->datauser->company_name,
+			'tgl_panen' => $dataRealisasi->mulai_panen,
+			'tgl_akhir_panen' => $dataRealisasi->akhir_panen,
+			'volume' => $dataRealisasi->volume,
+			'fotoProduksi' => $dataRealisasi->fotoproduksi,
 		];
 		return response()->json($result);
 	}

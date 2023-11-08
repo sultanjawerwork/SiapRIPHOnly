@@ -7,50 +7,59 @@ function initMap() {
 
 	// Make an Ajax request to retrieve the marker data and polygons
 	$("#periodetahun").on("change", function () {
-		initMap();
+		$("#panelData1").addClass("collapse");
+		$("#panelData2").addClass("collapse");
 
 		var periodetahun = $(this).val();
 		var url =
 			periodetahun == "all"
 				? "/admin/mapDataAll/"
 				: "/admin/mapDataByYear/" + periodetahun;
+		if (map) {
+			map = null;
+		}
+
+		// Call initMap again to reinitialize the map
+		initMap();
 		$.ajax({
 			url: url,
 			type: "GET",
 			dataType: "json",
 			success: function (data) {
-				$.each(data, function (index, anggotaMitra) {
-					if (anggotaMitra.latitude && anggotaMitra.longitude) {
+				$.each(data, function (index, dataRealisasi) {
+					if (dataRealisasi.latitude && dataRealisasi.longitude) {
 						var marker = new google.maps.Marker({
 							position: {
-								lat: parseFloat(anggotaMitra.latitude),
-								lng: parseFloat(anggotaMitra.longitude),
+								lat: parseFloat(dataRealisasi.latitude),
+								lng: parseFloat(dataRealisasi.longitude),
 							},
 							map: map,
-							id: anggotaMitra.id,
-							npwp: anggotaMitra.npwp,
-							periodetahun: anggotaMitra.periodetahun,
-							latitude: anggotaMitra.latitude,
-							longitude: anggotaMitra.longitude,
-							no_ijin: anggotaMitra.no_ijin,
-							no_perjanjian: anggotaMitra.no_perjanjian,
-							nama_lokasi: anggotaMitra.nama_lokasi,
-							panen_pict: anggotaMitra.panen_pict,
-							tanam_pict: anggotaMitra.tanam_pict,
+							id: dataRealisasi.id,
+							npwp: dataRealisasi.npwp,
+							perioderiph: dataRealisasi.perioderiph,
+							latitude: dataRealisasi.latitude,
+							longitude: dataRealisasi.longitude,
+							no_ijin: dataRealisasi.no_ijin,
+							no_perjanjian: dataRealisasi.no_perjanjian,
+							nama_lokasi: dataRealisasi.nama_lokasi,
+							dataFotoTanam: dataRealisasi.fotoTanam,
+							dataFotoProduksi: dataRealisasi.fotoProduksi,
 
-							nama_petani: anggotaMitra.nama_petani,
-							nama_kelompok: anggotaMitra.nama_kelompok,
-							nama_lokasi: anggotaMitra.nama_lokasi,
+							nama_petani: dataRealisasi.nama_petani,
+							nama_kelompok: dataRealisasi.nama_kelompok,
+							nama_lokasi: dataRealisasi.nama_lokasi,
 
-							altitude: anggotaMitra.altitude,
-							luas_kira: anggotaMitra.luas_kira,
-							tgl_tanam: anggotaMitra.tgl_tanam,
-							luas_tanam: anggotaMitra.luas_tanam,
-							varietas: anggotaMitra.varietas,
-							tgl_panen: anggotaMitra.tgl_panen,
-							volume: anggotaMitra.volume,
+							altitude: dataRealisasi.altitude,
+							luas_kira: dataRealisasi.luas_kira,
+							mulaitanam: dataRealisasi.tgl_tanam,
+							akhirtanam: dataRealisasi.tgl_akhir_tanam,
+							luas_tanam: dataRealisasi.luas_tanam,
+							varietas: dataRealisasi.varietas,
+							mulaipanen: dataRealisasi.tgl_panen,
+							akhirpanen: dataRealisasi.tgl_akhir_panen,
+							volume: dataRealisasi.volume,
 
-							company: anggotaMitra.company,
+							company: dataRealisasi.company,
 						});
 
 						marker.addListener("click", function () {
@@ -60,7 +69,7 @@ function initMap() {
 							// Send an AJAX request to get the marker data
 
 							$.ajax({
-								url: "/admin/mapDataById/" + anggotaMitra.id,
+								url: "/admin/mapDataById/" + dataRealisasi.id,
 								type: "GET",
 								dataType: "json",
 								success: function (data) {
@@ -68,114 +77,84 @@ function initMap() {
 									var markerId = marker.id;
 									var npwp = marker.npwp;
 									var no_ijin = marker.no_ijin;
-									var periodetahun = marker.periodetahun;
+									var perioderiph = marker.perioderiph;
 									var no_perjanjian = marker.no_perjanjian;
 									var nama_lokasi = marker.nama_lokasi;
-									var panenPictName = marker.panen_pict;
-									var panenPict = marker.panen_pict;
-									var tanamPictName = marker.tanam_pict;
-									var tanamPict = marker.tanam_pict;
+									var fotoTanam = marker.dataFotoTanam;
+									var fotoTanamHtml = "";
+									var fotoProduksi = marker.dataFotoProduksi;
+									var fotoProduksiHtml = "";
 
 									var nama_petani = marker.nama_petani;
 									var nama_kelompok = marker.nama_kelompok;
 									var nama_lokasi = marker.nama_lokasi;
-									var altitude = marker.altitude;
-									var luas_kira = marker.luas_kira;
-									var tgl_tanam = marker.tgl_tanam;
+									var mulaitanam = marker.mulaitanam;
+									var akhirtanam = marker.akhirtanam;
 									var luas_tanam = marker.luas_tanam;
 									var varietas = marker.varietas;
-									var tgl_panen = marker.tgl_panen;
+									var mulaipanen = marker.mulaipanen;
+									var akhirpanen = marker.akhirpanen;
 									var volume = marker.volume;
 
 									var company = marker.company;
 
 									// Set the modal content to the marker details
-									$("#markerModal #markerId").text(markerId);
-									$("#markerModal #no_ijin").text(no_ijin);
-									$("#markerModal #no_perjanjian").text(no_perjanjian);
-									$("#markerModal #nama_lokasi").text(nama_lokasi);
-									$("#markerModal #npwp").text(npwp);
-									$("#markerModal #company").text(company);
+									// $("#markerModal #markerId").text(markerId); sample jika mengguakan modal
+									$("#company").text(company);
+									$("#no_ijin").text(no_ijin);
+									$("#perioderiph").text(perioderiph);
+									$("#pks").text(no_perjanjian);
+									$("#kelompok").text(nama_kelompok);
+									$("#petani").text(nama_petani);
+									$("#lokasi").text(nama_lokasi);
+									$("#varietas").text(varietas);
+									$("#mulaitanam").text(mulaitanam);
+									$("#akhirtanam").text(akhirtanam);
+									$("#luas_tanam").text(luas_tanam);
+									$("#mulaipanen").text(mulaipanen);
+									$("#akhirpanen").text(akhirpanen);
+									$("#volume").text(volume);
+									fotoTanam.forEach(function (foto) {
+										fotoTanamHtml += `
+										<div class="col mb-4">
+											<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
+												<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+												<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
+													<i class="fal fa-expand"></i>
+												</a>
+											</div>
+										</div>`;
+									});
 
-									//set the <a> element for panen
+									fotoProduksi.forEach(function (foto) {
+										fotoProduksiHtml += `
+										<div class="col mb-4">
+											<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
+												<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+												<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
+													<i class="fal fa-expand"></i>
+												</a>
+											</div>
+										</div>`;
+									});
 
-									$("#markerModal #panenPictName").html(
-										`<a href="/storage/uploads/${npwp}/${periodetahun}/${panenPict}" target="_blank">${panenPictName}</a>`
-									);
-									$("#markerModal #panenPict").attr(
-										"src",
-										"/storage/uploads/" +
-											npwp +
-											"/" +
-											periodetahun +
-											"/" +
-											panenPict
-									);
-									$("#markerModal #panenPict")
-										.parent("a")
-										.attr(
-											"href",
-											"/storage/uploads/" +
-												npwp +
-												"/" +
-												periodetahun +
-												"/" +
-												panenPict
-										);
-
-									//set the <a> element for tanam
-									$("markerModal #tanamPictName").html(
-										`<a href="/storage/uploads/${npwp}/${periodetahun}/${tanamPict}" target="_blank">${tanamPictName}</a>`
-									);
-									$("#markerModal #tanamPict").attr(
-										"src",
-										"/storage/uploads/" +
-											npwp +
-											"/" +
-											periodetahun +
-											"/" +
-											tanamPict
+									$("#galleryFotoTanam").html(
+										fotoTanamHtml + fotoProduksiHtml
 									);
 
-									$("#markerModal #tanamPict")
-										.parent("a")
-										.attr(
-											"href",
-											"/storage/uploads/" +
-												npwp +
-												"/" +
-												periodetahun +
-												"/" +
-												tanamPict
-										);
-									// $("#markerModal #tanamPictName").text(tanamPictName);
-									// $("#markerModal #tanamPict").attr(
-									// 	"src",
-									// 	"/storage/docs/pks/anggota/tanam/img/" + tanamPict
-									// );
-
-									$("#markerModal #nama_petani").text(nama_petani);
-									$("#markerModal #nama_kelompok").text(nama_kelompok);
-									$("#markerModal #nama_lokasi").text(nama_lokasi);
-
-									$("#markerModal #altitude").text(altitude);
-									$("#markerModal #luas_kira").text(luas_kira);
-									$("#markerModal #tgl_tanam").text(tgl_tanam);
-									$("#markerModal #luas_tanam").text(luas_tanam);
-									$("#markerModal #varietas").text(varietas);
-									$("#markerModal #tgl_panen").text(tgl_panen);
-									$("#markerModal #volume").text(volume);
 									console.log(npwp);
 									// Show the modal
-									$("#markerModal").modal("show");
+									// $("#markerModal").modal("show");
+									$("#panelData1").removeClass("collapse");
+									$("#panelData2").removeClass("collapse");
 								},
 							});
 						});
 					}
 
-					if (anggotaMitra.polygon) {
+					if (dataRealisasi.polygon) {
 						var polygon = new google.maps.Polygon({
-							paths: JSON.parse(anggotaMitra.polygon),
+							paths: JSON.parse(dataRealisasi.polygon),
 							strokeColor: "#FF0000",
 							strokeOpacity: 0.8,
 							strokeWeight: 2,

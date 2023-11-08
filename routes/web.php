@@ -38,6 +38,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
 	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
 
+	//data pemetaan
+	Route::group(['prefix' => 'map', 'as' => 'map.'], function () {
+		Route::get('getAllMap', 'AdminMapController@index')->name('getAllMap');
+		Route::get('getAllMapByYears/{periodeTahun}', 'AdminMapController@ByYears')->name('getAllMapByYears');
+		Route::get('getLocationData/{id}', 'AdminMapController@index')->name('getLocationData');
+	});
+
 	//dashboard data for admin
 	Route::get('monitoringDataByYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
 
@@ -165,8 +172,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('pks/{id}/edit', 'PksController@edit')->name('pks.edit');
 		Route::put('pks/{id}/update', 'PksController@update')->name('pks.update');
 
-		//daftar lokasi tanam
-		Route::get('pks/{id}/lokasitanam', 'PksController@anggotas')->name('pks.anggotas');
+		//daftar anggota
+		Route::get('pks/{id}/daftaranggota', 'PksController@anggotas')->name('pks.anggotas');
+		// daftar lokasi tanam per anggota
+		Route::get('pks/{pksId}/anggota/{anggotaId}/list_lokasi', 'PksController@listLokasi')->name('pks.anggota.listLokasi');
+		//page tambah lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/add_lokasi', 'PksController@addLokasiTanam')->name('pks.anggota.addLokasiTanam');
+		//edit lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/edit', 'PksController@editLokasiTanam')->name('pks.anggota.editLokasiTanam');
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/foto', 'PksController@fotoLokasi')->name('pks.anggota.fotoLokasi');
+		Route::delete('deleteFotoTanam/{id}', 'PksController@deleteFotoTanam')->name('deleteFotoTanam');
+		Route::delete('deleteFotoProduksi/{id}', 'PksController@deleteFotoProduksi')->name('deleteFotoProduksi');
+		Route::delete('deleteLokasiTanam/{id}', 'PksController@deleteLokasiTanam')->name('deleteLokasiTanam');
+
+		Route::post('storeLokasiTanam', 'PksController@storeLokasiTanam')->name('storeLokasiTanam');
+		Route::put('updateLokasiTanam/{id}/update', 'PksController@updateLokasiTanam')->name('updateLokasiTanam');
+		Route::put('storeRealisasiProduksi/{id}', 'PksController@storeRealisasiProduksi')->name('storeRealisasiProduksi');
+
+		Route::post('upload/dropZoneTanam', 'PksController@dropZoneTanam')->name('dropZoneTanam');
+		Route::post('upload/dropZoneProduksi', 'PksController@dropZoneProduksi')->name('dropZoneProduksi');
 
 		//saprodi
 		Route::get('pks/{id}/saprodi', 'PksController@saprodi')->name('pks.saprodi');
@@ -257,7 +281,8 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 
 	//verifikasi data lokasi tanam
 	Route::get('{noIjin}/lokasitanam', 'LokasiTanamController@index')->name('lokasitanam');
-	Route::get('{noIjin}/lokasitanam/{anggota_id}', 'LokasiTanamController@show')->name('lokasitanam.show');
+
+	Route::get('{noIjin}/lokasitanam/{lokasiId}', 'LokasiTanamController@listLokasibyPetani')->name('listLokasibyPetani');
 	Route::get('{id}/summary', 'VerifSklController@dataCheck')->name('data.summary');
 
 	//new verifikasi tanam
@@ -266,6 +291,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 		Route::get('{id}/check', 'VerifTanamController@check')->name('check');
 		Route::put('{id}/storeCheck', 'VerifTanamController@storeCheck')->name('storeCheck');
 		Route::get('{id}/show', 'VerifTanamController@show')->name('show');
+		Route::get('{id}/showlocation', 'LokasiTanamController@showLocation')->name('showLocation');
 		Route::post('{id}/checkBerkas', 'VerifTanamController@checkBerkas')->name('checkBerkas');
 		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifTanamController@verifPks')->name('check.pks');
 		Route::put('pks/{id}/store', 'VerifTanamController@verifPksStore')->name('check.pks.store');
@@ -356,4 +382,8 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
 	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
+});
+
+Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+	Route::get('sample/{id}', 'TestController@index')->name('sample');
 });

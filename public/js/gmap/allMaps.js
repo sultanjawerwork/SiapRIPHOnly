@@ -1,6 +1,7 @@
 // Declare global variables
 var map;
 var markers = [];
+var polygons = [];
 
 // Initialize the map
 function initMap() {
@@ -12,11 +13,20 @@ function initMap() {
 
 	// Handle the change event of #periodetahun element
 	$("#periodetahun").on("change", function () {
+		$("#panelData1").addClass("collapse");
+		$("#panelData2").addClass("collapse");
+		// initMap();
 		var periodetahun = $(this).val();
 		var url =
 			periodetahun === "all"
-				? "/api/getAPIAnggotaMitraAll/"
-				: "/api/getAPIAnggotaMitraByYear/" + periodetahun;
+				? "/admin/map/getAllMap/"
+				: "/admin/map/getAllMapByYears/" + periodetahun;
+		if (map) {
+			map = null;
+		}
+
+		// Call initMap again to reinitialize the map
+		initMap();
 
 		// Make an AJAX request to retrieve marker data and polygons
 		$.ajax({
@@ -37,60 +47,63 @@ function handleMarkerData(data) {
 	removePolygons();
 
 	// Iterate over the data to create markers and polygons
-	$.each(data, function (index, anggotaMitra) {
-		if (anggotaMitra.latitude && anggotaMitra.longitude) {
-			createMarker(anggotaMitra);
+	$.each(data, function (index, dataRealisasi) {
+		if (dataRealisasi.latitude && dataRealisasi.longitude) {
+			createMarker(dataRealisasi);
 		}
 
-		if (anggotaMitra.polygon) {
-			createPolygon(anggotaMitra);
+		if (dataRealisasi.polygon) {
+			createPolygon(dataRealisasi);
 		}
 	});
 
 	// Check for polygon intersections
-	var intersections = map.findPolygonIntersections();
-	if (intersections.length > 0) {
-		console.log("There are intersections between polygons!");
-		// Perform additional actions for intersecting polygons
-		// You can access the intersecting polygons using intersections array
-	}
+	// var intersections = map.findPolygonIntersections();
+	// if (intersections.length > 0) {
+	// 	console.log("There are intersections between polygons!");
+	// 	// Perform additional actions for intersecting polygons
+	// 	// You can access the intersecting polygons using intersections array
+	// }
 }
 
 // Create a marker on the map
-function createMarker(anggotaMitra) {
+function createMarker(dataRealisasi) {
 	var marker = new google.maps.Marker({
 		position: {
-			lat: parseFloat(anggotaMitra.latitude),
-			lng: parseFloat(anggotaMitra.longitude),
+			lat: parseFloat(dataRealisasi.latitude),
+			lng: parseFloat(dataRealisasi.longitude),
 		},
 		map: map,
 		// Set other properties of the marker here
 	});
-	// Assign the id property from anggotaMitra to the marker object
-	marker.id = anggotaMitra.id;
-	marker.npwp = anggotaMitra.npwp;
-	marker.periodetahun = anggotaMitra.periodetahun;
-	marker.latitude = anggotaMitra.latitude;
-	marker.longitude = anggotaMitra.longitude;
-	marker.no_ijin = anggotaMitra.no_ijin;
-	marker.no_perjanjian = anggotaMitra.no_perjanjian;
-	marker.nama_lokasi = anggotaMitra.nama_lokasi;
-	marker.panen_pict = anggotaMitra.panen_pict;
-	marker.tanam_pict = anggotaMitra.tanam_pict;
+	// Assign the id property from dataRealisasi to the marker object
+	marker.id = dataRealisasi.id;
+	marker.npwp = dataRealisasi.npwp;
+	marker.perioderiph = dataRealisasi.perioderiph;
+	marker.latitude = dataRealisasi.latitude;
+	marker.longitude = dataRealisasi.longitude;
+	marker.no_ijin = dataRealisasi.no_ijin;
+	marker.no_perjanjian = dataRealisasi.no_perjanjian;
+	marker.nama_lokasi = dataRealisasi.nama_lokasi;
 
-	marker.nama_petani = anggotaMitra.nama_petani;
-	marker.nama_kelompok = anggotaMitra.nama_kelompok;
-	marker.nama_lokasi = anggotaMitra.nama_lokasi;
+	marker.nama_petani = dataRealisasi.nama_petani;
+	marker.nama_kelompok = dataRealisasi.nama_kelompok;
+	marker.nama_lokasi = dataRealisasi.nama_lokasi;
 
-	marker.altitude = anggotaMitra.altitude;
-	marker.luas_kira = anggotaMitra.luas_kira;
-	marker.tgl_tanam = anggotaMitra.tgl_tanam;
-	marker.luas_tanam = anggotaMitra.luas_tanam;
-	marker.varietas = anggotaMitra.varietas;
-	marker.tgl_panen = anggotaMitra.tgl_panen;
-	marker.volume = anggotaMitra.volume;
+	marker.altitude = dataRealisasi.altitude;
+	marker.luas_kira = dataRealisasi.luas_kira;
+	marker.mulaitanam = dataRealisasi.mulaitanam;
+	marker.akhirtanam = dataRealisasi.akhirtanam;
+	marker.luas_tanam = dataRealisasi.luas_tanam;
+	marker.varietas = dataRealisasi.varietas;
+	marker.mulaipanen = dataRealisasi.mulaipanen;
+	marker.akhirpanen = dataRealisasi.akhirpanen;
+	marker.volume = dataRealisasi.volume;
 
-	marker.company = anggotaMitra.company;
+	marker.dataFotoTanam = dataRealisasi.fotoTanam;
+	marker.dataFotoProduksi = dataRealisasi.fotoProduksi;
+
+	marker.company = dataRealisasi.company;
 
 	// Add a click event listener to the marker
 	marker.addListener("click", function () {
@@ -99,9 +112,9 @@ function createMarker(anggotaMitra) {
 }
 
 // Create a polygon on the map
-function createPolygon(anggotaMitra) {
+function createPolygon(dataRealisasi) {
 	var polygon = new google.maps.Polygon({
-		paths: JSON.parse(anggotaMitra.polygon),
+		paths: JSON.parse(dataRealisasi.polygon),
 		strokeColor: "#FF0000",
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
@@ -118,131 +131,105 @@ function createPolygon(anggotaMitra) {
 
 // Show marker details in a modal
 function showMarkerDetails(marker) {
-	// Send an AJAX request to get the marker data
-	$.ajax({
-		url: "/api/getAPIAnggotaMitra/" + marker.id,
-		type: "GET",
-		dataType: "json",
-		success: function (data) {
-			// Set the modal content with the marker details
-			var markerId = marker.id;
-			var npwp = marker.npwp;
-			var no_ijin = marker.no_ijin;
-			var periodetahun = marker.periodetahun;
-			var no_perjanjian = marker.no_perjanjian;
-			var nama_lokasi = marker.nama_lokasi;
-			var panenPictName = marker.panen_pict;
-			var panenPict = marker.panen_pict;
-			var tanamPictName = marker.tanam_pict;
-			var tanamPict = marker.tanam_pict;
+	var geocoder = new google.maps.Geocoder();
+	var latlng = marker.getPosition();
+	geocoder.geocode({ location: latlng }, function (results, status) {
+		if (status === "OK") {
+			if (results[0]) {
+				var address = results[0].formatted_address;
+				marker.alamat = address;
+				console.log("Alamat: " + address);
+				// Send an AJAX request to get the marker data
+				$.ajax({
+					url: "/admin/map/getLocationData/" + marker.id,
+					type: "GET",
+					dataType: "json",
+					success: function (data) {
+						var alamat = marker.alamat;
+						// Set the modal content with the marker details
+						var markerId = marker.id;
+						var npwp = marker.npwp;
+						var no_ijin = marker.no_ijin;
+						var perioderiph = marker.perioderiph;
+						var no_perjanjian = marker.no_perjanjian;
+						var nama_lokasi = marker.nama_lokasi;
 
-			var nama_petani = marker.nama_petani;
-			var nama_kelompok = marker.nama_kelompok;
-			var altitude = marker.altitude;
-			var luas_kira = marker.luas_kira;
-			var tgl_tanam = marker.tgl_tanam;
-			var luas_tanam = marker.luas_tanam;
-			var varietas = marker.varietas;
-			var tgl_panen = marker.tgl_panen;
-			var volume = marker.volume;
+						var nama_petani = marker.nama_petani;
+						var nama_kelompok = marker.nama_kelompok;
+						var altitude = marker.altitude;
+						var luas_kira = marker.luas_kira;
+						var mulaitanam = marker.mulaitanam;
+						var akhirtanam = marker.akhirtanam;
+						var luas_tanam = marker.luas_tanam;
+						var varietas = marker.varietas;
+						var mulaipanen = marker.mulaipanen;
+						var akhirpanen = marker.akhirpanen;
+						var volume = marker.volume;
+						var fotoTanam = marker.dataFotoTanam;
+						var fotoTanamHtml = "";
+						var fotoProduksi = marker.dataFotoProduksi;
+						var fotoProduksiHtml = "";
 
-			var company = marker.company;
+						var company = marker.company;
 
-			// Update the modal elements with the marker data
-			$("#markerModal #markerId").text(markerId);
-			$("#markerModal #no_ijin").text(no_ijin);
-			$("#markerModal #no_perjanjian").text(no_perjanjian);
-			$("#markerModal #nama_lokasi").text(nama_lokasi);
-			$("#markerModal #npwp").text(npwp);
-			$("#markerModal #company").text(company);
+						// Update the modal elements with the marker data
+						$("#company").text(company);
+						$("#no_ijin").text(no_ijin);
+						$("#perioderiph").text(perioderiph);
+						$("#pks").text(no_perjanjian);
+						$("#kelompok").text(nama_kelompok);
+						$("#petani").text(nama_petani);
+						$("#lokasi").text(nama_lokasi);
+						$("#alamat").text(alamat);
+						$("#varietas").text(varietas);
+						$("#mulaitanam").text(mulaitanam);
+						$("#akhirtanam").text(akhirtanam);
+						$("#luas_tanam").text(luas_tanam);
+						$("#mulaipanen").text(mulaipanen);
+						$("#akhirpanen").text(akhirpanen);
+						$("#volume").text(volume);
+						fotoTanam.forEach(function (foto) {
+							fotoTanamHtml += `
+								<div class="col mb-4">
+									<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
+										<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+										<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
+											<i class="fal fa-expand"></i>
+										</a>
+									</div>
+								</div>`;
+						});
 
-			//set the <a> element for panen
-			if (panenPict) {
-				$("#markerModal #panenPictName").html(
-					`<a href="/storage/uploads/${npwp}/${periodetahun}/${panenPict}" target="_blank">${panenPictName}</a>`
-				);
-				$("#markerModal #panenPict").attr(
-					"src",
-					"/storage/uploads/" +
-						npwp +
-						"/" +
-						periodetahun +
-						"/" +
-						panenPict
-				);
+						fotoProduksi.forEach(function (foto) {
+							fotoProduksiHtml += `
+								<div class="col mb-4">
+									<div class="card shadow-2" style="width: 100%; padding-top: 100%; position: relative; overflow: hidden;">
+										<div class="card-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('/storage/uploads/${npwp}/${perioderiph}/${foto.filename}'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+										<a href="/storage/uploads/${npwp}/${perioderiph}/${foto.filename}" style="position: absolute; top: 10px; right: 10px; target="blank" class="mr-1 btn btn-warning btn-xs btn-icon waves-effect waves-themed" data-toggle="tooltip" data-original-title="Layar Penuh">
+											<i class="fal fa-expand"></i>
+										</a>
+									</div>
+								</div>`;
+						});
 
-				$("#markerModal #panenPict")
-					.parent("a")
-					.attr(
-						"href",
-						"/storage/uploads/" +
-							npwp +
-							"/" +
-							periodetahun +
-							"/" +
-							panenPict
-					);
+						$("#galleryFotoTanam").html(
+							fotoTanamHtml + fotoProduksiHtml
+						);
+
+						console.log(fotoTanam);
+						// Show the modal
+						// $("#markerModal").modal("show");
+						$("#panelData1").removeClass("collapse");
+						$("#panelData2").removeClass("collapse");
+						zoomToMarker(marker);
+					},
+				});
 			} else {
-				// Jika panenPict tidak ada, sembunyikan elemen gambar dan tautannya
-				$("#markerModal #panenPictName").html("");
-				$("#markerModal #panenPict").attr("src", "").hide();
-				$("#markerModal #panenPict")
-					.parent("a")
-					.attr("href", "")
-					.hide();
+				console.log("Tidak ada hasil ditemukan");
 			}
-
-			//set the <a> element for tanam
-			if (tanamPict) {
-				$("#markerModal #tanamPictName").html(
-					`<a href="/storage/uploads/${npwp}/${periodetahun}/${tanamPict}" target="_blank">${tanamPictName}</a>`
-				);
-				$("#markerModal #tanamPict").attr(
-					"src",
-					"/storage/uploads/" +
-						npwp +
-						"/" +
-						periodetahun +
-						"/" +
-						tanamPict
-				);
-
-				$("#markerModal #tanamPict")
-					.parent("a")
-					.attr(
-						"href",
-						"/storage/uploads/" +
-							npwp +
-							"/" +
-							periodetahun +
-							"/" +
-							tanamPict
-					);
-			} else {
-				// Jika tanamPict tidak ada, sembunyikan elemen gambar dan tautannya
-				$("#markerModal #tanamPictName").html("");
-				$("#markerModal #tanamPict").attr("src", "").hide();
-				$("#markerModal #tanamPict")
-					.parent("a")
-					.attr("href", "")
-					.hide();
-			}
-
-			$("#markerModal #nama_petani").text(nama_petani);
-			$("#markerModal #nama_kelompok").text(nama_kelompok);
-			$("#markerModal #nama_lokasi").text(nama_lokasi);
-			$("#markerModal #altitude").text(altitude);
-			$("#markerModal #luas_kira").text(luas_kira);
-			$("#markerModal #tgl_tanam").text(tgl_tanam);
-			$("#markerModal #luas_tanam").text(luas_tanam);
-			$("#markerModal #varietas").text(varietas);
-			$("#markerModal #tgl_panen").text(tgl_panen);
-			$("#markerModal #volume").text(volume);
-
-			// Show the modal
-			$("#markerModal").modal("show");
-			zoomToMarker(marker);
-		},
+		} else {
+			console.log("Geocoder gagal dengan status: " + status);
+		}
 	});
 }
 

@@ -13,13 +13,13 @@
 				name="periodetahun" id="periodetahun" required>
 					<option value="" hidden>--pilih tahun</option>
 					<option value="all">Semua Tahun</option>
-					@foreach($periodeTahuns as $periodetahun => $records)
+					@foreach($periodeTahuns as $periodetahun)
 						<option value="{{ $periodetahun }}">Tahun {{ $periodetahun }}</option>
 					@endforeach
 				</select>
 			</div>
 			<div class="help-block">
 			</div>
-		</div>	
+		</div>
 	</div>
 </div>

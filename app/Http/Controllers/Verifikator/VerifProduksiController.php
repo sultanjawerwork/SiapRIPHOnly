@@ -325,7 +325,7 @@ class VerifProduksiController extends Controller
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 		$countAnggota = $anggotas->count();
-		$hasGeoloc = $anggotas->count('polygon');
+		$hasGeoloc = $anggotas->sum('nama_lokasi');
 
 		return view('admin.verifikasi.produksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
 	}

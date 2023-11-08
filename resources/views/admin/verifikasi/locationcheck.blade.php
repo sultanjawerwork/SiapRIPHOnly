@@ -9,7 +9,7 @@
 	@can('online_access')
 		@include('partials.sysalert')
 		@php
-			$npwp = str_replace(['.', '-'], '', $commitment->npwp);
+			$npwp = str_replace(['.', '-'], '', $realNpwp);
 		@endphp
 		<div class="row d-flex">
 			<div class="col-12">
@@ -26,7 +26,7 @@
 											</span>
 										</div>
 										<input type="text" class="form-control form-control-sm" id="no_ijin"
-											value="{{$commitment->no_ijin}}" disabled>
+											value="{{$noIjin}}" disabled>
 									</div>
 									<span class="help-block">Nomor Ijin (RIPH).</span>
 								</div>
@@ -38,8 +38,7 @@
 												<i class="fal fa-file-invoice"></i>
 											</span>
 										</div>
-										<input type="text" class="form-control form-control-sm" id="no_perjanjian"
-											value="{{$pks->no_perjanjian}}" disabled>
+										<input type="text" class="form-control form-control-sm" id="no_perjanjian" value="{{$pks}}" disabled>
 									</div>
 									<span class="help-block">Nomor Perjanjian Kerjasama.</span>
 								</div>
@@ -58,7 +57,8 @@
 					</div>
 					<div class="panel-container show">
 						<div id="myMap" style="height: 500px; width: 100%;"></div><hr>
-						{{-- <div class="panel-content card-header">
+						{{--
+						<div class="panel-content card-header">
 							<div class="row">
 								<div class="form-group col-md-12">
 									<label class="form-label" for="gmap">
@@ -124,7 +124,8 @@
 									</div>
 								</div>
 							</div>
-						</div> --}}
+						</div>
+						--}}
 					</div>
 				</div>
 			</div>
@@ -145,78 +146,96 @@
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Nama Lokasi/Lahan</span>
 										<div class="form-group">
-											<input readonly type="text" name="nama_lokasi" id="nama_lokasi" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->nama_lokasi}}">
+											<input readonly type="text" name="nama_lokasi" id="nama_lokasi" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->nama_lokasi}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
-										<span class="text-muted">Anggota Pengelola</span>
+										<span class="text-muted">Petani</span>
 										<div class="form-group">
-											<input readonly type="text" name="nama_petani" id="nama_petani" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->masteranggota->nama_petani}}">
+											<input readonly type="text" name="nama_petani" id="nama_petani" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->masteranggota->nama_petani}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">NIK Pengelola</span>
 										<div class="form-group">
-											<input readonly type="text" name="nik_petani" id="nik_petani" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->masteranggota->ktp_petani}}">
+											<input readonly type="text" name="nik_petani" id="nik_petani" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->masteranggota->ktp_petani}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Latitude</span>
 										<div class="form-group">
-											<input readonly type="text" name="latitude" id="latitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->latitude}}">
+											<input readonly type="text" name="latitude" id="latitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->latitude}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">longitude</span>
 										<div class="form-group">
-											<input readonly type="text" name="longitude" id="longitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->longitude}}">
+											<input readonly type="text" name="longitude" id="longitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->longitude}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Polygon</span>
 										<div class="form-group">
-											<input readonly type="text" name="polygon" id="polygon" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->polygon}}">
+											<input readonly type="text" name="polygon" id="polygon" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->polygon}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Luas pada Peta</span>
 										<div class="form-group">
-											<input readonly type="text" name="luas_kira" id="luas_kira" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->luas_kira}} ha">
+											<input readonly type="text" name="luas_kira" id="luas_kira" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->luas_kira}} ha">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Altitude</span>
 										<div class="form-group">
-											<input readonly type="text" name="altitude" id="altitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->altitude}} mdpl">
+											<input readonly type="text" name="altitude" id="altitude" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->altitude}} mdpl">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Varietas ditanam</span>
 										<div class="form-group">
-											<input readonly type="text" name="varietas" id="varietas" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->varietas}}">
+											<input readonly type="text" name="varietas" id="varietas" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->pks->varietas->nama_varietas}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
-										<span class="text-muted">Tanggal Tanam</span>
+										<span class="text-muted">Mulai Tanam</span>
 										<div class="form-group">
-											<input readonly type="text" name="tgl_tanam" id="tgl_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->tgl_tanam}}">
+											<input readonly type="text" name="mulai_tanam" id="mulai_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->mulai_tanam}}">
+										</div>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										<span class="text-muted">Akhir Tanam</span>
+										<div class="form-group">
+											<input readonly type="text" name="akhir_tanam" id="akhir_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->akhir_tanam}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Luas Tanam dilaporkan</span>
 										<div class="form-group">
-											@if ($anggotamitra->luas_tanam)
-												<input readonly type="text" name="luas_tanam" id="luas_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->luas_tanam}} ha">
+											@if ($lokasi->luas_lahan)
+												<input readonly type="text" name="luas_lahan" id="luas_lahan" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->luas_lahan}} ha">
 											@else
-												<input readonly type="text" name="luas_tanam" id="luas_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data">
+												<input readonly type="text" name="luas_lahan" id="luas_lahan" class="text-right form-control form-control-sm" placeholder="tidak ada data">
 											@endif
+										</div>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										<span class="text-muted">Mulai Panen</span>
+										<div class="form-group">
+											<input readonly type="text" name="mulai_panen" id="mulai_panen" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->mulai_panen}}">
+										</div>
+									</li>
+									<li class="list-group-item d-flex justify-content-between align-items-center">
+										<span class="text-muted">Akhir Panen</span>
+										<div class="form-group">
+											<input readonly type="text" name="akhir_panen" id="akhir_panen" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->akhir_panen}}">
 										</div>
 									</li>
 									<li class="list-group-item d-flex justify-content-between align-items-center">
 										<span class="text-muted">Volume Produksi</span>
 										<div class="form-group">
-											@if ($anggotamitra->volume)
-												<input readonly type="text" name="luas_tanam" id="luas_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$anggotamitra->volume}} ton">
+											@if ($lokasi->volume)
+												<input readonly type="text" name="luas_tanam" id="luas_tanam" class="text-right form-control form-control-sm" placeholder="tidak ada data" value="{{$lokasi->volume}} ton">
 											@else
 												<input readonly type="text" name="volume" id="volume" class="text-right form-control form-control-sm" placeholder="tidak ada data">
 											@endif
@@ -227,18 +246,7 @@
 									<label class="form-label" for="tgl_prod">Dokumentasi</label>
 									<div class="d-flex align-items-center flex-row">
 										<div id="js-galleryTanam">
-											<a href="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->tanam_pict) }}"
-												data-sub-html="{{$anggotamitra->tanam_pict}}" title="{{$anggotamitra->tanam_pict}}">
-												<img class="img-responsive img-thumbnail" style="max-height: 120px"
-												src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->tanam_pict) }}"
-												alt="{{$anggotamitra->tanam_pict}}">
-											</a>
-											<a href="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->panen_pict) }}"
-												data-sub-html="{{$anggotamitra->panen_pict}}" title="{{$anggotamitra->panen_pict}}">
-												<img class="img-responsive img-thumbnail" style="max-height: 120px"
-												src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->panen_pict) }}"
-												alt="{{$anggotamitra->panen_pict}}">
-											</a>
+											{{-- foreach --}}
 										</div>
 									</div>
 								</div>
@@ -248,28 +256,26 @@
 					<div id="panel-4" class="panel card">
 						<div class="panel-hdr">
 							<h2>
-								Lampiran<span class="fw-300"><i>Berkas</i></span>
+								Lampiran<span class="fw-300"><i>Foto</i></span>
 							</h2>
-							<div class="panel-toolbar">
-								<select id="pdf-select" class="form-control form-control-sm">
-									<option value="">Select PDF file</option>
-								</select>
-							</div>
 						</div>
-						@if ($anggotamitra->tanam_doc)
-							<div class="panel-container show card-body embed-responsive embed-responsive-16by9">
-								<iframe class="embed-responsive-item" id="pdf-iframe"
-									src="{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->tanam_doc) }}"
-									frameborder="0" width="100%">
-								</iframe>
-							</div>
-						@else
-							<div class="panel-container show">
-								<div class="panel-content text-center">
-									<h3 class="text-danger">Tidak ada berkas dilampirkan</h2>
+						<div class="panel-container show">
+							<div class="panel-content">
+								<div id="js-lightgallery">
+									@foreach ($fotoTanams as $foto)
+										<a class="" href="{{ asset('storage/uploads/'.$npwp.'/'.$foto->datarealisasi->commitment->periodetahun.'/'.$foto->filename) }}" data-sub-html="The free in pointed they their for the so fame.">
+											<img class="img-responsive" src="{{ asset('storage/uploads/'.$npwp.'/'.$foto->datarealisasi->commitment->periodetahun.'/'.$foto->filename) }}" alt="{{$foto->filename}}">
+										</a>
+									@endforeach
+									@foreach ($fotoProduksis as $foto)
+										<a class="" href="{{ asset('storage/uploads/'.$npwp.'/'.$foto->datarealisasi->commitment->periodetahun.'/'.$foto->filename) }}" data-sub-html="The free in pointed they their for the so fame.">
+											<img class="img-responsive" src="{{ asset('storage/uploads/'.$npwp.'/'.$foto->datarealisasi->commitment->periodetahun.'/'.$foto->filename) }}" alt="{{$foto->filename}}">
+										</a>
+									@endforeach
 								</div>
 							</div>
-						@endif
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -289,35 +295,7 @@
 			initMap();
 		});
 	</script>
-	<script>
-		const pdfSelect = document.getElementById('pdf-select');
-		const pdfIframe = document.getElementById('pdf-iframe');
-		const pdfUrls = [
-			{
-				url: "{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->tanam_doc) }}",
-				name: "Dokumen Tanam"
-			},
-			{
-				url: "{{ url('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$anggotamitra->panen_doc) }}",
-				name: "Dokumen Panen"
-			}
-		];
 
-		pdfUrls.forEach(function (item) {
-			const option = document.createElement('option');
-			option.value = item.url;
-			option.textContent = item.name;
-			pdfSelect.appendChild(option);
-		});
-
-		// Set the default value to the Tanam Doc url
-		pdfSelect.value = pdfUrls[0].url;
-
-		pdfSelect.addEventListener('change', function () {
-			const pdfUrl = this.value;
-			pdfIframe.src = pdfUrl;
-		});
-	</script>
 	<script>
 		$(document).ready(function()
 		{
@@ -327,7 +305,7 @@
 				$initScope.justifiedGallery(
 				{
 					border: -1,
-					rowHeight: 150,
+					rowHeight: 100,
 					margins: 8,
 					waitThumbnailsLoad: true,
 					randomize: false,

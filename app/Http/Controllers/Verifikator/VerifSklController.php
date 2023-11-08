@@ -115,7 +115,7 @@ class VerifSklController extends Controller
 
 			'realisasiTanam' => number_format($lokasis->sum('luas_tanam'), 2, '.', ','),
 			'realisasiProduksi' => number_format($lokasis->sum('volume'), 2, '.', ','),
-			'hasGeoloc' => number_format($lokasis->where('polygon', '!=', null)->count(), 0, '.', ','),
+			'hasGeoloc' => number_format($lokasis->sum('nama_lokasi'), 0, '.', ','),
 
 			//ringkasan kemitraan
 			'countPoktan' => $pks->count(),

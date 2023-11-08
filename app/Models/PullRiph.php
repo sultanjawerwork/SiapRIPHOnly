@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Auditable;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -121,5 +122,10 @@ class PullRiph extends Model
 	public function commitmentcheck()
 	{
 		return $this->hasMany(CommitmentCheck::class, 'no_ijin', 'no_ijin');
+	}
+
+	public function datarealisasi()
+	{
+		return $this->hasMany(DataRealisasi::class, 'no_ijin', 'no_ijin');
 	}
 }
