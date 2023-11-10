@@ -416,6 +416,7 @@ class PksController extends Controller
 		$produksi->volume = $request->input('volume');
 		$produksi->save();
 
+		$produksi = DataRealisasi::findOrFail($id);
 		// udate table lokasis
 		$lokasiId = $produksi->lokasi_id;
 		$updateLokasi = Lokasi::find($lokasiId);
