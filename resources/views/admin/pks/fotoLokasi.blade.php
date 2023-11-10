@@ -15,6 +15,16 @@
 		$npwp = str_replace(['.', '-'], '', $npwpCompany);
 	@endphp
 	<div class="row">
+		<div class="col-12 mb-3">
+			<div class="panel-tag fade show bg-white border-warning m-0 l-h-m-n">
+				<div class="d-flex align-items-center">
+					<i class="fas fa-info mr-1"></i>
+					<div class="flex-1">
+						<small><span class="mr-1 fw-700">Informasi!</span>Jika setelah mengunggah, foto yang Anda unggah tidak muncul di kolom tampilan, cobalah untuk menyegarkan halaman (refresh/reload. ctrl+F5)</small>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-lg-6">
 			<div class="panel" id="panel-tanam">
 				<div class="panel-hdr">
@@ -48,7 +58,7 @@
 									<br>
 									<span class="fs-sm text-muted">Unggah foto-foto sebagai bukti pelaksanaan realisasi tanam. Maksimum 4 foto, ukuran maksimum masing-masing berkas kurang dari 2mb.</span>
 								</div>
-							</form>
+							</form><hr class="m-h-l-n-0">
 						</div>
 					@endif
 					<div class="panel-content">

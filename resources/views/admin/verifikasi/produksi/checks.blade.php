@@ -20,7 +20,7 @@ td {
 				<div id="panel-1" class="panel">
 					<div class="panel-container show">
 						<div class="panel-content">
-							<div class="row d-flex justify-content-between">
+							<div class="row">
 								<div class="form-group col-md-4">
 									<label class="form-label" for="no_pengajuan">Nomor Pengajuan</label>
 									<div class="input-group">
@@ -46,8 +46,34 @@ td {
 									</div>
 									<span class="help-block">Nomor Ijin RIPH.</span>
 								</div>
+							</div>
+							<div class="row">
 								<div class="form-group col-md-4">
-									<label class="form-label" for="created_at">Tanggal Pengajuan</label>
+									<label class="form-label" for="tgl_ijin">Tanggal Ijin RIPH</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fal fa-calendar-day"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control form-control-sm" id="tgl_ijin" name="tgl_ijin" value="{{$verifikasi->commitment->tgl_ijin}}" disabled>
+									</div>
+									<span class="help-block">Tanggal mulai berlaku RIPH ini.</span>
+								</div>
+								<div class="form-group col-md-4">
+									<label class="form-label" for="tgl_akhir">Tanggal Akhir RIPH</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fal fa-calendar-day"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control form-control-sm" id="tgl_akhir" name="tgl_akhir" value="{{$verifikasi->commitment->tgl_akhir}}" disabled>
+									</div>
+									<span class="help-block">Tanggal akhir/masa berlaku RIPH ini.</span>
+								</div>
+								<div class="form-group col-md-4">
+									<label class="form-label" for="created_at">Tanggal Pengajuan Verifikasi</label>
 									<div class="input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text">
@@ -57,7 +83,7 @@ td {
 										<input type="text" class="form-control form-control-sm" id="created_at" name="created_at"
 											value="{{$verifikasi->created_at}}" disabled>
 									</div>
-									<span class="help-block">Tanggal Pengajuan</span>
+									<span class="help-block">Tanggal Pelaku Usaha mengajukan verifikasi.</span>
 								</div>
 							</div>
 						</div>
@@ -482,7 +508,7 @@ td {
 									<div class="d-flex align-items-center">
 										<i class="fal fa-info-circle mr-1"></i>
 										<div class="flex-1">
-											<small>Berikut ini adalah tabel untuk memeriksa kesesuaian tanggal. Text tanggal berwarna merah memiliki arti Tanggal dimaksud berada di luar rentang yang seharusnya.</small>
+											<small>Berikut ini adalah tabel untuk memeriksa kesesuaian tanggal. Text tanggal <span class="fw-500 text-danger">berwarna merah </span>memiliki arti Tanggal dimaksud berada di luar rentang yang seharusnya.</small>
 										</div>
 									</div>
 								</div>
@@ -491,10 +517,10 @@ td {
 										<thead>
 											<tr>
 												<th>Kelompok</th>
-												<th>Awal PKS</th>
-												<th>Akhir PKS</th>
 												<th>Petani</th>
 												<th>Lokasi</th>
+												<th>Awal PKS</th>
+												<th>Akhir PKS</th>
 												<th>Awal Tanam</th>
 												<th>Akhir Tanam</th>
 												<th>Awal Panen</th>

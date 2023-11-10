@@ -73,7 +73,7 @@
 									<form action="{{route('admin.task.deleteLokasiTanam', $lokasi->id)}}" method="post">
 										@csrf
 										@method('DELETE')
-										<a href="{{route('admin.task.pks.anggota.editLokasiTanam', ['pksId' => $pks->id, 'anggotaId' => $anggota->id, 'id' => $lokasi->id])}}" class="btn btn-icon btn-primary btn-xs" data-toggle="tooltip" data-original-title="Data Spasial dan Tanam" >
+										<a href="{{route('admin.task.pks.anggota.editLokasiTanam', ['pksId' => $pks->id, 'anggotaId' => $anggota->id, 'id' => $lokasi->id])}}" class="btn btn-icon btn-primary btn-xs" data-toggle="tooltip" data-original-title="Tambah/Ubah Data Spasial dan Tanam" >
 											<i class="fal fa-edit"></i>
 										</a>
 										<a class="btn btn-icon btn-warning btn-xs showModal" href="javascript:void(0)" data-toggle="tooltip" data-lokasi="{{$lokasi->id}}" data-original-title="Realisasi Produksi" id="showModal">

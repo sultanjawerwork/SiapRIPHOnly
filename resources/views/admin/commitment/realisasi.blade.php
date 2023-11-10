@@ -400,7 +400,16 @@
 									</span>
 								</div>
 							</div><hr>
-							<span class="text-info mb-3">Unggah berkas berikut jika Anda ingin mengajukan verifikasi tanam.</span>
+							<div class="panel-tag fade show">
+								<div class="d-flex align-items-top">
+									<i class="fal fa-info-circle mr-1"></i>
+									<div class="flex-1">
+										<small>
+											Unggah berkas berikut jika Anda telah mengunggah seluruh berkas di atas dan ingin mengajukan verifikasi tanam. <br>
+										</small>
+									</div>
+								</div>
+							</div>
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label" for="spvt">Pengajuan Verifikasi Tanam</label>
 								<div class="col-sm-9">
@@ -440,24 +449,6 @@
 									<div class="flex-1">
 										<small>Berkas-berkas yang diperlukan terkait dengan Verifikasi Produksi. Lengkapi dan unggah dokumen berikut sebelum Anda mengajukan Verifikasi Produksi.</small>
 									</div>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label" for="spvp">Pengajuan Verifikasi Produksi</label>
-								<div class="col-sm-9">
-									<div class="custom-file input-group">
-										<input type="file" accept=".pdf" accept=".pdf" class="custom-file-input" name="spvp" id="spvp" value="{{ old('spvp', optional($docs)->spvp) }}">
-										<label class="custom-file-label" for="spvp">{{ $docs ? ($docs->spvp ? $docs->spvp : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
-									</div>
-									<span class="help-block">
-										@if($docs && $docs->spvp)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->spvp) }}" target="_blank">
-												Lihat Dokumen diunggah.
-											</a>
-										@else
-											<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Surat Pengajuan Verifikasi Produksi. Pdf, max 2Mb.</span>
-										@endif
-									</span>
 								</div>
 							</div>
 							<div class="form-group row">
@@ -546,6 +537,32 @@
 											</a>
 										@else
 											<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Form Laporan Akhir Realisasi Komitmen Wajib Tanam-Produksi. Pdf, max 2Mb.</span>
+										@endif
+									</span>
+								</div>
+							</div><hr>
+							<div class="panel-tag fade show">
+								<div class="d-flex align-items-top">
+									<i class="fal fa-info-circle mr-1"></i>
+									<div class="flex-1">
+										<small>Unggah berkas berikut jika Anda telah mengunggah seluruh berkas di atas dan ingin mengajukan verifikasi produksi.</small>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="spvp">Pengajuan Verifikasi Produksi</label>
+								<div class="col-sm-9">
+									<div class="custom-file input-group">
+										<input type="file" accept=".pdf" accept=".pdf" class="custom-file-input" name="spvp" id="spvp" value="{{ old('spvp', optional($docs)->spvp) }}">
+										<label class="custom-file-label" for="spvp">{{ $docs ? ($docs->spvp ? $docs->spvp : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
+									</div>
+									<span class="help-block">
+										@if($docs && $docs->spvp)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->spvp) }}" target="_blank">
+												Lihat Dokumen diunggah.
+											</a>
+										@else
+											<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Surat Pengajuan Verifikasi Produksi. Pdf, max 2Mb.</span>
 										@endif
 									</span>
 								</div>

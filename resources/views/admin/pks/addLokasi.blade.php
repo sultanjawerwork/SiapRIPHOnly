@@ -17,7 +17,7 @@
 	@endphp
 	<div class="row">
 		<div class="col-12">
-			<div class="panel" id="panel-spasial">
+			<div class="panel" id="panel-peta">
 				<div class="panel-hdr">
 					<h2>
 						Data Spasial <span class="fw-300">
@@ -28,7 +28,7 @@
 						@include('partials.globaltoolbar')
 					</div>
 				</div>
-				<div class="panel-container show">
+				<div class="panel-container collapse">
 					<div class="panel-content card-header">
 						<div class="row">
 							<div class="form-group col-md-12">
@@ -97,6 +97,20 @@
 							</div>
 						</div>
 					</div>
+				</div>
+			</div>
+			<div class="panel" id="panel-data">
+				<div class="panel-hdr">
+					<h2>
+						Data Tanam <span class="fw-300">
+							<i>Lokasi</i>
+						</span>
+					</h2>
+					<div class="panel-toolbar">
+						@include('partials.globaltoolbar')
+					</div>
+				</div>
+				<div class="panel-container show">
 					<form action="{{route('admin.task.storeLokasiTanam')}}" method="POST" enctype="multipart/form-data">
 						@csrf
 						<input type="hidden" name="form_action" value="form1">
