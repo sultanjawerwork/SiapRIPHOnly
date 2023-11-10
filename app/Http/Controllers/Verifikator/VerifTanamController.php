@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\LokasiCheck;
 use App\Models\CommitmentCheck;
+use App\Models\DataRealisasi;
 use App\Models\PksCheck;
 use App\Models\Lokasi;
 use App\Models\PullRiph;
@@ -55,39 +56,23 @@ class VerifTanamController extends Controller
 		$noIjin = str_replace(['/', '.'], '', $verifikasi->no_ijin);
 		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
 		$userDocs = UserDocs::where('no_ijin', $verifikasi->no_ijin)->first();
-		// $commitmentcheck = CommitmentCheck::where('pengajuan_id', $verifikasi->id)->firstOrFail();
-		// $pkschecks = PksCheck::where('pengajuan_id', $verifikasi->id)->get();
+
 		$lokasichecks = LokasiCheck::where('pengajuan_id', $verifikasi->id)->orderBy('created_at', 'desc')->get();
 
 		$pkss = Pks::withCount('lokasi')->where('no_ijin', $verifikasi->no_ijin)
 			->get();
 
-		// $poktanIds = Pks::where('no_ijin', $verifikasi->no_ijin)
-		// 	->pluck('poktan_id'); // Retrieve the poktan_id values
-
-		// // Group poktan_id values and retrieve unique nama_kelompok values
-		// $poktans = MasterPoktan::whereIn('id', $poktanIds)
-		// 	->groupBy('poktan_id')
-		// 	->pluck('nama_kelompok', 'poktan_id');
-		// dd($poktans);
-		// $lokasis = collect();
-		// foreach ($pkschecks as $pkscheck) {
-		// 	$lokasi = Lokasi::where('poktan_id', $pkscheck->poktan_id)
-		// 		->where('no_ijin', $verifikasi->no_ijin)
-		// 		->get();
-		// 	$lokasis->push($lokasi);
-		// }
-
 		$total_luastanam = $commitment->lokasi->sum('luas_tanam');
 		$total_volume = $commitment->lokasi->sum('volume');
 
-		// $pks = Pks::where('no_ijin', $commitment->no_ijin)->get();
 		$countPoktan = $pkss->count();
 		$countPks = $pkss->where('berkas_pks', '!=', null)->count();
 
 
 		return view('admin.verifikasi.tanam.check', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'lokasichecks', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin'));
 	}
+
+	// data monitoring tanggal dan daftar tanam-produksi
 
 	//set status hasil pemeriksaan pada tab-pane kelengkapan berkas
 	public function checkBerkas(Request $request, $id)

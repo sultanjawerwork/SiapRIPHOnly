@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Verifikator;
 
 use App\Http\Controllers\Controller;
+use App\Models\AjuVerifProduksi;
 use App\Models\AjuVerifTanam;
 use App\Models\DataRealisasi;
 use App\Models\FotoProduksi;
@@ -37,39 +38,112 @@ class LokasiTanamController extends Controller
 		$no_ijin = substr_replace($no_ijin, '/', 16, 0);
 		$commitment = PullRiph::where('no_ijin', $no_ijin)->first();
 
+		$pkss = Pks::withCount('lokasi')->where('no_ijin', $commitment->no_ijin)
+			->get();
+		$daftarPks = $pkss->map(function ($pks) use ($noIjin) {
+			$pksRoute = route('verification.tanam.check.pks', [
+				'noIjin' => $noIjin,
+				'poktan_id' => $pks->poktan_id
+			]);
+			return [
+				'noPks' => $pks->no_perjanjian,
+				'kelompok' => $pks->masterpoktan->nama_kelompok,
+				'mulaiPks' => $pks->tgl_perjanjian_start,
+				'akhirPks' => $pks->tgl_perjanjian_end,
+				'status' => $pks->status,
+				'pksRoute' => $pksRoute,
+			];
+		});
+
 		$query = Lokasi::where('no_ijin', $no_ijin)
 			// ->where('polygon', '!=', null) //uncomment this line to include the condition
 			->with('masterkelompok', 'masteranggota')
 			->select('id', 'npwp', 'no_ijin', 'poktan_id', 'anggota_id', 'nama_lokasi', 'luas_tanam', 'volume');
 
-		$lokasis = $query->get()->map(function ($lokasi) {
-			$poktan = MasterPoktan::where('id', $lokasi->poktan_id)->value('nama_kelompok');
-			$anggota = MasterAnggota::where('id', $lokasi->anggota_id)->value('nama_petani');
-			$noIjin = str_replace(['/', '.', '-'], '', $lokasi->no_ijin);
-
+		$lokasis = $query->get()->map(function ($lokasi) use ($noIjin) {
 			//ubah route halaman ke daftar lokasi dari setiap petani
 			$showRoute = route('verification.listLokasibyPetani', [
 				'noIjin' => $noIjin,
 				'lokasiId' => $lokasi->id
 			]);
 			return [
-				// 'idPks'			=> $lokasi->id,
-				// 'npwp'			=> $lokasi->npwp,
-				// 'no_ijin'		=> $lokasi->no_ijin,
-				// 'poktan_id'		=> $lokasi->poktan_id,
-				'poktan'		=> $poktan,
-				'anggota'		=> $anggota,
+				'poktan'		=> $lokasi->masterkelompok->nama_kelompok,
+				'anggota'		=> $lokasi->masteranggota->nama_petani,
 				'nama_lokasi'	=> $lokasi->nama_lokasi,
 				'luas_tanam'	=> $lokasi->luas_tanam,
 				'volume'		=> $lokasi->volume,
 				'show'			=> $showRoute,
 			];
 		});
+
+		$realisasis = DataRealisasi::where('no_ijin', $commitment->no_ijin)
+			->get();
+		$dataRealisasi = $realisasis->map(function ($realisasi) {
+			return [
+				'mulai_ijin' => $realisasi->commitment->tgl_ijin,
+				'akhir_ijin' => $realisasi->commitment->tgl_akhir,
+				'kelompok' => $realisasi->masterkelompok->nama_kelompok,
+				'no_perjanjian' => $realisasi->pks->no_perjanjian,
+				'mulai_perjanjian' => $realisasi->pks->tgl_perjanjian_start,
+				'akhir_perjanjian' => $realisasi->pks->tgl_perjanjian_end,
+				'anggota' => $realisasi->masteranggota->nama_petani,
+				'mulai_tanam' => $realisasi->mulai_tanam,
+				'akhir_tanam' => $realisasi->akhir_tanam,
+				'luas_tanam' => $realisasi->luas_lahan,
+				'mulai_panen' => $realisasi->mulai_panen,
+				'akhir_panen' => $realisasi->akhir_panen,
+				'volume' => $realisasi->volume,
+				'lokasi' => $realisasi->nama_lokasi,
+			];
+		});
 		$data = [
+			'daftarPks' => $daftarPks,
 			'lokasis' => $lokasis,
+			'datarealisasi' => $dataRealisasi,
 		];
 		return response()->json($data);
 	}
+
+	public function daftarTanam($id)
+	{
+		$verifikasi = AjuVerifTanam::find($id);
+		$commitment = PullRiph::where('no_ijin', $verifikasi->no_ijin)->first();
+		$lokasis = Lokasi::where('no_ijin', $verifikasi->no_ijin)->get();
+
+		$anggotas = $lokasis->map(function ($lokasi) use ($commitment) {
+			$anggotaData = [
+				'kelompok' => $lokasi->masterkelompok->nama_kelompok,
+				'no_pks' => $lokasi->pks->no_perjanjian,
+				'mulai_pks' => $lokasi->pks->tgl_perjanjian_start,
+				'akhir_pks' => $lokasi->pks->tgl_perjanjian_end,
+				'anggota' => $lokasi->masteranggota->nama_petani,
+				'datarealisasi' => [] // Inisialisasi data realisasi
+			];
+
+			foreach ($lokasi->datarealisasi as $realisasi) {
+				$realisasiData = [
+					'lokasi' => $realisasi->nama_lokasi,
+					'mulai_tanam' => $realisasi->mulai_tanam,
+					'akhir_tanam' => $realisasi->akhir_tanam,
+					'mulai_panen' => $realisasi->mulai_panen,
+					'akhir_panen' => $realisasi->akhir_panen,
+					// Tambahkan atribut datarealisasi lainnya sesuai kebutuhan
+				];
+
+				$anggotaData['datarealisasi'][] = $realisasiData;
+			}
+
+			return $anggotaData;
+		});
+
+		$data = [
+			'anggotas' => $anggotas,
+		];
+
+		return response()->json($data);
+	}
+
+
 
 	public function listLokasibyPetani($noIjin, $lokasiId)
 	{

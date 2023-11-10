@@ -289,6 +289,7 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 	Route::get('tanam', 'VerifTanamController@index')->name('tanam');
 	Route::group(['prefix' => 'tanam', 'as' => 'tanam.'], function () {
 		Route::get('{id}/check', 'VerifTanamController@check')->name('check');
+		// Route::get('{noIjin}/daftar_lokasi_tanam', 'LokasiTanamController@daftarTanam')->name('daftarTanam');
 		Route::put('{id}/storeCheck', 'VerifTanamController@storeCheck')->name('storeCheck');
 		Route::get('{id}/show', 'VerifTanamController@show')->name('show');
 		Route::get('{id}/showlocation', 'LokasiTanamController@showLocation')->name('showLocation');

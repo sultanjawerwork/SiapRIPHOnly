@@ -329,24 +329,6 @@
 								</div>
 							</div>
 							<div class="form-group row">
-								<label class="col-sm-3 col-form-label" for="spvt">Pengajuan Verifikasi Tanam</label>
-								<div class="col-sm-9">
-									<div class="custom-file input-group">
-										<input type="file" accept=".pdf" class="custom-file-input" name="spvt" id="spvt" value="{{ old('spvt', optional($docs)->spvt) }}">
-										<label class="custom-file-label" for="spvt">{{ $docs ? ($docs->spvt ? $docs->spvt : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
-									</div>
-									<span class="help-block">
-										@if($docs && $docs->spvt)
-											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->spvt) }}" target="_blank">
-												Lihat Dokumen diunggah.
-											</a>
-										@else
-											<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Surat Pengajuan Verifikasi Tanam. Pdf, max 2Mb.</span>
-										@endif
-									</span>
-								</div>
-							</div>
-							<div class="form-group row">
 								<label class="col-sm-3 col-form-label" for="sptjmtanam">Form SPTJM (tanam)</label>
 								<div class="col-sm-9">
 									<div class="custom-file input-group">
@@ -414,6 +396,25 @@
 											</a>
 										@else
 										<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Logbook Tanam. Pdf, max 2Mb.</span>
+										@endif
+									</span>
+								</div>
+							</div><hr>
+							<span class="text-info mb-3">Unggah berkas berikut jika Anda ingin mengajukan verifikasi tanam.</span>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="spvt">Pengajuan Verifikasi Tanam</label>
+								<div class="col-sm-9">
+									<div class="custom-file input-group">
+										<input type="file" accept=".pdf" class="custom-file-input" name="spvt" id="spvt" value="{{ old('spvt', optional($docs)->spvt) }}">
+										<label class="custom-file-label" for="spvt">{{ $docs ? ($docs->spvt ? $docs->spvt : 'Pilih berkas...') : 'Pilih berkas...' }}</label>
+									</div>
+									<span class="help-block">
+										@if($docs && $docs->spvt)
+											<a href="{{ asset('storage/uploads/'.$npwp.'/'.$commitment->periodetahun.'/'.$docs->spvt) }}" target="_blank">
+												Lihat Dokumen diunggah.
+											</a>
+										@else
+											<span class="text-info"><i class="fa fa-info-circle mr-1"></i>Surat Pengajuan Verifikasi Tanam. Pdf, max 2Mb.</span>
 										@endif
 									</span>
 								</div>

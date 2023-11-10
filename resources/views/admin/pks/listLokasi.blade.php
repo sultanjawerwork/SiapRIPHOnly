@@ -189,16 +189,19 @@
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-xs btn-icon mr-3'
 				},
+
+				@if($anggota->datarealisasi->sum('luas_lahan') < $anggota->masteranggota->luas_lahan )
 				{
 					text: '<i class="fal fa-plus"></i> Tambah Lokasi',
-					titleAttr: 'Lihat Detail',
+					titleAttr: 'Tambah data',
 					className: 'btn btn-danger btn-xs',
-					action: function () {
-						//
-						// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
-						window.location.href = '{{route('admin.task.pks.anggota.addLokasiTanam', ['pksId' => $pks->id, 'anggotaId' => $anggota->id])}}';
-					}
+						action: function () {
+							//
+							// Replace 'to_somewhere' with your actual route and $key->id with the parameter value
+							window.location.href = '{{route('admin.task.pks.anggota.addLokasiTanam', ['pksId' => $pks->id, 'anggotaId' => $anggota->id])}}';
+						}
 				}
+					@endif()
 			],
 		});
 

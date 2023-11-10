@@ -176,15 +176,15 @@
 					titleAttr: 'Print Table',
 					className: 'btn-outline-primary btn-xs btn-icon mr-3'
 				},
-				{
-					text: '<i class="fal fa-undo"></i> Kembali',
-					titleAttr: 'Lihat Detail',
-					className: 'btn btn-danger btn-xs',
-					action: function () {
+				// {
+				// 	text: '<i class="fal fa-undo"></i> Kembali',
+				// 	titleAttr: 'Lihat Detail',
+				// 	className: 'btn btn-danger btn-xs',
+				// 	action: function () {
 
-						window.location.href = '{{route('verification.tanam.check', $ajuVerifTanam)}}';
-					}
-				}
+				// 		window.location.href = '{{route('verification.tanam.check', $ajuVerifTanam)}}';
+				// 	}
+				// }
 			],
 		});
 

@@ -273,6 +273,7 @@ class PksController extends Controller
 		$pks = Pks::find($pksId);
 		$anggota = Lokasi::find($anggotaId);
 		$listLokasi = DataRealisasi::where('lokasi_id', $anggotaId)->get();
+		// dd($anggota->datarealisasi->sum('luas_lahan'));
 
 
 		return view('admin.pks.listLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'pks', 'anggota', 'listLokasi'));
@@ -338,7 +339,7 @@ class PksController extends Controller
 		$countLokasi = $dataRealisasi->count();
 		$updateLokasi->nama_lokasi = $countLokasi;
 		$updateLokasi->save();
-		dd('Luas awal: ' . $updateLokasi->luas_tanam, 'Luas baru: ' . $sumLuas, 'Volume awal: ' . $updateLokasi->volume, 'Volume baru: ' . $sumVolume, 'Jumlah awal: ' . $updateLokasi->nama_lokasi = $countLokasi, 'Jumlah baru: ' . $updateLokasi->count);
+		// dd('Luas awal: ' . $updateLokasi->luas_tanam, 'Luas baru: ' . $sumLuas, 'Volume awal: ' . $updateLokasi->volume, 'Volume baru: ' . $sumVolume, 'Jumlah awal: ' . $updateLokasi->nama_lokasi = $countLokasi, 'Jumlah baru: ' . $updateLokasi->count);
 
 		// dd($request->all());
 		return redirect()->route('admin.task.pks.anggota.listLokasi', [$pksId, $anggotaId])->with('message', "Data berhasil disimpan.");

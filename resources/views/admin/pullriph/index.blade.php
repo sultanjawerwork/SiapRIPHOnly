@@ -22,7 +22,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text"><i class="fal fa-file-invoice text-align-center"></i></span>
 									</div>
-									<input id="nomor" name="nomor" type="text" placeholder="____/PP.240/D/__/____" data-inputmask="'mask': '9999/PP.240/D/99/9999'" class="form-control"  required>
+									<input id="nomor" name="nomor" type="text" placeholder="____/PP.240/D/__/____" data-inputmask="'mask': '9999/PP.240/D/99/9999'" class="form-control" value="0369/PP.240/D/04/2023" required>
 								</div>
 								<footer class="blockquote-footer text-left">
 									<cite title="Source Title">contoh: 0001/PP.240/D/04/2022</cite>
@@ -35,7 +35,7 @@
 										<span class="input-group-text"><i class="fal fa-credit-card-front text-align-center"></i></span>
 									</div>
 									<!-- NPWP ini diperoleh dari tabel user importir yang diisi pada saat registrasi -->
-									<input id="npwp" type="text" placeholder="__.___.___._-___.___" data-inputmask="'mask': '99.999.999.9-999.999'" class="form-control" value="{{ ($npwp_company ?? '') }}" disabled>
+									<input id="npwp" type="text" placeholder="__.___.___._-___.___" data-inputmask="'mask': '99.999.999.9-999.999'" class="form-control" value="53.655.369.6-623.000" disabled>
 								</div>
 								<footer class="blockquote-footer text-left">
 									<cite title="Source Title">ini adalah Nomor Pokok Wajib Pajak (NPWP) Anda.</cite>

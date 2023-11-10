@@ -4,6 +4,11 @@
 td {
 	vertical-align: middle !important;
 }
+table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtrg-level-2 td{
+	font-weight: bold !important;
+	background: #f0f0f0 !important;
+	font-size: 1em !important;
+}
 </style>
 @endsection
 @section('content')
@@ -70,6 +75,9 @@ td {
 						<a class="nav-link" data-toggle="tab" href="#panel-3" role="tab" aria-selected="true">Kelengkapan Berkas</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#panel-7" role="tab" aria-selected="true">Monitoring Timeline Realisasi</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" data-toggle="tab" href="#panel-4" role="tab" aria-selected="true">Perjanjian Kemitraan</a>
 					</li>
 					<li class="nav-item">
@@ -80,7 +88,7 @@ td {
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane fade active show" id="panel-2" role="tabpanel" aria-labelledby="panel-2">
+					<div class="tab-pane fade" id="panel-2" role="tabpanel" aria-labelledby="panel-2">
 						<div id="panel-2" class="panel">
 							<div class="panel-container show">
 								<div class="panel-tag fade show">
@@ -275,6 +283,39 @@ td {
 							</form>
 						</div>
 					</div>
+					<div class="tab-pane fade" id="panel-7" role="tabpanel" aria-labelledby="panel-7">
+						<div id="panel-7" class="panel">
+							<div class="panel-container show">
+								<div class="panel-tag fade show">
+									<div class="d-flex align-items-center">
+										<i class="fal fa-info-circle mr-1"></i>
+										<div class="flex-1">
+											<small>Berikut ini adalah tabel untuk memeriksa kesesuaian tanggal. Text tanggal berwarna merah memiliki arti Tanggal dimaksud berada di luar rentang yang seharusnya.</small>
+										</div>
+									</div>
+								</div>
+								<div class="panel-content">
+									<table id="tableTanam" class="table table-bordered table-sm table-hover" style="width:100%">
+										<thead>
+											<tr>
+												<th>Kelompok</th>
+												<th>Awal PKS</th>
+												<th>Akhir PKS</th>
+												<th>Petani</th>
+												<th>Lokasi</th>
+												<th>Awal Tanam</th>
+												<th>Akhir Tanam</th>
+												<th>Awal Panen</th>
+												<th>Akhir Panen</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="tab-pane fade" id="panel-4" role="tabpanel" aria-labelledby="panel-4">
 						<div id="panel-4" class="panel">
 							<div class="panel-container show">
@@ -298,24 +339,6 @@ td {
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($pkss as $pks)
-												<tr>
-													<td>{{$pks->no_perjanjian}}</td>
-													<td>{{$pks->masterpoktan->nama_kelompok}}</td>
-													<td class="text-center">
-														{{$pks->tgl_perjanjian_start}} s.d
-														{{$pks->tgl_perjanjian_end}}
-													</td>
-													<td class="text-center">
-														{{$pks->status}}
-													</td>
-													<td class="text-center">
-														<a href="{{route('verification.tanam.check.pks', ['noIjin' => $noIjin, 'poktan_id' => $pks->poktan_id]) }}" class="btn btn-icon @if($pks->status) btn-success @else btn-warning @endif btn-xs" data-toggle="tooltip" data-original-title="Lihat/Periksa berkas dan data.">
-															<i class="fal fa-search"></i>
-														</a>
-													</td>
-												</tr>
-											@endforeach
 										</tbody>
 									</table>
 								</div>
@@ -349,7 +372,7 @@ td {
 									</div>
 								</div>
 								<div class="panel-content">
-									<table class="table table-striped table-bordered table-sm w-100" id="dataTable">
+									<table class="table table-striped table-bordered table-sm w-100" id="tableLokasi">
 										<thead class="thead-themed text-uppercase text-muted">
 											<th class="text-center">Kelompoktani</th>
 											<th class="text-center">Jumlah Lokasi</th>
@@ -510,7 +533,76 @@ td {
 				});
 			});
 
-			var tableData = $('#dataTable').DataTable({
+			var url = '{{ route("verification.lokasitanam", $noIjin) }}';
+
+			$('#pksCheck').DataTable({
+				responsive: true,
+				lengthChange: true,
+				order: [1, 'asc'],
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Daftar Perjanjian Kerjasama',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Daftar Perjanjian Kerjasama',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
+				],
+				columnDefs: [
+
+					{ className: 'text-center', targets: [2,3,4] },
+				],
+				ajax: {
+					url: url,
+					type: 'GET',
+					dataType: 'json',
+					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+					success: function (response) {
+						var pksCheck = $('#pksCheck').DataTable();
+						pksCheck.clear().draw();
+						if (response.daftarPks.length > 0) {
+							$.each(response.daftarPks, function(index, pks) { // Update response handling
+								var noPks = pks.noPks;
+								var kelompok = pks.kelompok;
+								var mulaiPks = pks.mulaiPks;
+								var akhirPks = pks.akhirPks;
+								var tglPks = `
+									<span>${mulaiPks !== null ? mulaiPks + ' s.d ' : ''}</span>
+									<span>${akhirPks !== null ? akhirPks : ''}</span>
+								`;
+								var status = pks.status;
+								var statusClass = status ? 'btn-success' : 'btn-warning';
+								var pksBtn =`
+									<a href="${pks.pksRoute}" class="btn btn-xs btn-icon btn-primary" title="Lihat detail">
+										<i class="fal fa-search"></i>
+									</a>
+									`;
+								pksCheck.row.add([noPks, kelompok, tglPks, status, pksBtn]).draw(false);
+							});
+						}
+						pksCheck.draw(); // Draw the table after adding the rows
+					},
+					error: function (xhr, status, error) {
+						// Handle error jika diperlukan
+						console.error(xhr);
+
+					}
+				},
+			});
+
+			$('#tableTanam').DataTable({
+				// serverSide: true,
 				responsive: true,
 				lengthChange: true,
 				dom:
@@ -521,31 +613,89 @@ td {
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					}
 				],
-				columnDefs: [
-
-					{ className: 'text-right', targets: [1, 3] },
-					{ className: 'text-center', targets: [4] },
-				]
-			});
-
-			function updateTableData() {
-				$.ajax({
-					url: '{{ route("verification.lokasitanam", $noIjin) }}',
+				ajax: {
+					url: url,
 					type: 'GET',
 					dataType: 'json',
-					success: function(response) {
+					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+					success: function (response) {
+						// Hapus data yang ada di tabel sebelum memasukkan yang baru
+						var tableTanam = $('#tableTanam').DataTable();
+						tableTanam.clear().draw();
 
-						tableData.clear().draw();
+						if (response.datarealisasi.length > 0) {
+							$.each(response.datarealisasi, function (index, realisasi) {
+								var ijinStart = realisasi.mulai_ijin;
+								var ijinEnd = realisasi.akhir_ijin;
+								var kelompok = realisasi.kelompok;
+								var pksAwal = realisasi.mulai_perjanjian;
+								var pksAkhir = realisasi.akhir_perjanjian;
+								var petani = realisasi.anggota;
+								var lokasi = realisasi.lokasi;
+								var awalTanam = realisasi.mulai_tanam;
+								var akhirTanam = realisasi.akhir_tanam;
+								var awalPanen = realisasi.mulai_panen;
+								var akhirPanen = realisasi.akhir_panen;
+
+								var pksStart = (pksAwal < ijinStart || pksAwal > ijinEnd) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku">' + pksAwal + '</span>' : pksAwal;
+								var pksEnd = (pksAkhir < ijinStart || pksAkhir > ijinEnd) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku">' + pksAkhir + '</span>' : pksAkhir;
+								var tanamStart = (awalTanam < ijinStart || awalTanam > ijinEnd || awalTanam < pksAwal || awalTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + awalTanam + '</span>' : awalTanam;
+								var tanamEnd = (akhirTanam < ijinStart || akhirTanam > ijinEnd || akhirTanam < pksAwal || akhirTanam > pksAkhir) ? '<span class="text-danger" title="Mendahului/Melampaui tanggal ijin RIPH yang berlaku atau tanggal berlaku PKS">' + akhirTanam + '</span>' : akhirTanam;
+
+								tableTanam.row.add([lokasi, petani, kelompok, pksStart, pksEnd, tanamStart, tanamEnd, awalPanen, akhirPanen]).draw(false);
+							});
+						}
+					},
+					error: function (xhr, status, error) {
+						// Handle error jika diperlukan
+						console.error(xhr);
+					}
+				},
+			});
+
+			$('#tableLokasi').DataTable({
+				responsive: true,
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Daftar Lokasi Tanam',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Daftar Lokasi Tanam',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
+				],
+				ajax: {
+					url: url,
+					type: 'GET',
+					dataType: 'json',
+					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
+					success: function (response) {
+						var tableLokasi = $('#tableLokasi').DataTable();
+						tableLokasi.clear().draw();
 						if (response.lokasis.length > 0) {
 							$.each(response.lokasis, function(index, lokasi) { // Update response handling
 
@@ -571,17 +721,17 @@ td {
 										<i class="fal fa-search"></i>
 									</a>
 								`;
-								tableData.row.add([poktan, jmlLokasi, anggota,LuasTanam, actionBtn]).draw(false);
+								tableLokasi.row.add([poktan, jmlLokasi, anggota,LuasTanam, actionBtn]).draw(false);
 							});
 						}
-						tableData.draw(); // Draw the table after adding the rows
+						tableLokasi.draw(); // Draw the table after adding the rows
 					},
-					error: function(xhr, status, error) {
-						console.error(xhr.responseText);
+					error: function (xhr, status, error) {
+						// Handle error jika diperlukan
+						console.error(xhr);
 					}
-				});
-			}
-			updateTableData();
+				},
+			});
 		});
 	</script>
 
@@ -610,4 +760,5 @@ td {
 			}
 		}
 	</script>
+
 @endsection

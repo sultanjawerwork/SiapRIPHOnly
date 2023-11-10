@@ -26,11 +26,7 @@ use Illuminate\Support\Facades\DB;
 
 class VerifProduksiController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+
 	public function index()
 	{
 		abort_if(Gate::denies('onfarm_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -292,13 +288,6 @@ class VerifProduksiController extends Controller
 		}
 	}
 
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function show($id)
 	{
 		abort_if(Gate::denies('online_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -330,12 +319,9 @@ class VerifProduksiController extends Controller
 		return view('admin.verifikasi.produksi.show', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'verifikasi', 'commitment', 'pkss', 'total_luastanam', 'total_volume', 'countPoktan', 'countPks', 'userDocs', 'noIjin', 'hasGeoloc', 'countAnggota'));
 	}
 
-	public function edit($id)
-	{
-		//
-	}
 
 
+	// ke bawa ini kemungkinan dihapus
 
 	public function farmlist($id)
 	{
@@ -432,34 +418,6 @@ class VerifProduksiController extends Controller
 			->with('success', 'Data berhasil disimpan');
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		dd($request->all());
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function update(Request $request, $id)
 	{
 		$user = Auth::user();
@@ -486,16 +444,5 @@ class VerifProduksiController extends Controller
 		$commitment->save();
 		return redirect()->route('verification.onfarm')
 			->with('success', 'Data berhasil disimpan');
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 }
