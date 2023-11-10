@@ -38,6 +38,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 	Route::get('mapDataByYear/{periodeTahun}', 'UserMapDashboard@ByYears')->name('mapDataByYear');
 	Route::get('mapDataById/{id}', 'UserMapDashboard@show')->name('mapDataById');
 
+	//data pemetaan
+	Route::group(['prefix' => 'map', 'as' => 'map.'], function () {
+		Route::get('getAllMap', 'AdminMapController@index')->name('getAllMap');
+		Route::get('getAllMapByYears/{periodeTahun}', 'AdminMapController@ByYears')->name('getAllMapByYears');
+		Route::get('getLocationData/{id}', 'AdminMapController@index')->name('getLocationData');
+	});
+
 	//dashboard data for admin
 	Route::get('monitoringDataByYear/{periodetahun}', 'DashboardDataController@monitoringDataByYear')->name('monitoringDataByYear');
 
@@ -134,33 +141,56 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('getriph', 'PullRiphController@pull')->name('pull.getriph');
 		Route::post('pull', 'PullRiphController@store')->name('pull.store');
 
+
 		Route::get('commitment', 'CommitmentController@index')->name('commitment');
-		Route::get('commitment/{id}/show', 'CommitmentController@show')->name('commitment.show');
-		Route::put('commitment/{id}/update', 'CommitmentController@update')->name('commitment.update');
-		Route::delete('commitment/{pullriph}', 'CommitmentController@destroy')->name('commitment.destroy');
+		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+			Route::get('{id}/show', 'CommitmentController@show')->name('show');
+			Route::delete('{pullriph}', 'CommitmentController@destroy')->name('destroy');
+
+			//pengisian data realisasi
+			Route::get('{id}/realisasi', 'CommitmentController@realisasi')->name('realisasi');
+			Route::post('{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('realisasi.storeUserDocs');
+			Route::get('{id}/penangkar', 'PenangkarRiphController@mitra')->name('penangkar');
+			Route::post('{id}/penangkar/store', 'PenangkarRiphController@store')->name('penangkar.store');
+		});
 		Route::delete('commitmentmd', 'CommitmentController@massDestroy')->name('commitment.massDestroy');
 
 		//master penangkar
 		Route::get('penangkar', 'MasterPenangkarController@index')->name('penangkar');
-		Route::get('penangkar/create', 'MasterPenangkarController@create')->name('penangkar.create');
-		Route::post('penangkar/store', 'MasterPenangkarController@store')->name('penangkar.store');
-		Route::get('penangkar/{id}/edit', 'MasterPenangkarController@edit')->name('penangkar.edit');
-		Route::put('penangkar/{id}/update', 'MasterPenangkarController@update')->name('penangkar.update');
-		Route::delete('penangkar/{id}/delete', 'MasterPenangkarController@destroy')->name('penangkar.delete');
+		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+			Route::get('create', 'MasterPenangkarController@create')->name('create');
+			Route::post('store', 'MasterPenangkarController@store')->name('store');
+			Route::get('{id}/edit', 'MasterPenangkarController@edit')->name('edit');
+			Route::put('{id}/update', 'MasterPenangkarController@update')->name('update');
+			Route::delete('{id}/delete', 'MasterPenangkarController@destroy')->name('delete');
+		});
 
-		//pengisian data realisasi
-		Route::get('commitment/{id}/realisasi', 'CommitmentController@realisasi')->name('commitment.realisasi');
-		Route::post('commitment/{id}/realisasi/storeUserDocs', 'CommitmentController@storeUserDocs')->name('commitment.realisasi.storeUserDocs');
-		Route::get('commitment/{id}/penangkar', 'PenangkarRiphController@mitra')->name('commitment.penangkar');
-		Route::post('commitment/{id}/penangkar/store', 'PenangkarRiphController@store')->name('commitment.penangkar.store');
 		Route::delete('mitra/{id}/delete', 'PenangkarRiphController@destroy')->name('mitra.delete');
 
 		// daftar pks
+
 		Route::get('pks/{id}/edit', 'PksController@edit')->name('pks.edit');
 		Route::put('pks/{id}/update', 'PksController@update')->name('pks.update');
 
-		//daftar lokasi tanam
-		Route::get('pks/{id}/lokasitanam', 'PksController@anggotas')->name('pks.anggotas');
+		//daftar anggota
+		Route::get('pks/{id}/daftaranggota', 'PksController@anggotas')->name('pks.anggotas');
+		// daftar lokasi tanam per anggota
+		Route::get('pks/{pksId}/anggota/{anggotaId}/list_lokasi', 'PksController@listLokasi')->name('pks.anggota.listLokasi');
+		//page tambah lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/add_lokasi', 'PksController@addLokasiTanam')->name('pks.anggota.addLokasiTanam');
+		//edit lokasi tanam
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/edit', 'PksController@editLokasiTanam')->name('pks.anggota.editLokasiTanam');
+		Route::get('pks/{pksId}/anggota/{anggotaId}/lokasi/{id}/foto', 'PksController@fotoLokasi')->name('pks.anggota.fotoLokasi');
+		Route::delete('deleteFotoTanam/{id}', 'PksController@deleteFotoTanam')->name('deleteFotoTanam');
+		Route::delete('deleteFotoProduksi/{id}', 'PksController@deleteFotoProduksi')->name('deleteFotoProduksi');
+		Route::delete('deleteLokasiTanam/{id}', 'PksController@deleteLokasiTanam')->name('deleteLokasiTanam');
+
+		Route::post('storeLokasiTanam', 'PksController@storeLokasiTanam')->name('storeLokasiTanam');
+		Route::put('updateLokasiTanam/{id}/update', 'PksController@updateLokasiTanam')->name('updateLokasiTanam');
+		Route::put('storeRealisasiProduksi/{id}', 'PksController@storeRealisasiProduksi')->name('storeRealisasiProduksi');
+
+		Route::post('upload/dropZoneTanam', 'PksController@dropZoneTanam')->name('dropZoneTanam');
+		Route::post('upload/dropZoneProduksi', 'PksController@dropZoneProduksi')->name('dropZoneProduksi');
 
 		//saprodi
 		Route::get('pks/{id}/saprodi', 'PksController@saprodi')->name('pks.saprodi');
@@ -227,11 +257,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
 
 		//dihapus
-		// Route::post('commitment/unggah', 'CommitmentController@store')->name('commitment.store');
-		// Route::get('commitment/{pullriph}', 'CommitmentController@show')->name('commitment.show');
-		// Route::get('commitment/{id}/edit', 'CommitmentController@edit')->name('commitment.edit');
-		// pengajuan
-		// Route::post('commitment/{id}/review/submit', 'PengajuanController@store')->name('commitment.review.submit');
 
 		//Daftar SKL untuk user
 		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');
@@ -256,15 +281,18 @@ Route::group(['prefix' => 'verification', 'as' => 'verification.', 'namespace' =
 
 	//verifikasi data lokasi tanam
 	Route::get('{noIjin}/lokasitanam', 'LokasiTanamController@index')->name('lokasitanam');
-	Route::get('{noIjin}/lokasitanam/{anggota_id}', 'LokasiTanamController@show')->name('lokasitanam.show');
+
+	Route::get('{noIjin}/lokasitanam/{lokasiId}', 'LokasiTanamController@listLokasibyPetani')->name('listLokasibyPetani');
 	Route::get('{id}/summary', 'VerifSklController@dataCheck')->name('data.summary');
 
 	//new verifikasi tanam
 	Route::get('tanam', 'VerifTanamController@index')->name('tanam');
 	Route::group(['prefix' => 'tanam', 'as' => 'tanam.'], function () {
 		Route::get('{id}/check', 'VerifTanamController@check')->name('check');
+		// Route::get('{noIjin}/daftar_lokasi_tanam', 'LokasiTanamController@daftarTanam')->name('daftarTanam');
 		Route::put('{id}/storeCheck', 'VerifTanamController@storeCheck')->name('storeCheck');
 		Route::get('{id}/show', 'VerifTanamController@show')->name('show');
+		Route::get('{id}/showlocation', 'LokasiTanamController@showLocation')->name('showLocation');
 		Route::post('{id}/checkBerkas', 'VerifTanamController@checkBerkas')->name('checkBerkas');
 		Route::get('{noIjin}/poktan/{poktan_id}/check', 'VerifTanamController@verifPks')->name('check.pks');
 		Route::put('pks/{id}/store', 'VerifTanamController@verifPksStore')->name('check.pks.store');
@@ -355,4 +383,8 @@ Route::group(['prefix' => 'wilayah', 'as' => 'wilayah.', 'namespace' => 'Wilayah
 Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('index', 'DigitalSign@index')->name('index');
 	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
+});
+
+Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
+	Route::get('sample/{id}', 'TestController@index')->name('sample');
 });

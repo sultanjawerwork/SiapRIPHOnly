@@ -193,11 +193,11 @@
 											<span class="input-group-text" id="inputGroupPrepend3">PKS</span>
 										</div>
 										<div class="custom-file">
-											<input type="file" class="custom-file-input" id="berkas_pks" name="berkas_pks">
+											<input type="file" accept=".pdf" class="custom-file-input" id="berkas_pks" name="berkas_pks">
 											<label class="custom-file-label" for="berkas_pks">Choose file...</label>
 										</div>
 									</div>
-									<div class="help-block">Unggah hasil pemindaian berkas Form-5 dalam bentuk pdf.</div>
+									<div class="help-block">Unggah hasil pemindaian berkas Form-5 dalam bentuk pdf, max 2Mb.</div>
 								</div>
 							</div>
 						</div>

@@ -170,11 +170,11 @@
 					<dd class="col-sm-5">
 							<span class="mb-5" style="height: 7em">Direktur,</span>
 							<br><br><br>
-								@if ($pejabat)
+								{{-- @if ($pejabat)
 									@if ($pejabat->sign_img)
 										<img style="max-width: 7em" src="{{ asset('storage/uploads/dataadmin/'.$pejabat->sign_img) }}" alt="ttd">
 									@endif
-								@endif
+								@endif --}}
 							<br>
 							<u><strong>{{$pejabat->nama ?? ''}}</strong></u><br>
 							<span class="mr-1">NIP.</span>{{$pejabat->nip ??''}}

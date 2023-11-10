@@ -174,7 +174,7 @@
 											</div>
 											<input type="number" id="total" name class="form-control fw-600" placeholder="autocalculate" aria-label="Total Amount" aria-describedby="amount" hidden >
 											<input type="text" id="formattedTotal" class="form-control fw-600" placeholder="autocalculate" aria-label="Formatted Total Amount" aria-describedby="formattedAmount" disabled>
-		
+
 										</div>
 										<span class="help-block">Total nilai bantuan</span>
 									</div>
@@ -182,10 +182,10 @@
 								<div class="form-group">
 									<label class="form-label">Dokumentasi</label>
 									<div class="custom-file input-group">
-										<input type="file" id="file" name="file" class="custom-file-input" id="customControlValidation7">
+										<input type="file" accept=".jpg, .png" id="file" name="file" class="custom-file-input" id="customControlValidation7">
 										<label class="custom-file-label" for="customControlValidation7">pilih berkas...</label>
 									</div>
-									<span class="help-block">Dokumentasi bantuan. Berkas berekstensi jpg atau pdf.</span>
+									<span class="help-block">Dokumentasi bantuan. Berkas berekstensi jpg atau png, max 2Mb.</span>
 								</div>
 							</div>
 							<div class="modal-footer">
@@ -343,7 +343,7 @@
 	  function calculateTotal() {
 		var volume = parseFloat($('#volume').val());
 		var harga = parseFloat($('#harga').val());
-		
+
 		// Check for valid numbers
 		if (isNaN(volume) || isNaN(harga)) {
 		  $('#total').val(0).addClass('text-danger');
@@ -354,10 +354,10 @@
 		  $('#formattedTotal').val(formatNumber(total)).removeClass('text-danger');
 		}
 	  }
-  
+
 	  // Bind the input events to recalculate the total
 	  $('#volume, #harga').on('input', calculateTotal);
-  
+
 	  // Function to format number with thousand separator
 	  function formatNumber(number) {
 		return number.toLocaleString('en-US');

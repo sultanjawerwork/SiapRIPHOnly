@@ -58,7 +58,6 @@ class PullRiphController extends Controller
 			);
 			$response = $client->__soapCall('get_riph', $parameter);
 		} catch (\Exception $e) {
-
 			Log::error('Soap Exception: ' . $e->getMessage());
 			throw new \Exception('Problem with SOAP call');
 		}
@@ -114,14 +113,13 @@ class PullRiphController extends Controller
 			$filepath = 'uploads/' . $npwp . '/' . $fijin . '.json';
 			Storage::disk('public')->put($filepath, $datariph);
 		} catch (\Exception $e) {
-
 			Log::error('Soap Exception: ' . $e->getMessage());
 			throw new \Exception('Problem with SOAP call');
 		}
 
 		$user = Auth::user();
 		DB::beginTransaction();
-		try{
+		try {
 			$riph = PullRiph::updateOrCreate(
 				[
 					'npwp' => $stnpwp,
@@ -151,18 +149,24 @@ class PullRiphController extends Controller
 			$dtjson = json_decode($datariph);
 			if ($riph) {
 				$lastPoktan = '';
-				// if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
-				// 	return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
-				// } else {
+				if ($dtjson->riph->wajib_tanam->kelompoktani->loop === null) {
+					return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
+				} else {
 					if (is_array($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						// Kelompoktani adalah array
 						foreach ($dtjson->riph->wajib_tanam->kelompoktani->loop as $poktan) {
 							$nama = trim($poktan->nama_kelompok, ' ');
 							$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
-							// Menghapus karakter yang tidak diperlukan
-							$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
-							$ktp = trim($ktp, "\u{00a0}");
-							$ktp = trim($ktp, "\u{00c2}");
+							if (is_string($ktp)) {
+								// Menghapus karakter yang tidak diperlukan
+								$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
+								$ktp = trim($ktp, "\u{00a0}");
+								$ktp = trim($ktp, "\u{00c2}");
+							} else {
+								// Kesalahan terdeteksi jika $ktp bukan string
+								DB::rollback();
+								return redirect()->back()->with('error', 'Gagal menyimpan. Data KTP petani tidak valid. Silakan periksa kembali atau hubungi Administrator terkait.');
+							}
 							$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 							$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
 							$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
@@ -228,10 +232,16 @@ class PullRiphController extends Controller
 						$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
 						$nama = trim($poktan->nama_kelompok, ' ');
 						$ktp = isset($poktan->ktp_petani) ? $poktan->ktp_petani : '';
-						// Menghapus karakter yang tidak diperlukan
-						$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
-						$ktp = trim($ktp, "\u{00a0}");
-						$ktp = trim($ktp, "\u{00c2}");
+						if (is_string($ktp)) {
+							// Menghapus karakter yang tidak diperlukan
+							$ktp = preg_replace('/[^0-9\p{Latin}\pP\p{Sc}@\s]+/u', '', $ktp);
+							$ktp = trim($ktp, "\u{00a0}");
+							$ktp = trim($ktp, "\u{00c2}");
+						} else {
+							// Kesalahan terdeteksi jika $ktp bukan string
+							DB::rollback();
+							return redirect()->back()->with('error', 'Gagal menyimpan. Data KTP petani tidak valid. Silakan periksa kembali atau hubungi Administrator terkait.');
+						}
 						$idpoktan = isset($poktan->id_poktan) ? trim($poktan->id_poktan, ' ') : '';
 						$idpetani = isset($poktan->id_petani) ? trim($poktan->id_petani, ' ') : '';
 						$idkabupaten = isset($poktan->id_kabupaten) ? trim($poktan->id_kabupaten, ' ') : '';
@@ -293,15 +303,13 @@ class PullRiphController extends Controller
 							]
 						);
 					}
-				// }
+				}
 			}
 			DB::commit();
 		} catch (\Exception $e) {
 			DB::rollback();
 			return redirect()->back()->with('error', 'Gagal menyimpan. Data terkait RIPH dimaksud tidak lengkap. silahkan lengkapi terlebih dahulu di aplikasi SIAP RIPH atau hubungi Administrator terkait.');
 		}
-
-		// return back()->with('message', "Sukses menyimpan data RIPH, lihat daftarnya di menu Komitmen ");
 		return redirect()->route('admin.task.commitment')->with('success', 'Sukses menyimpan data dan dapat Anda lihat pada daftar di bawah ini.');
 	}
 }

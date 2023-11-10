@@ -60,4 +60,9 @@ class Lokasi extends Model
 	{
 		return $this->belongsTo(Pks::class, 'poktan_id', 'poktan_id');
 	}
+
+	public function datarealisasi()
+	{
+		return $this->hasMany(DataRealisasi::class, 'lokasi_id');
+	}
 }

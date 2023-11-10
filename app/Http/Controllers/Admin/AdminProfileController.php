@@ -61,10 +61,20 @@ class AdminProfileController extends Controller
 
 		if ($request->hasFile('sign_img')) {
 			$file = $request->file('sign_img');
-			$filename = 'ttd_' . $user->id . '.' . $file->getClientOriginalExtension();
-			$file->storeAs('uploads/dataadmin/', $filename, 'public');
-			$dataadmin->sign_img = $filename;
+
+			// Validasi ekstensi file
+			$allowedExtensions = ['jpg', 'png']; // Ekstensi yang diperbolehkan
+			$fileExtension = $file->getClientOriginalExtension();
+
+			if (in_array($fileExtension, $allowedExtensions)) {
+				$filename = 'ttd_' . $user->id . '.' . $fileExtension;
+				$file->storeAs('uploads/dataadmin/', $filename, 'public');
+				$dataadmin->sign_img = $filename;
+			} else {
+				return redirect()->back()->with('error', 'Berkas yang diunggah harus memiliki ekstensi .jpg atau .png.');
+			}
 		}
+
 		// dd($dataadmin);
 		$dataadmin->save();
 		return redirect()->back()->with('success', 'Berhasil menyimpan data Profile Anda.');

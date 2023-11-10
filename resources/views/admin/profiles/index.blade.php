@@ -53,7 +53,7 @@
 														<div class="form-group">
 															<label class="form-label" for="firstname">Ganti foto</label>
 															<div class="custom-file">
-																<input type="file" class="custom-file-input" name="avatar" aria-describedby="avatar" onchange="readURL(this,1);">
+																<input type="file" accept=".jpg, .png" class="custom-file-input" name="avatar" aria-describedby="avatar" onchange="readURL(this,1);">
 																<label class="custom-file-label" for="avatar"></label>
 															</div>
 															<span class="help-block">Klik browse untuk memilih file</span>
@@ -72,7 +72,7 @@
 														<div class="form-group">
 															<label class="form-label" for="firstname">Ganti Logo Perusahaan</label>
 															<div class="custom-file">
-																<input type="file" class="custom-file-input" name="logo" aria-describedby="logo" onchange="readURL(this,2);">
+																<input type="file" accept=".jpg, .png" class="custom-file-input" name="logo" aria-describedby="logo" onchange="readURL(this,2);">
 																<label class="custom-file-label" for="logo"></label>
 															</div>
 															<span class="help-block">Klik browse untuk mengganti logo</span>
@@ -252,10 +252,10 @@
 											<div class="form-group">
 												<label class="form-label" for="imagektp">ID Card/KTP</label>
 												<div class="custom-file">
-													<input type="file" class="custom-file-input" name="imagektp" aria-describedby="imagektp" value="">
+													<input type="file" accept=".jpg, .png" class="custom-file-input" name="imagektp" aria-describedby="imagektp" value="">
 													<label class="custom-file-label" for="imagektp"></label>
 												</div>
-												<span class="help-block">Unggah foto KTP</span>
+												<span class="help-block">Unggah foto KTP. JPG atau PNG, max 2Mb.</span>
 											</div>
 											<div class="form-group">
 												<label class="form-label" for="assignment">Assignment/Surat Tugas</label>
@@ -263,7 +263,7 @@
 													<input type="file" class="custom-file-input" name="assignment" aria-describedby="assignment" value="" >
 													<label class="custom-file-label" for="assignment"></label>
 												</div>
-												<span class="help-block">Unggah surat tugas</span>
+												<span class="help-block">Unggah surat tugas. PDF atau JPG, max 2Mb.</span>
 											</div>
 										</div>
 									</div>

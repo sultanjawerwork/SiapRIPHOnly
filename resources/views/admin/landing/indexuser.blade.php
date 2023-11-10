@@ -30,10 +30,10 @@
 			@php($getRecomendations = null)
 		@endif
 
-		{{-- @if (Auth::user()->roles[0]->title == 'User')
+		@if (Auth::user()->roles[0]->title == 'User')
 			@php($getNewSkl = \App\Models\SklReads::getNewSkl())
 			@php($cntgetNewSkl = \App\Models\SklReads::getNewSklCount())
-		@endif --}}
+		@endif
 
 		<div class="row mb-5">
 			<div class="col text-center">
@@ -392,7 +392,7 @@
 						</div>
 					</div>
 				@endif
-				{{-- @if (Auth::user()->roles[0]->title == 'User')
+				@if (Auth::user()->roles[0]->title == 'User')
 					<div id="panel-3" class="panel">
 						<div class="panel-hdr">
 							<h2>
@@ -436,7 +436,7 @@
 							</div>
 						</div>
 					</div>
-				@endif --}}
+				@endif
 			</div>
 		</div>
 		<!-- Page Content -->

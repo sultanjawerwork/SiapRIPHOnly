@@ -39,7 +39,7 @@
 									<label class="form-label" for="lampiran">Unggah Berkas</label>
 									<div class="input-group">
 										<div class="custom-file">
-											<input type="file" class="custom-file-input" id="lampiran" name="lampiran" aria-describedby="lampiran" required>
+											<input type="file" accept=".docx, .pdf" class="custom-file-input" id="lampiran" name="lampiran" aria-describedby="lampiran" required>
 											<label class="custom-file-label" for="lampiran">
 												pilih berkas
 											</label>

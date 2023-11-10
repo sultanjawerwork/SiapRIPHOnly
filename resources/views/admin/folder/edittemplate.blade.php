@@ -53,18 +53,18 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class='form-group row'>
                             <div class="col-lg-6">
                                 <label class="form-label" for="firstname">File <span class="text-danger">*</span></label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="fileUnggah" aria-describedby="fileUnggah" >
+                                    <input type="file" accept=".docx, .pdf" class="custom-file-input" name="fileUnggah" aria-describedby="fileUnggah" >
                                     <label class="custom-file-label" for="fileUnggah"></label>
                                 </div>
                                 <span class="help-block">File sebelumnya: {{ $berkas->name }}</span>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
 <script src="/js/formplugins/select2/select2.bundle.js"></script>
 <script>
     $(document).ready(function() {
-        
+
     });
 </script>
 @endsection

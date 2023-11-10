@@ -118,7 +118,7 @@
 											</a>
 										</div>
 										<div class="custom-file">
-											<input type="file" class="custom-file-input" id="berkas_pks" name="berkas_pks"
+											<input type="file" accept=".pdf" class="custom-file-input" id="berkas_pks" name="berkas_pks"
 											value="{{old('berkas_pks', $pks->berkas_pks)}}">
 											<label class="custom-file-label" for="berkas_pks">
 												{{ $pks->berkas_pks ? $pks->berkas_pks : 'Pilih file...' }}

@@ -8,7 +8,7 @@
 
 @can('feeds_edit')
 <div class="row">
-    <div class="col-md-12">   
+    <div class="col-md-12">
         <form method="post" action="{{ route('admin.posts.update', [$post->id]) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -25,7 +25,7 @@
                             </div>
                         @endif
                         <small id="helptitle" class="text-muted">{{ __('Isikan judul artikel.') }}</small>
-                    </div>            
+                    </div>
                     {{-- end input judul --}}
 
                     {{-- article content input --}}
@@ -96,7 +96,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="custom-file">
-                                    <input type="file" class="form-control form-control-sm" id="img_cover" name="img_cover"
+                                    <input type="file" accept=".jpg" class="form-control form-control-sm" id="img_cover" name="img_cover"
                                         aria-describedby="image" value="{{ old('title', $post->img_cover) }}">
                                     <label class="custom-file-label" for="img_cover">{{ old('title', $post->img_cover) }}</label>
                                 </div>
@@ -119,7 +119,7 @@
                                 </select>
                                 <span class="help-block">Pilih priority yang telah disediakan.</span>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="category">Category</label>
                                 <select class="form-control select2-placeholder" name="category" id="category">
@@ -130,7 +130,7 @@
                                 </select>
                                 <span class="help-block">Pilih kategori yang telah disediakan.</span>
                             </div>
-                            
+
                             <div class="form-group">
                                 <select class="form-control form-control-sm select2-user" name="author" id="author">
                                     <option value="">Pilih Author</option>
@@ -187,7 +187,7 @@
                 </div>
             </div>
         </form>
-        
+
     </div>
 </div>
 @endcan
@@ -245,7 +245,7 @@
             });
         });
     </script>
-    
+
     {{-- radio draft-publish button --}}
     {{-- <script>
         const switchBtn = document.querySelector('#draft');
