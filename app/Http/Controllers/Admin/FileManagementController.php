@@ -42,13 +42,15 @@ class FileManagementController extends Controller
 		$template->berkas = $request->input('berkas');
 		$template->nama_berkas = $request->input('nama_berkas');
 		$template->deskripsi = $request->input('deskripsi');
+		$filename = preg_replace('/[^\w\s]/', '_', $template->berkas);
 
 		if ($request->hasFile('lampiran')) {
 			$file = $request->file('lampiran');
-			$filename = 'template_' . $file->getClientOriginalName();
+			$filename = 'template_' . $filename . '.' . $file->getClientOriginalExtension();
 			$file->storeAs('uploads/master/', $filename, 'public');
 			$template->lampiran = $filename;
 		}
+		dd($filename);
 		$template->save();
 		return redirect()->route('admin.task.template.index')->with('success', 'Template berhasil diunggah.');
 	}
@@ -79,17 +81,8 @@ class FileManagementController extends Controller
 		$filename = $file->lampiran;
 		$path = 'uploads/master/' . $filename;
 
-		// Check if the file exists in the storage
-		// if (Storage::exists($path)) {
-		// 	// Generate a public URL for the file
 		$url = Storage::url($path);
-
-		// Download the file
 		return Response::download(public_path($url), $filename);
-		// } else {
-		// 	// Or you can redirect or display an error message
-		// 	return redirect()->back()->with('error', 'Berkas tidak ditemukan');
-		// }
 	}
 
 	public function destroy($id)

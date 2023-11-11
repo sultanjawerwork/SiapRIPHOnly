@@ -390,6 +390,3 @@ Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin
 Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('sample/{id}', 'TestController@index')->name('sample');
 });
-
-
-//
