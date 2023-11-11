@@ -24,10 +24,10 @@
 								<td>{{$file->created_at}}</td>
 								<td>{{$file->updated_at}}</td>
 								<td class="d-flex">
-										<form action="{{route('admin.task.template.delete', $file->id)}}" enctype="multipart/form-data">
+										<form action="{{route('admin.template.delete', $file->id)}}" enctype="multipart/form-data">
 											@csrf
 											@method('DELETE')
-											<a href="{{route('admin.task.template.download', $file->id)}}" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Unduh Berkas">
+											<a href="{{route('admin.template.download', $file->id)}}" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Unduh Berkas">
 												<i class="fal fa-download"></i>
 											</a>
 											@can('administrator_access')
@@ -96,7 +96,7 @@
 					className: 'btn btn-info btn-xs ml-2',
 					@can('administrator_access')
 						action: function(e, dt, node, config) {
-							window.location.href = '{{ route('admin.task.template.create') }}';
+							window.location.href = '{{ route('admin.template.create') }}';
 						}
 					@else
 						action: function(e, dt, node, config) {

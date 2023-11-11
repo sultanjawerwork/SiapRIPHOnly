@@ -7,7 +7,7 @@
 	<div class="col-12">
 		<div class="panel" id="panel-1">
 			<div class="panel-container show">
-				<form method="POST" action="{{ route('admin.task.template.store')}}"
+				<form method="POST" action="{{ route('admin.template.store')}}"
 					enctype="multipart/form-data">
 					@csrf
 					<div class="panel-content">
