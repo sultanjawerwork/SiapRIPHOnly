@@ -157,7 +157,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
 		//master penangkar
 		Route::get('penangkar', 'MasterPenangkarController@index')->name('penangkar');
-		Route::group(['prefix' => 'commitment', 'as' => 'commitment.'], function () {
+		Route::group(['prefix' => 'penangkar', 'as' => 'penangkar.'], function () {
 			Route::get('create', 'MasterPenangkarController@create')->name('create');
 			Route::post('store', 'MasterPenangkarController@store')->name('store');
 			Route::get('{id}/edit', 'MasterPenangkarController@edit')->name('edit');
@@ -237,39 +237,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('skl/arsip', function () {
 			return redirect()->route('skl.arsip');
 		})->name('skl.arsip');
-
-		// Route::get('user/oldskl/index', 'OldSklController@index')->name('user.oldskl.index');
-		// Route::get('user/oldskl/{id}/show', 'OldSklController@show')->name('user.oldskl.show');
-
-		//berkas
-		Route::get('berkas', 'BerkasController@indexberkas')->name('berkas');
-
-		//galeri
-		Route::get('galeri', 'BerkasController@indexgaleri')->name('galeri');
-
-		//template
-		Route::group(['prefix' => 'template', 'as' => 'template.'], function () {
-			Route::get('index', 'FileManagementController@index')->name('index');
-			Route::get('create', 'FileManagementController@create')->name('create');
-			Route::post('store', 'FileManagementController@store')->name('store');
-			Route::post('{id}/edit', 'FileManagementController@edit')->name('edit');
-			Route::put('{id}/update', 'FileManagementController@update')->name('update');
-			Route::get('{id}/download', 'FileManagementController@download')->name('download');
-			Route::delete('{id}/delete', 'FileManagementController@destroy')->name('delete');
-		});
-
-		//dihapus
-
-		//Daftar SKL untuk user
-		// Route::get('user/skl', 'UserSklController@index')->name('user.skl');
-		// Route::get('user/skl/{id}/show', 'UserSklController@show')->name('user.skl.show');
-		// Route::get('user/skl/{id}/print', 'UserSklController@print')->name('user.skl.print');
-
-		// Route::get('template', 'BerkasController@indextemplate')->name('template');
-		//Route::get('template/{berkas}', 'BerkasController@showtemplate')->name('template.show');
-		// Route::get('template/create', 'BerkasController@createtemplate')->name('template.create');
-		// Route::post('template', 'BerkasController@storetemplate')->name('template.store');
-
+	});
+	//template
+	Route::group(['prefix' => 'template', 'as' => 'template.'], function () {
+		Route::get('index', 'FileManagementController@index')->name('index');
+		Route::get('create', 'FileManagementController@create')->name('create');
+		Route::post('store', 'FileManagementController@store')->name('store');
+		Route::post('{id}/edit', 'FileManagementController@edit')->name('edit');
+		Route::put('{id}/update', 'FileManagementController@update')->name('update');
+		Route::get('{id}/download', 'FileManagementController@download')->name('download');
+		Route::delete('{id}/delete', 'FileManagementController@destroy')->name('delete');
 	});
 	Route::get('lokasiTanamByCommitment/{id}', 'DataLokasiTanamController@lokasiTanamByCommitment')->name('lokasiTanamByCommitment');
 	Route::get('listLokasi/{id}', 'DataLokasiTanamController@listLokasi')->name('ajutanam.listlokasi');
