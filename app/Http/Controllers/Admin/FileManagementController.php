@@ -50,9 +50,9 @@ class FileManagementController extends Controller
 			$file->storeAs('uploads/master/', $filename, 'public');
 			$template->lampiran = $filename;
 		}
-		dd($filename);
+		// dd($filename);
 		$template->save();
-		return redirect()->route('admin.task.template.index')->with('success', 'Template berhasil diunggah.');
+		return redirect()->route('admin.template.index')->with('success', 'Template berhasil diunggah.');
 	}
 
 	public function show($id)
@@ -89,6 +89,6 @@ class FileManagementController extends Controller
 	{
 		$template = FileManagement::findOrFail($id);
 		$template->delete();
-		return redirect()->route('admin.task.template.index')->with('success', 'tempplate berhasil dihapus.');
+		return redirect()->route('admin.template.index')->with('success', 'tempplate berhasil dihapus.');
 	}
 }
