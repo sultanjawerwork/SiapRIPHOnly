@@ -371,8 +371,8 @@
 			@can('permohonan_access')
 				<li class="nav-title">Pengelolaan Berkas</li>
 				@can('template_access')
-					<li class="c-sidebar-nav-item {{ request()->is('admin/task/template')
-						|| request()->is('admin/task/template/*') ? 'active' : '' }}">
+					<li class="c-sidebar-nav-item {{ request()->is('admin/template')
+						|| request()->is('admin/template/*') ? 'active' : '' }}">
 						<a href="{{ route('admin.template.index') }}" title="Master Template"
 							data-filter-tags="daftar berkas file template">
 							<i class="fa-fw fab fa-stack-overflow c-sidebar-nav-icon"></i>
@@ -504,7 +504,7 @@
 
 				{{-- Master template --}}
 				{{-- @can('template_access') --}}
-					<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') || request()->is('admin/task/template/*') ? 'active' : '' }}">
+					<li class="c-sidebar-nav-item {{ request()->is('admin/template') || request()->is('admin/template/*') ? 'active' : '' }}">
 						<a href="{{ route('admin.template.index') }}"
 							data-filter-tags="{{ strtolower(trans('cruds.mastertemplate.title_lang')) }}">
 							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
