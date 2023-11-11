@@ -30,8 +30,8 @@
 			@php($getRecomendations = null)
 		@endif
 
-		@if (Auth::user()->roles[0]->title == 'User')
-			@php($getNewSkl = \App\Models\SklReads::getNewSkl())
+		@if (Auth::user()->roles[0]->title == 'User' || Auth::user()->roles[0]->title == 'Pejabat' )
+			@php($getNewSkl = \App\Models\Skl::getNewSkl())
 			@php($cntgetNewSkl = \App\Models\SklReads::getNewSklCount())
 		@endif
 
@@ -349,6 +349,49 @@
 							</div>
 						</div>
 					</div>
+					<div id="panel-3" class="panel">
+						<div class="panel-hdr">
+							<h2>
+								<i class="subheader-icon fal fa-file-certificate mr-1"></i>
+								<span class="text-primary fw-700 text-uppercase">
+									SKL Terbit
+								</span>
+							</h2>
+							<div class="panel-toolbar">
+								@if ($cntgetNewSkl > 0)
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntgetNewSkl}} SKL baru diterbitkan.">
+										{{$cntgetNewSkl}}
+									</a>
+								@else
+								@endif
+							</div>
+						</div>
+						<div class="panel-container collapse">
+							<div class="panel-content p-0">
+								<ul class="notification">
+									@foreach ($getNewSkl as $item)
+										<li>
+											<a href="{{route('skl.arsip')}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
+												<span class="mr-2">
+													<i class="fal fa-award fa-4x text-success"></i>
+												</span>
+												<span class="d-flex flex-column flex-1">
+													<span class="name">{{ $item->no_ijin }} <span
+														class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
+													<span class="msg-a fs-sm">
+														<span class="badge badge-success">TERBIT!</span>
+													</span>
+
+													<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
+												</span>
+											</a>
+										</li>
+
+									@endforeach
+								</ul>
+							</div>
+						</div>
+					</div>
 					<div id="panel-4" class="panel" hidden>
 						<div class="panel-hdr">
 							<h2>
@@ -398,12 +441,12 @@
 							<h2>
 								<i class="subheader-icon fal fa-file-certificate mr-1"></i>
 								<span class="text-primary fw-700 text-uppercase">
-									SKL Terbit
+									SKL Baru Terbit
 								</span>
 							</h2>
 							<div class="panel-toolbar">
 								@if ($cntgetNewSkl > 0)
-									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntRecomendations}} Rekomendasi Penerbitan yang perlu Anda tindaklanjuti.">
+									<a href="javascript:void(0);" class="mr-1 btn btn-danger btn-xs waves-effect waves-themed" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Terdapat {{$cntgetNewSkl}} SKL baru diterbitkan.">
 										{{$cntgetNewSkl}}
 									</a>
 								@else
@@ -415,7 +458,7 @@
 								<ul class="notification">
 									@foreach ($getNewSkl as $item)
 										<li>
-											<a href="{{$item->completed->url}}" onClick="markAsRead({{ $item->id }})" class="d-flex align-items-center show-child-on-hover">
+											<a href="{{route('admin.task.skl.arsip')}}" class="d-flex align-items-center show-child-on-hover">
 												<span class="mr-2">
 													<i class="fal fa-award fa-4x text-success"></i>
 												</span>
@@ -423,14 +466,13 @@
 													<span class="name">{{ $item->no_ijin }} <span
 														class="badge badge-success fw-n position-absolute pos-top pos-right mt-1">NEW</span></span>
 													<span class="msg-a fs-sm">
-														<span class="badge badge-success">Direkomendasikan</span>
+														<span class="badge badge-success">TERBIT!</span>
 													</span>
 
 													<span class="fs-nano text-muted mt-1">{{ $item->published_date->format('d F Y') }} ({{ $item->published_date->diffForHumans() }})</span>
 												</span>
 											</a>
 										</li>
-
 									@endforeach
 								</ul>
 							</div>

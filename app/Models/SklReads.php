@@ -18,52 +18,6 @@ class SklReads extends Model
 		'read_at',
 	];
 
-	public static function getNewSkl()
-	{
-		$userId = Auth::id();
-		$userRole = Auth::user()->roles[0]->title;
-
-		if ($userRole === 'Admin' || $userRole === 'Pejabat') {
-			// Jika peran pengguna adalah Admin atau Pejabat, gunakan logika sebelumnya
-			return Skl::whereNotIn('id', function ($query) {
-				$query->select('skl_id')->from('skl_reads');
-			})->get();
-		} elseif ($userRole === 'User') {
-			// Jika peran pengguna adalah User, ambil hanya SKL yang sesuai dengan npwp_company dari DataUser
-			$userNpwp = Auth::user()->data_user->npwp_company;
-
-			$newSklIds = Skl::where('npwp', $userNpwp)
-				->whereNotIn('id', function ($query) use ($userId) {
-					$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
-				})->pluck('id')->toArray();
-
-			return Skl::whereIn('id', $newSklIds)->get();
-		}
-	}
-
-	public static function getNewSklCount()
-	{
-		$userId = Auth::id();
-		$userRole = Auth::user()->roles[0]->title;
-
-		if ($userRole === 'Admin' || $userRole === 'Pejabat') {
-			// Jika peran pengguna adalah Admin atau Pejabat, gunakan logika sebelumnya
-			return Skl::whereNotIn('id', function ($query) {
-				$query->select('skl_id')->from('skl_reads');
-			})->count();
-		} elseif ($userRole === 'User') {
-			// Jika peran pengguna adalah User, hitung hanya SKL yang sesuai dengan user_id dari DataUser
-			$userNpwp = Auth::user()->data_user->npwp_company;
-
-			$newSklCount = Skl::where('npwp', $userNpwp)
-				->whereNotIn('id', function ($query) use ($userId) {
-					$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
-				})->count();
-
-			return $newSklCount;
-		}
-	}
-
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id');
@@ -72,5 +26,25 @@ class SklReads extends Model
 	public function skl()
 	{
 		return $this->belongsTo(Skl::class, 'skl_id', 'id');
+	}
+
+	// Di dalam model SklReads.php
+	public static function getNewSklCount()
+	{
+		$userId = Auth::id();
+		$userRole = Auth::user()->roles[0]->title;
+
+		if ($userRole === 'Admin' || $userRole === 'Pejabat') {
+			// Jika peran pengguna adalah Admin atau Pejabat, hitung semua skl yang belum dilihat
+			return Skl::whereNotIn('id', function ($query) use ($userId) {
+				$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
+			})->count();
+		} elseif ($userRole === 'User') {
+			// Jika peran pengguna adalah User, hitung hanya SKL yang sesuai dengan npwp_company dari DataUser
+			$userNpwp = Auth::user()->data_user->npwp_company;
+			return Skl::whereNotIn('id', function ($query) use ($userId) {
+				$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
+			})->where('npwp', $userNpwp)->count();
+		}
 	}
 }
