@@ -15,5 +15,6 @@ jobs:
       run: |
         cd ${{vars.GIT_WORKDIR_MASTER}}
         git pull
+        php artisan optimize
         cd ..
 
