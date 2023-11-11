@@ -561,10 +561,9 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 
 			var url = '{{ route("verification.lokasitanam", $noIjin) }}';
 
-			$('#pksCheck').DataTable({
+			var pksCheck = $('#pksCheck').DataTable({
 				responsive: true,
 				lengthChange: true,
-				order: [1, 'asc'],
 				dom:
 				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
 				"<'row'<'col-sm-12'tr>>" +
@@ -573,27 +572,75 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 					{
 						extend: 'excelHtml5',
 						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Daftar Perjanjian Kerjasama',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Generate Excel',
 						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
 					},
 					{
 						extend: 'print',
 						text: '<i class="fa fa-print"></i>',
-						title: 'Daftar Perjanjian Kerjasama',
+						title: 'Monitoring Timeline Realisasi',
 						titleAttr: 'Print Table',
 						className: 'btn-outline-primary btn-xs btn-icon mr-1'
 					}
 				],
-				columnDefs: [
+			});
 
-					{ className: 'text-center', targets: [2,3,4] },
+			var tableTanam = $('#tableTanam').DataTable({
+				responsive: true,
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
 				],
-				ajax: {
+			});
+
+			var tableLokasi = $('#tableLokasi').DataTable({
+				responsive: true,
+				lengthChange: true,
+				dom:
+				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Generate Excel',
+						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i>',
+						title: 'Monitoring Timeline Realisasi',
+						titleAttr: 'Print Table',
+						className: 'btn-outline-primary btn-xs btn-icon mr-1'
+					}
+				],
+			});
+
+			function updateTablePks(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						var pksCheck = $('#pksCheck').DataTable();
 						pksCheck.clear().draw();
@@ -620,42 +667,16 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						pksCheck.draw(); // Draw the table after adding the rows
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
-
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
 
-			$('#tableTanam').DataTable({
-				// serverSide: true,
-				responsive: true,
-				lengthChange: true,
-				dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-				buttons: [
-					{
-						extend: 'excelHtml5',
-						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Monitoring Timeline Realisasi',
-						titleAttr: 'Generate Excel',
-						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
-					},
-					{
-						extend: 'print',
-						text: '<i class="fa fa-print"></i>',
-						title: 'Monitoring Timeline Realisasi',
-						titleAttr: 'Print Table',
-						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					}
-				],
-				ajax: {
+			function updateTableTanam(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						// Hapus data yang ada di tabel sebelum memasukkan yang baru
 						var tableTanam = $('#tableTanam').DataTable();
@@ -685,40 +706,16 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						}
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
 
-			$('#tableLokasi').DataTable({
-				responsive: true,
-				lengthChange: true,
-				dom:
-				"<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'lB>>" +
-				"<'row'<'col-sm-12'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-				buttons: [
-					{
-						extend: 'excelHtml5',
-						text: '<i class="fa fa-file-excel"></i>',
-						title: 'Daftar Lokasi Tanam',
-						titleAttr: 'Generate Excel',
-						className: 'btn-outline-success btn-xs btn-icon ml-3 mr-1'
-					},
-					{
-						extend: 'print',
-						text: '<i class="fa fa-print"></i>',
-						title: 'Daftar Lokasi Tanam',
-						titleAttr: 'Print Table',
-						className: 'btn-outline-primary btn-xs btn-icon mr-1'
-					}
-				],
-				ajax: {
+			function updateTableLokasi(url) {
+				$.ajax({
 					url: url,
 					type: 'GET',
 					dataType: 'json',
-					dataSrc: '', // Ini adalah opsi untuk mengatur sumber data dalam respons
 					success: function (response) {
 						var tableLokasi = $('#tableLokasi').DataTable();
 						tableLokasi.clear().draw();
@@ -753,11 +750,14 @@ table.dataTable tr.dtrg-group.dtrg-level-1 td, table.dataTable tr.dtrg-group.dtr
 						tableLokasi.draw(); // Draw the table after adding the rows
 					},
 					error: function (xhr, status, error) {
-						// Handle error jika diperlukan
-						console.error(xhr);
+						console.log("AJAX request error: " + error);
 					}
-				},
-			});
+				});
+			}
+
+			updateTablePks(url);
+			updateTableTanam(url);
+			updateTableLokasi(url);
 		});
 	</script>
 
