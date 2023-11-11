@@ -23,14 +23,46 @@
 								<td>{{$file->nama_berkas}}</td>
 								<td>{{$file->created_at}}</td>
 								<td>{{$file->updated_at}}</td>
-								<td>
-									
+								<td class="d-flex">
+										<form action="{{route('admin.task.template.delete', $file->id)}}" enctype="multipart/form-data">
+											@csrf
+											@method('DELETE')
+											<a href="{{route('admin.task.template.download', $file->id)}}" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Unduh Berkas">
+												<i class="fal fa-download"></i>
+											</a>
+											@can('administrator_access')
+												<a href="" class="btn btn-icon btn-xs btn-warning" data-toggle="tooltip" data-original-title="Perbarui Berkas">
+													<i class="fal fa-file-edit"></i>
+												</a>
+												<button type="submit" class="btn btn-icon btn-xs btn-danger" data-toggle="tooltip" data-original-title="Hapus Berkas">
+													<i class="fal fa-trash"></i>
+												</button>
+											@endcan
+										</form>
 								</td>
 							</tr>
 							@endforeach
 						</tbody>
 					</table>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{-- modal view doc --}}
+<div class="modal fade" id="viewDocs" tabindex="-1" role="dialog" aria-labelledby="document" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-right" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">
+					Berkas <span class="fw-300"><i>lampiran </i></span>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body embed-responsive embed-responsive-16by9">
+				<iframe class="embed-responsive-item" src="" width="100%"  frameborder="0"></iframe>
 			</div>
 		</div>
 	</div>
@@ -42,6 +74,10 @@
 <script>
 	$(document).ready(function()
 	{
+		$('#viewDocs').on('shown.bs.modal', function (e) {
+			var docUrl = $(e.relatedTarget).data('doc');
+			$('iframe').attr('src', docUrl);
+		});
 
 		// initialize datatable
 		$('#datatable').dataTable(
@@ -55,40 +91,10 @@
 				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 			buttons: [
 				{
-					extend: 'pdfHtml5',
-					text: '<i class="fa fa-file-pdf"></i>',
-					titleAttr: 'Generate PDF',
-					className: 'btn-outline-danger btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'excelHtml5',
-					text: '<i class="fa fa-file-excel"></i>',
-					titleAttr: 'Generate Excel',
-					className: 'btn-outline-success btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'csvHtml5',
-					text: '<i class="fal fa-file-csv"></i>',
-					titleAttr: 'Generate CSV',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'copyHtml5',
-					text: '<i class="fa fa-copy"></i>',
-					titleAttr: 'Copy to clipboard',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					extend: 'print',
-					text: '<i class="fa fa-print"></i>',
-					titleAttr: 'Print Table',
-					className: 'btn-outline-primary btn-sm btn-icon mr-1'
-				},
-				{
-					text: '<i class="fa fa-plus"></i>',
+					text: '<i class="fa fa-plus mr-1"></i> Tambah Templat',
 					titleAttr: 'Create new template',
-					className: 'btn btn-info btn-sm btn-icon ml-2',
-					@can('old_skl_create')
+					className: 'btn btn-info btn-xs ml-2',
+					@can('administrator_access')
 						action: function(e, dt, node, config) {
 							window.location.href = '{{ route('admin.task.template.create') }}';
 						}

@@ -88,7 +88,7 @@ function createMarkers() {
 }
 
 function createPolygon() {
-	const polygonCoords = document.getElementById("polygon").value;
+	let polygonCoords = document.getElementById("polygon").value;
 	if (polygonCoords !== "") {
 		const parsedCoords = JSON.parse(polygonCoords);
 		if (polygon) {

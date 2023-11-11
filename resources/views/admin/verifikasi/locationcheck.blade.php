@@ -287,7 +287,7 @@
 <script src="{{ asset('js/miscellaneous/lightgallery/lightgallery.bundle.js') }}"></script>
 	@parent
 	<script src="{{ asset('js/gmap/map.js') }}"></script>
-	<script src="{{ asset('js/gmap/location-search.js') }}"></script>
+	{{-- <script src="{{ asset('js/gmap/location-search.js') }}"></script> --}}
 	<script src="{{ asset('js/gmap/kml_parser.js') }}"></script>
 	<script src="{{ asset('js/gmap/link_parser.js') }}"></script>
 	<script>

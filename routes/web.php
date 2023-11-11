@@ -248,13 +248,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		Route::get('galeri', 'BerkasController@indexgaleri')->name('galeri');
 
 		//template
-		Route::delete('template/destroy', 'BerkasController@massDestroy')->name('template.massDestroy');
-		Route::delete('template/{id}', 'BerkasController@destroytemplate')->name('template.destroy');
-		Route::get('template/{berkas}/edit', 'BerkasController@edittemplate')->name('template.edit');
-		Route::put('template/{berkas}', 'BerkasController@updatetemplate')->name('template.update');
-		Route::get('template', 'FileManagementController@templateindex')->name('template');
-		Route::get('template/create', 'FileManagementController@templatecreate')->name('template.create');
-		Route::post('template', 'FileManagementController@templatestore')->name('template.store');
+		Route::group(['prefix' => 'template', 'as' => 'template.'], function () {
+			Route::get('index', 'FileManagementController@index')->name('index');
+			Route::get('create', 'FileManagementController@create')->name('create');
+			Route::post('store', 'FileManagementController@store')->name('store');
+			Route::post('{id}/edit', 'FileManagementController@edit')->name('edit');
+			Route::put('{id}/update', 'FileManagementController@update')->name('update');
+			Route::get('{id}/download', 'FileManagementController@download')->name('download');
+			Route::delete('{id}/delete', 'FileManagementController@destroy')->name('delete');
+		});
 
 		//dihapus
 

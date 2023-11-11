@@ -155,9 +155,7 @@
 					</li>
 				@endcan
 				@can('commitment_access')
-					@if (Auth::user()->roles[0]->title == 'user_v2')
-						{{-- for later use only --}}
-					@elseif (Auth::user()->roles[0]->title == 'User')
+					@if (Auth::user()->roles[0]->title == 'User')
 						<li class="c-sidebar-nav-item {{ request()->is('admin/task/commitment') ||
 						request()->is('admin/task/pks*') ? 'active' : '' }}">
 							<a href="{{ route('admin.task.commitment') }}"
@@ -370,9 +368,19 @@
 			@endif
 
 			{{-- pengelolaan berkas --}}
-			{{-- @can('folder_access')
+			@can('permohonan_access')
 				<li class="nav-title">Pengelolaan Berkas</li>
-				<li class="{{ request()->is('admin/task/berkas*')
+				@can('template_access')
+					<li class="c-sidebar-nav-item {{ request()->is('admin/task/template')
+						|| request()->is('admin/task/template/*') ? 'active' : '' }}">
+						<a href="{{ route('admin.task.template.index') }}" title="Skl"
+							data-filter-tags="daftar berkas file template">
+							<i class="fa-fw fab fa-stack-overflow c-sidebar-nav-icon"></i>
+							<span class="nav-link-text">{{ trans('cruds.template.title_lang') }}</span>
+						</a>
+					</li>
+				@endcan
+				<li hidden class="hidden {{ request()->is('admin/task/berkas*')
 					|| request()->is('admin/task/galeri*')
 					|| request()->is('admin/task/template*') ? 'active open' : '' }} ">
 					<a href="#" title="Pengelolaan Berkas"
@@ -381,7 +389,6 @@
 						<span class="nav-link-text">{{ trans('cruds.folder.title_lang') }}</span>
 					</a>
 					<ul>
-
 						@can('berkas_access')
 							<li class="c-sidebar-nav-item {{ request()->is('admin/task/berkas')
 								|| request()->is('admin/task/berkas/*') ? 'active' : '' }}">
@@ -404,24 +411,9 @@
 								</a>
 							</li>
 						@endcan
-						@can('template_access')
-							<li class="c-sidebar-nav-item {{ request()->is('admin/task/template')
-								|| request()->is('admin/task/template/*') ? 'active' : '' }}">
-								<a href="{{ route('admin.task.template') }}" title="Skl"
-									data-filter-tags="daftar berkas file template">
-									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
-									<span class="nav-link-text">{{ trans('cruds.template.title_lang') }}</span>
-								</a>
-								<a href="{{ route('admin.task.template') }}" title="Skl"
-									data-filter-tags="daftar berkas file template">
-									<i class="fa-fw fal fa-folder c-sidebar-nav-icon"></i>
-									<span class="nav-link-text">{{ trans('cruds.template.title_lang') }}</span>
-								</a>
-							</li>
-						@endcan
 					</ul>
 				</li>
-			@endcan --}}
+			@endcan
 
 			{{-- Feed & Messages --}}
 			@can('feedmsg_access')
@@ -544,14 +536,14 @@
 				@endcan
 
 				{{-- Master template --}}
-				@can('template_access')
-					<li hidden class="c-sidebar-nav-item {{ request()->is('admin/task/template') || request()->is('admin/task/template/*') ? 'active' : '' }}">
-						<a href="{{ route('admin.task.template') }}"
+				{{-- @can('template_access') --}}
+					<li class="c-sidebar-nav-item {{ request()->is('admin/task/template') || request()->is('admin/task/template/*') ? 'active' : '' }}">
+						<a href="{{ route('admin.task.template.index') }}"
 							data-filter-tags="{{ strtolower(trans('cruds.mastertemplate.title_lang')) }}">
-							<i class="fal fa-file-upload c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
+							<i class="fab fa-stack-overflow c-sidebar-nav-icon"></i>{{ trans('cruds.mastertemplate.title_lang') }}
 						</a>
 					</li>
-				@endcan
+				{{-- @endcan --}}
 
 				{{-- data report --}}
 				@can('data_report_access')

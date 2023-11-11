@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Skl extends Model
 {
@@ -64,6 +65,29 @@ class Skl extends Model
 		return self::whereNotNull('approved_by')
 			->whereNull('published_date')->get();
 	}
+
+	// Di dalam model Skl.php
+	// Di dalam model Skl.php
+	public static function getNewSkl()
+	{
+		$userId = Auth::id();
+		$userRole = Auth::user()->roles[0]->title;
+
+		if ($userRole === 'Admin' || $userRole === 'Pejabat') {
+			// Jika peran pengguna adalah Admin atau Pejabat, dapatkan semua skl yang belum dilihat
+			return Skl::whereNotIn('id', function ($query) use ($userId) {
+				$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
+			})->get();
+		} elseif ($userRole === 'User') {
+			// Jika peran pengguna adalah User, dapatkan semua SKL yang belum dilihat sesuai npwp_company dari DataUser
+			$userNpwp = Auth::user()->data_user->npwp_company;
+			return Skl::whereNotIn('id', function ($query) use ($userId) {
+				$query->select('skl_id')->from('skl_reads')->where('user_id', $userId);
+			})->where('npwp', $userNpwp)->get();
+		}
+	}
+
+
 
 
 	//relationship

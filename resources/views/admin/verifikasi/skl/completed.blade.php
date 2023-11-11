@@ -26,7 +26,12 @@
 									</thead>
 									<tbody>
 										@foreach ($completeds as $completed)
-											<tr>
+											@php
+												$sklRead = \App\Models\SklReads::where('skl_id', $completed->skl->id)
+													->where('user_id', Auth::id())
+													->first();
+											@endphp
+											<tr  style="{{ !$sklRead ? 'background-color: rgba(255, 166, 0, 0.37)' : '' }}">
 												<td>{{$completed->no_skl}}</td>
 												@if (Auth::user()->roleaccess === 1)
 													<td>{{$completed->datauser->company_name}}</td>
@@ -46,7 +51,7 @@
 														<i class="fal fa-file-certificate"></i>
 													</a>
 													@endif
-													<a href="{{$completed->url}}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL" onClick="markAsRead({{ $completed->skl->id }})" target="_blank">
+													<a href="{{ $completed->url }}" class="btn btn-icon btn-success btn-xs mr-1" title="Lihat SKL" onClick="markAsRead({{ $completed->skl->id }})" target="_blank">
 														<i class="fal fa-file-certificate"></i>
 													</a>
 												</td>

@@ -42,7 +42,7 @@
 					</div>
 					<div class="panel-content card-header">
 						<form id="location-search-form">
-							<div class="form-group mb-5" title="Cari lokasi yang diinginkan">
+							<div class="form-group mb-5" title="Cari lokasi yang diinginkan berdasar nama tempat, area, wilayah.">
 								<div class="input-group bg-white shadow-inset-2">
 									<div class="input-group-prepend">
 										<span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
@@ -58,6 +58,40 @@
 								</div>
 								<span class="help-block">Cari lokasi di peta</span>
 							</div>
+							{{-- <div class="row d-flex mb-3 flex-row justify-content-between" title="Cari lokasi yang diinginkan berdasarkan Latitude dan Longitude.">
+								<div class="col-md-6">
+									<div class="form-group mb-5" title="Masukkan koordinat Latitude.">
+										<label for="">Latitude</label>
+										<div class="input-group bg-white shadow-inset-2">
+											<div class="input-group-prepend">
+												<span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+													<i class="fal fa-map-marker-plus"></i>
+												</span>
+											</div>
+											<input id="searchLat" placeholder="latitude..." class="form-control border-left-0 bg-transparent pl-0" >
+										</div>
+										<span class="help-block">Koordinat latitude.</span>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-5" title="Masukkan koordinat Longitude.">
+										<label for="">Longitude</label>
+										<div class="input-group bg-white shadow-inset-2">
+											<div class="input-group-prepend">
+												<span class="input-group-text bg-transparent border-right-0 py-1 px-3 text-success">
+													<i class="fal fa-map-marker-plus"></i>
+												</span>
+											</div>
+											<input id="searchLng" placeholder="longitude..." class="form-control border-left-0 bg-transparent pl-0" >
+											<div class="input-group-append">
+												<button class="btn btn-default waves-effect waves-themed"
+													type="submit">Search</button>
+											</div>
+										</div>
+										<span class="help-block">Koordinat Longitude.</span>
+									</div>
+								</div>
+							</div> --}}
 						</form>
 						<div class="row d-flex flex-row justify-content-between">
 							<div class="col-md-6">
