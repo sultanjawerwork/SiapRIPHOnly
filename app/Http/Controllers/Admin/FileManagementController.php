@@ -9,31 +9,16 @@ use App\Http\Requests\StoreBerkasRequest;
 use App\Http\Requests\UpdateBerkasRequest;
 use App\Http\Requests\MassDestroyBerkasRequest;
 use App\Models\FileManagement;
-use App\Models\PullRiph;
-use Gate;
-use Illuminate\Database\Eloquent\Collection;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
-use PhpParser\ErrorHandler\Collecting;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-use DateTime;
-use DateTimeZone;
-use Exception;
-use Yajra\DataTables\Facades\DataTables;
 
 class FileManagementController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function templateindex()
+	public function index()
 	{
 		$module_name = 'File Management';
 		$page_title = 'Templates Master';
-		$page_heading = 'File Templates';
+		$page_heading = 'Templates Master';
 		$heading_class = 'fab fa-stack-overflow';
 
 		$templates = FileManagement::all();
@@ -41,12 +26,7 @@ class FileManagementController extends Controller
 		return view('admin.filemanagement.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'templates'));
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function templatecreate()
+	public function create()
 	{
 		$module_name = 'File Management';
 		$page_title = 'Templates Master';
@@ -56,13 +36,7 @@ class FileManagementController extends Controller
 		return view('admin.filemanagement.create', compact('module_name', 'page_title', 'page_heading', 'heading_class'));
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function templatestore(Request $request)
+	public function store(Request $request)
 	{
 		$template = new FileManagement();
 		$template->berkas = $request->input('berkas');
@@ -76,51 +50,52 @@ class FileManagementController extends Controller
 			$template->lampiran = $filename;
 		}
 		$template->save();
-		// dd($template);
+		return redirect()->route('admin.task.template.index')->with('success', 'Template berhasil diunggah.');
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function show($id)
 	{
 		//
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function edit($id)
 	{
 		//
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function update(Request $request, $id)
 	{
 		//
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	public function download($id)
+	{
+		$file = FileManagement::find($id);
+
+		if (!$file) {
+			return redirect()->back()->with('error', 'Berkas tidak ditemukan');
+		}
+
+		$filename = $file->lampiran;
+		$path = 'uploads/master/' . $filename;
+
+		// Check if the file exists in the storage
+		// if (Storage::exists($path)) {
+		// 	// Generate a public URL for the file
+		$url = Storage::url($path);
+
+		// Download the file
+		return Response::download(public_path($url), $filename);
+		// } else {
+		// 	// Or you can redirect or display an error message
+		// 	return redirect()->back()->with('error', 'Berkas tidak ditemukan');
+		// }
+	}
+
 	public function destroy($id)
 	{
-		//
+		$template = FileManagement::findOrFail($id);
+		$template->delete();
+		return redirect()->route('admin.task.template.index')->with('success', 'tempplate berhasil dihapus.');
 	}
 }
