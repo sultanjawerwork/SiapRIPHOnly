@@ -9,6 +9,7 @@ jobs:
     runs-on: self-hosted
     if: github.ref == 'refs/heads/master'
     steps:
+
       - uses: actions/checkout@v3
       - name: Run Script
         run: |
@@ -16,3 +17,11 @@ jobs:
           git pull
           php artisan optimize
           cd ..
+
+ 
+
+
+
+   
+
+
