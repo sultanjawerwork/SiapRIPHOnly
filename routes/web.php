@@ -367,6 +367,19 @@ Route::group(['prefix' => 'digisign', 'as' => 'digisign.', 'namespace' => 'Admin
 	Route::post('saveQrImage', 'DigitalSign@saveQrImage')->name('saveQrImage');
 });
 
+Route::group(['prefix' => 'support', 'as' => 'support.', 'middleware' => ['auth']], function () {
+	Route::group(['prefix' => 'how_to', 'as' => 'howto.', 'namespace' => 'HowTo'], function () {
+		Route::get('importir',		'HowToController@importir')->name('importir');
+		Route::get('administrator',	'HowToController@administrator')->name('administrator');
+		Route::get('verifikator',	'HowToController@verifikator')->name('verifikator');
+		Route::get('pejabat',		'HowToController@pejabat')->name('pejabat');
+	});
+	Route::group(['prefix' => 'faq', 'as' => 'faq.', 'namespace' => 'Faq'], function () {
+	});
+	Route::group(['prefix' => 'ticket', 'as' => 'ticket.', 'namespace' => 'Ticket'], function () {
+	});
+});
+
 Route::group(['prefix' => 'test', 'as' => 'test.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
 	Route::get('sample/{id}', 'TestController@index')->name('sample');
 });

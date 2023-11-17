@@ -585,6 +585,45 @@
 				@endcan
 			@endcan
 
+			{{-- support --}}
+			@can('administrator_access')
+			<li class="nav-title" data-i18n="nav.administation">DUKUNGAN</li>
+			<li class="{{ request()->is('support/how_to*') ? 'active open' : '' }} ">
+				<a href="{{route('support.howto.administrator')}}" title="Daftar Varietas Hortikultura"
+					data-filter-tags="setting permission user">
+					<i class="fal fa-seedling"></i>
+					<span class="nav-link-text">Panduan Adminisrator</span>
+				</a>
+			</li>
+			@endcan
+			@can('verificator_task_access')
+			<li class="{{ request()->is('support/how_to*') ? 'active open' : '' }} ">
+				<a href="{{route('support.howto.verifikator')}}" title="Daftar Varietas Hortikultura"
+					data-filter-tags="setting permission user">
+					<i class="fal fa-seedling"></i>
+					<span class="nav-link-text">Panduan Verifikator</span>
+				</a>
+			</li>
+			@endcan
+			@can('user_task_access')
+			<li class="{{ request()->is('support/how_to*') ? 'active open' : '' }} ">
+				<a href="{{route('support.howto.importir')}}" title="Daftar Varietas Hortikultura"
+					data-filter-tags="setting permission user">
+					<i class="fal fa-seedling"></i>
+					<span class="nav-link-text">Panduan Importir</span>
+				</a>
+			</li>
+			@endcan
+			@if (Auth::user()->roles[0]->title == 'Pejabat')
+			<li class="{{ request()->is('support/how_to*') ? 'active open' : '' }} ">
+				<a href="{{route('support.howto.pejabat')}}" title="Daftar Varietas Hortikultura"
+					data-filter-tags="setting permission user">
+					<i class="fal fa-seedling"></i>
+					<span class="nav-link-text">Panduan Pejabat</span>
+				</a>
+			</li>
+			@endif
+
 			{{-- personalisasi --}}
 			<li class="nav-title" data-i18n="nav.administation">PERSONALISASI</li>
 			{{-- Change Password --}}
