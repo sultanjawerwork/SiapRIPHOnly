@@ -8,7 +8,7 @@
 @endsection
 @section('content')
 	@include('partials.subheader')
-	@can('administrator_access')
+	@can('user_task_access')
 		@include('partials.sysalert')
 		<div class="panel shadow" id="panel-1">
 			<div class="panel-container show card-body embed-responsive embed-responsive-16by9">

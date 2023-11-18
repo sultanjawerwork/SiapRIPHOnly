@@ -99,7 +99,6 @@
 			</div>
 		</div>
 	</div>
-
 	{{-- modal show data --}}
 	<!-- Modal -->
 	<!-- Modal -->
@@ -255,7 +254,10 @@
 		{
 			$('body').removeClass("overflow-hidden");
 		});
+
+
+		//data peta
+
     });
 </script>
-
 @endsection

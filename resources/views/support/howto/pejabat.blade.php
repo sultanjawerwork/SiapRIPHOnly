@@ -8,7 +8,7 @@
 @endsection
 @section('content')
 	@include('partials.subheader')
-	@can('administrator_access')
+	@if (Auth::user()->roles[0]->title == 'Pejabat')
 		@include('partials.sysalert')
 		<div class="panel shadow" id="panel-1">
 			<div class="panel-container show card-body embed-responsive embed-responsive-16by9">
@@ -17,7 +17,7 @@
 				</iframe>
 			</div>
 		</div>
-	@endcan
+	@endif
 @endsection
 
 @section('scripts')
