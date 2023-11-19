@@ -204,7 +204,6 @@ class UserMapDashboard extends Controller
 		// 		];
 		// 	}
 		// }
-
 		return response()->json($result);
 	}
 
