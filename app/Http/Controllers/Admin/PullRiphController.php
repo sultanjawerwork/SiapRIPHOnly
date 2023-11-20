@@ -32,9 +32,9 @@ class PullRiphController extends Controller
 		$page_heading = 'Tarik Data RIPH';
 		$heading_class = 'fa fa-sync-alt';
 		$npwp_company = (Auth::user()::find(Auth::user()->id)->data_user->npwp_company ?? null);
-		return view('admin.pullriph.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company'));
+		$noIjins = PullRiph::where('npwp', $npwp_company)->select('no_ijin')->get();
+		return view('admin.pullriph.index', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwp_company', 'noIjins'));
 	}
-
 
 	public function pull(Request $request)
 	{
@@ -56,6 +56,7 @@ class PullRiphController extends Controller
 				'npwp' => $request->string('npwp'),
 				'nomor' =>  $request->string('nomor')
 			);
+
 			$response = $client->__soapCall('get_riph', $parameter);
 		} catch (\Exception $e) {
 			Log::error('Soap Exception: ' . $e->getMessage());
@@ -300,6 +301,8 @@ class PullRiphController extends Controller
 								'no_ijin' => $noijin,
 								'poktan_id' => $idpoktan,
 								'anggota_id' => $idpetani,
+								// 'luas_lahan' => trim($poktan->luas_lahan, ' '),
+								// 'periode_tanam' => trim($poktan->periode_tanam, ' ')
 							]
 						);
 					}
