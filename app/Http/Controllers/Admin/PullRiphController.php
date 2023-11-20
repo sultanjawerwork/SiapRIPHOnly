@@ -226,6 +226,9 @@ class PullRiphController extends Controller
 									'no_ijin' => $noijin,
 									'poktan_id' => $idpoktan,
 									'anggota_id' => $idpetani,
+									// 'luas_lahan' => trim($poktan->luas_lahan, ' '),
+									// 'periode_tanam' => trim($poktan->periode_tanam, ' ')
+
 								]
 							);
 						}
