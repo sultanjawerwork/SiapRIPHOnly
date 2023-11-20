@@ -1691,3 +1691,405 @@
 #72 C:\\Users\\Admin\\SiapRIPHOnly\\server.php(21): require_once('C:\\\\Users\\\\Admin\\\\...')
 #73 {main}
 "} 
+[2023-11-20 17:17:55] local.ERROR: Attempt to read property "id" on null {"view":{"view":"C:\\Users\\Admin\\SiapRIPHOnly\\resources\\views\\admin\\lokasitanam\\lokasi.blade.php","data":{"errors":"<pre class=sf-dump id=sf-dump-1774819550 data-indent-pad=\"  \"><span class=sf-dump-note>Illuminate\\Support\\ViewErrorBag</span> {<a class=sf-dump-ref>#283</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">bags</span>: []
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1774819550\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","module_name":"<pre class=sf-dump id=sf-dump-1680976050 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"9 characters\">Realisasi</span>\"
+</pre><script>Sfdump(\"sf-dump-1680976050\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","page_title":"<pre class=sf-dump id=sf-dump-1650488958 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"12 characters\">Lokasi Tanam</span>\"
+</pre><script>Sfdump(\"sf-dump-1650488958\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","page_heading":"<pre class=sf-dump id=sf-dump-441322744 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"15 characters\">Realisasi Tanam</span>\"
+</pre><script>Sfdump(\"sf-dump-441322744\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","heading_class":"<pre class=sf-dump id=sf-dump-979240443 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"11 characters\">fal fa-farm</span>\"
+</pre><script>Sfdump(\"sf-dump-979240443\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","anggota":"<pre class=sf-dump id=sf-dump-133051369 data-indent-pad=\"  \"><span class=sf-dump-note>App\\Models\\Lokasi</span> {<a class=sf-dump-ref>#393</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">table</span>: \"<span class=sf-dump-str title=\"7 characters\">lokasis</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+  +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+  +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+  +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:24</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>143</span>
+    \"<span class=sf-dump-key>npwp</span>\" => \"<span class=sf-dump-str title=\"20 characters\">42.214.798.3-604.000</span>\"
+    \"<span class=sf-dump-key>no_ijin</span>\" => \"<span class=sf-dump-str title=\"21 characters\">0106/PP.240/D/03/2022</span>\"
+    \"<span class=sf-dump-key>poktan_id</span>\" => <span class=sf-dump-num>183</span>
+    \"<span class=sf-dump-key>anggota_id</span>\" => <span class=sf-dump-num>2389</span>
+    \"<span class=sf-dump-key>nama_lokasi</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>latitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>longitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>altitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>polygon</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>luas_kira</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tgl_tanam</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>luas_tanam</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tanam_doc</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tanam_pict</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tgl_panen</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>volume</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>panen_doc</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>panen_pict</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>status</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>varietas</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:54</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:54</span>\"
+    \"<span class=sf-dump-key>deleted_at</span>\" => <span class=sf-dump-const>null</span>
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:24</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>143</span>
+    \"<span class=sf-dump-key>npwp</span>\" => \"<span class=sf-dump-str title=\"20 characters\">42.214.798.3-604.000</span>\"
+    \"<span class=sf-dump-key>no_ijin</span>\" => \"<span class=sf-dump-str title=\"21 characters\">0106/PP.240/D/03/2022</span>\"
+    \"<span class=sf-dump-key>poktan_id</span>\" => <span class=sf-dump-num>183</span>
+    \"<span class=sf-dump-key>anggota_id</span>\" => <span class=sf-dump-num>2389</span>
+    \"<span class=sf-dump-key>nama_lokasi</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>latitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>longitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>altitude</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>polygon</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>luas_kira</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tgl_tanam</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>luas_tanam</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tanam_doc</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tanam_pict</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>tgl_panen</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>volume</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>panen_doc</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>panen_pict</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>status</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>varietas</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:54</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:54</span>\"
+    \"<span class=sf-dump-key>deleted_at</span>\" => <span class=sf-dump-const>null</span>
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>deleted_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dates</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"10 characters\">created_at</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"10 characters\">updated_at</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"10 characters\">deleted_at</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+  +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:20</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"4 characters\">npwp</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"7 characters\">no_ijin</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"9 characters\">poktan_id</span>\"
+    <span class=sf-dump-index>3</span> => \"<span class=sf-dump-str title=\"10 characters\">anggota_id</span>\"
+    <span class=sf-dump-index>4</span> => \"<span class=sf-dump-str title=\"11 characters\">nama_lokasi</span>\"
+    <span class=sf-dump-index>5</span> => \"<span class=sf-dump-str title=\"8 characters\">latitude</span>\"
+    <span class=sf-dump-index>6</span> => \"<span class=sf-dump-str title=\"9 characters\">longitude</span>\"
+    <span class=sf-dump-index>7</span> => \"<span class=sf-dump-str title=\"8 characters\">altitude</span>\"
+    <span class=sf-dump-index>8</span> => \"<span class=sf-dump-str title=\"7 characters\">polygon</span>\"
+    <span class=sf-dump-index>9</span> => \"<span class=sf-dump-str title=\"9 characters\">luas_kira</span>\"
+    <span class=sf-dump-index>10</span> => \"<span class=sf-dump-str title=\"9 characters\">tgl_tanam</span>\"
+    <span class=sf-dump-index>11</span> => \"<span class=sf-dump-str title=\"10 characters\">luas_tanam</span>\"
+    <span class=sf-dump-index>12</span> => \"<span class=sf-dump-str title=\"9 characters\">tanam_doc</span>\"
+    <span class=sf-dump-index>13</span> => \"<span class=sf-dump-str title=\"10 characters\">tanam_pict</span>\"
+    <span class=sf-dump-index>14</span> => \"<span class=sf-dump-str title=\"9 characters\">tgl_panen</span>\"
+    <span class=sf-dump-index>15</span> => \"<span class=sf-dump-str title=\"6 characters\">volume</span>\"
+    <span class=sf-dump-index>16</span> => \"<span class=sf-dump-str title=\"9 characters\">panen_doc</span>\"
+    <span class=sf-dump-index>17</span> => \"<span class=sf-dump-str title=\"10 characters\">panen_pict</span>\"
+    <span class=sf-dump-index>18</span> => \"<span class=sf-dump-str title=\"6 characters\">status</span>\"
+    <span class=sf-dump-index>19</span> => \"<span class=sf-dump-str title=\"8 characters\">varietas</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str>*</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">forceDeleting</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-133051369\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","npwp_company":"<pre class=sf-dump id=sf-dump-2046576756 data-indent-pad=\"  \">\"<span class=sf-dump-str title=\"20 characters\">12.345.612.3-456.123</span>\"
+</pre><script>Sfdump(\"sf-dump-2046576756\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","commitment":"<pre class=sf-dump id=sf-dump-1640878063 data-indent-pad=\"  \"><span class=sf-dump-note>App\\Models\\PullRiph</span> {<a class=sf-dump-ref>#400</a><samp data-depth=1 class=sf-dump-expanded>
+  #<span class=sf-dump-protected title=\"Protected property\">connection</span>: \"<span class=sf-dump-str title=\"5 characters\">mysql</span>\"
+  +<span class=sf-dump-public title=\"Public property\">table</span>: \"<span class=sf-dump-str title=\"10 characters\">pull_riphs</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">primaryKey</span>: \"<span class=sf-dump-str title=\"2 characters\">id</span>\"
+  #<span class=sf-dump-protected title=\"Protected property\">keyType</span>: \"<span class=sf-dump-str title=\"3 characters\">int</span>\"
+  +<span class=sf-dump-public title=\"Public property\">incrementing</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">with</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">withCount</span>: []
+  +<span class=sf-dump-public title=\"Public property\">preventsLazyLoading</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">perPage</span>: <span class=sf-dump-num>15</span>
+  +<span class=sf-dump-public title=\"Public property\">exists</span>: <span class=sf-dump-const>true</span>
+  +<span class=sf-dump-public title=\"Public property\">wasRecentlyCreated</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">escapeWhenCastingToString</span>: <span class=sf-dump-const>false</span>
+  #<span class=sf-dump-protected title=\"Protected property\">attributes</span>: <span class=sf-dump-note>array:35</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>3</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>8</span>
+    \"<span class=sf-dump-key>keterangan</span>\" => \"<span class=sf-dump-str title=\"7 characters\">SUCCESS</span>\"
+    \"<span class=sf-dump-key>nama</span>\" => \"<span class=sf-dump-str title=\"18 characters\">LADANG REZEKI TANI</span>\"
+    \"<span class=sf-dump-key>npwp</span>\" => \"<span class=sf-dump-str title=\"20 characters\">42.214.798.3-604.000</span>\"
+    \"<span class=sf-dump-key>no_ijin</span>\" => \"<span class=sf-dump-str title=\"21 characters\">0106/PP.240/D/03/2022</span>\"
+    \"<span class=sf-dump-key>periodetahun</span>\" => <span class=sf-dump-num>2022</span>
+    \"<span class=sf-dump-key>tgl_ijin</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2022-03-14</span>\"
+    \"<span class=sf-dump-key>tgl_akhir</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2022-12-31</span>\"
+    \"<span class=sf-dump-key>no_hs</span>\" => \"<span class=sf-dump-str title=\"43 characters\">07032090- - Bawang putih, segar atau dingin</span>\"
+    \"<span class=sf-dump-key>volume_riph</span>\" => <span class=sf-dump-num>9976.0</span>
+    \"<span class=sf-dump-key>volume_produksi</span>\" => <span class=sf-dump-num>498.8</span>
+    \"<span class=sf-dump-key>luas_wajib_tanam</span>\" => <span class=sf-dump-num>83.133333333333</span>
+    \"<span class=sf-dump-key>stok_mandiri</span>\" => \"<span class=sf-dump-str title=\"4 characters\">2.00</span>\"
+    \"<span class=sf-dump-key>pupuk_organik</span>\" => \"<span class=sf-dump-str title=\"10 characters\">1669000.00</span>\"
+    \"<span class=sf-dump-key>npk</span>\" => \"<span class=sf-dump-str title=\"8 characters\">20862.50</span>\"
+    \"<span class=sf-dump-key>dolomit</span>\" => \"<span class=sf-dump-str title=\"8 characters\">50070.00</span>\"
+    \"<span class=sf-dump-key>za</span>\" => \"<span class=sf-dump-str title=\"8 characters\">25035.00</span>\"
+    \"<span class=sf-dump-key>mulsa</span>\" => \"<span class=sf-dump-str title=\"6 characters\">840.00</span>\"
+    \"<span class=sf-dump-key>poktan_share</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>importir_share</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRiph</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formSptjm</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>logbook</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRt</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRta</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRpo</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formLa</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>datariph</span>\" => \"<span class=sf-dump-str title=\"45 characters\">uploads/422147983604000/0106PP240D032022.json</span>\"
+    \"<span class=sf-dump-key>sphsbs</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>status</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>skl</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:53</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:53</span>\"
+    \"<span class=sf-dump-key>deleted_at</span>\" => <span class=sf-dump-const>null</span>
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">original</span>: <span class=sf-dump-note>array:35</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>id</span>\" => <span class=sf-dump-num>3</span>
+    \"<span class=sf-dump-key>user_id</span>\" => <span class=sf-dump-num>8</span>
+    \"<span class=sf-dump-key>keterangan</span>\" => \"<span class=sf-dump-str title=\"7 characters\">SUCCESS</span>\"
+    \"<span class=sf-dump-key>nama</span>\" => \"<span class=sf-dump-str title=\"18 characters\">LADANG REZEKI TANI</span>\"
+    \"<span class=sf-dump-key>npwp</span>\" => \"<span class=sf-dump-str title=\"20 characters\">42.214.798.3-604.000</span>\"
+    \"<span class=sf-dump-key>no_ijin</span>\" => \"<span class=sf-dump-str title=\"21 characters\">0106/PP.240/D/03/2022</span>\"
+    \"<span class=sf-dump-key>periodetahun</span>\" => <span class=sf-dump-num>2022</span>
+    \"<span class=sf-dump-key>tgl_ijin</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2022-03-14</span>\"
+    \"<span class=sf-dump-key>tgl_akhir</span>\" => \"<span class=sf-dump-str title=\"10 characters\">2022-12-31</span>\"
+    \"<span class=sf-dump-key>no_hs</span>\" => \"<span class=sf-dump-str title=\"43 characters\">07032090- - Bawang putih, segar atau dingin</span>\"
+    \"<span class=sf-dump-key>volume_riph</span>\" => <span class=sf-dump-num>9976.0</span>
+    \"<span class=sf-dump-key>volume_produksi</span>\" => <span class=sf-dump-num>498.8</span>
+    \"<span class=sf-dump-key>luas_wajib_tanam</span>\" => <span class=sf-dump-num>83.133333333333</span>
+    \"<span class=sf-dump-key>stok_mandiri</span>\" => \"<span class=sf-dump-str title=\"4 characters\">2.00</span>\"
+    \"<span class=sf-dump-key>pupuk_organik</span>\" => \"<span class=sf-dump-str title=\"10 characters\">1669000.00</span>\"
+    \"<span class=sf-dump-key>npk</span>\" => \"<span class=sf-dump-str title=\"8 characters\">20862.50</span>\"
+    \"<span class=sf-dump-key>dolomit</span>\" => \"<span class=sf-dump-str title=\"8 characters\">50070.00</span>\"
+    \"<span class=sf-dump-key>za</span>\" => \"<span class=sf-dump-str title=\"8 characters\">25035.00</span>\"
+    \"<span class=sf-dump-key>mulsa</span>\" => \"<span class=sf-dump-str title=\"6 characters\">840.00</span>\"
+    \"<span class=sf-dump-key>poktan_share</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>importir_share</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRiph</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formSptjm</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>logbook</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRt</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRta</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formRpo</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>formLa</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>datariph</span>\" => \"<span class=sf-dump-str title=\"45 characters\">uploads/422147983604000/0106PP240D032022.json</span>\"
+    \"<span class=sf-dump-key>sphsbs</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>status</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>skl</span>\" => <span class=sf-dump-const>null</span>
+    \"<span class=sf-dump-key>created_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:53</span>\"
+    \"<span class=sf-dump-key>updated_at</span>\" => \"<span class=sf-dump-str title=\"19 characters\">2023-11-20 14:31:53</span>\"
+    \"<span class=sf-dump-key>deleted_at</span>\" => <span class=sf-dump-const>null</span>
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">changes</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">casts</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    \"<span class=sf-dump-key>deleted_at</span>\" => \"<span class=sf-dump-str title=\"8 characters\">datetime</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">classCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">attributeCastCache</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dates</span>: <span class=sf-dump-note>array:3</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"10 characters\">created_at</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"10 characters\">updated_at</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"10 characters\">deleted_at</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">dateFormat</span>: <span class=sf-dump-const>null</span>
+  #<span class=sf-dump-protected title=\"Protected property\">appends</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">dispatchesEvents</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">observables</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">relations</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">touches</span>: []
+  +<span class=sf-dump-public title=\"Public property\">timestamps</span>: <span class=sf-dump-const>true</span>
+  #<span class=sf-dump-protected title=\"Protected property\">hidden</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">visible</span>: []
+  #<span class=sf-dump-protected title=\"Protected property\">fillable</span>: <span class=sf-dump-note>array:32</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str title=\"7 characters\">user_id</span>\"
+    <span class=sf-dump-index>1</span> => \"<span class=sf-dump-str title=\"4 characters\">npwp</span>\"
+    <span class=sf-dump-index>2</span> => \"<span class=sf-dump-str title=\"10 characters\">keterangan</span>\"
+    <span class=sf-dump-index>3</span> => \"<span class=sf-dump-str title=\"4 characters\">nama</span>\"
+    <span class=sf-dump-index>4</span> => \"<span class=sf-dump-str title=\"7 characters\">no_ijin</span>\"
+    <span class=sf-dump-index>5</span> => \"<span class=sf-dump-str title=\"12 characters\">periodetahun</span>\"
+    <span class=sf-dump-index>6</span> => \"<span class=sf-dump-str title=\"8 characters\">tgl_ijin</span>\"
+    <span class=sf-dump-index>7</span> => \"<span class=sf-dump-str title=\"9 characters\">tgl_akhir</span>\"
+    <span class=sf-dump-index>8</span> => \"<span class=sf-dump-str title=\"5 characters\">no_hs</span>\"
+    <span class=sf-dump-index>9</span> => \"<span class=sf-dump-str title=\"11 characters\">volume_riph</span>\"
+    <span class=sf-dump-index>10</span> => \"<span class=sf-dump-str title=\"15 characters\">volume_produksi</span>\"
+    <span class=sf-dump-index>11</span> => \"<span class=sf-dump-str title=\"16 characters\">luas_wajib_tanam</span>\"
+    <span class=sf-dump-index>12</span> => \"<span class=sf-dump-str title=\"12 characters\">stok_mandiri</span>\"
+    <span class=sf-dump-index>13</span> => \"<span class=sf-dump-str title=\"13 characters\">pupuk_organik</span>\"
+    <span class=sf-dump-index>14</span> => \"<span class=sf-dump-str title=\"3 characters\">npk</span>\"
+    <span class=sf-dump-index>15</span> => \"<span class=sf-dump-str title=\"7 characters\">dolomit</span>\"
+    <span class=sf-dump-index>16</span> => \"<span class=sf-dump-str title=\"2 characters\">za</span>\"
+    <span class=sf-dump-index>17</span> => \"<span class=sf-dump-str title=\"5 characters\">mulsa</span>\"
+    <span class=sf-dump-index>18</span> => \"<span class=sf-dump-str title=\"6 characters\">status</span>\"
+    <span class=sf-dump-index>19</span> => \"<span class=sf-dump-str title=\"8 characters\">formRiph</span>\"
+    <span class=sf-dump-index>20</span> => \"<span class=sf-dump-str title=\"9 characters\">formSptjm</span>\"
+    <span class=sf-dump-index>21</span> => \"<span class=sf-dump-str title=\"7 characters\">logBook</span>\"
+    <span class=sf-dump-index>22</span> => \"<span class=sf-dump-str title=\"6 characters\">formRt</span>\"
+    <span class=sf-dump-index>23</span> => \"<span class=sf-dump-str title=\"7 characters\">formRta</span>\"
+    <span class=sf-dump-index>24</span> => \"<span class=sf-dump-str title=\"7 characters\">formRpo</span>\"
+    <span class=sf-dump-index>25</span> => \"<span class=sf-dump-str title=\"6 characters\">formLa</span>\"
+    <span class=sf-dump-index>26</span> => \"<span class=sf-dump-str title=\"6 characters\">no_doc</span>\"
+    <span class=sf-dump-index>27</span> => \"<span class=sf-dump-str title=\"12 characters\">poktan_share</span>\"
+    <span class=sf-dump-index>28</span> => \"<span class=sf-dump-str title=\"14 characters\">importir_share</span>\"
+    <span class=sf-dump-index>29</span> => \"<span class=sf-dump-str title=\"6 characters\">status</span>\"
+    <span class=sf-dump-index>30</span> => \"<span class=sf-dump-str title=\"3 characters\">skl</span>\"
+    <span class=sf-dump-index>31</span> => \"<span class=sf-dump-str title=\"8 characters\">datariph</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">guarded</span>: <span class=sf-dump-note>array:1</span> [<samp data-depth=2 class=sf-dump-compact>
+    <span class=sf-dump-index>0</span> => \"<span class=sf-dump-str>*</span>\"
+  </samp>]
+  #<span class=sf-dump-protected title=\"Protected property\">forceDeleting</span>: <span class=sf-dump-const>false</span>
+</samp>}
+</pre><script>Sfdump(\"sf-dump-1640878063\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","pks":"<pre class=sf-dump id=sf-dump-2086966546 data-indent-pad=\"  \"><span class=sf-dump-const>null</span>
+</pre><script>Sfdump(\"sf-dump-2086966546\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+","disabled":"<pre class=sf-dump id=sf-dump-1358531583 data-indent-pad=\"  \"><span class=sf-dump-const>false</span>
+</pre><script>Sfdump(\"sf-dump-1358531583\", {\"maxDepth\":3,\"maxStringLength\":160})</script>
+"}},"userId":6,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): Attempt to read property \"id\" on null at C:\\Users\\Admin\\SiapRIPHOnly\\resources\\views\\admin\\lokasitanam\\lokasi.blade.php:187)
+[stacktrace]
+#0 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(270): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Attempt to read...', 'C:\\\\Users\\\\Admin\\\\...', 186)
+#1 C:\\Users\\Admin\\SiapRIPHOnly\\resources\\views\\admin\\lokasitanam\\lokasi.blade.php(187): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Attempt to read...', 'C:\\\\Users\\\\Admin\\\\...', 186)
+#2 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(109): require('C:\\\\Users\\\\Admin\\\\...')
+#3 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(110): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#4 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('C:\\\\Users\\\\Admin\\\\...', Array)
+#5 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(70): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('C:\\\\Users\\\\Admin\\\\...', Array)
+#6 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(195): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Admin\\\\...', Array)
+#7 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(178): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(147): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#10 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#11 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(906): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#12 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(875): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#13 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(797): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#14 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(141): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\Users\\Admin\\SiapRIPHOnly\\app\\Http\\Middleware\\SetLocale.php(24): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): App\\Http\\Middleware\\SetLocale->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 C:\\Users\\Admin\\SiapRIPHOnly\\app\\Http\\Middleware\\AuthGates.php(34): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): App\\Http\\Middleware\\AuthGates->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(44): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#29 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(797): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#36 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(776): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#37 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(740): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#38 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(729): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#39 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(190): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(141): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(86): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#54 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(165): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(134): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 C:\\Users\\Admin\\SiapRIPHOnly\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Admin\\SiapRIPHOnly\\server.php(21): require_once('C:\\\\Users\\\\Admin\\\\...')
+#58 {main}
+
+[previous exception] [object] (ErrorException(code: 0): Attempt to read property \"id\" on null at C:\\Users\\Admin\\SiapRIPHOnly\\storage\\framework\\views\\6186a915de6cfe26fdcc6e615cc87f509b3e3ec6.php:186)
+[stacktrace]
+#0 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\HandleExceptions.php(270): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'Attempt to read...', 'C:\\\\Users\\\\Admin\\\\...', 186)
+#1 C:\\Users\\Admin\\SiapRIPHOnly\\storage\\framework\\views\\6186a915de6cfe26fdcc6e615cc87f509b3e3ec6.php(186): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'Attempt to read...', 'C:\\\\Users\\\\Admin\\\\...', 186)
+#2 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(109): require('C:\\\\Users\\\\Admin\\\\...')
+#3 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Filesystem\\Filesystem.php(110): Illuminate\\Filesystem\\Filesystem::Illuminate\\Filesystem\\{closure}()
+#4 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\PhpEngine.php(58): Illuminate\\Filesystem\\Filesystem->getRequire('C:\\\\Users\\\\Admin\\\\...', Array)
+#5 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Engines\\CompilerEngine.php(70): Illuminate\\View\\Engines\\PhpEngine->evaluatePath('C:\\\\Users\\\\Admin\\\\...', Array)
+#6 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(195): Illuminate\\View\\Engines\\CompilerEngine->get('C:\\\\Users\\\\Admin\\\\...', Array)
+#7 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(178): Illuminate\\View\\View->getContents()
+#8 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\View.php(147): Illuminate\\View\\View->renderContents()
+#9 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(69): Illuminate\\View\\View->render()
+#10 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Response.php(35): Illuminate\\Http\\Response->setContent(Object(Illuminate\\View\\View))
+#11 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(906): Illuminate\\Http\\Response->__construct(Object(Illuminate\\View\\View), 200, Array)
+#12 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(875): Illuminate\\Routing\\Router::toResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#13 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(797): Illuminate\\Routing\\Router->prepareResponse(Object(Illuminate\\Http\\Request), Object(Illuminate\\View\\View))
+#14 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(141): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\Users\\Admin\\SiapRIPHOnly\\app\\Http\\Middleware\\SetLocale.php(24): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): App\\Http\\Middleware\\SetLocale->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#17 C:\\Users\\Admin\\SiapRIPHOnly\\app\\Http\\Middleware\\AuthGates.php(34): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): App\\Http\\Middleware\\AuthGates->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php(44): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Auth\\Middleware\\Authenticate->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#23 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\View\\Middleware\\ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Session\\Middleware\\StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#29 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Cookie\\Middleware\\EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(797): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#36 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(776): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#37 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(740): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#38 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(729): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#39 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(190): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#40 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(141): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#47 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#48 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#49 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(86): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#50 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#51 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#52 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(180): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#53 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(116): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#54 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(165): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#55 C:\\Users\\Admin\\SiapRIPHOnly\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(134): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#56 C:\\Users\\Admin\\SiapRIPHOnly\\public\\index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#57 C:\\Users\\Admin\\SiapRIPHOnly\\server.php(21): require_once('C:\\\\Users\\\\Admin\\\\...')
+#58 {main}
+"} 
