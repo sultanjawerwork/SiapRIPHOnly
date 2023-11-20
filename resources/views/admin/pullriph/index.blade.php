@@ -307,8 +307,10 @@
 		$("#btnexec").on('click', function(){
 			stnpwp = $("#npwp").val().replace(/[\.,-]+/g,'');
 			stnomor = $("#nomor").val();
-			 // Periksa apakah nomor sudah ada di $noIjins
-			 var isNomorExists = false;
+			// Periksa apakah nomor sudah ada di $noIjins
+			var isNomorExists = false;
+
+			//$noIjins
 			$.each(<?php echo json_encode($noIjins); ?>, function(index, value) {
 				if(value.no_ijin === stnomor) {
 					isNomorExists = true;
@@ -324,6 +326,31 @@
 					return false;
 				}
 			}
+
+			const arraysToCheck = [
+				{ data: <?php echo json_encode($ajutanam); ?>, message: "Verifikasi Tanam" },
+				{ data: <?php echo json_encode($ajuproduksi); ?>, message: "Verifikasi Produksi" },
+				{ data: <?php echo json_encode($ajuskl); ?>, message: "Pengajuan SKL" },
+				{ data: <?php echo json_encode($completed); ?>, message: "Lunas" }
+			];
+
+			let isExists = false;
+			let message = "";
+
+			arraysToCheck.some(({ data, message: msg }) => {
+				const exists = data.some(value => value.no_ijin === stnomor);
+				if (exists) {
+					isExists = true;
+					message = `Nomor tersebut telah memiliki status ${msg}. Permintaan ini tidak dapat dilanjutkan.`;
+				}
+				return exists;
+			});
+
+			if (isExists) {
+				alert(message);
+				return false;
+			}
+
 			$.ajax ({
 				url: "{{ route('admin.task.pull.getriph') }}",
 				type: 'get',

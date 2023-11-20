@@ -92,3 +92,9 @@ Pilihan Solusi:
 *3. lokasi-lokasi tersebut agar diberi pembeda, sehingga nama_petani dan id_petani berbeda untuk tiap lokasi agar di simethris tetap muncul sejumlah petani yang sama dengan di SIAPRIPH. Pada dasarna pilihan ini adalah sama dengan pilihan poin 2. hanya metode input di SIAPRIPH saja yang berbeda.*
 
 4. Simethris tidak melakukan pemeriksaan redundancy terhadap data petani. maka seluruh data akan di salin tanpa memeriksa apakah data tersebut ada atau tidak. namun pilihan ini akan menyebabkan redundancy data yang buruk.
+
+
+
+To do
+1. id masteranggota yang ada jangan digunakan sebagai public key
+2. public key master anggota ganti ke kolom baru, msagg_id, increment PK
