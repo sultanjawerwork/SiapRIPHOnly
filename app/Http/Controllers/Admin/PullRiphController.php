@@ -232,8 +232,8 @@ class PullRiphController extends Controller
 									'user_id' => $user->id,
 									'nama_petani'  => trim($poktan->nama_petani, ' '),
 									'ktp_petani' => $ktp,
-									'luas_lahan' => trim($poktan->luas_lahan, ' '),
-									'periode_tanam' => trim($poktan->periode_tanam, ' ')
+									// 'luas_lahan' => trim($poktan->luas_lahan, ' '),
+									// 'periode_tanam' => trim($poktan->periode_tanam, ' ')
 								]
 							);
 
@@ -261,6 +261,16 @@ class PullRiphController extends Controller
 								// 	'periode_tanam' => trim($poktan->periode_tanam, ' ')
 								// ]
 							);
+							// Lokasi::create(
+							// 	[
+							// 		'npwp' => $stnpwp,
+							// 		'no_ijin' => $noijin,
+							// 		'poktan_id' => $idpoktan,
+							// 		'anggota_id' => $idpetani,
+							// 		'luas_lahan' => trim($poktan->luas_lahan, ' '),
+							// 		'periode_tanam' => trim($poktan->periode_tanam, ' ')
+							// 	],
+							// );
 						}
 					} elseif (is_object($dtjson->riph->wajib_tanam->kelompoktani->loop)) {
 						$poktan = $dtjson->riph->wajib_tanam->kelompoktani->loop;
