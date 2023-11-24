@@ -200,8 +200,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 		route::delete('saprodi/{id}', 'SaprodiController@destroy')->name('saprodi.delete');
 		Route::get('saprodi', 'SaprodiController@index')->name('saprodi.index');
 
-		Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
-		Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
+		// Route::get('pks/create/{noriph}/{poktan}', 'PksController@create')->name('pks.create');
+		// Route::delete('pksmd', 'PksController@massDestroy')->name('pks.massDestroy');
 
 		//realisasi lokasi tanam & produksi
 		Route::get('realisasi/lokasi/{lokasiId}', 'LokasiController@show')->name('lokasi.tanam');
