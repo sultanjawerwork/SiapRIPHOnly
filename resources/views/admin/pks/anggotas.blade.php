@@ -15,6 +15,9 @@
 						Data <span class="fw-300"><i>Informasi</i></span>
 					</h2>
 					<div class="panel-toolbar">
+						<a href="{{route('admin.task.commitment.realisasi', $pks->commitment->id)}}" class="btn btn-info btn-xs">
+							<i class="fal fa-undo mr-1"></i>Kembali
+						</a>
 					</div>
 				</div>
 				<div class="panel-container show">

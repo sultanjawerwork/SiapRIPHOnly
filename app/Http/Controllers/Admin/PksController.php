@@ -428,7 +428,7 @@ class PksController extends Controller
 		$fotoTanams = FotoTanam::where('realisasi_id', $id)->get();
 		$fotoProduksis = FotoProduksi::where('realisasi_id', $id)->get();
 
-		return view('admin.pks.fotoLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'filenpwp', 'pks', 'anggota', 'lokasi', 'fotoTanams', 'fotoProduksis'));
+		return view('admin.pks.fotoLokasi', compact('module_name', 'page_title', 'page_heading', 'heading_class', 'npwpCompany', 'filenpwp', 'pks', 'anggota', 'lokasi', 'fotoTanams', 'fotoProduksis', 'pksId', 'anggotaId'));
 	}
 
 	public function dropZoneTanam(Request $request)
@@ -469,8 +469,12 @@ class PksController extends Controller
 		$image = $request->file('file');
 		if ($request->file('file')) {
 			$newFileName = 'foto_produksi_' . $realisasiId . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-			$image->storeAs('uploads/' . $filenpwp . '/' . $periode . '/', $newFileName, 'public');
+			$filePath = 'uploads/' . $filenpwp . '/' . $periode . '/';
+			$image->storeAs($filePath, $newFileName, 'public');
 		}
+
+		// Setel $imagePath ke path file lengkap
+		$imagePath = url('/') . '/' . $filePath . $newFileName;
 
 		FotoProduksi::create([
 			'realisasi_id' => $realisasiId,

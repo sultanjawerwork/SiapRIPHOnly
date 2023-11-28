@@ -286,6 +286,7 @@
 		}
 		return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 	}
+
 	$(document).ready(function()
 	{
 		var $validator = $("#dataForm").validate({
@@ -322,35 +323,13 @@
 				}
 			});
 
-			// if(isNomorExists) {
-			// 	// Jika nomor sudah terdaftar, tampilkan pesan kepada pengguna
-			// 	var confirmMessage = confirm("Nomor tersebut sudah terdaftar. Jika Anda melanjutkan, SELURUH DATA yang telah tersimpan akan TERHAPUS dan digantikan dengan data yang baru. Apakah Anda ingin melanjutkan?");
-			// 	if(!confirmMessage) {
-			// 		// Jika pengguna membatalkan, hentikan proses
-			// 		return false;
-			// 	}
-			// }
-
 			if(isNomorExists) {
-				// Jika nomor sudah terdaftar, tampilkan pesan kepada pengguna dengan SweetAlert2
-				Swal.fire({
-					title: '<strong class="text-danger">Nomor Ini sudah TERDAFTAR!</strong>',
-					type: "warning",
-					html: 'Jika Anda melanjutkan, <span class="text-danger fw-500">SELURUH DATA</span> yang telah tersimpan akan TERHAPUS dan digantikan dengan data yang baru. Apakah Anda ingin melanjutkan?',
-					icon: 'warning',
-					backdrop: '\n\t\t\t    rgba(0,0,0,0.7)\n\t\t\t    center left\n\t\t\t    no-repeat\n\t\t\t  ',
-					showCancelButton: true,
-					confirmButtonColor: '#fd3995',
-					cancelButtonColor: '#886ab5',
-					confirmButtonText: 'Ya, lanjutkan!',
-					cancelButtonText: 'Batal'
-				}).then((result) => {
-					if (result.isConfirmed) {
-						// Jika pengguna mengonfirmasi, lanjutkan proses
-						// Tambahkan kode yang ingin dijalankan setelah konfirmasi di sini
-					}
-				});
-				return false;
+				// Jika nomor sudah terdaftar, tampilkan pesan kepada pengguna
+				var confirmMessage = confirm("Nomor tersebut sudah terdaftar. Jika Anda melanjutkan, data yang telah tersimpan akan terhapus dan digantikan dengan data yang baru. Apakah Anda ingin melanjutkan?");
+				if(!confirmMessage) {
+					// Jika pengguna membatalkan, hentikan proses
+					return false;
+				}
 			}
 
 			const arraysToCheck = [
@@ -373,12 +352,7 @@
 			});
 
 			if (isExists) {
-				swal({
-					title: "Ada Kesalahan",
-					text: message,
-					icon: "error",
-					button: "OK",
-				});
+				alert(message);
 				return false;
 			}
 

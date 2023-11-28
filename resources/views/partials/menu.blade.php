@@ -644,8 +644,8 @@
 				</a>
 			</li>
 			@endif
-			<li class="">
-				<a href="" title="Tiket Bantuan"
+			<li class="disabled">
+				<a href="javascript:void(0);" title="Coming soon!"
 				data-filter-tags="dukungan support tiket" disabled>
 					<i class="fal fa-ticket"></i>
 					<span class="nav-link-text">Tiket Bantuan</span>
