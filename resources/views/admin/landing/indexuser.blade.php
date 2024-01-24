@@ -103,6 +103,62 @@
 		@endif
 		<!-- Page Content -->
 		<div class="row">
+
+<div class="card">
+	<div class="card-body">
+		@php
+    // Data arrays
+    $data1 = [
+        ["nama" => "Andi"],
+        ["nama" => "Budi"],
+        ["nama" => "Wati"],
+    ];
+
+    $data2 = [
+        ["nama" => "Eri"],
+        ["nama" => "Edi"],
+        ["nama" => "Eni"],
+    ];
+
+    $data3 = [
+        ["nama" => "Beni"],
+        ["nama" => "Bono"],
+        ["nama" => "Banu"],
+    ];
+
+    // Get the selected value from the dropdown
+    $selectedClass = request('kelas');
+
+    // Create an array variable based on the selected class
+    $data = [];
+    switch ($selectedClass) {
+        case '1':
+            $data = $data1;
+            break;
+        case '2':
+            $data = $data2;
+            break;
+        case '3':
+            $data = $data3;
+            break;
+        // Add more cases if needed for other classes
+    }
+@endphp
+
+<!-- HTML dropdown menu -->
+<select name="kelas" id="kelas">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+</select>
+
+@foreach($data as $item)
+    <!-- Iterating through the selected data -->
+    <p>{{ $item['nama'] }}</p>
+@endforeach
+
+	</div>
+</div>
 			<div class="col-lg-6">
 				{{-- <div id="panel-1" class="panel">
 					<div class="panel-hdr">

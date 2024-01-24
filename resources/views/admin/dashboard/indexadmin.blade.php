@@ -234,6 +234,90 @@
 	</div>
 </div>
 
+
+<div class="col-12">
+	<div class="card">
+		<div class="card-body">
+			<!-- Data arrays -->
+<!-- Data arrays -->
+@php
+    $data1 = [
+        ["nama" => "Andi"],
+        ["nama" => "Budi"],
+        ["nama" => "Wati"],
+    ];
+
+    $data2 = [
+        ["nama" => "Eri"],
+        ["nama" => "Edi"],
+        ["nama" => "Eni"],
+    ];
+
+    $data3 = [
+        ["nama" => "Beni"],
+        ["nama" => "Bono"],
+        ["nama" => "Banu"],
+    ];
+@endphp
+
+<!-- HTML dropdown menu -->
+<select name="kelas" id="kelas">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+</select>
+
+<!-- Result container -->
+<div id="result"></div>
+
+<script>
+    // Data arrays in JavaScript
+    var data1 = {!! json_encode($data1) !!};
+    var data2 = {!! json_encode($data2) !!};
+    var data3 = {!! json_encode($data3) !!};
+
+    // Function to change data based on selected class
+    function changeData() {
+        var select = document.getElementById("kelas");
+        var selectedClass = select.options[select.selectedIndex].value;
+
+        // Clear existing data
+        document.getElementById("result").innerHTML = "";
+
+        // Select the appropriate data array
+        var selectedData = [];
+        switch (selectedClass) {
+            case '1':
+                selectedData = data1;
+                break;
+            case '2':
+                selectedData = data2;
+                break;
+            case '3':
+                selectedData = data3;
+                break;
+            // Add more cases if needed for other classes
+        }
+
+        // Iterate through the selected data and display it
+        selectedData.forEach(function(item) {
+            var paragraph = document.createElement("p");
+            paragraph.innerHTML = item.nama;
+            document.getElementById("result").appendChild(paragraph);
+        });
+    }
+
+    // Attach the changeData function to the onchange event of the dropdown
+    document.getElementById("kelas").onchange = changeData;
+
+    // Initial data display
+    changeData();
+</script>
+
+		</div>
+	</div>
+</div>
+
 <div class="panel" id="panel-title-2">
 	<div class="panel-hdr">
 		<h2>
